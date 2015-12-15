@@ -58,4 +58,8 @@ group :development do
   gem "binding_of_caller"
 end
 
+# Adding ckeditor
 gem 'ckeditor'
+
+# Adding Globalize gem
+gem 'globalize', '~> 5.0.0'
