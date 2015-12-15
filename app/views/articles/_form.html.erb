@@ -16,7 +16,7 @@
     <%= f.label :body %>
   </div>
   <div>
-    <%= f.cktext_area :body, rows: 10 %>
+    <%= f.cktext_area :body, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
   </div>
   <div>
     <%= f.submit %>
