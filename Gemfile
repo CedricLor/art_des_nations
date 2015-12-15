@@ -63,3 +63,6 @@ gem 'ckeditor'
 
 # Adding Globalize gem
 gem 'globalize', '~> 5.0.0'
+
+# Adding figaro
+gem 'figaro'
