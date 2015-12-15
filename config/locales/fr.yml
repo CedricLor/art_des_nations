@@ -19,13 +19,13 @@
 # To learn more, please read the Rails Internationalization guide
 # available at http://guides.rubyonrails.org/i18n.html.
 
-en:
-  hello: "Hello world"
+fr:
+  hello: "Bonjour le monde"
 
   activerecord:
     models:
       article: "Article"
     attributes:
       article:
-        title: "Title"
-        body: "Body of the article"
+        title: "Titre"
+        body: "Corps de l'article"
