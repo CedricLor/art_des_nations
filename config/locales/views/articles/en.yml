@@ -1,0 +1,9 @@
+en:
+  articles:
+    index:
+      new_article: "New Article"
+      edit_article: "Edit Article"
+    new:
+      new_article: "New Article"
+    edit:
+      editing_article: "Editing %{article_title}"
