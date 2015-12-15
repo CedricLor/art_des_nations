@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.2.3'
+# ruby '2.2.3'
 
 gem 'rails_12factor', group: :production
 gem 'puma',           group: :production
@@ -58,3 +58,4 @@ group :development do
   gem "binding_of_caller"
 end
 
+gem 'ckeditor'
