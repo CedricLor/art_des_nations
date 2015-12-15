@@ -66,3 +66,7 @@ gem 'globalize', '~> 5.0.0'
 
 # Adding figaro
 gem 'figaro'
+
+# Adding support for paperclip
+gem 'aws-sdk', '< 2.0'
+gem 'paperclip'
