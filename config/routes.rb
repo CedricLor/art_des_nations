@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :media_containers
+  resources :galleries
   scope '(:locale)', locale: /fr|en|ru|zh-CN/ do
     resources :articles
 
