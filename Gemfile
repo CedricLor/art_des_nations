@@ -73,3 +73,6 @@ gem 'paperclip'
 
 # Browserify
 gem "browserify-rails"
+
+# React
+gem 'react-rails', '~> 1.5.0'

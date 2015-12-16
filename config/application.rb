@@ -26,5 +26,8 @@ module ArtDesNations
 
     # browserify
     config.browserify_rails.commandline_options = "-t coffeeify --extension=\".js.coffee\" -t [ reactify --everything --es6 --target es5 ]"
+
+    # React
+    config.react.addons = true # defaults to false
   end
 end
