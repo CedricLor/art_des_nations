@@ -9,11 +9,12 @@ class ArticlesController < ApplicationController
   end
 
   def new
-    @article = Article.new
+    @article_form = ArticleForm.new
   end
 
   def create
-    @article = Article.new(article_params)
+    byebug
+    @article = ArticleForm.new(params[:article_form])
     if @article.save
       redirect_to articles_path, notice: "The article has been successfully created."
     else
@@ -37,7 +38,7 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
-    params.require(:article).permit(:title, :body, :teaser, :picture)
+    params.require(:article).permit(:title, :body, :teaser)
   end
 
 end

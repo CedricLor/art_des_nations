@@ -1,22 +1,28 @@
-<% if @article.errors.any? %>
+<% if @article_form.errors.any? %>
   <ul>
-    <%= @article.errors.full_messages.each do |message| %>
+    <%= @article_form.errors.full_messages.each do |message| %>
         <li><%= message %></li>
     <% end %>
   </ul>
 <% end %>
-<%= form_for(@article, html: { multipart: true }) do |f| %>
+<%= form_for(@article_form, url: articles_path, method: :post, html: { multipart: true }) do |f| %>
   <div>
-    <%= f.label :title %>
+    <%= f.label :article_title %>
   </div>
   <div>
-    <%= f.text_field :title %>
+    <%= f.text_field :article_title %>
   </div>
   <div>
-    <%= f.label :body %>
+    <%= f.label :article_teaser %>
   </div>
   <div>
-    <%= f.cktext_area :body, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+    <%= f.text_area :article_teaser, rows: 5 %>
+  </div>
+  <div>
+    <%= f.label :article_body %>
+  </div>
+  <div>
+    <%= f.cktext_area :article_body, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
   </div>
 <!--   <div>
     <%#= f.label :picture %>
