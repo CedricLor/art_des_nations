@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.2.3'
+# ruby '2.2.3'
 
 gem 'rails_12factor', group: :production
 gem 'puma',           group: :production
@@ -70,3 +70,6 @@ gem 'figaro'
 # Adding support for paperclip
 gem 'aws-sdk', '< 2.0'
 gem 'paperclip'
+
+# Browserify
+gem "browserify-rails"
