@@ -19,7 +19,6 @@ class ArticleForm
   private
 
   def persist!
-    byebug
     @article = Article.create!(title: article_title, teaser: article_teaser, body: article_body)
     @gallery = @article.galleries.create!(title: gallery_title)
     @media_container = @gallery.media_containers.create!(title: media_title, author: media_author, source: media_source, creation_date: media_creation_date, media: media_file)

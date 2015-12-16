@@ -13,9 +13,8 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    byebug
-    @article = ArticleForm.new(params[:article_form])
-    if @article.save
+    @article_form = ArticleForm.new(params[:article_form])
+    if @article_form.save
       redirect_to articles_path, notice: "The article has been successfully created."
     else
       render action: "new"

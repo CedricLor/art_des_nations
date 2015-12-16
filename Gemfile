@@ -70,6 +70,3 @@ gem 'figaro'
 # Adding support for paperclip
 gem 'aws-sdk', '< 2.0'
 gem 'paperclip'
-
-# Virtus
-gem 'virtus', '~> 1.0', '>= 1.0.5'
