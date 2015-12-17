@@ -24,9 +24,6 @@ module ArtDesNations
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
-    # browserify
-    config.browserify_rails.commandline_options = "-t coffeeify --extension=\".js.coffee\" -t [ reactify --everything --es6 --target es5 ]"
-
     # React
     config.react.addons = true # defaults to false
   end

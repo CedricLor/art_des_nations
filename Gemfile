@@ -71,8 +71,5 @@ gem 'figaro'
 gem 'aws-sdk', '< 2.0'
 gem 'paperclip'
 
-# Browserify
-gem "browserify-rails"
-
 # React
 gem 'react-rails', '~> 1.5.0'
