@@ -1,0 +1,15 @@
+{
+  "name": "arts-des-nations",
+  "devDependencies": {
+    "browserify": "^12.0.1",
+    "coffeeify": "^2.0.1",
+    "reactify": "^1.1.1",
+    "watchify": "^3.6.1"
+  },
+  "dependencies": {},
+  "scripts": {
+    "bundle": "browserify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/react_bundle.js",
+    "watch-js": "watchify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/react_bundle.js",
+    "start": "npm run watch-js & rails s"
+  }
+}

@@ -1,7 +1,7 @@
 ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 DOM = React.DOM
 
-@NewsIndexPage = React.createClass
+NewsIndexPage = React.createClass
   displayName: "NewsContainer"
 
   render: ->
@@ -197,3 +197,7 @@ CardContainer = React.createClass
       className: "row"
       cards
 
+
+`module.exports = {
+  NewIndexPage: NewsIndexPage
+};`

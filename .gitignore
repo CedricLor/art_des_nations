@@ -99,6 +99,11 @@ bower.json
 # Ignore pow environment settings
 .powenv
 
-
 # Ignore application configuration
 /config/application.yml
+
+# Ignore rvm rc file
+.rvmrc
+
+# Ignore browserify generated bundle
+# app/assets/javascripts/react_bundle.js
