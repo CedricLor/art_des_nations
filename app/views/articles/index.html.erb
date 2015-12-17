@@ -1,3 +1,6 @@
+
+<%= react_component('NewsIndexPage', { articles: @articles } ) %>
+
 <%= link_to t('.new_article'), new_article_path %>
 
 <% @articles.each do |article| %>
