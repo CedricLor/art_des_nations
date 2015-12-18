@@ -6,10 +6,9 @@
     "reactify": "^1.1.1",
     "watchify": "^3.6.1"
   },
-  "dependencies": {},
+  "dependencies": {
+  },
   "scripts": {
-    "bundle": "browserify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/react_bundle.js",
-    "watch-js": "watchify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/react_bundle.js",
-    "start": "npm run watch-js & rails s"
+    "bundle": "browserify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/components_bundle.js"
   }
 }

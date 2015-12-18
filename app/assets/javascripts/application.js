@@ -17,4 +17,4 @@
 
 //= require react
 //= require react_ujs
-//= require react_bundle
+//= require components_bundle
