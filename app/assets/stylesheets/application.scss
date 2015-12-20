@@ -8,6 +8,10 @@
 @import "font-awesome-sprockets";
 @import "font-awesome";
 
+// Site wide settings (other than variables and mixins)
+@import "config/additional_variables";
+@import "config/site_wide_settings";
+
 // Your CSS
 @import "layout/index";
 @import "components/index";

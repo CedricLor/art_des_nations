@@ -63,26 +63,3 @@ Look at your main `application.scss` file to see how SASS files are imported.
 ```
 
 For every folder (**`components`**, **`layout`**, **`pages`**, **`vendor`**), there is one `_index.scss` partial which is responsible for importing all the other partials of its folder.
-
-**Example 1**: Let's say you add a new `_contact.scss` file in **`pages`** then modify `pages/_index.scss` as:
-
-```scss
-// pages/_index.scss
-@import "home";
-@import "contact";
-```
-
-**Example 2**: Let's say you add a new `_sidebar.scss` file in **`layout`** then modify `layout/_index.scss` as:
-
-```scss
-// layout/_index.scss
-@import "base";
-@import "utilities";
-@import "footer";
-@import "navbar";
-@import "sidebar";
-```
-
-## Navbar template
-
-Our `layout/_navbar.scss` code works well with our home-made ERB template which you can find [here](https://github.com/lewagon/awesome-navbars/blob/master/templates/_navbar_wagon.html.erb). Enjoy.

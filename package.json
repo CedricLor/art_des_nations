@@ -3,12 +3,13 @@
   "devDependencies": {
     "browserify": "^12.0.1",
     "coffeeify": "^2.0.1",
-    "reactify": "^1.1.1",
     "watchify": "^3.6.1"
   },
   "dependencies": {
   },
   "scripts": {
-    "bundle": "browserify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/components_bundle.js"
+    "bundle": "browserify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/components_bundle.js",
+    "bundle_full": "browserify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js app/assets/javascripts/components/news_index_page_.js.coffee -o app/assets/javascripts/components_bundle.js",
+    "watch_full": "watchify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/components_bundle.js"
   }
 }

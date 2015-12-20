@@ -1,0 +1,244 @@
+////////////////////////////
+// SASS Custom-variables
+////////////////////////////
+
+
+////////////////////////////
+// SITE-WIDE TOOLSET
+////////////////////////////
+a {
+  text-decoration: none;
+}
+
+// section.section-bottom-margin {
+//   margin-bottom: 0px;
+//   @media (max-width: $my-screen-sm-max) and (min-width: $my-screen-sm-min) {
+//     margin-bottom: 70px;
+//   }
+//   @media (max-width: $my-screen-md-max) and (min-width: $my-screen-md-min) {
+//     margin-bottom: 72px;
+//   }
+//   @media (min-width: $my-screen-lg-min) {
+//     margin-bottom: 50px;
+//   }
+// }
+
+// section {
+//   .section-title {
+//     margin-left: -15px;
+//     @media (min-width: $my-screen-sm-min) {
+//       padding-top: 45px;
+//       padding-bottom: 45px;
+//     }
+//   }
+// }
+
+// div.spacer-for-content-header-of-sec-pages {
+//   margin-top: 50px;
+// }
+
+////////////////////////////
+// Side nav
+////////////////////////////
+////////////////////////////
+// Top site-wide thin header row formatting
+////////////////////////////
+
+////////////////////////////
+// Top navbar formatting
+////////////////////////////
+// For the scrollspy
+body {
+  position: relative;
+}
+
+////////////////////////////
+// Main content formating
+////////////////////////////
+body {
+  ///////////////
+  /* home page */
+  ///////////////
+  &.page-index {
+    section.header-section {
+      height: 70vh;
+      position: relative;
+      .header-content {
+        height: 100%;
+        width: 100%;
+        .header-row {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 100%;
+        }
+        .header-bg-image-row {
+          overflow: hidden;
+          img {
+            height: 100%;
+            width: 100%;
+          }
+        }
+        .header-text-row {
+          color: $index-page-header-color;
+          opacity: 1;
+          z-index: 1;
+          .vertical-positionner-wrapper-table {
+            display: table;
+            height: 100%;
+            .vertical-positionner-wrapper-table-cell {
+              display: table-cell;
+              vertical-align: middle;
+            }
+          }
+        }
+      }
+    }
+  }
+  ///////////////////////////////////////////
+  /* news.liquid & news on the index page */
+  ///////////////////////////////////////////
+  div.news-listing {
+    margin-bottom: 20px;
+    .outer-wrapper-news-div {
+      // position: relative;
+      padding: 0px;
+      border-style: none;
+      .inner-wrapper-news-div {
+        .news-teaser-wrapper {
+          a {
+            text-decoration: none;
+            color: black;
+            &:hover {
+              color: $news-teaser-wrapper-hover-color;
+            }
+          }
+        }
+      }
+      img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .read-more-news-btn-container {
+        text-align: right;
+      }
+    }
+  }
+  /////////////////
+  /* events.liquid */
+  /////////////////
+  &.page-events {
+    .event-outer-wrapper {
+      padding-top: 70px;
+      padding-bottom: 70px;
+      border-bottom-style: solid;
+      border-bottom-width: 1px;
+      border-bottom-color: $event-border-color;
+      &:hover {
+        background-color: $event-hover-bg-color;
+      }
+      img.my-media-size {
+        width: 200px;
+        height: 100px;
+      }
+      .my-event-media-body {
+        padding-left: 55px;
+        .my-event-media-heading {
+          text-transform: uppercase;
+        }
+        .my-event-category {
+          color: $event-category-color;
+        }
+        .my-event-location {
+          color: $event-location-color;
+        }
+      }
+      .my-event-btn-container {
+        margin-top: 10px;
+        @media (min-width: $my-screen-sm-min) {
+          margin-top: 55px;
+          text-align: right;
+        }
+        .my-event-btn {
+          @media (max-width: $my-screen-sm-min) {
+            display: block;
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+  ///////////////
+  /* Footer */
+  ///////////////
+  @keyframes for-footer {
+      from {opacity: 0;}
+      to {opacity: 1;}
+  }
+  .footer {
+    opacity: 1;
+    animation-name: for-footer;
+    animation-duration: 4s;
+    /********/
+    margin-top: 70px;
+    p {
+      padding: 10px;
+      text-align: center;
+    }
+    a, a:visited {
+      color: $language-switcher-footer-visited-color;
+    }
+  }
+  ///////////////
+  /* news/content_type_template.liquid */
+  /* For show news */
+  ///////////////
+  article.news {
+    p.tags span {
+      margin-left: 10px;
+    }
+    h3.posted-at {
+      font-size: 20px;
+      margin-top: 0px;
+      color: $individual-news-heading-color;
+    }
+  }
+}
+
+
+/* Image box on about page */
+/* phones */
+.img-box {
+  width: 100%;
+  margin: 0px auto auto auto;
+  .img-resizable {
+    width: 800px;
+    cursor: pointer;
+  }
+  .img-belittled {
+    height: 300px;
+  }
+}
+.lightbox {
+  position: fixed;
+  top: 0px; left: 0px;
+  bottom: 0px; right: 0px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
+  background-color: $light-box-bg-color;
+  z-index: 1050;
+  cursor: pointer;
+  .img-enlarged {
+     width: 800px;
+  }
+  p {
+    color: $light-box-legend-color;
+    font-weight: bold;
+  }
+}

@@ -1,0 +1,76 @@
+/* -------------------------------------
+ * Side-nav classes
+ * ------------------------------------- */
+body {
+  div.side-nav {
+    position: fixed;
+    top: $logo-height-for-mobile-side-nav;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    @media (min-width: $my-screen-sm-min) {
+      // GIVE SOME ROOM TO THE LOGO IN THE HEADER ON SMALL SCREENS
+      top: 0px;
+    }
+    div.side-nav-wrapper-open {
+      z-index: 1000;
+      -webkit-transform: translateX(0);
+      -ms-transform: translateX(0);
+      transform: translateX(0);
+    }
+    div.side-nav-wrapper-close {
+      -webkit-transform: translateX(-100%);
+      -ms-transform: translateX(-100%);
+      transform: translateX(-100%);
+    }
+    .side-nav-wrapper {
+      position: relative;
+      height: 100%;
+      -webkit-transition: 240ms cubic-bezier(.25,.46,.45,.94) -webkit-transform;
+      transition: 240ms cubic-bezier(.25,.46,.45,.94) transform;
+      background-color: $side-nav-bg-color;
+      font-size: 16px;
+      -webkit-font-smoothing: subpixel-antialiased;
+      @media (min-width: $my-screen-lg-min) {
+        font-size: 17px;
+      }
+      @media (min-width: $my-screen-sm-min) {
+        max-width: 250px;
+      }
+      .side-nav-scrollable {
+        border-right: 1px solid $light-gray;
+        height: -webkit-calc(100% - 49px);
+        height: calc(100% - 49px);
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        .side-nav-logo {
+          text-align: center;
+          display: none;
+          @media (min-width: $my-screen-sm-min) {
+            display: block;
+          }
+          margin: 0 auto;
+          width: 135px;
+          padding: 17px 0 18px;
+          @media (max-width: $my-screen-sm-max) and (min-width: $my-screen-sm-min) {
+            padding: 14px 0 13px;
+            width: 105px;
+          }
+        }
+        .side-nav-list {
+          margin: 0;
+          padding: 0;
+          list-style-type: none;
+          margin-top: 11px;
+          > li > a {
+            display: block;
+            padding: 0 25px;
+            line-height: 35px;
+            color: $side-nav-item-color;
+          }
+        }
+      }
+    }
+  }
+}

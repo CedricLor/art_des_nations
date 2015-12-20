@@ -1,0 +1,22 @@
+/* -------------------------------------
+ * Common utilities for top header and sidenav
+ * ------------------------------------- */
+.icon-logo {
+  display: inline-block;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.icon-lg-logo {
+  // FIXME - HEIGHT TO BE SET DEPENDING ON LOGO SIZE AND MAKE SIZE A SASS VARIABLE
+  width: 131px;
+  height: 66px;
+  // SET DIFFERENT RESIZED IMAGES DEPENDING ON THE SCREEN SIZE
+  // background-image: url('../images/..');
+}
+.icon-sm-log {
+  // FIXME - HEIGHT TO BE SET DEPENDING ON LOGO SIZE AND MAKE SIZE A SASS VARIABLE
+  width: 105px;
+  height: 53px;
+  // SET DIFFERENT RESIZED IMAGES DEPENDING ON THE SCREEN SIZE
+  // background-image: url('../images/..');
+}

@@ -1,7 +1,9 @@
 // # `window.React = require('react')`
 // # `window.ReactDOM = require('react-dom')`
 
-window.NewsIndexPage = require('./components/news_index_page_.js.coffee').CommentBox
+DOM = React.DOM;
+
+window.NewsIndexPage = require('./components/news_index_page.js.coffee').NewsIndexPage
 
 // # $(window).load ->
 

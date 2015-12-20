@@ -1,0 +1,132 @@
+/* -------------------------------------
+ * Top-header classes
+ * ------------------------------------- */
+body {
+  header.header {
+    background-color: $top-site-wide-header-bg-color;
+    color: white;
+    @media (max-width: $my-screen-xs-max) {
+      // FIXME - PROBABLY TO BE DELETED - THE HEIGHT IS SET BY THE HEADER LOGO -- SEE BELOW
+      height: 60px;
+      // height: $logo-height-for-mobile-side-nav;
+    }
+    @media (max-width: $my-screen-sm-max) and (min-width: $my-screen-sm-min) {
+      height: 85px;
+    }
+    .header-wrapper {
+      width: 100%;
+      top: 0;
+      background-color: $top-site-wide-header-bg-color;
+      z-index: 10;
+      position: relative;
+      @media (max-width: $my-screen-sm-max) {
+        position: fixed;
+      }
+      .header-inner {
+        position: relative;
+        .header-logo {
+          display: block;
+          width: 100%;
+          // FIXME - HEIGHT TO BE SET DEPENDING ON LOGO SIZE AND MAKE SIZE A SASS VARIABLE
+          // FIXME - REVIEW LAYOUT AND SIDENAV
+          min-height: 106px;
+          text-align: center;
+          border-bottom: 1px solid $top-site-wide-header-border-color;
+          @media (max-width: $my-screen-xs-max) {
+            height: $logo-height-for-mobile-side-nav;
+            min-height: 60px;
+          }
+          @media (max-width: $my-screen-sm-max) and (min-width: $my-screen-sm-min) {
+            min-height: 85px;
+          }
+          .header-logo-title {
+            display: block;
+          }
+          // FIXME - SIMILAR TO A IN NAVBAR - REFACTOR AS A COMMON CLASS (WITH SIDE NAV) OR ADJUST
+          a.header-logo-title {
+            &:hover {
+              color: $top-site-wide-header-logo-hover-color;
+            }
+            display: block;
+            color: $top-site-wide-header-logo-color;
+            font-size: 16px;
+            @media (min-width: $my-screen-lg-min) {
+              font-size: 17px;
+            }
+            .header-icon-logo {
+              margin: auto;
+              // FIXME - HEIGHT TO BE SET DEPENDING ON LOGO SIZE AND MAKE SIZE A SASS VARIABLE
+              min-height: 60px;
+              // min-height: 106px;
+              @media (min-width: $my-screen-sm-min) {
+                // min-height: 60px;
+                min-height: 106px;
+              }
+              @media (max-width: $my-screen-sm-max) and (min-width: $my-screen-sm-min) {
+                min-height: 85px;
+              }
+            }
+          }
+        }
+        .header-menu {
+          position: absolute;
+          top: 0;
+          left: 0;
+          .menu-btn {
+            text-decoration: none !important;
+            .min-menu-icon {
+              display: inline-block;
+              margin: 0 14px 0 26px;
+              width: 22px;
+              line-height: initial;
+              height: 18px;
+              background-repeat: no-repeat;
+              svg {
+                  -webkit-transform: translateY(3px);
+                  -ms-transform: translateY(3px);
+                  transform: translateY(3px);
+                path {
+                    fill: $menu-button-color;
+                }
+                &:not(:root) {
+                    overflow: hidden;
+                }
+              }
+            }
+            &:hover {
+              color: $menu-button-hover-color;
+              svg path {
+                fill: $menu-button-hover-color;
+              }
+            }
+            display: inline-block;
+            color: $menu-button-icon-color;
+            border: 0;
+            @media (min-width: $my-screen-sm-min) {
+              border-right: 1px solid $extreme-dark-gray;
+            }
+            line-height: 60px;
+            @media (max-width: $my-screen-sm-max) and (min-width: $my-screen-sm-min) {
+              width: 72px;
+              line-height: 85px;
+            }
+            @media (min-width: $my-screen-md-min) {
+              width: 129px;
+              line-height: 106px;
+            }
+            font-size: 16px;
+            @media (min-width: $my-screen-lg-min) {
+              font-size: 17px;
+            }
+            span {
+              display: none;
+              @media (min-width: $my-screen-md-min) {
+                display: initial;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
