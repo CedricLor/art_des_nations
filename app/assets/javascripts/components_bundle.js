@@ -166,71 +166,6 @@ NewsBtstpRow = React.createClass({
 
 NewsCardsContainer = React.createClass({
   displayName: "NewsCardsContainer",
-  arrayBuilder: function(chunk_size) {
-    var empty_div_height_array, i, j, ref, ref1;
-    empty_div_height_array = [];
-    for (i = j = 1, ref = this.props.domElements, ref1 = chunk_size; ref1 > 0 ? j <= ref : j >= ref; i = j += ref1) {
-      empty_div_height_array.push(0);
-    }
-    return empty_div_height_array;
-  },
-  numberOfCardsByRow: function() {
-    if (window.innerWidth >= 992) {
-      return 3;
-    } else if (window.innerWidth >= 768) {
-      return 2;
-    }
-  },
-  getInitialState: function() {
-    return {
-      cardByRows: this.numberOfCardsByRow(),
-      heightOfRows: [],
-      heightOfRowsByChunksOf: {
-        2: this.arrayBuilder(2),
-        3: this.arrayBuilder(3)
-      }
-    };
-  },
-  handleResize: function() {
-    var cardByRows;
-    cardByRows = this.numberOfCardsByRow();
-    this.setState({
-      cardByRows: cardByRows
-    });
-    return this.forceUpdate();
-  },
-  componentDidMount: function() {
-    return window.addEventListener('resize', this.handleResize);
-  },
-  componentWillUnmount: function() {
-    return window.removeEventListener('resize', this.handleResize);
-  },
-  storeDivHeight: function(height, card_index) {
-    var heightOfRows;
-    heightOfRows = this.state.heightOfRows;
-    heightOfRows[card_index] = height;
-    return this.setState({
-      heightOfRows: heightOfRows
-    });
-  },
-  inWhichRowIsTheCardByRowOf: function(number_of_cards_by_row, index) {
-    var rindex, row;
-    rindex = index + 1;
-    return row = rindex % number_of_cards_by_row === 0 ? rindex / number_of_cards_by_row - 1 : Math.floor(rindex / number_of_cards_by_row);
-  },
-  setRequiredHeightOfRowsOnRender: function(card_index) {
-    var height, heights_of_cards_in_same_row, j, len, my_row_index, required_min_height;
-    my_row_index = this.inWhichRowIsTheCardByRowOf(this.state.cardByRows, card_index);
-    heights_of_cards_in_same_row = this.state.heightOfRows.slice(my_row_index * 3, (my_row_index * 3) + 3);
-    required_min_height = 0;
-    for (j = 0, len = heights_of_cards_in_same_row.length; j < len; j++) {
-      height = heights_of_cards_in_same_row[j];
-      if (height > required_min_height) {
-        required_min_height = height;
-      }
-    }
-    return required_min_height;
-  },
   createCards: function() {
     NewsCard = require('./news_card.js.coffee').NewsCard;
     var card, element, i, j, len, ref, required_min_height, results;
@@ -238,8 +173,8 @@ NewsCardsContainer = React.createClass({
     results = [];
     for (i = j = 0, len = ref.length; j < len; i = ++j) {
       card = ref[i];
-      if (this.state.heightOfRows.length === this.props.domElements.length) {
-        required_min_height = this.setRequiredHeightOfRowsOnRender(i);
+      if (this.props.div_equalization_params.heightOfRows.length === this.props.domElements.length) {
+        required_min_height = this.props.div_equalization_params.setRequiredHeightOfRowsOnRender(i);
       } else {
         required_min_height = 0;
       }
@@ -250,7 +185,7 @@ NewsCardsContainer = React.createClass({
         localizedReadMore: this.props.localizedReadMore,
         colClasses: this.props.colClasses,
         cardNumber: i,
-        myHeightIs: this.storeDivHeight,
+        myHeightIs: this.props.div_equalization_params.storeDivHeight,
         minHeightOfInnerWrapper: required_min_height
       });
       results.push(element);
@@ -290,7 +225,8 @@ NewsIndexPage = React.createClass({
   getInitialState: function() {
     return {
       articles: this.props.articles,
-      new_article: this.blankNewArticle()
+      new_article: this.blankNewArticle(),
+      div_equalization_params: this.divEqualizationParams()
     };
   },
   blankNewArticle: function() {
@@ -339,7 +275,76 @@ NewsIndexPage = React.createClass({
       new_article: new_article
     });
   },
+  divEqualizationParams: function() {
+    return {
+      cardByRows: this.numberOfCardsByRow(),
+      heightOfRows: [],
+      heightOfRowsByChunksOf: {
+        2: this.arrayBuilder(2),
+        3: this.arrayBuilder(3)
+      },
+      setRequiredHeightOfRowsOnRender: this.setRequiredHeightOfRowsOnRender,
+      storeDivHeight: this.storeDivHeight
+    };
+  },
+  arrayBuilder: function(chunk_size) {
+    var empty_div_height_array, i, j, ref, ref1;
+    empty_div_height_array = [];
+    for (i = j = 1, ref = this.props.domElements, ref1 = chunk_size; ref1 > 0 ? j <= ref : j >= ref; i = j += ref1) {
+      empty_div_height_array.push(0);
+    }
+    return empty_div_height_array;
+  },
+  numberOfCardsByRow: function() {
+    if (window.innerWidth >= 992) {
+      return 3;
+    } else if (window.innerWidth >= 768) {
+      return 2;
+    }
+  },
+  handleResize: function() {
+    var div_equalization_params;
+    div_equalization_params = this.state.div_equalization_params;
+    div_equalization_params[cardByRows] = this.numberOfCardsByRow();
+    this.setState({
+      div_equalization_params: div_equalization_params
+    });
+    return this.forceUpdate();
+  },
+  componentDidMount: function() {
+    return window.addEventListener('resize', this.handleResize);
+  },
+  componentWillUnmount: function() {
+    return window.removeEventListener('resize', this.handleResize);
+  },
+  storeDivHeight: function(height, card_index) {
+    var div_equalization_params;
+    div_equalization_params = this.state.div_equalization_params;
+    div_equalization_params.heightOfRows[card_index] = height;
+    return this.setState({
+      div_equalization_params: div_equalization_params
+    });
+  },
+  inWhichRowIsTheCardByRowOf: function(number_of_cards_by_row, index) {
+    var rindex, row;
+    rindex = index + 1;
+    return row = rindex % number_of_cards_by_row === 0 ? rindex / number_of_cards_by_row - 1 : Math.floor(rindex / number_of_cards_by_row);
+  },
+  setRequiredHeightOfRowsOnRender: function(card_index) {
+    var height, heights_of_cards_in_same_row, j, len, my_row_index, required_min_height;
+    my_row_index = this.inWhichRowIsTheCardByRowOf(this.state.div_equalization_params.cardByRows, card_index);
+    heights_of_cards_in_same_row = this.state.div_equalization_params.heightOfRows.slice(my_row_index * 3, (my_row_index * 3) + 3);
+    required_min_height = 0;
+    for (j = 0, len = heights_of_cards_in_same_row.length; j < len; j++) {
+      height = heights_of_cards_in_same_row[j];
+      if (height > required_min_height) {
+        required_min_height = height;
+      }
+    }
+    return required_min_height;
+  },
   render: function() {
+    console.log(this.state);
     NewsCardsContainer = require('./news_cards_container.js.coffee').NewsCardsContainer;
     return DOM.div({
       className: "news-index-page-body"
@@ -353,7 +358,8 @@ NewsIndexPage = React.createClass({
       domElements: this.state.articles,
       localizedReadMore: "Read more",
       colClasses: "col-xs-12 col-sm-6 col-md-4",
-      new_article: this.state.new_article
+      new_article: this.state.new_article,
+      div_equalization_params: this.state.div_equalization_params
     })));
   }
 });
