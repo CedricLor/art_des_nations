@@ -10,7 +10,7 @@ NewsBtstpRow = React.createClass
 
   render: ->
     DOM.div
-      className: "row "
+      className: "row"
       @props.cards_for_row
 
 ########################################
@@ -29,32 +29,12 @@ NewsCardsContainer = React.createClass
   numberOfCardsByRow: ->
     if window.innerWidth >= 992 then 3 else if window.innerWidth >= 768 then 2
 
-  blankNewArticle: ->
-    {
-      article_data: {
-        title: '',
-        teaser: '',
-        body: ''
-        },
-      article_form_functions: {
-        handleSubmitNewArticle: @handleSubmitNewArticle,
-        handleChangeInFieldsOfNewArticle: @handleChangeInFieldsOfNewArticle
-      }
-    }
-
-  createBlankNewArticle: ->
-    blank_article = @blankNewArticle()
-    @setState new_article: blank_article
-
   getInitialState: ->
-    articles: @props.domElements
-    new_article: @blankNewArticle()
     cardByRows: @numberOfCardsByRow()
     heightOfRows: []
     heightOfRowsByChunksOf:
       2: @arrayBuilder(2)
       3: @arrayBuilder(3)
-    pending: true
 
   handleResize: ->
     cardByRows = @numberOfCardsByRow()
@@ -102,8 +82,8 @@ NewsCardsContainer = React.createClass
 
   createCards: ->
     `NewsCard = require('./news_card.js.coffee').NewsCard`
-    for card, i in @state.articles
-      if @state.heightOfRows.length == @state.articles.length then required_min_height = @setRequiredHeightOfRowsOnRender(i) else required_min_height = 0
+    for card, i in @props.domElements
+      if @state.heightOfRows.length == @props.domElements.length then required_min_height = @setRequiredHeightOfRowsOnRender(i) else required_min_height = 0
       element = React.createElement NewsCard,
         key: i
       #   # cardImageSource: card.dataset.imageSrc
@@ -119,22 +99,6 @@ NewsCardsContainer = React.createClass
         # Card equalization
       element
 
-  addNewArticle: (article) ->
-    articles = @state.articles.slice()
-    articles.unshift article
-    @setState articles: articles
-
-  handleSubmitNewArticle: ->
-    $.post '', { article: @state.new_article.article_data }, (data) =>
-      @addNewArticle data
-      @createBlankNewArticle()
-    , 'JSON'
-
-  handleChangeInFieldsOfNewArticle: (e) ->
-    new_article = @state.new_article
-    new_article.article_data[e.target.name] = e.target.value
-    @setState new_article: new_article
-
   render: ->
     cards = @createCards()
     # cards_in_rows = @wrapCardsInRows cards
@@ -147,7 +111,7 @@ NewsCardsContainer = React.createClass
         DOM.div
           className: "col-xs-12"
           React.createElement ArticleForm,
-            new_article: @state.new_article
+            new_article: @props.new_article
       React.DOM.hr null
       DOM.div
         className: "row"

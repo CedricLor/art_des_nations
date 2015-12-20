@@ -159,7 +159,7 @@ NewsBtstpRow = React.createClass({
   displayName: "NewsBtstpRow",
   render: function() {
     return DOM.div({
-      className: "row "
+      className: "row"
     }, this.props.cards_for_row);
   }
 });
@@ -181,37 +181,14 @@ NewsCardsContainer = React.createClass({
       return 2;
     }
   },
-  blankNewArticle: function() {
-    return {
-      article_data: {
-        title: '',
-        teaser: '',
-        body: ''
-      },
-      article_form_functions: {
-        handleSubmitNewArticle: this.handleSubmitNewArticle,
-        handleChangeInFieldsOfNewArticle: this.handleChangeInFieldsOfNewArticle
-      }
-    };
-  },
-  createBlankNewArticle: function() {
-    var blank_article;
-    blank_article = this.blankNewArticle();
-    return this.setState({
-      new_article: blank_article
-    });
-  },
   getInitialState: function() {
     return {
-      articles: this.props.domElements,
-      new_article: this.blankNewArticle(),
       cardByRows: this.numberOfCardsByRow(),
       heightOfRows: [],
       heightOfRowsByChunksOf: {
         2: this.arrayBuilder(2),
         3: this.arrayBuilder(3)
-      },
-      pending: true
+      }
     };
   },
   handleResize: function() {
@@ -257,11 +234,11 @@ NewsCardsContainer = React.createClass({
   createCards: function() {
     NewsCard = require('./news_card.js.coffee').NewsCard;
     var card, element, i, j, len, ref, required_min_height, results;
-    ref = this.state.articles;
+    ref = this.props.domElements;
     results = [];
     for (i = j = 0, len = ref.length; j < len; i = ++j) {
       card = ref[i];
-      if (this.state.heightOfRows.length === this.state.articles.length) {
+      if (this.state.heightOfRows.length === this.props.domElements.length) {
         required_min_height = this.setRequiredHeightOfRowsOnRender(i);
       } else {
         required_min_height = 0;
@@ -279,6 +256,62 @@ NewsCardsContainer = React.createClass({
       results.push(element);
     }
     return results;
+  },
+  render: function() {
+    var cards;
+    cards = this.createCards();
+    ArticleForm = require('./article_form.js.coffee').ArticleForm;
+    return DOM.div({
+      className: "container-fluid"
+    }, DOM.div({
+      className: "row"
+    }, DOM.div({
+      className: "col-xs-12"
+    }, React.createElement(ArticleForm, {
+      new_article: this.props.new_article
+    }))), React.DOM.hr(null), DOM.div({
+      className: "row"
+    }, cards));
+  }
+});
+
+module.exports = {
+  NewsCardsContainer: NewsCardsContainer
+};;
+
+
+},{"./article_form.js.coffee":2,"./news_card.js.coffee":3}],5:[function(require,module,exports){
+var NewsIndexPage, ReactCSSTransitionGroup;
+
+ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
+NewsIndexPage = React.createClass({
+  displayName: "NewsIndexPage",
+  getInitialState: function() {
+    return {
+      articles: this.props.articles,
+      new_article: this.blankNewArticle()
+    };
+  },
+  blankNewArticle: function() {
+    return {
+      article_data: {
+        title: '',
+        teaser: '',
+        body: ''
+      },
+      article_form_functions: {
+        handleSubmitNewArticle: this.handleSubmitNewArticle,
+        handleChangeInFieldsOfNewArticle: this.handleChangeInFieldsOfNewArticle
+      }
+    };
+  },
+  createBlankNewArticle: function() {
+    var blank_article;
+    blank_article = this.blankNewArticle();
+    return this.setState({
+      new_article: blank_article
+    });
   },
   addNewArticle: function(article) {
     var articles;
@@ -307,36 +340,6 @@ NewsCardsContainer = React.createClass({
     });
   },
   render: function() {
-    var cards;
-    cards = this.createCards();
-    ArticleForm = require('./article_form.js.coffee').ArticleForm;
-    return DOM.div({
-      className: "container-fluid"
-    }, DOM.div({
-      className: "row"
-    }, DOM.div({
-      className: "col-xs-12"
-    }, React.createElement(ArticleForm, {
-      new_article: this.state.new_article
-    }))), React.DOM.hr(null), DOM.div({
-      className: "row"
-    }, cards));
-  }
-});
-
-module.exports = {
-  NewsCardsContainer: NewsCardsContainer
-};;
-
-
-},{"./article_form.js.coffee":2,"./news_card.js.coffee":3}],5:[function(require,module,exports){
-var NewsIndexPage, ReactCSSTransitionGroup;
-
-ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
-NewsIndexPage = React.createClass({
-  displayName: "NewsIndexPage",
-  render: function() {
     NewsCardsContainer = require('./news_cards_container.js.coffee').NewsCardsContainer;
     return DOM.div({
       className: "news-index-page-body"
@@ -347,9 +350,10 @@ NewsIndexPage = React.createClass({
       transitionAppear: true,
       transitionAppearTimeout: 4000
     }, React.createElement(NewsCardsContainer, {
-      domElements: this.props.articles,
+      domElements: this.state.articles,
       localizedReadMore: "Read more",
-      colClasses: "col-xs-12 col-sm-6 col-md-4"
+      colClasses: "col-xs-12 col-sm-6 col-md-4",
+      new_article: this.state.new_article
     })));
   }
 });
