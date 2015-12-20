@@ -12,12 +12,21 @@ class ArticlesController < ApplicationController
     @article_form = ArticleForm.new
   end
 
+  # def create
+  #   @article_form = ArticleForm.new(params[:article_form])
+  #       redirect_to articles_path, notice: "The article has been successfully created." }
+  #   else
+  #       render action: "new"
+  #   end
+  # end
+
   def create
-    @article_form = ArticleForm.new(params[:article_form])
-    if @article_form.save
-      redirect_to articles_path, notice: "The article has been successfully created."
+    @article = Article.new(article_params)
+
+    if @article.save
+      render json: @article
     else
-      render action: "new"
+      render json: @article.errors, status: :unprocessable_entity
     end
   end
 

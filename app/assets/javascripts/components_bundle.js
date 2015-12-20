@@ -18,7 +18,86 @@ window.NewsIndexPage = require('./components/news_index_page.js.coffee').NewsInd
 // #   render
 
 
-},{"./components/news_index_page.js.coffee":4}],2:[function(require,module,exports){
+},{"./components/news_index_page.js.coffee":5}],2:[function(require,module,exports){
+var ArticleForm;
+
+ArticleForm = React.createClass({
+  getInitialState: function() {
+    return {
+      title: '',
+      teaser: '',
+      body: ''
+    };
+  },
+  handleChange: function(e) {
+    var name, obj;
+    name = e.target.name;
+    return this.setState((
+      obj = {},
+      obj["" + name] = e.target.value,
+      obj
+    ));
+  },
+  handleSubmit: function(e) {
+    e.preventDefault();
+    return $.post('', {
+      article: this.state
+    }, (function(_this) {
+      return function(data) {
+        console.log("hello");
+        _this.props.handleNewArticle(data);
+        return _this.setState(_this.getInitialState());
+      };
+    })(this), 'JSON');
+  },
+  valid: function() {
+    return this.state.title && this.state.teaser && this.state.body;
+  },
+  render: function() {
+    return React.DOM.form({
+      className: 'form-inline',
+      onSubmit: this.handleSubmit
+    }, React.DOM.div({
+      className: 'form-group'
+    }, React.DOM.input({
+      type: 'text',
+      className: 'form-control',
+      placeholder: 'Title',
+      name: 'title',
+      value: this.state.title,
+      onChange: this.handleChange
+    })), React.DOM.div({
+      className: 'form-group'
+    }, React.DOM.input({
+      type: 'text',
+      className: 'form-control',
+      placeholder: 'Teaser',
+      name: 'teaser',
+      value: this.state.teaser,
+      onChange: this.handleChange
+    })), React.DOM.div({
+      className: 'form-group'
+    }, React.DOM.input({
+      type: 'text',
+      className: 'form-control',
+      placeholder: 'Body',
+      name: 'body',
+      value: this.state.body,
+      onChange: this.handleChange
+    })), React.DOM.button({
+      type: 'submit',
+      className: 'btn btn-primary',
+      disabled: !this.valid()
+    }, 'Create article'));
+  }
+});
+
+module.exports = {
+  ArticleForm: ArticleForm
+};;
+
+
+},{}],3:[function(require,module,exports){
 var Image, NewsCard;
 
 Image = React.createClass({
@@ -94,7 +173,7 @@ module.exports = {
 };;
 
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var NewsBtstpRow, NewsCardsContainer;
 
 NewsBtstpRow = React.createClass({
@@ -111,7 +190,7 @@ NewsCardsContainer = React.createClass({
   arrayBuilder: function(chunk_size) {
     var empty_div_height_array, i, j, ref, ref1;
     empty_div_height_array = [];
-    for (i = j = 1, ref = this.props.domElements.length, ref1 = chunk_size; ref1 > 0 ? j <= ref : j >= ref; i = j += ref1) {
+    for (i = j = 1, ref = this.props.domElements, ref1 = chunk_size; ref1 > 0 ? j <= ref : j >= ref; i = j += ref1) {
       empty_div_height_array.push(0);
     }
     return empty_div_height_array;
@@ -125,6 +204,7 @@ NewsCardsContainer = React.createClass({
   },
   getInitialState: function() {
     return {
+      articles: this.props.domElements,
       cardByRows: this.numberOfCardsByRow(),
       heightOfRows: [],
       heightOfRowsByChunksOf: {
@@ -177,11 +257,11 @@ NewsCardsContainer = React.createClass({
   createCards: function() {
     NewsCard = require('./news_card.js.coffee').NewsCard;
     var card, element, i, j, len, ref, required_min_height, results;
-    ref = this.props.domElements;
+    ref = this.state.articles;
     results = [];
     for (i = j = 0, len = ref.length; j < len; i = ++j) {
       card = ref[i];
-      if (this.state.heightOfRows.length === this.props.domElements.length) {
+      if (this.state.heightOfRows.length === this.state.articles.length) {
         required_min_height = this.setRequiredHeightOfRowsOnRender(i);
       } else {
         required_min_height = 0;
@@ -200,12 +280,27 @@ NewsCardsContainer = React.createClass({
     }
     return results;
   },
+  addArticle: function(article) {
+    var articles;
+    articles = this.state.articles.slice();
+    articles.unshift(article);
+    return this.setState({
+      articles: articles
+    });
+  },
   render: function() {
     var cards;
     cards = this.createCards();
+    ArticleForm = require('./article_form.js.coffee').ArticleForm;
     return DOM.div({
       className: "container-fluid"
     }, DOM.div({
+      className: "row"
+    }, DOM.div({
+      className: "col-xs-12"
+    }, React.createElement(ArticleForm, {
+      handleNewArticle: this.addArticle
+    }))), React.DOM.hr(null), DOM.div({
       className: "row"
     }, cards));
   }
@@ -216,7 +311,7 @@ module.exports = {
 };;
 
 
-},{"./news_card.js.coffee":2}],4:[function(require,module,exports){
+},{"./article_form.js.coffee":2,"./news_card.js.coffee":3}],5:[function(require,module,exports){
 var NewsIndexPage, ReactCSSTransitionGroup;
 
 ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
@@ -246,4 +341,4 @@ module.exports = {
 };;
 
 
-},{"./news_cards_container.js.coffee":3}]},{},[1]);
+},{"./news_cards_container.js.coffee":4}]},{},[1]);

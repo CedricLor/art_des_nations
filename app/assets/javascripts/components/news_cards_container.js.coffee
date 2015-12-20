@@ -22,7 +22,7 @@ NewsCardsContainer = React.createClass
   # Card equalization
   arrayBuilder: (chunk_size) ->
     empty_div_height_array = []
-    for i in [1..@props.domElements.length] by chunk_size
+    for i in [1..@props.domElements] by chunk_size
       empty_div_height_array.push(0)
     empty_div_height_array
 
@@ -30,6 +30,7 @@ NewsCardsContainer = React.createClass
     if window.innerWidth >= 992 then 3 else if window.innerWidth >= 768 then 2
 
   getInitialState: ->
+    articles: @props.domElements
     cardByRows: @numberOfCardsByRow()
     heightOfRows: []
     heightOfRowsByChunksOf:
@@ -83,8 +84,8 @@ NewsCardsContainer = React.createClass
 
   createCards: ->
     `NewsCard = require('./news_card.js.coffee').NewsCard`
-    for card, i in @props.domElements
-      if @state.heightOfRows.length == @props.domElements.length then required_min_height = @setRequiredHeightOfRowsOnRender(i) else required_min_height = 0
+    for card, i in @state.articles
+      if @state.heightOfRows.length == @state.articles.length then required_min_height = @setRequiredHeightOfRowsOnRender(i) else required_min_height = 0
       element = React.createElement NewsCard,
         key: i
       #   # cardImageSource: card.dataset.imageSrc
@@ -100,12 +101,24 @@ NewsCardsContainer = React.createClass
         # Card equalization
       element
 
+  addArticle: (article) ->
+    articles = @state.articles.slice()
+    articles.unshift article
+    @setState articles: articles
+
   render: ->
     cards = @createCards()
     # cards_in_rows = @wrapCardsInRows cards
+    `ArticleForm = require('./article_form.js.coffee').ArticleForm`
 
     DOM.div
       className: "container-fluid"
+      DOM.div
+        className: "row"
+        DOM.div
+          className: "col-xs-12"
+          React.createElement ArticleForm, handleNewArticle: @addArticle
+      React.DOM.hr null
       DOM.div
         className: "row"
         cards
@@ -114,4 +127,3 @@ NewsCardsContainer = React.createClass
 `module.exports = {
   NewsCardsContainer: NewsCardsContainer
 };`
-
