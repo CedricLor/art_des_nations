@@ -29,8 +29,21 @@ NewsCardsContainer = React.createClass
   numberOfCardsByRow: ->
     if window.innerWidth >= 992 then 3 else if window.innerWidth >= 768 then 2
 
+  createBlankNewArticle: ->
+    blank_article = {
+      title: '',
+      teaser: '',
+      body: ''
+    }
+    @setState new_article: blank_article
+
   getInitialState: ->
     articles: @props.domElements
+    new_article: {
+      title: '',
+      teaser: '',
+      body: ''
+    }
     cardByRows: @numberOfCardsByRow()
     heightOfRows: []
     heightOfRowsByChunksOf:
@@ -101,10 +114,22 @@ NewsCardsContainer = React.createClass
         # Card equalization
       element
 
-  addArticle: (article) ->
+  addNewArticle: (article) ->
     articles = @state.articles.slice()
     articles.unshift article
     @setState articles: articles
+
+  handleSubmitNewArticle: ->
+    console.log("hello")
+    $.post '', { article: @state.new_article }, (data) =>
+      @addNewArticle data
+      @createBlankNewArticle()
+    , 'JSON'
+
+  handleChangeInFieldsOfNewArticle: (e) ->
+    new_article = @state.new_article
+    new_article[e.target.name] = e.target.value
+    @setState new_article: new_article
 
   render: ->
     cards = @createCards()
@@ -117,7 +142,10 @@ NewsCardsContainer = React.createClass
         className: "row"
         DOM.div
           className: "col-xs-12"
-          React.createElement ArticleForm, handleNewArticle: @addArticle
+          React.createElement ArticleForm,
+            handleSubmitNewArticle: @handleSubmitNewArticle
+            handleChange: @handleChangeInFieldsOfNewArticle
+            new_article: @state.new_article
       React.DOM.hr null
       DOM.div
         className: "row"

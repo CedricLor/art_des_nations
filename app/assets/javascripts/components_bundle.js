@@ -22,36 +22,15 @@ window.NewsIndexPage = require('./components/news_index_page.js.coffee').NewsInd
 var ArticleForm;
 
 ArticleForm = React.createClass({
-  getInitialState: function() {
-    return {
-      title: '',
-      teaser: '',
-      body: ''
-    };
-  },
   handleChange: function(e) {
-    var name, obj;
-    name = e.target.name;
-    return this.setState((
-      obj = {},
-      obj["" + name] = e.target.value,
-      obj
-    ));
+    return this.props.handleChange(e);
   },
   handleSubmit: function(e) {
     e.preventDefault();
-    return $.post('', {
-      article: this.state
-    }, (function(_this) {
-      return function(data) {
-        console.log("hello");
-        _this.props.handleNewArticle(data);
-        return _this.setState(_this.getInitialState());
-      };
-    })(this), 'JSON');
+    return this.props.handleSubmitNewArticle();
   },
   valid: function() {
-    return this.state.title && this.state.teaser && this.state.body;
+    return this.props.new_article.title && this.props.new_article.teaser && this.props.new_article.body;
   },
   render: function() {
     return React.DOM.form({
@@ -64,7 +43,7 @@ ArticleForm = React.createClass({
       className: 'form-control',
       placeholder: 'Title',
       name: 'title',
-      value: this.state.title,
+      value: this.props.new_article.title,
       onChange: this.handleChange
     })), React.DOM.div({
       className: 'form-group'
@@ -73,7 +52,7 @@ ArticleForm = React.createClass({
       className: 'form-control',
       placeholder: 'Teaser',
       name: 'teaser',
-      value: this.state.teaser,
+      value: this.props.new_article.teaser,
       onChange: this.handleChange
     })), React.DOM.div({
       className: 'form-group'
@@ -82,7 +61,7 @@ ArticleForm = React.createClass({
       className: 'form-control',
       placeholder: 'Body',
       name: 'body',
-      value: this.state.body,
+      value: this.props.new_article.body,
       onChange: this.handleChange
     })), React.DOM.button({
       type: 'submit',
@@ -202,9 +181,25 @@ NewsCardsContainer = React.createClass({
       return 2;
     }
   },
+  createBlankNewArticle: function() {
+    var blank_article;
+    blank_article = {
+      title: '',
+      teaser: '',
+      body: ''
+    };
+    return this.setState({
+      new_article: blank_article
+    });
+  },
   getInitialState: function() {
     return {
       articles: this.props.domElements,
+      new_article: {
+        title: '',
+        teaser: '',
+        body: ''
+      },
       cardByRows: this.numberOfCardsByRow(),
       heightOfRows: [],
       heightOfRowsByChunksOf: {
@@ -280,12 +275,31 @@ NewsCardsContainer = React.createClass({
     }
     return results;
   },
-  addArticle: function(article) {
+  addNewArticle: function(article) {
     var articles;
     articles = this.state.articles.slice();
     articles.unshift(article);
     return this.setState({
       articles: articles
+    });
+  },
+  handleSubmitNewArticle: function() {
+    console.log("hello");
+    return $.post('', {
+      article: this.state.new_article
+    }, (function(_this) {
+      return function(data) {
+        _this.addNewArticle(data);
+        return _this.createBlankNewArticle();
+      };
+    })(this), 'JSON');
+  },
+  handleChangeInFieldsOfNewArticle: function(e) {
+    var new_article;
+    new_article = this.state.new_article;
+    new_article[e.target.name] = e.target.value;
+    return this.setState({
+      new_article: new_article
     });
   },
   render: function() {
@@ -299,7 +313,9 @@ NewsCardsContainer = React.createClass({
     }, DOM.div({
       className: "col-xs-12"
     }, React.createElement(ArticleForm, {
-      handleNewArticle: this.addArticle
+      handleSubmitNewArticle: this.handleSubmitNewArticle,
+      handleChange: this.handleChangeInFieldsOfNewArticle,
+      new_article: this.state.new_article
     }))), React.DOM.hr(null), DOM.div({
       className: "row"
     }, cards));

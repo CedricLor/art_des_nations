@@ -1,23 +1,13 @@
 ArticleForm = React.createClass
-    getInitialState: ->
-      title: ''
-      teaser: ''
-      body: ''
-
     handleChange: (e) ->
-      name = e.target.name
-      @setState "#{ name }": e.target.value
+      @props.handleChange(e)
 
     handleSubmit: (e) ->
       e.preventDefault()
-      $.post '', { article: @state }, (data) =>
-        console.log("hello")
-        @props.handleNewArticle data
-        @setState @getInitialState()
-      , 'JSON'
+      @props.handleSubmitNewArticle()
 
     valid: ->
-      @state.title && @state.teaser && @state.body
+      @props.new_article.title && @props.new_article.teaser && @props.new_article.body
 
     render: ->
       React.DOM.form
@@ -30,7 +20,7 @@ ArticleForm = React.createClass
             className: 'form-control'
             placeholder: 'Title'
             name: 'title'
-            value: @state.title
+            value: @props.new_article.title
             onChange: @handleChange
         React.DOM.div
           className: 'form-group'
@@ -39,7 +29,7 @@ ArticleForm = React.createClass
             className: 'form-control'
             placeholder: 'Teaser'
             name: 'teaser'
-            value: @state.teaser
+            value: @props.new_article.teaser
             onChange: @handleChange
         React.DOM.div
           className: 'form-group'
@@ -48,7 +38,7 @@ ArticleForm = React.createClass
             className: 'form-control'
             placeholder: 'Body'
             name: 'body'
-            value: @state.body
+            value: @props.new_article.body
             onChange: @handleChange
         React.DOM.button
           type: 'submit'
