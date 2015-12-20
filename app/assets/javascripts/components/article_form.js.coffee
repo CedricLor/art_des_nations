@@ -1,13 +1,13 @@
 ArticleForm = React.createClass
     handleChange: (e) ->
-      @props.handleChange(e)
+      @props.new_article.article_form_functions.handleChangeInFieldsOfNewArticle(e)
 
     handleSubmit: (e) ->
       e.preventDefault()
-      @props.handleSubmitNewArticle()
+      @props.new_article.article_form_functions.handleSubmitNewArticle()
 
     valid: ->
-      @props.new_article.title && @props.new_article.teaser && @props.new_article.body
+      @props.new_article.article_data.title && @props.new_article.article_data.teaser && @props.new_article.article_data.body
 
     render: ->
       React.DOM.form
@@ -20,7 +20,7 @@ ArticleForm = React.createClass
             className: 'form-control'
             placeholder: 'Title'
             name: 'title'
-            value: @props.new_article.title
+            value: @props.new_article.article_data.title
             onChange: @handleChange
         React.DOM.div
           className: 'form-group'
@@ -29,7 +29,7 @@ ArticleForm = React.createClass
             className: 'form-control'
             placeholder: 'Teaser'
             name: 'teaser'
-            value: @props.new_article.teaser
+            value: @props.new_article.article_data.teaser
             onChange: @handleChange
         React.DOM.div
           className: 'form-group'
@@ -38,7 +38,7 @@ ArticleForm = React.createClass
             className: 'form-control'
             placeholder: 'Body'
             name: 'body'
-            value: @props.new_article.body
+            value: @props.new_article.article_data.body
             onChange: @handleChange
         React.DOM.button
           type: 'submit'

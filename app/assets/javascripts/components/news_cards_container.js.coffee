@@ -29,21 +29,26 @@ NewsCardsContainer = React.createClass
   numberOfCardsByRow: ->
     if window.innerWidth >= 992 then 3 else if window.innerWidth >= 768 then 2
 
-  createBlankNewArticle: ->
-    blank_article = {
-      title: '',
-      teaser: '',
-      body: ''
+  blankNewArticle: ->
+    {
+      article_data: {
+        title: '',
+        teaser: '',
+        body: ''
+        },
+      article_form_functions: {
+        handleSubmitNewArticle: @handleSubmitNewArticle,
+        handleChangeInFieldsOfNewArticle: @handleChangeInFieldsOfNewArticle
+      }
     }
+
+  createBlankNewArticle: ->
+    blank_article = @blankNewArticle()
     @setState new_article: blank_article
 
   getInitialState: ->
     articles: @props.domElements
-    new_article: {
-      title: '',
-      teaser: '',
-      body: ''
-    }
+    new_article: @blankNewArticle()
     cardByRows: @numberOfCardsByRow()
     heightOfRows: []
     heightOfRowsByChunksOf:
@@ -120,15 +125,14 @@ NewsCardsContainer = React.createClass
     @setState articles: articles
 
   handleSubmitNewArticle: ->
-    console.log("hello")
-    $.post '', { article: @state.new_article }, (data) =>
+    $.post '', { article: @state.new_article.article_data }, (data) =>
       @addNewArticle data
       @createBlankNewArticle()
     , 'JSON'
 
   handleChangeInFieldsOfNewArticle: (e) ->
     new_article = @state.new_article
-    new_article[e.target.name] = e.target.value
+    new_article.article_data[e.target.name] = e.target.value
     @setState new_article: new_article
 
   render: ->
@@ -143,8 +147,6 @@ NewsCardsContainer = React.createClass
         DOM.div
           className: "col-xs-12"
           React.createElement ArticleForm,
-            handleSubmitNewArticle: @handleSubmitNewArticle
-            handleChange: @handleChangeInFieldsOfNewArticle
             new_article: @state.new_article
       React.DOM.hr null
       DOM.div
