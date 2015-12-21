@@ -36,13 +36,12 @@ NewsCardsContainer = React.createClass
 
   createCards: ->
     `NewsCard = require('./news_card.js.coffee').NewsCard`
-    for card, i in @props.domElements
-      if @props.div_equalization_params.heightOfRows.length == @props.domElements.length then required_min_height = @props.div_equalization_params.setRequiredHeightOfRowsOnRender(i) else required_min_height = 0
+    for card, i in @props.domElements.data
+      if @props.div_equalization_params.heightOfRows.length == @props.domElements.data.length then required_min_height = @props.div_equalization_params.setRequiredHeightOfRowsOnRender(i) else required_min_height = 0
       element = React.createElement NewsCard,
         key: i
       #   # cardImageSource: card.dataset.imageSrc
-        newsTitle: card.title
-        newsTeaser: card.teaser
+        card: card
         localizedReadMore: @props.localizedReadMore
       #   # cardBtnTarget: card.dataset.btnTarget
         colClasses: @props.colClasses
@@ -50,7 +49,8 @@ NewsCardsContainer = React.createClass
         cardNumber: i
         myHeightIs: @props.div_equalization_params.storeDivHeight
         minHeightOfInnerWrapper: required_min_height
-        # Card equalization
+        admin_functions: @props.domElements.admin_functions
+        passedInStates: @props.domElements.articles_states[card.id]
       element
 
   render: ->

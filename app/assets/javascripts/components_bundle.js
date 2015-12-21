@@ -96,6 +96,11 @@ NewsCard = React.createClass({
       __html: raw
     };
   },
+  getInitialState: function() {
+    return {
+      edit: false
+    };
+  },
   componentDidMount: function() {
     var callback;
     callback = (function() {
@@ -105,6 +110,75 @@ NewsCard = React.createClass({
     }).bind(this);
     return setTimeout(callback, 0);
   },
+  handleDelete: function(e) {
+    e.preventDefault();
+    return this.props.admin_functions.destroy["function"](this.props.card);
+  },
+  handleToggle: function(e) {
+    e.preventDefault();
+    return this.props.admin_functions.toggle_edit["function"](this.props.card.id);
+  },
+  handleUpdate: function(e) {
+    e.preventDefault();
+    return this.props.admin_functions.update["function"](this.refs, this.props.card);
+  },
+  toolbar_on_read_only: function() {
+    return DOM.div({
+      className: "news-toolbar"
+    }, DOM.a({
+      className: 'btn btn-danger',
+      onClick: this.handleDelete
+    }, this.props.admin_functions.destroy.text), React.DOM.a({
+      className: 'btn btn-default',
+      onClick: this.handleToggle
+    }, this.props.admin_functions.edit.text));
+  },
+  toolbar_on_edit: function() {
+    return DOM.div({
+      className: "news-toolbar"
+    }, React.DOM.a({
+      className: 'btn btn-default',
+      onClick: this.handleToggle
+    }, "Cancel"), DOM.a({
+      className: 'btn btn-danger',
+      onClick: this.handleUpdate
+    }, "Update"));
+  },
+  title_editable: function() {
+    return React.DOM.input({
+      key: 'title_editable',
+      className: 'form-control',
+      type: 'text',
+      defaultValue: this.props.card.title,
+      ref: 'title'
+    });
+  },
+  title_read_only: function() {
+    return DOM.a({
+      key: 'title_read_only',
+      href: this.props.cardBtnTarget
+    }, DOM.h3({
+      style: this.props.cardImageSource === "" ? {
+        marginTop: 0
+      } : void 0
+    }, this.props.card.title));
+  },
+  teaser_editable: function() {
+    return React.DOM.input({
+      key: 'teaser_editable',
+      className: 'form-control',
+      type: 'text',
+      defaultValue: this.props.card.teaser,
+      ref: 'teaser'
+    });
+  },
+  teaser_read_only: function() {
+    return DOM.div({
+      key: 'teaser_read_only',
+      className: "teaser",
+      dangerouslySetInnerHTML: this.rawMarkup(this.props.card.teaser)
+    });
+  },
   render: function() {
     return DOM.div({
       className: "news-listing " + this.props.colClasses
@@ -113,7 +187,7 @@ NewsCard = React.createClass({
       style: {
         minHeight: "0px"
       }
-    }, DOM.div({
+    }, this.props.passedInStates.edit ? this.toolbar_on_edit() : this.toolbar_on_read_only(), DOM.div({
       className: "inner-wrapper-news-div",
       ref: this.props.cardNumber,
       style: {
@@ -129,16 +203,7 @@ NewsCard = React.createClass({
       className: "news-picture-overlay"
     })), DOM.div({
       className: "news-teaser-wrapper"
-    }, DOM.a({
-      href: this.props.cardBtnTarget
-    }, DOM.h3({
-      style: this.props.cardImageSource === "" ? {
-        marginTop: 0
-      } : void 0
-    }, this.props.newsTitle)), DOM.div({
-      className: "teaser",
-      dangerouslySetInnerHTML: this.rawMarkup(this.props.newsTeaser)
-    }))), DOM.p({
+    }, this.props.passedInStates.edit ? [this.title_editable(), this.teaser_editable()] : [this.title_read_only(), this.teaser_read_only()])), DOM.p({
       className: "btn-container read-more-news-btn-container"
     }, DOM.a({
       href: this.props.cardBtnTarget,
@@ -169,24 +234,25 @@ NewsCardsContainer = React.createClass({
   createCards: function() {
     NewsCard = require('./news_card.js.coffee').NewsCard;
     var card, element, i, j, len, ref, required_min_height, results;
-    ref = this.props.domElements;
+    ref = this.props.domElements.data;
     results = [];
     for (i = j = 0, len = ref.length; j < len; i = ++j) {
       card = ref[i];
-      if (this.props.div_equalization_params.heightOfRows.length === this.props.domElements.length) {
+      if (this.props.div_equalization_params.heightOfRows.length === this.props.domElements.data.length) {
         required_min_height = this.props.div_equalization_params.setRequiredHeightOfRowsOnRender(i);
       } else {
         required_min_height = 0;
       }
       element = React.createElement(NewsCard, {
         key: i,
-        newsTitle: card.title,
-        newsTeaser: card.teaser,
+        card: card,
         localizedReadMore: this.props.localizedReadMore,
         colClasses: this.props.colClasses,
         cardNumber: i,
         myHeightIs: this.props.div_equalization_params.storeDivHeight,
-        minHeightOfInnerWrapper: required_min_height
+        minHeightOfInnerWrapper: required_min_height,
+        admin_functions: this.props.domElements.admin_functions,
+        passedInStates: this.props.domElements.articles_states[card.id]
       });
       results.push(element);
     }
@@ -224,10 +290,114 @@ NewsIndexPage = React.createClass({
   displayName: "NewsIndexPage",
   getInitialState: function() {
     return {
-      articles: this.props.articles,
+      articles: {
+        data: this.props.articles,
+        admin_functions: {
+          destroy: {
+            text: "Delete",
+            "function": this.handleDeleteArticle
+          },
+          edit: {
+            text: "Edit"
+          },
+          update: {
+            text: "Update",
+            "function": this.handleUpdateArticle
+          },
+          toggle_edit: {
+            "function": this.handleToggleEditArticle
+          }
+        },
+        articles_states: this.initialStates()
+      },
       new_article: this.blankNewArticle(),
       div_equalization_params: this.divEqualizationParams()
     };
+  },
+  deleteArticle: function(article) {
+    var articles, index;
+    index = this.state.articles.data.indexOf(article);
+    articles = React.addons.update(this.state.articles, {
+      data: {
+        $splice: [[index, 1]]
+      }
+    });
+    delete articles.articles_states[article.id];
+    console.log(articles);
+    return this.setState({
+      articles: articles
+    });
+  },
+  handleDeleteArticle: function(article) {
+    return $.ajax({
+      method: 'DELETE',
+      url: "/articles/" + article.id,
+      dataType: 'JSON',
+      success: (function(_this) {
+        return function() {
+          return _this.deleteArticle(article);
+        };
+      })(this)
+    });
+  },
+  updateArticle: function(article, data) {
+    var articles, index;
+    index = this.state.articles.data.indexOf(article);
+    articles = React.addons.update(this.state.articles, {
+      data: {
+        $splice: [[index, 1, data]]
+      }
+    });
+    return this.setState({
+      articles: articles
+    });
+  },
+  handleUpdateArticle: function(refs, article) {
+    var data;
+    data = {
+      title: ReactDOM.findDOMNode(refs.title).value,
+      teaser: ReactDOM.findDOMNode(refs.teaser).value
+    };
+    return $.ajax({
+      method: 'PUT',
+      url: "/articles/" + article.id,
+      dataType: 'JSON',
+      data: {
+        article: data
+      },
+      success: (function(_this) {
+        return function(data) {
+          var articles;
+          articles = _this.state.articles;
+          articles.articles_states[article.id].edit = false;
+          _this.setState({
+            articles: articles
+          });
+          return _this.updateArticle(article, data);
+        };
+      })(this)
+    });
+  },
+  initialStates: function() {
+    var article, hash, j, len, ref;
+    hash = {};
+    ref = this.props.articles;
+    for (j = 0, len = ref.length; j < len; j++) {
+      article = ref[j];
+      hash[article.id] = {
+        edit: false,
+        resized: false
+      };
+    }
+    return hash;
+  },
+  handleToggleEditArticle: function(article_id) {
+    var articles;
+    articles = this.state.articles;
+    articles.articles_states[article_id].edit = !articles.articles_states[article_id].edit;
+    return this.setState({
+      articles: articles
+    });
   },
   blankNewArticle: function() {
     return {
@@ -251,8 +421,15 @@ NewsIndexPage = React.createClass({
   },
   addNewArticle: function(article) {
     var articles;
-    articles = this.state.articles.slice();
-    articles.unshift(article);
+    articles = React.addons.update(this.state.articles, {
+      data: {
+        $unshift: [article]
+      }
+    });
+    articles.articles_states[article.id] = {
+      edit: false,
+      resized: false
+    };
     return this.setState({
       articles: articles
     });
@@ -290,7 +467,7 @@ NewsIndexPage = React.createClass({
   arrayBuilder: function(chunk_size) {
     var empty_div_height_array, i, j, ref, ref1;
     empty_div_height_array = [];
-    for (i = j = 1, ref = this.props.domElements, ref1 = chunk_size; ref1 > 0 ? j <= ref : j >= ref; i = j += ref1) {
+    for (i = j = 1, ref = this.props.articles, ref1 = chunk_size; ref1 > 0 ? j <= ref : j >= ref; i = j += ref1) {
       empty_div_height_array.push(0);
     }
     return empty_div_height_array;
@@ -305,7 +482,7 @@ NewsIndexPage = React.createClass({
   handleResize: function() {
     var div_equalization_params;
     div_equalization_params = this.state.div_equalization_params;
-    div_equalization_params[cardByRows] = this.numberOfCardsByRow();
+    div_equalization_params.cardByRows = this.numberOfCardsByRow();
     this.setState({
       div_equalization_params: div_equalization_params
     });
@@ -333,7 +510,7 @@ NewsIndexPage = React.createClass({
   setRequiredHeightOfRowsOnRender: function(card_index) {
     var height, heights_of_cards_in_same_row, j, len, my_row_index, required_min_height;
     my_row_index = this.inWhichRowIsTheCardByRowOf(this.state.div_equalization_params.cardByRows, card_index);
-    heights_of_cards_in_same_row = this.state.div_equalization_params.heightOfRows.slice(my_row_index * 3, (my_row_index * 3) + 3);
+    heights_of_cards_in_same_row = this.state.div_equalization_params.heightOfRows.slice(my_row_index * this.state.div_equalization_params.cardByRows, (my_row_index * this.state.div_equalization_params.cardByRows) + this.state.div_equalization_params.cardByRows);
     required_min_height = 0;
     for (j = 0, len = heights_of_cards_in_same_row.length; j < len; j++) {
       height = heights_of_cards_in_same_row[j];
@@ -344,7 +521,6 @@ NewsIndexPage = React.createClass({
     return required_min_height;
   },
   render: function() {
-    console.log(this.state);
     NewsCardsContainer = require('./news_cards_container.js.coffee').NewsCardsContainer;
     return DOM.div({
       className: "news-index-page-body"

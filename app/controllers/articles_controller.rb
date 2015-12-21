@@ -36,11 +36,17 @@ class ArticlesController < ApplicationController
 
   def update
     @article = Article.find(params[:id])
-    if @article.update_attributes(article_params)
-      redirect_to articles_path, notice: "The article has been successfully updated."
+    if @article.update(article_params)
+      render json: @article
     else
-      render action: "edit"
+      render json: @article.errors, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @article = Article.find(params[:id])
+    @article.destroy
+    head :no_content
   end
 
   private
