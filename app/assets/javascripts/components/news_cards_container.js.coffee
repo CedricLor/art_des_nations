@@ -22,7 +22,6 @@ NewsCardsContainer = React.createClass
   createCards: ->
     `NewsCard = require('./news_card.js.coffee').NewsCard`
     for card, i in @props.domElements.data
-      # if @props.div_equalization_params.heightOfRows.length == @props.domElements.data.length then required_min_height = @props.div_equalization_params.setRequiredHeightOfRowsOnRender(i) else required_min_height = 0
       element = React.createElement NewsCard,
         key: i
       #   # cardImageSource: card.dataset.imageSrc
