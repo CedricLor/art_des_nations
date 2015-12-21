@@ -4,9 +4,10 @@ NewsIndexPage = React.createClass
   displayName: "NewsIndexPage"
 
   getInitialState: ->
-    #### new article management
+    #### articles management
     articles: {
       data: @props.articles,
+
       admin_functions: {
         destroy: {
           text: "Delete",
@@ -23,20 +24,45 @@ NewsIndexPage = React.createClass
           function: @handleToggleEditArticle
         }
       },
-      articles_states: @initialStates()
+
+      articles_states: @initialArticlesStates(),
+
+      display_functions: {
+        getDomPropsForArticle: @getDomPropsForArticle
+      },
+
+      articles_dom_props: @initialArticlesDomProps()
     }
+    #### end articles management
+    #### new article management
     new_article: @blankNewArticle()
     #### end new article management
-    #### div height equalizer
-    div_equalization_params: @divEqualizationParams()
-    #### div height equalizer
 
+
+  ####################
+  ## articles states initializers
+  ####################
+  initialArticlesStates: ->
+    hash = {}
+    for article in @props.articles
+      hash[article.id] = { edit: false, needs_resizing: false }
+    hash
+
+  initialArticlesDomProps: ->
+    array = []
+    for article in @props.articles
+      array.push({ article_id: article.id, pos_top: 0, div_height: 0, req_div_height: 0 })
+    array
+
+  ##################
   ## admin articles
+  ##################
+  ## Delete articles
+  #######
   deleteArticle: (article) ->
     index = @state.articles.data.indexOf article
     articles = React.addons.update(@state.articles, data: { $splice: [[index, 1]] })
     delete articles.articles_states[article.id]
-    console.log(articles)
     @setState articles: articles
 
   handleDeleteArticle: (article) ->
@@ -47,9 +73,12 @@ NewsIndexPage = React.createClass
       success: () =>
         @deleteArticle article
 
+  ## Update articles
+  #######
   updateArticle: (article, data) ->
     index = @state.articles.data.indexOf article
     articles = React.addons.update(@state.articles, data: { $splice: [[index, 1, data]] })
+    articles = @refreshArticles(articles)
     @setState articles: articles
 
   handleUpdateArticle: (refs, article) ->
@@ -64,22 +93,15 @@ NewsIndexPage = React.createClass
       success: (data) =>
         articles = @state.articles
         articles.articles_states[article.id].edit = false
-        @setState articles: articles
         @updateArticle article, data
-
-  initialStates: ->
-    hash = {}
-    for article in @props.articles
-      hash[article.id] = { edit: false, resized: false }
-    hash
 
   handleToggleEditArticle: (article_id) ->
     articles = @state.articles
     articles.articles_states[article_id].edit = !articles.articles_states[article_id].edit
     @setState articles: articles
-  ## end admin articles
 
-  ###### new article management
+  ## New article
+  #######
   blankNewArticle: ->
     {
       article_data: {
@@ -98,12 +120,19 @@ NewsIndexPage = React.createClass
     @setState new_article: blank_article
 
   addNewArticle: (article) ->
-    articles = React.addons.update(@state.articles, data: { $unshift: [article] })
-    articles.articles_states[article.id] = { edit: false, resized: false }
+    # add the article to the articles data list
+    articles = React.addons.update(
+      @state.articles
+      data: { $unshift: [ article ] }
+      articles_dom_props: { $unshift: [ { article_id: article.id, pos_top: 0, div_height: 0, req_div_height: 0 } ] }
+      )
+    # create an entry for the article in the articles set collection
+    articles.articles_states[article.id] = { edit: false, needs_resizing: true }
+    articles = @refreshArticles(articles)
     @setState articles: articles
 
   handleSubmitNewArticle: ->
-    $.post '', { article: @state.new_article.article_data }, (data) =>
+    $.post '/articles', { article: @state.new_article.article_data }, (data) =>
       @addNewArticle data
       @createBlankNewArticle()
     , 'JSON'
@@ -112,66 +141,74 @@ NewsIndexPage = React.createClass
     new_article = @state.new_article
     new_article.article_data[e.target.name] = e.target.value
     @setState new_article: new_article
-  ###### end new article management
+  ###### End Admin
 
-  ###### div height equalizer
-  ## state initializers
-  divEqualizationParams: ->
-    {
-      cardByRows: @numberOfCardsByRow(),
-      heightOfRows: [],
-      heightOfRowsByChunksOf: {
-        2: @arrayBuilder(2),
-        3: @arrayBuilder(3)
-      },
-      setRequiredHeightOfRowsOnRender: @setRequiredHeightOfRowsOnRender,
-      storeDivHeight: @storeDivHeight
-    }
+  ##################
+  ## div height equalizer
+  ##################
+  setDomValuesForArticle: (current_art_dom_props, refs, current_article_id, current_card_number) ->
+    # collect values from DOM/function input values, and set them on the article dom props record
+    _.assign(current_art_dom_props, {
+      'pos_top': ReactDOM.findDOMNode(refs["main_article_div_#{current_article_id}"]).getBoundingClientRect().top
+      'div_height': ReactDOM.findDOMNode(refs["#{current_card_number}"]).clientHeight
+      'card_number': current_card_number
+      })
+    return current_art_dom_props
 
-  arrayBuilder: (chunk_size) ->
-    empty_div_height_array = []
-    #######################
-    # BEWARE : WHY ARE WE CALLING @props and not @state
-    # And why does it work???
-    #######################
-    for i in [1..@props.articles] by chunk_size
-      empty_div_height_array.push(0)
-    empty_div_height_array
+  equalizeRows: (articles, previous_art_dom_props) ->
+    # select articles in same row as previous article
+    articles_in_same_row = _.filter(articles.articles_dom_props, (value) -> value if value.pos_top == previous_art_dom_props.pos_top )
+    # get an array of the height of divs in the same row
+    heights_of_cards_in_same_row = _.pluck(articles_in_same_row, 'div_height')
+    # get the highest div value of all such divs
+    required_height = _.max(heights_of_cards_in_same_row)
+    # set the required height of each element
+    _.map( articles_in_same_row, (value) -> value.req_div_height = required_height )
+    return articles
 
-  numberOfCardsByRow: ->
-    if window.innerWidth >= 992 then 3 else if window.innerWidth >= 768 then 2
+  equalizeRowsWrapper: (articles, current_card_number, current_art_dom_props) ->
+    # check if the current_card is not the first one
+    if current_card_number > 0
+      # select the previous card
+      previous_art_dom_props = _.find(articles.articles_dom_props, { card_number: current_card_number - 1 })
+      # and check if the current card is positionned on a new row
+      if current_art_dom_props.pos_top > previous_art_dom_props.pos_top
+        # if so, equalize the previous row
+        articles = @equalizeRows(articles, previous_art_dom_props)
+    return articles
+
+
+  getDomPropsForArticle: (refs, current_article_id, current_card_number) ->
+    articles = @state.articles
+    current_art_dom_props = _.find(articles.articles_dom_props, { article_id: current_article_id })
+    # reset the needs resizing @state to false
+    articles.articles_states[current_article_id].needs_resizing = false
+    # assign the values collected from the DOM and function input to the current_art_dom_props record
+    current_art_dom_props = @setDomValuesForArticle(current_art_dom_props, refs, current_article_id, current_card_number)
+    # equalize div heights
+    articles = @equalizeRowsWrapper(articles, current_card_number, current_art_dom_props)
+
+    @setState articles: articles
+
+  refreshArticles: (articles) ->
+    _.forIn( articles.articles_states, (value) -> value.needs_resizing = true )
+    _.map( articles.articles_dom_props, (value) ->
+      value.pos_top = 0
+      value.div_height = 0
+      value.req_div_height = 0
+      )
+    return articles
 
   handleResize: ->
-    div_equalization_params = @state.div_equalization_params
-    div_equalization_params.cardByRows = @numberOfCardsByRow()
-    @setState div_equalization_params: div_equalization_params
-    @forceUpdate()
-  ## end state initializers
-  ## behavior handlers
+    articles = @state.articles
+    articles = @refreshArticles(articles)
+    @setState articles: articles
+
   componentDidMount: ->
     window.addEventListener('resize', @handleResize)
 
   componentWillUnmount: ->
-    window.removeEventListener('resize', @handleResize);
-
-  storeDivHeight: (height, card_index) ->
-    div_equalization_params = @state.div_equalization_params
-    div_equalization_params.heightOfRows[card_index] = height
-    @setState div_equalization_params: div_equalization_params
-
-  inWhichRowIsTheCardByRowOf: (number_of_cards_by_row, index) ->
-    rindex = index + 1
-    row = if rindex % number_of_cards_by_row == 0 then rindex / number_of_cards_by_row - 1 else Math.floor(rindex / number_of_cards_by_row)
-
-  setRequiredHeightOfRowsOnRender: (card_index) ->
-    my_row_index = @inWhichRowIsTheCardByRowOf(@state.div_equalization_params.cardByRows, card_index)
-    heights_of_cards_in_same_row = @state.div_equalization_params.heightOfRows.slice(my_row_index * @state.div_equalization_params.cardByRows, (my_row_index * @state.div_equalization_params.cardByRows) + @state.div_equalization_params.cardByRows)
-    required_min_height = 0
-    for height in heights_of_cards_in_same_row
-      required_min_height = height if height > required_min_height
-    required_min_height
-  ## end behavior handlers
-  ##### end div height equalizer
+    window.removeEventListener('resize')
 
   render: ->
     `NewsCardsContainer = require('./news_cards_container.js.coffee').NewsCardsContainer`
@@ -189,7 +226,7 @@ NewsIndexPage = React.createClass
           localizedReadMore: "Read more"
           colClasses: "col-xs-12 col-sm-6 col-md-4"
           new_article: @state.new_article
-          div_equalization_params: @state.div_equalization_params
+          # div_equalization_params: @state.div_equalization_params
 
 `module.exports = {
   NewsIndexPage: NewsIndexPage

@@ -1,6 +1,7 @@
 // # `window.React = require('react')`
 // # `window.ReactDOM = require('react-dom')`
 
+_ = require('lodash');
 DOM = React.DOM;
 
 window.NewsIndexPage = require('./components/news_index_page.js.coffee').NewsIndexPage

@@ -19,15 +19,17 @@ NewsCard = React.createClass
   rawMarkup: (raw) ->
     { __html: raw }
 
-  getInitialState: ->
-    edit: false
-
   # Card equalization
   componentDidMount: ->
     callback = ( ->
-      height = @refs[@props.cardNumber].clientHeight
-      @props.myHeightIs height, @props.cardNumber).bind(@)
+      @props.display_functions.getDomPropsForArticle @refs, @props.card.id, @props.cardNumber).bind(@)
     setTimeout callback, 0
+
+  componentDidUpdate: (nextProps) ->
+    callback = ( ->
+      @props.display_functions.getDomPropsForArticle @refs, @props.card.id, @props.cardNumber).bind(@)
+    if nextProps.passedInStates.needs_resizing == true
+      setTimeout callback, 0
 
   # admin
   handleDelete: (e) ->
@@ -100,7 +102,8 @@ NewsCard = React.createClass
 
   render: ->
     DOM.div
-      className: "news-listing #{@props.colClasses}"
+      ref: "main_article_div_#{@props.card.id}"
+      className: "news-listing #{@props.colClasses} "
       DOM.div
         className: "thumbnail outer-wrapper-news-div"
         # Card equalization
@@ -118,7 +121,7 @@ NewsCard = React.createClass
           # Card equalization
           ref: @props.cardNumber
           style:
-            minHeight: @props.minHeightOfInnerWrapper
+            minHeight: @props.passedInDomProps.req_div_height
           ####
           # content / image
           DOM.a

@@ -6,6 +6,7 @@
     "watchify": "^3.6.1"
   },
   "dependencies": {
+    "lodash": "^3.10.1"
   },
   "scripts": {
     "bundle": "browserify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/components_bundle.js",
