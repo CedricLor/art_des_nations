@@ -19,7 +19,29 @@ window.NewsIndexPage = require('./components/news_index_page.js.coffee').NewsInd
 // #   render
 
 
-},{"./components/news_index_page.js.coffee":5,"lodash":6}],2:[function(require,module,exports){
+},{"./components/news_index_page.js.coffee":6,"lodash":7}],2:[function(require,module,exports){
+var AdminSwitchButton;
+
+AdminSwitchButton = React.createClass({
+  displayName: "AdminSwitchButton",
+  handleToggleAdminMode: function(e) {
+    e.preventDefault();
+    return this.props.siteAdmin.admin_functions.switch_admin_mode_function();
+  },
+  render: function() {
+    return DOM.a({
+      className: 'btn btn-danger',
+      onClick: this.handleToggleAdminMode
+    }, this.props.siteAdmin.admin_mode_button_props.button_text[this.props.siteAdmin.admin_mode]);
+  }
+});
+
+module.exports = {
+  AdminSwitchButton: AdminSwitchButton
+};;
+
+
+},{}],3:[function(require,module,exports){
 var ArticleForm;
 
 ArticleForm = React.createClass({
@@ -77,7 +99,7 @@ module.exports = {
 };;
 
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var Image, NewsCard;
 
 Image = React.createClass({
@@ -104,26 +126,48 @@ NewsCard = React.createClass({
     }).bind(this);
     return setTimeout(callback, 0);
   },
-  componentDidUpdate: function(nextProps) {
-    var callback;
-    callback = (function() {
-      return this.props.display_functions.getDomPropsForArticle(this.refs, this.props.card.id, this.props.cardNumber);
-    }).bind(this);
-    if (nextProps.passedInStates.needs_resizing === true) {
-      return setTimeout(callback, 0);
-    }
+  componentDidUpdate: function(nextProps) {},
+  handleToggle: function(e) {
+    e.preventDefault();
+    return this.props.admin_functions.toggleEditArticle["function"](this.props.card.id);
+  },
+  handleCancel: function(e) {
+    e.preventDefault();
+    return this.props.admin_functions.cancelEditArticle["function"](this.props.card.id);
+  },
+  handleUpdate: function(e) {
+    var fieldName;
+    e.preventDefault();
+    fieldName = e.target.parentNode.name.match(/(_for_)(\S+)/)[2];
+    return this.props.admin_functions.update["function"](this.refs, this.props.card.id, fieldName);
   },
   handleDelete: function(e) {
     e.preventDefault();
     return this.props.admin_functions.destroy["function"](this.props.card);
   },
-  handleToggle: function(e) {
+  handleToggleEditField: function(e) {
+    var fieldName;
     e.preventDefault();
-    return this.props.admin_functions.toggle_edit["function"](this.props.card.id);
+    fieldName = e.target.parentNode.name.match(/(_for_)(\S+)/)[2];
+    return this.props.admin_functions.toggleEditField["function"](fieldName, this.props.card.id);
   },
-  handleUpdate: function(e) {
+  handleChange: function(e) {
+    var WIPStateVAlue, fieldName, fieldValue, ref;
+    ref = [e.target.name, e.target.value], fieldName = ref[0], fieldValue = ref[1];
+    return this.props.admin_functions.handleChangeInFieldsOfArticle["function"](fieldName, fieldValue, this.props.card.id, WIPStateVAlue = true);
+  },
+  handleDeleteText: function(e) {
+    var WIPStateVAlue, fieldName, fieldValue, ref;
     e.preventDefault();
-    return this.props.admin_functions.update["function"](this.refs, this.props.card);
+    ref = [e.target.parentNode.name.match(/(_for_)(\S+)/)[2], ''], fieldName = ref[0], fieldValue = ref[1];
+    ReactDOM.findDOMNode(this.refs[fieldName]).value = fieldValue;
+    return this.props.admin_functions.handleChangeInFieldsOfArticle["function"](fieldName, fieldValue, this.props.card.id, WIPStateVAlue = true);
+  },
+  handleRestoreText: function(e) {
+    var fieldName;
+    e.preventDefault();
+    fieldName = e.target.parentNode.name.match(/(_for_)(\S+)/)[2];
+    return this.props.admin_functions.restoreText["function"](fieldName, this.props.card.id);
   },
   toolbar_on_read_only: function() {
     return DOM.div({
@@ -131,30 +175,130 @@ NewsCard = React.createClass({
     }, DOM.a({
       className: 'btn btn-danger',
       onClick: this.handleDelete
-    }, this.props.admin_functions.destroy.text), React.DOM.a({
+    }, this.props.admin_functions.destroy.text), DOM.a({
       className: 'btn btn-default',
       onClick: this.handleToggle
-    }, this.props.admin_functions.edit.text));
+    }, this.props.admin_functions.toggleEditArticle.text));
   },
   toolbar_on_edit: function() {
     return DOM.div({
-      className: "news-toolbar"
-    }, React.DOM.a({
+      className: "news-toolbar",
+      name: "buttons_for_article"
+    }, DOM.a({
       className: 'btn btn-default',
-      onClick: this.handleToggle
-    }, "Cancel"), DOM.a({
+      onClick: this.handleCancel
+    }, this.props.admin_functions.cancelEditArticle.text), DOM.a({
       className: 'btn btn-danger',
       onClick: this.handleUpdate
-    }, "Update"));
+    }, this.props.admin_functions.update.text));
   },
-  title_editable: function() {
-    return React.DOM.input({
-      key: 'title_editable',
+  editButton: function(name) {
+    return DOM.button({
+      className: 'btn',
+      name: "edit_button_for_" + name,
+      onClick: this.handleToggleEditField,
+      style: {
+        backgroundColor: 'white'
+      }
+    }, DOM.span({
+      className: 'glyphicon glyphicon-pencil',
+      ariaHidden: 'true',
+      style: {
+        backgroundColor: 'white'
+      }
+    }));
+  },
+  deleteTextButton: function(fieldName) {
+    return DOM.button({
+      name: "delete_content_button_for_" + fieldName,
+      style: {
+        backgroundColor: 'white',
+        borderStyle: 'none',
+        display: 'block',
+        margin: 'auto'
+      },
+      onClick: this.handleDeleteText
+    }, DOM.span, this.props.admin_functions.deleteText.text);
+  },
+  restoreTextButton: function(fieldName) {
+    return DOM.button({
+      name: "restore_content_button_for_" + fieldName,
+      style: {
+        backgroundColor: 'white',
+        borderStyle: 'none',
+        display: 'block',
+        margin: 'auto'
+      },
+      onClick: this.handleRestoreText
+    }, DOM.span, null, this.props.admin_functions.restoreText.text);
+  },
+  exitEditFieldButton: function(fieldName) {
+    return DOM.button({
+      name: "exit_button_for_" + fieldName,
+      style: {
+        backgroundColor: 'white',
+        borderStyle: 'none',
+        display: 'block',
+        margin: 'auto'
+      },
+      onClick: this.handleToggleEditField
+    }, DOM.span, null, this.props.admin_functions.exitEditField.text);
+  },
+  buttonsForEditable: function(fieldName) {
+    return DOM.div({
+      className: 'input-group-btn'
+    }, DOM.button({
+      type: 'button',
+      name: "save_button_for_" + fieldName,
+      className: 'btn btn-default',
+      onClick: this.handleUpdate
+    }, DOM.span({
+      className: 'glyphicon glyphicon-floppy-save',
+      ariaHidden: 'true'
+    })), DOM.button({
+      type: 'button',
+      className: 'btn btn-default dropdown-toggle',
+      "data-toggle": 'dropdown',
+      ariaHaspopup: 'true',
+      ariaExpanded: 'false'
+    }, DOM.span({
+      className: 'caret'
+    }), DOM.span({
+      className: 'sr-only'
+    }, 'Toggle Dropdown')), DOM.ul({
+      className: "dropdown-menu dropdown-menu-right"
+    }, this.props.passedInStates.WIP[fieldName] ? DOM.li(null, this.restoreTextButton(fieldName)) : DOM.li(null, this.exitEditFieldButton(fieldName)), DOM.li(null, DOM.hr({
+      style: {
+        marginTop: '5px',
+        marginBottom: '5px'
+      }
+    })), DOM.li(null, this.deleteTextButton(fieldName))));
+  },
+  titleEditable: function() {
+    return DOM.div({
+      className: 'input-group',
+      key: 'title_editable'
+    }, DOM.input({
       className: 'form-control',
       type: 'text',
       defaultValue: this.props.card.title,
-      ref: 'title'
-    });
+      ref: 'title',
+      name: 'title',
+      onChange: this.handleChange
+    }), this.buttonsForEditable('title'));
+  },
+  teaserEditable: function() {
+    return DOM.div({
+      className: 'input-group',
+      key: 'teaser_editable'
+    }, DOM.input({
+      className: 'form-control',
+      type: 'text',
+      defaultValue: this.props.card.teaser,
+      ref: 'teaser',
+      name: 'teaser',
+      onChange: this.handleChange
+    }), this.buttonsForEditable('teaser'));
   },
   title_read_only: function() {
     return DOM.a({
@@ -164,23 +308,15 @@ NewsCard = React.createClass({
       style: this.props.cardImageSource === "" ? {
         marginTop: 0
       } : void 0
-    }, this.props.card.title));
-  },
-  teaser_editable: function() {
-    return React.DOM.input({
-      key: 'teaser_editable',
-      className: 'form-control',
-      type: 'text',
-      defaultValue: this.props.card.teaser,
-      ref: 'teaser'
-    });
+    }, this.props.card.title), this.props.passedInStates.edit.title ? this.titleEditable() : this.editButton('title'));
   },
   teaser_read_only: function() {
     return DOM.div({
-      key: 'teaser_read_only',
+      key: 'teaser_read_only'
+    }, DOM.div({
       className: "teaser",
       dangerouslySetInnerHTML: this.rawMarkup(this.props.card.teaser)
-    });
+    }), this.props.passedInStates.edit.teaser ? this.teaserEditable() : this.editButton('teaser'));
   },
   render: function() {
     return DOM.div({
@@ -191,7 +327,7 @@ NewsCard = React.createClass({
       style: {
         minHeight: "0px"
       }
-    }, this.props.passedInStates.edit ? this.toolbar_on_edit() : this.toolbar_on_read_only(), DOM.div({
+    }, this.props.passedInStates.edit.article ? this.toolbar_on_edit() : this.toolbar_on_read_only(), DOM.div({
       className: "inner-wrapper-news-div",
       ref: this.props.cardNumber,
       style: {
@@ -207,7 +343,7 @@ NewsCard = React.createClass({
       className: "news-picture-overlay"
     })), DOM.div({
       className: "news-teaser-wrapper"
-    }, this.props.passedInStates.edit ? [this.title_editable(), this.teaser_editable()] : [this.title_read_only(), this.teaser_read_only()])), DOM.p({
+    }, this.props.passedInStates.edit.article ? [this.titleEditable(), this.teaserEditable()] : [this.title_read_only(), this.teaser_read_only()])), DOM.p({
       className: "btn-container read-more-news-btn-container"
     }, DOM.a({
       href: this.props.cardBtnTarget,
@@ -221,7 +357,7 @@ module.exports = {
 };;
 
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var NewsBtstpRow, NewsCardsContainer;
 
 NewsBtstpRow = React.createClass({
@@ -248,8 +384,8 @@ NewsCardsContainer = React.createClass({
         localizedReadMore: this.props.localizedReadMore,
         colClasses: this.props.colClasses,
         cardNumber: i,
-        admin_functions: this.props.domElements.admin_functions,
         display_functions: this.props.domElements.display_functions,
+        admin_functions: this.props.domElements.admin_functions,
         passedInStates: this.props.domElements.articles_states[card.id],
         passedInDomProps: _.find(this.props.domElements.articles_dom_props, {
           article_id: card.id
@@ -282,8 +418,9 @@ module.exports = {
 };;
 
 
-},{"./article_form.js.coffee":2,"./news_card.js.coffee":3}],5:[function(require,module,exports){
-var NewsIndexPage, ReactCSSTransitionGroup;
+},{"./article_form.js.coffee":3,"./news_card.js.coffee":4}],6:[function(require,module,exports){
+var NewsIndexPage, ReactCSSTransitionGroup,
+  hasProp = {}.hasOwnProperty;
 
 ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
@@ -291,24 +428,21 @@ NewsIndexPage = React.createClass({
   displayName: "NewsIndexPage",
   getInitialState: function() {
     return {
-      articles: {
-        data: this.props.articles,
-        admin_functions: {
-          destroy: {
-            text: "Delete",
-            "function": this.handleDeleteArticle
-          },
-          edit: {
-            text: "Edit"
-          },
-          update: {
-            text: "Update",
-            "function": this.handleUpdateArticle
-          },
-          toggle_edit: {
-            "function": this.handleToggleEditArticle
+      site: {
+        admin_mode: false,
+        admin_mode_button_props: {
+          button_text: {
+            "false": "Edit website",
+            "true": "Exit edit website mode"
           }
         },
+        admin_functions: {
+          switch_admin_mode_function: this.handleToggleSiteAdminMode
+        }
+      },
+      articles: {
+        data: this.props.articles,
+        admin_functions: this.initialAdminFunctions(),
         articles_states: this.initialArticlesStates(),
         display_functions: {
           getDomPropsForArticle: this.getDomPropsForArticle
@@ -318,16 +452,65 @@ NewsIndexPage = React.createClass({
       new_article: this.blankNewArticle()
     };
   },
+  initialAdminFunctions: function() {
+    return {
+      toggleEditArticle: {
+        text: "Edit",
+        "function": this.handleToggleEditArticle
+      },
+      cancelEditArticle: {
+        text: "Cancel",
+        "function": this.handleCancelEditArticle
+      },
+      update: {
+        text: "Update",
+        "function": this.handleUpdateArticle
+      },
+      destroy: {
+        text: "Delete",
+        "function": this.handleDeleteArticle
+      },
+      toggleEditField: {
+        "function": this.handleToggleEditField
+      },
+      handleChangeInFieldsOfArticle: {
+        "function": this.handleChangeInFieldsOfArticle
+      },
+      exitEditField: {
+        text: "Exit edit"
+      },
+      deleteText: {
+        text: "Delete text"
+      },
+      restoreText: {
+        text: "Restore text",
+        "function": this.handleRestoreText
+      }
+    };
+  },
+  initialArticleState: function() {
+    return {
+      edit: {
+        article: false,
+        title: false,
+        teaser: false,
+        body: false
+      },
+      WIP: {
+        title: false,
+        teaser: false,
+        body: false
+      },
+      needs_resizing: false
+    };
+  },
   initialArticlesStates: function() {
     var article, hash, i, len, ref;
     hash = {};
     ref = this.props.articles;
     for (i = 0, len = ref.length; i < len; i++) {
       article = ref[i];
-      hash[article.id] = {
-        edit: false,
-        needs_resizing: false
-      };
+      hash[article.id] = this.initialArticleState();
     }
     return hash;
   },
@@ -346,53 +529,100 @@ NewsIndexPage = React.createClass({
     }
     return array;
   },
-  deleteArticle: function(article) {
-    var articles, index;
-    index = this.state.articles.data.indexOf(article);
-    articles = React.addons.update(this.state.articles, {
-      data: {
-        $splice: [[index, 1]]
-      }
+  handleToggleSiteAdminMode: function() {
+    var site;
+    site = this.state.site;
+    site.admin_mode = !site.admin_mode;
+    console.log(site.admin_mode);
+    return this.setState({
+      site: site
     });
-    delete articles.articles_states[article.id];
+  },
+  handleToggleEditArticle: function(article_id) {
+    var articles;
+    articles = this.state.articles;
+    articles.articles_states[article_id].edit.article = !articles.articles_states[article_id].edit.article;
     return this.setState({
       articles: articles
     });
   },
-  handleDeleteArticle: function(article) {
+  _resetAllEditAndWIPStates: function(articles, article_id, resetValue) {
+    articles.articles_states[article_id].edit = _.map(articles.articles_states[article_id].edit, function(value) {
+      return value = resetValue;
+    });
+    articles.articles_states[article_id].WIP = _.map(articles.articles_states[article_id].WIP, function(value) {
+      return value = resetValue;
+    });
+    return articles;
+  },
+  _resetEditAndWIPStatesForField: function(articles, article_id, fieldName, resetValue) {
+    articles.articles_states[article_id].edit[fieldName] = resetValue;
+    articles.articles_states[article_id].WIP[fieldName] = resetValue;
+    return articles;
+  },
+  _getInitialDataByAjax: function(articles, article_id, successCallBack, fieldName) {
     return $.ajax({
-      method: 'DELETE',
-      url: "/articles/" + article.id,
+      method: 'GET',
+      url: "/articles/" + article_id,
       dataType: 'JSON',
       success: (function(_this) {
-        return function() {
-          return _this.deleteArticle(article);
+        return function(data) {
+          return successCallBack(articles, article_id, data, fieldName);
         };
       })(this)
     });
   },
-  updateArticle: function(article, data) {
-    var articles, index;
-    index = this.state.articles.data.indexOf(article);
+  _successCallBackForRestoreText: function(articles, article_id, data, fieldName) {
+    var WIPStateValue, fieldValue;
+    articles = this._resetEditAndWIPStatesForField(articles, article_id, fieldName, false);
+    return this.handleChangeInFieldsOfArticle(fieldName, fieldValue = data[fieldName], article_id, WIPStateValue = false);
+  },
+  handleRestoreText: function(fieldName, article_id) {
+    var articles, successCallBack;
+    articles = this.state.articles;
+    successCallBack = this._successCallBackForRestoreText;
+    return this._getInitialDataByAjax(articles, article_id, successCallBack, fieldName);
+  },
+  _successCallBackForCancelEditArticle: function(articles, article_id, data, fieldName) {
+    articles = this._resetAllEditAndWIPStates(articles, article_id, false);
+    return this._updateArticle(articles, article_id, data);
+  },
+  handleCancelEditArticle: function(article_id) {
+    var articles;
+    articles = this.state.articles;
+    if (_.includes(_.values(articles.articles_states[article_id].WIP), true)) {
+      return this._getInitialDataByAjax(articles, article_id, this._successCallBackForCancelEditArticle, null);
+    } else {
+      return this.handleToggleEditArticle(article_id);
+    }
+  },
+  _updateArticle: function(articles, article_id, data) {
+    var index;
+    index = _.findIndex(articles.data, {
+      id: article_id
+    });
     articles = React.addons.update(this.state.articles, {
       data: {
         $splice: [[index, 1, data]]
       }
     });
-    articles = this.refreshArticles(articles);
     return this.setState({
       articles: articles
     });
   },
-  handleUpdateArticle: function(refs, article) {
-    var data;
-    data = {
-      title: ReactDOM.findDOMNode(refs.title).value,
-      teaser: ReactDOM.findDOMNode(refs.teaser).value
-    };
+  _updateEditAndWIPStates: function(articles, article_id, fieldName) {
+    if (fieldName === 'article') {
+      articles = this._resetAllEditAndWIPStates(articles, article_id, false);
+    } else {
+      articles.articles_states[article_id].edit[fieldName] = false;
+      articles.articles_states[article_id].WIP[fieldName] = false;
+    }
+    return articles;
+  },
+  _sendUpdateByAjax: function(data, article_id, fieldName) {
     return $.ajax({
       method: 'PUT',
-      url: "/articles/" + article.id,
+      url: "/articles/" + article_id,
       dataType: 'JSON',
       data: {
         article: data
@@ -401,18 +631,76 @@ NewsIndexPage = React.createClass({
         return function(data) {
           var articles;
           articles = _this.state.articles;
-          articles.articles_states[article.id].edit = false;
-          return _this.updateArticle(article, data);
+          articles = _this._updateEditAndWIPStates(articles, article_id, fieldName);
+          return _this._updateArticle(articles, article_id, data);
         };
       })(this)
     });
   },
-  handleToggleEditArticle: function(article_id) {
+  handleUpdateArticle: function(refs, article_id, fieldName) {
+    var data, key, value;
+    data = {};
+    if (fieldName === 'article') {
+      for (key in refs) {
+        if (!hasProp.call(refs, key)) continue;
+        value = refs[key];
+        if (key === 'title' || key === 'teaser' || key === 'body') {
+          data[key] = ReactDOM.findDOMNode(refs[key]).value;
+        }
+      }
+    } else {
+      data[fieldName] = ReactDOM.findDOMNode(refs[fieldName]).value;
+    }
+    return this._sendUpdateByAjax(data, article_id, fieldName);
+  },
+  handleToggleEditField: function(field_name, article_id) {
     var articles;
     articles = this.state.articles;
-    articles.articles_states[article_id].edit = !articles.articles_states[article_id].edit;
+    articles.articles_states[article_id].edit[field_name] = !articles.articles_states[article_id].edit[field_name];
     return this.setState({
       articles: articles
+    });
+  },
+  handleChangeInFieldsOfArticle: function(fieldName, fieldValue, article_id, WIPStateValue) {
+    var article, articles;
+    articles = this.state.articles;
+    article = _.find(articles.data, {
+      id: article_id
+    });
+    article[fieldName] = fieldValue;
+    articles.articles_states[article_id].WIP[fieldName] = WIPStateValue;
+    return this.setState({
+      articles: articles
+    });
+  },
+  _deleteArticle: function(article_id) {
+    var articles, index;
+    index = _.findIndex(this.state.articles.data, {
+      id: article_id
+    });
+    articles = React.addons.update(this.state.articles, {
+      data: {
+        $splice: [[index, 1]]
+      },
+      articles_dom_props: {
+        $splice: [[index, 1]]
+      }
+    });
+    delete articles.articles_states[article.id];
+    return this.setState({
+      articles: articles
+    });
+  },
+  handleDeleteArticle: function(article_id) {
+    return $.ajax({
+      method: 'DELETE',
+      url: "/articles/" + article.id,
+      dataType: 'JSON',
+      success: (function(_this) {
+        return function() {
+          return _this._deleteArticle(article_id);
+        };
+      })(this)
     });
   },
   blankNewArticle: function() {
@@ -452,10 +740,7 @@ NewsIndexPage = React.createClass({
         ]
       }
     });
-    articles.articles_states[article.id] = {
-      edit: false,
-      needs_resizing: true
-    };
+    articles.articles_states[article.id] = this.initialArticleState();
     articles = this.refreshArticles(articles);
     return this.setState({
       articles: articles
@@ -553,18 +838,22 @@ NewsIndexPage = React.createClass({
   },
   render: function() {
     NewsCardsContainer = require('./news_cards_container.js.coffee').NewsCardsContainer;
+    AdminSwitchButton = require('./admin_switch_button.js.coffee').AdminSwitchButton;
     return DOM.div({
       className: "news-index-page-body"
-    }, React.createElement(ReactCSSTransitionGroup, {
+    }, React.createElement(AdminSwitchButton, {
+      siteAdmin: this.state.site
+    }), React.createElement(ReactCSSTransitionGroup, {
       transitionName: "react-news-container",
       transitionEnterTimeout: 300,
       transitionLeaveTimeout: 300,
       transitionAppear: true,
       transitionAppearTimeout: 4000
     }, React.createElement(NewsCardsContainer, {
+      adminModeState: this.state.site.admin_mode,
       domElements: this.state.articles,
       localizedReadMore: "Read more",
-      colClasses: "col-xs-12 col-sm-6 col-md-4",
+      colClasses: "col-xs-12 col-sm-12 col-md-12",
       new_article: this.state.new_article
     })));
   }
@@ -575,7 +864,7 @@ module.exports = {
 };;
 
 
-},{"./news_cards_container.js.coffee":4}],6:[function(require,module,exports){
+},{"./admin_switch_button.js.coffee":2,"./news_cards_container.js.coffee":5}],7:[function(require,module,exports){
 (function (global){
 /**
  * @license

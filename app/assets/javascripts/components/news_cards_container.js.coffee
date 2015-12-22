@@ -30,8 +30,8 @@ NewsCardsContainer = React.createClass
       #   # cardBtnTarget: card.dataset.btnTarget
         colClasses: @props.colClasses
         cardNumber: i
-        admin_functions: @props.domElements.admin_functions
         display_functions: @props.domElements.display_functions
+        admin_functions: @props.domElements.admin_functions
         passedInStates: @props.domElements.articles_states[card.id]
         passedInDomProps: _.find(@props.domElements.articles_dom_props, { article_id: card.id })
       element

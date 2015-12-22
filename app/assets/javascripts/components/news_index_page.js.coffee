@@ -4,116 +4,221 @@ NewsIndexPage = React.createClass
   displayName: "NewsIndexPage"
 
   getInitialState: ->
+    site:
+      admin_mode: false
+      admin_mode_button_props:
+        button_text:
+          false: "Edit website"
+          true: "Exit edit website mode"
+      admin_functions:
+        switch_admin_mode_function: @handleToggleSiteAdminMode
     #### articles management
-    articles: {
+    articles:
       data: @props.articles,
 
-      admin_functions: {
-        destroy: {
-          text: "Delete",
-          function: @handleDeleteArticle
-        },
-        edit: {
-          text: "Edit"
-        },
-        update: {
-          text: "Update",
-          function: @handleUpdateArticle
-        },
-        toggle_edit: {
-          function: @handleToggleEditArticle
-        }
-      },
+      admin_functions: @initialAdminFunctions()
 
-      articles_states: @initialArticlesStates(),
+      articles_states: @initialArticlesStates()
 
-      display_functions: {
+      display_functions:
         getDomPropsForArticle: @getDomPropsForArticle
-      },
 
       articles_dom_props: @initialArticlesDomProps()
-    }
     #### end articles management
     #### new article management
     new_article: @blankNewArticle()
     #### end new article management
 
-
   ####################
   ## articles states initializers
   ####################
+  initialAdminFunctions: ->
+    toggleEditArticle:
+      text: "Edit",
+      function: @handleToggleEditArticle
+    cancelEditArticle:
+      text: "Cancel"
+      function: @handleCancelEditArticle
+    update:
+      text: "Update",
+      function: @handleUpdateArticle
+    destroy:
+      text: "Delete",
+      function: @handleDeleteArticle
+    toggleEditField:
+      function: @handleToggleEditField
+    handleChangeInFieldsOfArticle:
+      function: @handleChangeInFieldsOfArticle
+    exitEditField:
+      text: "Exit edit"
+    deleteText:
+      text: "Delete text"
+    restoreText:
+      text: "Restore text"
+      function: @handleRestoreText
+
+  initialArticleState: ->
+    edit:
+      article: false
+      title: false
+      teaser: false
+      body: false
+    WIP:
+      title: false
+      teaser: false
+      body: false
+    needs_resizing: false
+
   initialArticlesStates: ->
     hash = {}
     for article in @props.articles
-      hash[article.id] = { edit: false, needs_resizing: false }
+      hash[article.id] = @initialArticleState()
     hash
 
   initialArticlesDomProps: ->
     array = []
     for article in @props.articles
-      array.push({ article_id: article.id, pos_top: 0, div_height: 0, req_div_height: 0 })
-    array
+      array.push({
+        article_id: article.id,
+        pos_top: 0, div_height: 0,
+        req_div_height: 0 })
+    return array
+
+  ##################
+  ## admin site
+  ##################
+  handleToggleSiteAdminMode: ->
+    site = @state.site
+    site.admin_mode = !site.admin_mode
+    console.log site.admin_mode
+    @setState site: site
 
   ##################
   ## admin articles
   ##################
+  ## Update articles
+  #######
+  handleToggleEditArticle: (article_id) ->
+    articles = @state.articles
+    articles.articles_states[article_id].edit.article = !articles.articles_states[article_id].edit.article
+    @setState articles: articles
+
+  _resetAllEditAndWIPStates: (articles, article_id, resetValue) ->
+    articles.articles_states[article_id].edit = _.map(articles.articles_states[article_id].edit, (value) -> value = resetValue)
+    articles.articles_states[article_id].WIP = _.map(articles.articles_states[article_id].WIP, (value) -> value = resetValue)
+    return articles
+
+  _resetEditAndWIPStatesForField: (articles, article_id, fieldName, resetValue) ->
+    articles.articles_states[article_id].edit[fieldName] = resetValue
+    articles.articles_states[article_id].WIP[fieldName] = resetValue
+    return articles
+
+  _getInitialDataByAjax: (articles, article_id, successCallBack, fieldName) ->
+    $.ajax
+      method: 'GET'
+      url: "/articles/#{ article_id }"
+      dataType: 'JSON'
+      success: (data) =>
+        successCallBack(articles, article_id, data, fieldName)
+        # articles = @_resetAllEditAndWIPStates(articles, article_id, false)
+        # @_updateArticle articles, article_id, data
+
+  _successCallBackForRestoreText: (articles, article_id, data, fieldName) ->
+    articles = @_resetEditAndWIPStatesForField(articles, article_id, fieldName, false)
+    @handleChangeInFieldsOfArticle(fieldName, fieldValue = data[fieldName], article_id, WIPStateValue = false)
+
+  handleRestoreText: (fieldName, article_id) ->
+    articles = @state.articles
+    successCallBack = @_successCallBackForRestoreText
+    @_getInitialDataByAjax(articles, article_id, successCallBack, fieldName)
+
+  _successCallBackForCancelEditArticle: (articles, article_id, data, fieldName) ->
+    articles = @_resetAllEditAndWIPStates(articles, article_id, false)
+    @_updateArticle articles, article_id, data
+
+  handleCancelEditArticle: (article_id) ->
+    articles = @state.articles
+    if _.includes(_.values(articles.articles_states[article_id].WIP), true)
+      @_getInitialDataByAjax(articles, article_id, @_successCallBackForCancelEditArticle, null)
+    else
+      @handleToggleEditArticle(article_id)
+
+  _updateArticle: (articles, article_id, data) ->
+    index = _.findIndex(articles.data, { id: article_id })
+    articles = React.addons.update(@state.articles, data: { $splice: [[index, 1, data]] })
+    # articles = @refreshArticles(articles)
+    @setState articles: articles
+
+  _updateEditAndWIPStates: (articles, article_id, fieldName) ->
+    if fieldName == 'article'
+      articles = @_resetAllEditAndWIPStates(articles, article_id, false)
+    else
+      articles.articles_states[article_id].edit[fieldName] = false
+      articles.articles_states[article_id].WIP[fieldName] = false
+    return articles
+
+  _sendUpdateByAjax: (data, article_id, fieldName) ->
+    $.ajax
+      method: 'PUT'
+      url: "/articles/#{ article_id }"
+      dataType: 'JSON'
+      data: { article: data }
+      success: (data) =>
+        articles = @state.articles
+        articles = @_updateEditAndWIPStates(articles, article_id, fieldName)
+        @_updateArticle articles, article_id, data
+
+  handleUpdateArticle: (refs, article_id, fieldName) ->
+    data = {}
+    # Do I really need refs to get the data from the document???
+    if fieldName == 'article'
+      for own key, value of refs
+        data[key] = ReactDOM.findDOMNode(refs[key]).value if key in ['title', 'teaser', 'body']
+    else
+      data[fieldName] = ReactDOM.findDOMNode(refs[fieldName]).value
+    @_sendUpdateByAjax(data, article_id, fieldName)
+
+  handleToggleEditField: (field_name, article_id) ->
+    articles = @state.articles
+    articles.articles_states[article_id].edit[field_name] = !articles.articles_states[article_id].edit[field_name]
+    @setState articles: articles
+
+  handleChangeInFieldsOfArticle: (fieldName, fieldValue, article_id, WIPStateValue) ->
+    articles = @state.articles
+    article = _.find(articles.data, { id: article_id })
+    article[fieldName] = fieldValue
+    articles.articles_states[article_id].WIP[fieldName] = WIPStateValue
+    @setState articles: articles
+
   ## Delete articles
   #######
-  deleteArticle: (article) ->
-    index = @state.articles.data.indexOf article
-    articles = React.addons.update(@state.articles, data: { $splice: [[index, 1]] })
+  _deleteArticle: (article_id) ->
+    index = _.findIndex(@state.articles.data, { id: article_id })
+    articles = React.addons.update(
+      @state.articles,
+      data: { $splice: [ [index, 1] ] },
+      articles_dom_props: { $splice: [ [index, 1] ] } )
     delete articles.articles_states[article.id]
     @setState articles: articles
 
-  handleDeleteArticle: (article) ->
+  handleDeleteArticle: (article_id) ->
     $.ajax
       method: 'DELETE'
       url: "/articles/#{ article.id }"
       dataType: 'JSON'
       success: () =>
-        @deleteArticle article
-
-  ## Update articles
-  #######
-  updateArticle: (article, data) ->
-    index = @state.articles.data.indexOf article
-    articles = React.addons.update(@state.articles, data: { $splice: [[index, 1, data]] })
-    articles = @refreshArticles(articles)
-    @setState articles: articles
-
-  handleUpdateArticle: (refs, article) ->
-    data =
-      title: ReactDOM.findDOMNode(refs.title).value
-      teaser: ReactDOM.findDOMNode(refs.teaser).value
-    $.ajax
-      method: 'PUT'
-      url: "/articles/#{ article.id }"
-      dataType: 'JSON'
-      data: { article: data }
-      success: (data) =>
-        articles = @state.articles
-        articles.articles_states[article.id].edit = false
-        @updateArticle article, data
-
-  handleToggleEditArticle: (article_id) ->
-    articles = @state.articles
-    articles.articles_states[article_id].edit = !articles.articles_states[article_id].edit
-    @setState articles: articles
+        @_deleteArticle article_id
 
   ## New article
   #######
   blankNewArticle: ->
-    {
-      article_data: {
-        title: '',
-        teaser: '',
-        body: ''
-        },
-      article_form_functions: {
-        handleSubmitNewArticle: @handleSubmitNewArticle,
-        handleChangeInFieldsOfNewArticle: @handleChangeInFieldsOfNewArticle
-      }
-    }
+    article_data:
+      title: '',
+      teaser: '',
+      body: ''
+    article_form_functions:
+      handleSubmitNewArticle: @handleSubmitNewArticle,
+      handleChangeInFieldsOfNewArticle: @handleChangeInFieldsOfNewArticle
 
   createBlankNewArticle: ->
     blank_article = @blankNewArticle()
@@ -127,7 +232,8 @@ NewsIndexPage = React.createClass
       articles_dom_props: { $unshift: [ { article_id: article.id, pos_top: 0, div_height: 0, req_div_height: 0 } ] }
       )
     # create an entry for the article in the articles set collection
-    articles.articles_states[article.id] = { edit: false, needs_resizing: true }
+    articles.articles_states[article.id] = @initialArticleState()
+    # refresh all the articles (resizing)
     articles = @refreshArticles(articles)
     @setState articles: articles
 
@@ -141,7 +247,9 @@ NewsIndexPage = React.createClass
     new_article = @state.new_article
     new_article.article_data[e.target.name] = e.target.value
     @setState new_article: new_article
-  ###### End Admin
+  ##################
+  ## End Admin
+  ##################
 
   ##################
   ## div height equalizer
@@ -209,12 +317,18 @@ NewsIndexPage = React.createClass
 
   componentWillUnmount: ->
     window.removeEventListener('resize')
+  ##################
+  ## End div height equalizer
+  ##################
 
   render: ->
     `NewsCardsContainer = require('./news_cards_container.js.coffee').NewsCardsContainer`
+    `AdminSwitchButton = require('./admin_switch_button.js.coffee').AdminSwitchButton`
 
     DOM.div
       className: "news-index-page-body"
+      React.createElement AdminSwitchButton,
+        siteAdmin: @state.site
       React.createElement ReactCSSTransitionGroup,
         transitionName: "react-news-container"
         transitionEnterTimeout: 300
@@ -222,9 +336,10 @@ NewsIndexPage = React.createClass
         transitionAppear: true
         transitionAppearTimeout: 4000
         React.createElement NewsCardsContainer,
+          adminModeState: @state.site.admin_mode
           domElements: @state.articles
           localizedReadMore: "Read more"
-          colClasses: "col-xs-12 col-sm-6 col-md-4"
+          colClasses: "col-xs-12 col-sm-12 col-md-12"
           new_article: @state.new_article
           # div_equalization_params: @state.div_equalization_params
 

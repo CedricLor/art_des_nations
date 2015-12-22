@@ -26,25 +26,49 @@ NewsCard = React.createClass
     setTimeout callback, 0
 
   componentDidUpdate: (nextProps) ->
-    callback = ( ->
-      @props.display_functions.getDomPropsForArticle @refs, @props.card.id, @props.cardNumber).bind(@)
-    if nextProps.passedInStates.needs_resizing == true
-      setTimeout callback, 0
+    # callback = ( ->
+    #   @props.display_functions.getDomPropsForArticle @refs, @props.card.id, @props.cardNumber).bind(@)
+    # setTimeout callback, 0 if nextProps.passedInStates.needs_resizing == true
 
   # admin
+  handleToggle: (e) ->
+    e.preventDefault()
+    @props.admin_functions.toggleEditArticle.function(@props.card.id)
+
+  handleCancel: (e) ->
+    e.preventDefault()
+    @props.admin_functions.cancelEditArticle.function(@props.card.id)
+
+  handleUpdate: (e) ->
+    e.preventDefault()
+    fieldName = e.target.parentNode.name.match(/(_for_)(\S+)/)[2]
+    @props.admin_functions.update.function(@refs, @props.card.id, fieldName)
+
   handleDelete: (e) ->
     e.preventDefault()
     @props.admin_functions.destroy.function(@props.card)
 
-  handleToggle: (e) ->
+  handleToggleEditField: (e) ->
     e.preventDefault()
-    @props.admin_functions.toggle_edit.function(@props.card.id)
+    fieldName = e.target.parentNode.name.match(/(_for_)(\S+)/)[2]
+    @props.admin_functions.toggleEditField.function(fieldName, @props.card.id)
 
-  handleUpdate: (e) ->
+  handleChange: (e) ->
+    [fieldName, fieldValue] = [e.target.name, e.target.value]
+    @props.admin_functions.handleChangeInFieldsOfArticle.function(fieldName, fieldValue, @props.card.id, WIPStateVAlue = true)
+
+  handleDeleteText: (e) ->
     e.preventDefault()
-    @props.admin_functions.update.function(@refs, @props.card)
+    [fieldName, fieldValue] = [e.target.parentNode.name.match(/(_for_)(\S+)/)[2], '']
+    ReactDOM.findDOMNode(@refs[fieldName]).value = fieldValue
+    @props.admin_functions.handleChangeInFieldsOfArticle.function(fieldName, fieldValue, @props.card.id, WIPStateVAlue = true)
+
+  handleRestoreText: (e) ->
+    e.preventDefault()
+    fieldName = e.target.parentNode.name.match(/(_for_)(\S+)/)[2]
+    @props.admin_functions.restoreText.function(fieldName, @props.card.id)
+
   ####
-
   toolbar_on_read_only: ->
     DOM.div
       className: "news-toolbar"
@@ -52,30 +76,142 @@ NewsCard = React.createClass
         className: 'btn btn-danger'
         onClick: @handleDelete
         @props.admin_functions.destroy.text
-      React.DOM.a
+      DOM.a
         className: 'btn btn-default'
         onClick: @handleToggle
-        @props.admin_functions.edit.text
+        @props.admin_functions.toggleEditArticle.text
 
   toolbar_on_edit: ->
     DOM.div
       className: "news-toolbar"
-      React.DOM.a
+      name: "buttons_for_article"
+      DOM.a
         className: 'btn btn-default'
-        onClick: @handleToggle
-        "Cancel"
+        onClick: @handleCancel
+        @props.admin_functions.cancelEditArticle.text
       DOM.a
         className: 'btn btn-danger'
         onClick: @handleUpdate
-        "Update"
+        @props.admin_functions.update.text
 
-  title_editable: ->
-    React.DOM.input
+  editButton: (name) ->
+    DOM.button
+      className: 'btn'
+      name: "edit_button_for_#{name}"
+      onClick: @handleToggleEditField
+      # FIXME: CSS
+      style:
+        backgroundColor: 'white'
+      DOM.span
+        className: 'glyphicon glyphicon-pencil'
+        ariaHidden: 'true'
+        # FIXME: CSS
+        style:
+          backgroundColor: 'white'
+
+  deleteTextButton: (fieldName) ->
+    DOM.button
+      name: "delete_content_button_for_#{fieldName}"
+      # FIXME - IN CSS
+      style:
+        backgroundColor: 'white'
+        borderStyle: 'none'
+        display: 'block'
+        margin: 'auto'
+      onClick: @handleDeleteText
+      DOM.span
+        @props.admin_functions.deleteText.text
+
+  restoreTextButton: (fieldName) ->
+    DOM.button
+      name: "restore_content_button_for_#{fieldName}"
+      # FIXME - IN CSS
+      style:
+        backgroundColor: 'white'
+        borderStyle: 'none'
+        display: 'block'
+        margin: 'auto'
+      onClick: @handleRestoreText
+      DOM.span, null
+        @props.admin_functions.restoreText.text
+
+  exitEditFieldButton: (fieldName) ->
+    DOM.button
+      name: "exit_button_for_#{fieldName}"
+      # FIXME - IN CSS
+      style:
+        backgroundColor: 'white'
+        borderStyle: 'none'
+        display: 'block'
+        margin: 'auto'
+      onClick: @handleToggleEditField
+      DOM.span, null
+        @props.admin_functions.exitEditField.text
+
+  buttonsForEditable: (fieldName) ->
+    DOM.div
+      className: 'input-group-btn'
+      DOM.button
+        type: 'button'
+        name: "save_button_for_#{fieldName}"
+        className: 'btn btn-default'
+        onClick: @handleUpdate
+        DOM.span
+          className: 'glyphicon glyphicon-floppy-save'
+          ariaHidden: 'true'
+      DOM.button
+        type: 'button'
+        className: 'btn btn-default dropdown-toggle'
+        "data-toggle": 'dropdown'
+        ariaHaspopup: 'true'
+        ariaExpanded: 'false'
+        DOM.span
+          className: 'caret'
+        DOM.span
+          className: 'sr-only'
+          'Toggle Dropdown'
+      DOM.ul
+        className: "dropdown-menu dropdown-menu-right"
+        if @props.passedInStates.WIP[fieldName]
+          DOM.li null,
+            @restoreTextButton(fieldName)
+        else
+          DOM.li null,
+            @exitEditFieldButton(fieldName)
+        DOM.li null,
+          DOM.hr
+            # FIXME - IN CSS
+            style:
+              marginTop: '5px'
+              marginBottom: '5px'
+        DOM.li null,
+          @deleteTextButton(fieldName)
+
+  titleEditable: ->
+    DOM.div
+      className: 'input-group'
       key: 'title_editable'
-      className: 'form-control'
-      type: 'text'
-      defaultValue: @props.card.title
-      ref: 'title'
+      DOM.input
+        className: 'form-control'
+        type: 'text'
+        defaultValue: @props.card.title
+        ref: 'title'
+        name: 'title'
+        onChange: @handleChange
+      @buttonsForEditable('title')
+
+  teaserEditable: ->
+    DOM.div
+      className: 'input-group'
+      key: 'teaser_editable'
+      DOM.input
+        className: 'form-control'
+        type: 'text'
+        defaultValue: @props.card.teaser
+        ref: 'teaser'
+        name: 'teaser'
+        onChange: @handleChange
+      @buttonsForEditable('teaser')
 
   title_read_only: ->
     DOM.a
@@ -85,20 +221,21 @@ NewsCard = React.createClass
         style:
           marginTop: 0 if @props.cardImageSource == ""
         @props.card.title
-
-  teaser_editable: ->
-    React.DOM.input
-      key: 'teaser_editable'
-      className: 'form-control'
-      type: 'text'
-      defaultValue: @props.card.teaser
-      ref: 'teaser'
+      if @props.passedInStates.edit.title
+        @titleEditable()
+      else
+        @editButton('title')
 
   teaser_read_only: ->
     DOM.div
       key: 'teaser_read_only'
-      className: "teaser"
-      dangerouslySetInnerHTML: @rawMarkup(@props.card.teaser)
+      DOM.div
+        className: "teaser"
+        dangerouslySetInnerHTML: @rawMarkup(@props.card.teaser)
+      if @props.passedInStates.edit.teaser
+        @teaserEditable()
+      else
+        @editButton('teaser')
 
   render: ->
     DOM.div
@@ -111,7 +248,7 @@ NewsCard = React.createClass
           minHeight: "0px"
         ####
         # admin
-        if @props.passedInStates.edit
+        if @props.passedInStates.edit.article
           @toolbar_on_edit()
         else
           @toolbar_on_read_only()
@@ -137,8 +274,8 @@ NewsCard = React.createClass
           # content / Title and teaser
           DOM.div
             className: "news-teaser-wrapper"
-            if @props.passedInStates.edit
-              [ @title_editable(), @teaser_editable() ]
+            if @props.passedInStates.edit.article
+              [ @titleEditable(), @teaserEditable() ]
             else
               [ @title_read_only(), @teaser_read_only() ]
           ####
