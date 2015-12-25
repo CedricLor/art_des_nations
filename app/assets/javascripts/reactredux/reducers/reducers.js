@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
-import { TOGGLE_EDIT_MODE } from '../actions/actions'
+import { TOGGLE_SITE_EDIT_MODE } from '../actions/actions'
 
 function siteEditMode(state = { mode: false }, action) {
   switch (action.type) {
-    case TOGGLE_EDIT_MODE:
+    case TOGGLE_SITE_EDIT_MODE:
       const new_state = Object.assign({}, state, {
                     mode: !state.mode
                   })

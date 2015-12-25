@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
 // Import actions
-import { toggleEditMode, EditModes } from '../actions/actions'
+import { toggleSiteEditMode, EditModes } from '../actions/actions'
 
 // import (or require) components
 window.NewsIndexPage = require('../components/news_index_page').NewsIndexPage
@@ -19,12 +19,8 @@ class App extends Component {
         <NewsIndexPage
           articles={articles}
           siteEditMode={siteEditMode}
-          // onToggleEditMode={onToggleEditMode}
-          onToggleEditMode={ () =>
-            dispatch(toggleEditMode())
-          // }
-          // onFilterChange={nextFilter =>
-          //   dispatch(setVisibilityFilter(nextFilter))
+          onToggleSiteEditMode={ () =>
+            dispatch(toggleSiteEditMode())
           }  />
       </div>
     )
@@ -33,7 +29,6 @@ class App extends Component {
 
 
 function select(state) {
-  console.log(state)
   return {
     siteEditMode: state.siteEditMode,
     articles: state.articles

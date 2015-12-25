@@ -69,7 +69,7 @@ NewsCard = React.createClass
     @props.admin_functions.restoreText.function(fieldName, @props.card.id)
 
   ####
-  toolbar_on_read_only: ->
+  toolbarOnReadOnly: ->
     DOM.div
       className: "news-toolbar"
       DOM.a
@@ -81,7 +81,7 @@ NewsCard = React.createClass
         onClick: @handleToggle
         @props.admin_functions.toggleEditArticle.text
 
-  toolbar_on_edit: ->
+  toolbarOnEdit: ->
     DOM.div
       className: "news-toolbar"
       name: "buttons_for_article"
@@ -213,53 +213,70 @@ NewsCard = React.createClass
         onChange: @handleChange
       @buttonsForEditable('teaser')
 
-  title_read_only: ->
+  titleReadOnly: ->
     DOM.a
       key: 'title_read_only'
       href: @props.cardBtnTarget
       DOM.h3
         style:
           marginTop: 0 if @props.cardImageSource == ""
+        style:
+          display: "inline-block" if @props.siteEditMode.mode
         @props.card.title
-      if @props.passedInStates.edit.title
-        @titleEditable()
-      else
-        @editButton('title')
+      # if site edit mode on, show edit tools
+      if @props.siteEditMode.mode
+        # if field edit mode on, show form and field edit tools
+        if @props.passedInStates.edit.title
+          @titleEditable()
+        # else show pencil button
+        else
+          @editButton('title')
 
-  teaser_read_only: ->
+  teaserReadOnly: ->
     DOM.div
       key: 'teaser_read_only'
       DOM.div
         className: "teaser"
+        style:
+          display: "inline-block" if @props.siteEditMode.mode
         dangerouslySetInnerHTML: @rawMarkup(@props.card.teaser)
-      if @props.passedInStates.edit.teaser
-        @teaserEditable()
-      else
-        @editButton('teaser')
+      # if site edit mode on, show edit tools
+      if @props.siteEditMode.mode
+        # if field edit mode on, show form and field edit tools
+        if @props.passedInStates.edit.teaser
+          @teaserEditable()
+        # else show pencil button
+        else
+          @editButton('teaser')
 
   render: ->
     DOM.div
       ref: "main_article_div_#{@props.card.id}"
-      className: "news-listing #{@props.colClasses} "
+      className: "news-listing #{@props.passedInUiPropsForArticles.colClasses} "
       DOM.div
         className: "thumbnail outer-wrapper-news-div"
         # Card equalization
         style:
           minHeight: "0px"
         ####
-        # admin
-        if @props.passedInStates.edit.article
-          @toolbar_on_edit()
-        else
-          @toolbar_on_read_only()
+
+        # article edit toolbar
+        if @props.siteEditMode.mode
+          if @props.passedInStates.edit.article
+            @toolbarOnEdit()
+          else
+            @toolbarOnReadOnly()
         ####
+
         DOM.div
           className: "inner-wrapper-news-div"
+
           # Card equalization
           ref: @props.cardNumber
           style:
             minHeight: @props.passedInDomProps.req_div_height
           ####
+
           # content / image
           DOM.a
             className: "news-anchor-link-wrapper"
@@ -271,21 +288,23 @@ NewsCard = React.createClass
             DOM.div
               className: "news-picture-overlay"
           ####
+
           # content / Title and teaser
           DOM.div
             className: "news-teaser-wrapper"
             if @props.passedInStates.edit.article
               [ @titleEditable(), @teaserEditable() ]
             else
-              [ @title_read_only(), @teaser_read_only() ]
+              [ @titleReadOnly(), @teaserReadOnly() ]
           ####
+
         # Readmore button
         DOM.p
           className: "btn-container read-more-news-btn-container"
           DOM.a
             href: @props.cardBtnTarget
             className: "btn btn-lg black-square-btn news-read-more-btn"
-            @props.localizedReadMore
+            @props.passedInUiPropsForArticles.localizedReadMore
         ####
 
 `module.exports = {

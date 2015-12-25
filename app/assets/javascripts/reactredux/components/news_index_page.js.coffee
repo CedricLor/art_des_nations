@@ -12,13 +12,6 @@ NewsIndexPage = React.createClass
   displayName: "NewsIndexPage"
 
   getInitialState: ->
-    site:
-      admin_mode_button_props:
-        button_text:
-          false: "Edit website"
-          true: "Exit edit website mode"
-      admin_functions:
-        switch_admin_mode_function: @handleToggleSiteAdminMode
     #### articles management
     articles:
       data: @props.articles
@@ -35,6 +28,17 @@ NewsIndexPage = React.createClass
     #### new article management
     new_article: @blankNewArticle()
     #### end new article management
+
+  getDefaultProps: ->
+    site:
+      site_edit_mode_button_props:
+        button_text:
+          false: "Edit website"
+          true: "Exit edit website mode"
+    passedInUiPropsForArticles:
+      localizedReadMore: "Read more"
+      colClasses: "col-xs-12 col-sm-12 col-md-12"
+
 
   ####################
   ## articles states initializers
@@ -96,9 +100,6 @@ NewsIndexPage = React.createClass
   ##################
   handleToggleSiteAdminMode: ->
     @props.onToggleEditMode()
-    # site = @state.site
-    # site.admin_mode = !site.admin_mode
-    # @setState site: site
 
   ##################
   ## admin articles
@@ -317,23 +318,6 @@ NewsIndexPage = React.createClass
     articles = @refreshArticles(articles)
     @setState articles: articles
 
-  # successInitialDataFetchCallback: (jsonFetchedArticles) ->
-  #   articles = @state.articles
-  #   articles.data = jsonFetchedArticles
-  #   @setState articles: articles
-
-  # componentWillMount: ->
-  #   console.log "hello"
-  #   @initialAjaxCall()
-
-  # initialAjaxCall: ->
-  #   $.ajax
-  #     method: "GET",
-  #     url: "/articles",
-  #     dataType: 'JSON'
-  #     success: ( jsonFetchedArticles ) =>
-  #       @successInitialDataFetchCallback(jsonFetchedArticles)
-
   componentDidMount: ->
     window.addEventListener('resize', @handleResize)
 
@@ -350,8 +334,9 @@ NewsIndexPage = React.createClass
     DOM.div
       className: "news-index-page-body"
       React.createElement AdminSwitchButton,
-        siteAdmin: @state.site
+        siteEditModePassedInProps: @props.site
         siteEditMode: @props.siteEditMode
+        onToggleSiteEditMode: @props.onToggleSiteEditMode
       React.createElement ReactCSSTransitionGroup,
         transitionName: "react-news-container"
         transitionEnterTimeout: 300
@@ -359,12 +344,10 @@ NewsIndexPage = React.createClass
         transitionAppear: true
         transitionAppearTimeout: 4000
         React.createElement NewsCardsContainer,
-          adminModeState: @state.site.admin_mode
           domElements: @state.articles
-          localizedReadMore: "Read more"
-          colClasses: "col-xs-12 col-sm-12 col-md-12"
+          passedInUiPropsForArticles: @props.passedInUiPropsForArticles
           new_article: @state.new_article
-
+          siteEditMode: @props.siteEditMode
 
 `module.exports = {
   NewsIndexPage: NewsIndexPage

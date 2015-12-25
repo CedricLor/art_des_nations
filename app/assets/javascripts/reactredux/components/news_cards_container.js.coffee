@@ -1,19 +1,4 @@
 ########################################
-## Helpers Functions
-########################################
-
-########################################
-## NewsBtstpRow Component
-########################################
-NewsBtstpRow = React.createClass
-  displayName: "NewsBtstpRow"
-
-  render: ->
-    DOM.div
-      className: "row"
-      @props.cards_for_row
-
-########################################
 ## NewsCardContainer Component
 ########################################
 NewsCardsContainer = React.createClass
@@ -26,15 +11,28 @@ NewsCardsContainer = React.createClass
         key: i
       #   # cardImageSource: card.dataset.imageSrc
         card: card
-        localizedReadMore: @props.localizedReadMore
+        passedInUiPropsForArticles: @props.passedInUiPropsForArticles
       #   # cardBtnTarget: card.dataset.btnTarget
-        colClasses: @props.colClasses
         cardNumber: i
         display_functions: @props.domElements.display_functions
         admin_functions: @props.domElements.admin_functions
         passedInStates: @props.domElements.articles_states[card.id]
         passedInDomProps: _.find(@props.domElements.articles_dom_props, { article_id: card.id })
+        siteEditMode: @props.siteEditMode
       element
+
+  newArticleForm: ->
+    DOM.div
+      key: "new_article_form"
+      className: "row"
+      DOM.div
+        className: "col-xs-12"
+        React.createElement ArticleForm,
+          new_article: @props.new_article
+
+  newArticleHr: ->
+    React.DOM.hr
+      key: "hr_for_new_article_form"
 
   render: ->
     cards = @createCards()
@@ -42,13 +40,8 @@ NewsCardsContainer = React.createClass
 
     DOM.div
       className: "container-fluid"
-      DOM.div
-        className: "row"
-        DOM.div
-          className: "col-xs-12"
-          React.createElement ArticleForm,
-            new_article: @props.new_article
-      React.DOM.hr null
+      if @props.siteEditMode.mode
+        [@newArticleForm(), @newArticleHr()]
       DOM.div
         className: "row"
         cards
