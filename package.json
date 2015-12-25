@@ -1,16 +1,30 @@
 {
   "name": "arts-des-nations",
   "devDependencies": {
+    "babel-polyfill": "^6.3.14",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babelify": "^7.2.0",
     "browserify": "^12.0.1",
     "coffeeify": "^2.0.1",
+    "reactify": "^1.1.1",
+    "redux-devtools": "^3.0.0",
     "watchify": "^3.6.1"
   },
   "dependencies": {
-    "lodash": "^3.10.1"
+    "lodash": "^3.10.1",
+    "react": "^0.14.3",
+    "react-addons-css-transition-group": "^0.14.3",
+    "react-addons-update": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "react-redux": "^4.0.3",
+    "redux": "^3.0.5"
   },
   "scripts": {
     "bundle": "browserify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/components_bundle.js",
     "bundle_full": "browserify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js app/assets/javascripts/components/news_index_page_.js.coffee -o app/assets/javascripts/components_bundle.js",
-    "watch_full": "watchify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/components_bundle.js"
+    "watch_full": "watchify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/components_bundle.js",
+    "watch_full2": "watchify -t coffeeify --extension=\".js.coffee\" -t [ reactify --extension=\".js.coffee\" ] -t [ babelify --presets [ es2015 react ] ] app/assets/javascripts/components.js -o app/assets/javascripts/components_bundle.js",
+    "watch_redux": "watchify -d --extension=js -t coffeeify --extension=\".js.coffee\" -t [ babelify --presets [ es2015 react ] ]  app/assets/javascripts/index.js -o app/assets/javascripts/redux_bundle.js"
   }
 }

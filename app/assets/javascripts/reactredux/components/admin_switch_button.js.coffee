@@ -10,7 +10,7 @@ AdminSwitchButton = React.createClass
     DOM.a
       className: 'btn btn-danger'
       onClick: @handleToggleAdminMode
-      @props.siteAdmin.admin_mode_button_props.button_text[@props.siteAdmin.admin_mode]
+      @props.siteAdmin.admin_mode_button_props.button_text[@props.siteEditMode.mode]
 
 `module.exports = {
   AdminSwitchButton: AdminSwitchButton

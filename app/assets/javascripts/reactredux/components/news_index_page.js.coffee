@@ -1,11 +1,18 @@
-ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
+# ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
+`
+window.React = require('react');
+window.ReactDOM = require('react-dom');
+window._ = require('lodash');
+window.DOM = React.DOM;
+window.ReactCSSTransitionGroup = require('react-addons-css-transition-group');
+window.ReactAddonsUpdate = require('react-addons-update');
 
+`
 NewsIndexPage = React.createClass
   displayName: "NewsIndexPage"
 
   getInitialState: ->
     site:
-      admin_mode: false
       admin_mode_button_props:
         button_text:
           false: "Edit website"
@@ -14,7 +21,7 @@ NewsIndexPage = React.createClass
         switch_admin_mode_function: @handleToggleSiteAdminMode
     #### articles management
     articles:
-      data: @props.articles,
+      data: @props.articles
 
       admin_functions: @initialAdminFunctions()
 
@@ -88,10 +95,10 @@ NewsIndexPage = React.createClass
   ## admin site
   ##################
   handleToggleSiteAdminMode: ->
-    site = @state.site
-    site.admin_mode = !site.admin_mode
-    console.log site.admin_mode
-    @setState site: site
+    @props.onToggleEditMode()
+    # site = @state.site
+    # site.admin_mode = !site.admin_mode
+    # @setState site: site
 
   ##################
   ## admin articles
@@ -120,8 +127,6 @@ NewsIndexPage = React.createClass
       dataType: 'JSON'
       success: (data) =>
         successCallBack(articles, article_id, data, fieldName)
-        # articles = @_resetAllEditAndWIPStates(articles, article_id, false)
-        # @_updateArticle articles, article_id, data
 
   _successCallBackForRestoreText: (articles, article_id, data, fieldName) ->
     articles = @_resetEditAndWIPStatesForField(articles, article_id, fieldName, false)
@@ -145,7 +150,7 @@ NewsIndexPage = React.createClass
 
   _updateArticle: (articles, article_id, data) ->
     index = _.findIndex(articles.data, { id: article_id })
-    articles = React.addons.update(@state.articles, data: { $splice: [[index, 1, data]] })
+    articles = ReactAddonsUpdate(@state.articles, data: { $splice: [[index, 1, data]] })
     # articles = @refreshArticles(articles)
     @setState articles: articles
 
@@ -194,7 +199,7 @@ NewsIndexPage = React.createClass
   #######
   _deleteArticle: (article_id) ->
     index = _.findIndex(@state.articles.data, { id: article_id })
-    articles = React.addons.update(
+    articles = ReactAddonsUpdate(
       @state.articles,
       data: { $splice: [ [index, 1] ] },
       articles_dom_props: { $splice: [ [index, 1] ] } )
@@ -226,7 +231,7 @@ NewsIndexPage = React.createClass
 
   addNewArticle: (article) ->
     # add the article to the articles data list
-    articles = React.addons.update(
+    articles = ReactAddonsUpdate(
       @state.articles
       data: { $unshift: [ article ] }
       articles_dom_props: { $unshift: [ { article_id: article.id, pos_top: 0, div_height: 0, req_div_height: 0 } ] }
@@ -312,6 +317,23 @@ NewsIndexPage = React.createClass
     articles = @refreshArticles(articles)
     @setState articles: articles
 
+  # successInitialDataFetchCallback: (jsonFetchedArticles) ->
+  #   articles = @state.articles
+  #   articles.data = jsonFetchedArticles
+  #   @setState articles: articles
+
+  # componentWillMount: ->
+  #   console.log "hello"
+  #   @initialAjaxCall()
+
+  # initialAjaxCall: ->
+  #   $.ajax
+  #     method: "GET",
+  #     url: "/articles",
+  #     dataType: 'JSON'
+  #     success: ( jsonFetchedArticles ) =>
+  #       @successInitialDataFetchCallback(jsonFetchedArticles)
+
   componentDidMount: ->
     window.addEventListener('resize', @handleResize)
 
@@ -329,6 +351,7 @@ NewsIndexPage = React.createClass
       className: "news-index-page-body"
       React.createElement AdminSwitchButton,
         siteAdmin: @state.site
+        siteEditMode: @props.siteEditMode
       React.createElement ReactCSSTransitionGroup,
         transitionName: "react-news-container"
         transitionEnterTimeout: 300
@@ -341,7 +364,7 @@ NewsIndexPage = React.createClass
           localizedReadMore: "Read more"
           colClasses: "col-xs-12 col-sm-12 col-md-12"
           new_article: @state.new_article
-          # div_equalization_params: @state.div_equalization_params
+
 
 `module.exports = {
   NewsIndexPage: NewsIndexPage

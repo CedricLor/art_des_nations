@@ -15,6 +15,7 @@
 //= require bootstrap-sprockets
 //= require ckeditor/init
 
-//= require react
-//= require react_ujs
-//= require components_bundle
+// require react
+// require react_ujs
+// require components_bundle
+//= require redux_bundle

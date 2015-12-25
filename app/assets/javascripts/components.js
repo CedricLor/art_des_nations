@@ -1,19 +1,24 @@
-// # `window.React = require('react')`
-// # `window.ReactDOM = require('react-dom')`
+$(function() {
+  window.React = require('react');
+  window.ReactDOM = require('react-dom');
 
-_ = require('lodash');
-DOM = React.DOM;
+  window.NewsIndexPage = require('./reactredux/components/news_index_page.js.coffee').NewsIndexPage;
 
-window.NewsIndexPage = require('./components/news_index_page.js.coffee').NewsIndexPage
+  window.renderCallback = function(jsonFetchedArticles) {
+    ReactDOM.render(
+      <NewsIndexPage articles={jsonFetchedArticles} />,
+      document.getElementById('react-target')
+    );
+  }
 
-// # $(window).load ->
+  $.ajax({
+    method: "GET",
+    url: "/articles",
+    dataType: 'JSON'
+  })
+    .success(function( data ) {
+      renderCallback(data);
+    });
 
-// #   `var CommentBox = require('./sub_tuto.js.coffee').CommentBox`
-
-// #   render = ReactDOM.render(
-// #     React.createElement CommentBox
-// #     document.getElementById('content')
-// #   )
-
-// #   render
+});
 
