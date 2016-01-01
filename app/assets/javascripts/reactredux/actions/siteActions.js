@@ -1,7 +1,8 @@
-export const TOGGLE_SITE_EDIT_MODE = 'TOGGLE_SITE_EDIT_MODE'
+import { TOGGLE_SITE_EDIT_MODE } from '../constants/ActionTypes'
 
 export function toggleSiteEditMode() {
   return {
     type: TOGGLE_SITE_EDIT_MODE
   }
 }
+

@@ -6,33 +6,27 @@ NewsCardsContainer = React.createClass
 
   createCards: ->
     `NewsCard = require('./news_card.js.coffee').NewsCard`
-    for card, i in @props.domElements.data
+    for card, i in @props.articles
       element = React.createElement NewsCard,
         key: i
       #   # cardImageSource: card.dataset.imageSrc
-        card: card
-        passedInUiPropsForArticles: @props.passedInUiPropsForArticles
+        card:                             card
+        # from local getDefaultProps of news_index_page (to be refactored)
+        articlesPassedInUiProps:          @props.articlesPassedInUiProps
       #   # cardBtnTarget: card.dataset.btnTarget
         cardNumber: i
-        display_functions: @props.domElements.display_functions
-        admin_functions: @props.domElements.admin_functions
-        passedInStates: @props.domElements.articles_states[card.id]
-        passedInDomProps: _.find(@props.domElements.articles_dom_props, { article_id: card.id })
-        siteEditMode: @props.siteEditMode
+        # redux actions
+        articlesActions:                  @props.articlesActions
+        articlesFieldsActions:            @props.articlesFieldsActions
+        articlesSizingPositionningActions: @props.articlesSizingPositionningActions
+        # redux passed in Edit and Wip States
+        articlesWIPStatesOfFields:        @props.articlesWIPStatesOfFields[card.id]
+        articlesEditStates:               @props.articlesEditStates[card.id]
+        # redux passedInDomProps
+        articlesDOMProps:                 @props.articlesDOMProps[card.id]
+        # redux global site edit mode
+        siteEditMode:                     @props.siteEditMode
       element
-
-  newArticleForm: ->
-    DOM.div
-      key: "new_article_form"
-      className: "row"
-      DOM.div
-        className: "col-xs-12"
-        React.createElement ArticleForm,
-          new_article: @props.new_article
-
-  newArticleHr: ->
-    React.DOM.hr
-      key: "hr_for_new_article_form"
 
   render: ->
     cards = @createCards()
@@ -40,8 +34,6 @@ NewsCardsContainer = React.createClass
 
     DOM.div
       className: "container-fluid"
-      if @props.siteEditMode.mode
-        [@newArticleForm(), @newArticleHr()]
       DOM.div
         className: "row"
         cards

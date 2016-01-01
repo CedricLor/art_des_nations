@@ -1,40 +1,39 @@
-
-import React, { Component, PropTypes } from 'react'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-
-// Import actions
-import { toggleSiteEditMode, EditModes } from '../actions/actions'
-
-// import (or require) components
-window.NewsIndexPage = require('../components/news_index_page').NewsIndexPage
+window.NewsIndexPage = require('../components/NewsIndexPage').NewsIndexPage
 
 
+import * as ArticlesActions from '../actions/articlesActions'
+import * as ArticlesFieldsActions from '../actions/articleFieldsActions'
+import * as ArticlesSizingPositionningActions from '../actions/articlesSizingPositionningActions'
+import * as NewArticleActions from '../actions/newArticleActions'
+import * as SiteActions from '../actions/siteActions'
 
-class App extends Component {
-  render() {
-    const { dispatch, articles, siteEditMode } = this.props
 
-    return (
-      <div>
-        <NewsIndexPage
-          articles={articles}
-          siteEditMode={siteEditMode}
-          onToggleSiteEditMode={ () =>
-            dispatch(toggleSiteEditMode())
-          }  />
-      </div>
-    )
+function mapStateToProps(state) {
+  return {
+    isFetching:                   state.isFetching,
+    siteEditMode:                 state.siteEditMode,
+    articles:                     state.articles,
+    newArticleFields:             state.newArticleFields,
+    articlesWIPStatesOfFields:    state.articlesWIPStatesOfFields,
+    articlesEditStates:           state.articlesEditStates,
+    needResizingStatesOfArticles: state.needResizingStatesOfArticles,
+    articlesDOMProps:             state.articlesDOMProps
   }
 }
 
 
-function select(state) {
+function mapDispatchToProps(dispatch) {
   return {
-    siteEditMode: state.siteEditMode,
-    articles: state.articles
+    articlesActions:                  bindActionCreators(ArticlesActions, dispatch),
+    articlesFieldsActions:             bindActionCreators(ArticlesFieldsActions, dispatch),
+    articlesSizingPositionningActions: bindActionCreators(ArticlesSizingPositionningActions, dispatch),
+    newArticleActions:                bindActionCreators(NewArticleActions, dispatch),
+    siteActions:                      bindActionCreators(SiteActions, dispatch)
   }
 }
 
 
 // Wrap the component to inject dispatch and state into it
-export default connect(select)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(NewsIndexPage)

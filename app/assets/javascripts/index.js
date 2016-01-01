@@ -1,25 +1,23 @@
+window._ = require('lodash');
+
+import "babel-polyfill"
+
 import React from 'react'
 import { render } from 'react-dom'
-import { createStore } from 'redux'
+
 import { Provider } from 'react-redux'
+import configureStore from './reactredux/stores/configureStore'
+
+import { initialDataReceived } from './reactredux/actions/articlesActions'
+
 import App from './reactredux/containers/App'
-import rootReducer from './reactredux/reducers/reducers'
 
-window.renderCallback = function(jsonFetchedArticles) {
-  // ReactDOM.render(
-  //   <NewsIndexPage articles={jsonFetchedArticles} />,
-  //   document.getElementById('react-target')
-  // );
-  let store = createStore(rootReducer, {articles: jsonFetchedArticles})
+import { createInitialState } from './reactredux/stores/storeCreationHelpers'
 
-  let rootElement = document.getElementById('react-target')
-  render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
-    rootElement
-  )
-}
+const initialState = { isFetching: {initialData: true } }
+const store = configureStore(initialState);
+
+
 
 $.ajax({
   method: "GET",
@@ -27,5 +25,17 @@ $.ajax({
   dataType: 'JSON'
 })
   .success(function( data ) {
-    renderCallback(data);
+    // renderCallback(data);
+    store.dispatch(initialDataReceived(data));
   });
+
+$( document ).ready(function() {
+  render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.getElementById('react-target')
+  )
+});
+
+
