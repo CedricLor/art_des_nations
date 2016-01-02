@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-window.NewsIndexPage = require('../components/NewsIndexPage').NewsIndexPage
-
+import {NewsIndexPage} from '../components/NewsIndexPage'
+// window.NewsIndexPage = require('../components/NewsIndexPage').NewsIndexPage
 
 import * as ArticlesActions from '../actions/articlesActions'
 import * as ArticlesFieldsActions from '../actions/articleFieldsActions'
@@ -9,9 +9,11 @@ import * as ArticlesSizingPositionningActions from '../actions/articlesSizingPos
 import * as NewArticleActions from '../actions/newArticleActions'
 import * as SiteActions from '../actions/siteActions'
 
+console.log(NewsIndexPage);
 
 function mapStateToProps(state) {
   return {
+    routing:                      state.routing,
     isFetching:                   state.isFetching,
     siteEditMode:                 state.siteEditMode,
     articles:                     state.articles,
@@ -26,11 +28,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    articlesActions:                  bindActionCreators(ArticlesActions, dispatch),
+    articlesActions:                   bindActionCreators(ArticlesActions, dispatch),
     articlesFieldsActions:             bindActionCreators(ArticlesFieldsActions, dispatch),
     articlesSizingPositionningActions: bindActionCreators(ArticlesSizingPositionningActions, dispatch),
-    newArticleActions:                bindActionCreators(NewArticleActions, dispatch),
-    siteActions:                      bindActionCreators(SiteActions, dispatch)
+    newArticleActions:                 bindActionCreators(NewArticleActions, dispatch),
+    siteActions:                       bindActionCreators(SiteActions, dispatch)
   }
 }
 

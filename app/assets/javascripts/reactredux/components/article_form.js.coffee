@@ -14,8 +14,7 @@ ArticleForm = React.createClass
         key: "new_article_form"
         className: "row"
         DOM.div
-          className: "col-xs-12"
-          DOM.hr null
+          className: "#{@props.articlesPassedInUiProps.colClasses}"
           React.DOM.form
             className: 'form-inline'
             onSubmit: @handleSubmit
@@ -51,7 +50,6 @@ ArticleForm = React.createClass
               className: 'btn btn-primary'
               disabled: !@valid()
               'Create article'
-          DOM.hr null
 
 `module.exports = {
   ArticleForm: ArticleForm

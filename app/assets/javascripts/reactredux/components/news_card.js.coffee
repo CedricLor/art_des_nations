@@ -1,23 +1,19 @@
+`window.React = require('react');
+window.DOM = React.DOM
+`
+
 # `NewsEditableFieldToolbar = require('./news_editable_field_toolbar.js.coffee').NewsEditableFieldToolbar`
-`NewsTitleTeaserZone = require('./news_title_teaser_zone.js.coffee').NewsTitleTeaserZone`
+`NewsTitleTeaserZone = require('./news_title_teaser_zone.js.coffee').NewsTitleTeaserZone;
+NewsImage = require('./image.jsx').NewsImage`
 
-########################################
-## Image Component
-########################################
-Image = React.createClass
-  displayName: "Image"
-
-  render: ->
-    DOM.img
-      src: @props.cardImageSource
-      alt: @props.newsTitle
+`Link = require('react-router').Link
+RouteHandler = require('react-router').RouteHandler`
 
 
 ########################################
 ## Card Component
 ########################################
 NewsCard = React.createClass
-  displayName: "NewsCard"
 
   # rawMarkup: (raw) ->
   #   { __html: raw }
@@ -116,10 +112,10 @@ NewsCard = React.createClass
           DOM.a
             className: "news-anchor-link-wrapper"
             href: @props.cardBtnTarget
-            if @props.cardImageSource != ""
-              React.createElement Image,
-                cardImageSource: @props.cardImageSource,
-                newsTitle:       @props.newsTitle
+            # if @props.cardImageSource != ""
+            React.createElement NewsImage,
+              cardImageSource: @props.cardImageSource,
+              newsTitle:       @props.newsTitle
             DOM.div
               className: "news-picture-overlay"
           ####
@@ -133,10 +129,13 @@ NewsCard = React.createClass
         # Readmore button
         DOM.p
           className: "btn-container read-more-news-btn-container"
-          DOM.a
-            href: @props.cardBtnTarget
+
+          React.createElement Link,
+            to: "/articles/article/#{@props.card.id}"
             className: "btn btn-lg black-square-btn news-read-more-btn"
             @props.articlesPassedInUiProps.localizedReadMore
+          # DOM.a
+          #   href: @props.cardBtnTarget
         ####
 
 `module.exports = {

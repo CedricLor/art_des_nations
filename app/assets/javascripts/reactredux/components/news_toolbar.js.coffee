@@ -2,7 +2,6 @@
 ## NewsToolbar Component
 ########################################
 NewsToolbar = React.createClass
-  displayName: "NewsToolbar"
 
   toolbarOnReadOnly: ->
     DOM.div

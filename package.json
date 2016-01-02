@@ -6,6 +6,7 @@
     "babel-preset-react": "^6.3.13",
     "babelify": "^7.2.0",
     "browserify": "^12.0.1",
+    "coffee-reactify": "^4.0.0",
     "coffeeify": "^2.0.1",
     "grunt": "^0.4.5",
     "grunt-browserify": "^4.0.1",
@@ -16,6 +17,7 @@
   },
   "dependencies": {
     "es6-promise": "^3.0.2",
+    "history": "^1.17.0",
     "isomorphic-fetch": "^2.2.0",
     "lodash": "^3.10.1",
     "react": "^0.14.3",
@@ -23,8 +25,10 @@
     "react-addons-update": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-redux": "^4.0.3",
+    "react-router": "^2.0.0-rc4",
     "redux": "^3.0.5",
     "redux-logger": "^2.3.1",
+    "redux-simple-router": "^1.0.2",
     "redux-thunk": "^1.0.2"
   },
   "scripts": {
@@ -32,6 +36,6 @@
     "bundle_full": "browserify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js app/assets/javascripts/components/news_index_page_.js.coffee -o app/assets/javascripts/components_bundle.js",
     "watch_full": "watchify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/components_bundle.js",
     "watch_full2": "watchify -t coffeeify --extension=\".js.coffee\" -t [ reactify --extension=\".js.coffee\" ] -t [ babelify --presets [ es2015 react ] ] app/assets/javascripts/components.js -o app/assets/javascripts/components_bundle.js",
-    "watch_redux": "watchify -d --extension=js -t coffeeify --extension=\".js.coffee\" -t [ babelify --presets [ es2015 react ] ]  app/assets/javascripts/index.js -o app/assets/javascripts/redux_bundle.js"
+    "watch_redux": "watchify -d --extension=js --extension=jsx -t coffeeify --extension=\".js.coffee\" -t [ babelify --presets [ es2015 react ] ]  app/assets/javascripts/index.js -o app/assets/javascripts/redux_bundle.js"
   }
 }

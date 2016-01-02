@@ -1,7 +1,6 @@
 `NewsEditableFieldToolbar = require('./news_editable_field_toolbar.js.coffee').NewsEditableFieldToolbar`
 
 NewsTitleTeaserZone = React.createClass
-  displayName: "NewsTitleTeaserZone"
 
   # getInitialState: () ->
   #   value: @props.card[@props.name]

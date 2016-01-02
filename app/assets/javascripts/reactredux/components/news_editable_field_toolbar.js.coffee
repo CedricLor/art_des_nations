@@ -2,7 +2,6 @@
 ## NewsEditableFieldToolbarButton Component
 ########################################
 NewsEditableFieldToolbarButton = React.createClass
-  displayName: "NewsEditableFieldToolbarButton"
 
   carretSpan: ->
     DOM.span
@@ -41,7 +40,6 @@ NewsEditableFieldToolbarButton = React.createClass
 ## EditableFieldSubToolBarButton Component
 ########################################
 EditableFieldSubToolBarButton = React.createClass
-  displayName: "EditableFieldSubToolBarButton"
 
   render: ->
     DOM.button
@@ -61,7 +59,6 @@ EditableFieldSubToolBarButton = React.createClass
 ## NewsEditableFieldToolbar Component
 ########################################
 NewsEditableFieldToolbar = React.createClass
-  displayName: "NewsEditableFieldToolbar"
 
   handleExitEditField: (e) ->
     e.preventDefault()
