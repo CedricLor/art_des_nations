@@ -16,12 +16,13 @@ import { NewsCardsContainer } from './reactredux/components/news_cards_container
 import { IndividualNewsContainer } from './reactredux/components/individual_news_container'
 
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
-import { createHistory } from 'history'
+import createHistory from 'history/lib/createBrowserHistory'
 import { syncReduxAndRouter } from 'redux-simple-router'
 
 const initialState = { isFetching: {initialData: true } }
 const store = configureStore(initialState);
 const history = createHistory();
+history.__v2_compatible__ = true;
 
 syncReduxAndRouter(history, store)
 
@@ -42,9 +43,8 @@ $( document ).ready(function() {
       <Router history={ history }>
         <Route path="/" component={App}>
         <IndexRoute component={ NewsCardsContainer }/>
-          <Route path="articles/" component={ NewsCardsContainer }>
-            <Route path="article/:id" component={IndividualNewsContainer}/>
-          </Route>
+        <Route path="/articles" component={ NewsCardsContainer }/>
+        <Route path="/article/:id" component={IndividualNewsContainer}/>
         </Route>
       </Router>
     </Provider>,

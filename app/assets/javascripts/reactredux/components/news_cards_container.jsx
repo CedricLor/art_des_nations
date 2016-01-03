@@ -15,7 +15,6 @@ export const NewsCardsContainer = React.createClass({
             cardNumber=                        {i}
             card=                              {card}
             articlesPassedInUiProps=           {this.props.articlesPassedInUiProps}
-          // #   # cardBtnTarget: card.dataset.btnTarget
             // # redux actions
             articlesActions=                   {this.props.articlesActions}
             articlesFieldsActions=             {this.props.articlesFieldsActions}
@@ -34,40 +33,49 @@ export const NewsCardsContainer = React.createClass({
   },
 
   renderChildren() {
-    return (
-      this.props.children && React.cloneElement(this.props.children, {
-         articlesActions:                   this.props.articlesActions,
-         articlesFieldsActions:             this.props.articlesFieldsActions,
-         articlesSizingPositionningActions: this.props.articlesSizingPositionningActions,
-         siteEditMode:                      this.props.siteEditMode,
-         articles:                          this.props.articles,
-         articlesWIPStatesOfFields:         this.props.articlesWIPStatesOfFields,
-         articlesEditStates:                this.props.articlesEditStates,
-         articlesDOMProps:                  this.props.articlesDOMProps,
-         articlesPassedInUiProps:           this.props.articlesPassedInUiProps
-      })
-    )
+    if (this.props.children) {
+      const currentArticle = _.find(this.props.articles, { 'id': parseInt(this.props.children.props.params.id)});
+      return (
+        this.props.children && React.cloneElement(this.props.children, {
+           articlesActions:                   this.props.articlesActions,
+           articlesFieldsActions:             this.props.articlesFieldsActions,
+           // articlesSizingPositionningActions: this.props.articlesSizingPositionningActions,
+           siteEditMode:                      this.props.siteEditMode,
+           currentArticle:                    currentArticle,
+           articlesWIPStatesOfFields:         this.props.articlesWIPStatesOfFields,
+           articlesEditStates:                this.props.articlesEditStates,
+           articlesDOMProps:                  this.props.articlesDOMProps,
+           articlesPassedInUiProps:           this.props.articlesPassedInUiProps
+        })
+      )
+    }
   },
 
   render() {
+    let colClassForIndex = "";
+    let colClassForArticle = "";
+    if (this.props.children) {
+      colClassForIndex = "col-xs-3";
+      colClassForArticle = "col-xs-9";
+    } else {
+      colClassForIndex = "col-xs-12";
+      colClassForArticle = "hidden";
+    }
     let cards = this.createCards();
 
     return (
-      <ReactCSSTransitionGroup
-        transitionName="react-news-container"
-        transitionEnterTimeout={300}
-        transitionLeaveTimeout={300}
-        transitionAppear={true}
-        transitionAppearTimeout={4000}>
-        <div className="row">
-          <div className="col-xs-6">
+      <div className="row">
+        <ReactCSSTransitionGroup
+          transitionName="react-news-container"
+          transitionEnterTimeout={300}
+          transitionLeaveTimeout={300}
+          transitionAppear={true}
+          transitionAppearTimeout={4000}>
+          <div className="col-xs-12">
             { cards }
           </div>
-          <div className="col-xs-6">
-            {this.renderChildren()}
-          </div>
-        </div>
-      </ReactCSSTransitionGroup>
+        </ReactCSSTransitionGroup>
+      </div>
     )
   }
 });

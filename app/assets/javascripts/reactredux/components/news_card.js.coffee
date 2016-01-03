@@ -6,8 +6,7 @@ window.DOM = React.DOM
 `NewsTitleTeaserZone = require('./news_title_teaser_zone.js.coffee').NewsTitleTeaserZone;
 NewsImage = require('./image.jsx').NewsImage`
 
-`Link = require('react-router').Link
-RouteHandler = require('react-router').RouteHandler`
+`Link = require('react-router').Link`
 
 
 ########################################
@@ -69,6 +68,7 @@ NewsCard = React.createClass
   createFieldZone: (fieldName) ->
     React.createElement NewsTitleTeaserZone,
       key:                         "#{@props.cardNumber}_#{fieldName}",
+      viewType:                    "indexView",
       name:                        fieldName,
       card:                        @props.card,
       articlesPassedInUiProps:     @props.articlesPassedInUiProps,
@@ -77,12 +77,11 @@ NewsCard = React.createClass
       articlesEditStates:          @props.articlesEditStates,
       articlesWIPStatesOfFields:   @props.articlesWIPStatesOfFields,
       # unset properties
-      cardBtnTarget:               @props.cardBtnTarget,
       cardImageSource:             @props.cardImageSource,
       # redux actions
-      articlesFieldsActions:       @props.articlesFieldsActions
+      articlesFieldsActions:       @props.articlesFieldsActions,
       # local functions
-      handleUpdate:                @handleUpdate,
+      handleUpdate:                @handleUpdate
 
   render: ->
     DOM.div
@@ -109,9 +108,9 @@ NewsCard = React.createClass
           ####
 
           # content / image
-          DOM.a
+          React.createElement Link,
             className: "news-anchor-link-wrapper"
-            href: @props.cardBtnTarget
+            to: "/article/#{@props.card.id}"
             # if @props.cardImageSource != ""
             React.createElement NewsImage,
               cardImageSource: @props.cardImageSource,
@@ -131,11 +130,9 @@ NewsCard = React.createClass
           className: "btn-container read-more-news-btn-container"
 
           React.createElement Link,
-            to: "/articles/article/#{@props.card.id}"
+            to: "/article/#{@props.card.id}"
             className: "btn btn-lg black-square-btn news-read-more-btn"
             @props.articlesPassedInUiProps.localizedReadMore
-          # DOM.a
-          #   href: @props.cardBtnTarget
         ####
 
 `module.exports = {

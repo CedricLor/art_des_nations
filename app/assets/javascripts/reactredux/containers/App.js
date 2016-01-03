@@ -9,8 +9,6 @@ import * as ArticlesSizingPositionningActions from '../actions/articlesSizingPos
 import * as NewArticleActions from '../actions/newArticleActions'
 import * as SiteActions from '../actions/siteActions'
 
-console.log(NewsIndexPage);
-
 function mapStateToProps(state) {
   return {
     routing:                      state.routing,

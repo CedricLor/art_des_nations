@@ -66,37 +66,40 @@ export const NewsIndexPage = React.createClass({
     }
   },
 
-  renderNewsCardContainer() {
-    if ( this.props.isFetching.initialData === false ) {
-      return (
-        <NewsCardsContainer
-          articlesActions=                   {this.props.articlesActions}
-          articlesFieldsActions=             {this.props.articlesFieldsActions}
-          articlesSizingPositionningActions= {this.props.articlesSizingPositionningActions}
-          siteEditMode=                      {this.props.siteEditMode}
-          articles=                          {this.props.articles}
-          articlesWIPStatesOfFields=         {this.props.articlesWIPStatesOfFields}
-          articlesEditStates=                {this.props.articlesEditStates}
-          articlesDOMProps=                  {this.props.articlesDOMProps}
-          articlesPassedInUiProps=           {this.props.articlesPassedInUiProps}/>
-      )
-    }
-  },
-
   renderChildren() {
-    return (
-      this.props.children && React.cloneElement(this.props.children, {
-         articlesActions:                   this.props.articlesActions,
-         articlesFieldsActions:             this.props.articlesFieldsActions,
-         articlesSizingPositionningActions: this.props.articlesSizingPositionningActions,
-         siteEditMode:                      this.props.siteEditMode,
-         articles:                          this.props.articles,
-         articlesWIPStatesOfFields:         this.props.articlesWIPStatesOfFields,
-         articlesEditStates:                this.props.articlesEditStates,
-         articlesDOMProps:                  this.props.articlesDOMProps,
-         articlesPassedInUiProps:           this.props.articlesPassedInUiProps
-      })
-    )
+    if (this.props.children && this.props.children.props.location) {
+      if (this.props.children.props.location.pathname.match(/\/article\//) != null) {
+        const currentArticle = _.find(this.props.articles, { 'id': parseInt(this.props.children.props.params.id)});
+        return (
+          this.props.children && React.cloneElement(this.props.children, {
+            articlesActions:                   this.props.articlesActions,
+            articlesFieldsActions:             this.props.articlesFieldsActions,
+            siteEditMode:                      this.props.siteEditMode,
+            currentArticle:                    currentArticle,
+            // # redux passed in Edit and Wip States
+            articlesWIPStatesOfFields:         this.props.articlesWIPStatesOfFields[this.props.children.props.params.id],
+            articlesEditStates:                this.props.articlesEditStates[this.props.children.props.params.id],
+            // # redux passedInDomProps
+            articlesDOMProps:                  this.props.articlesDOMProps[this.props.children.props.params.id],
+            articlesPassedInUiProps:           this.props.articlesPassedInUiProps
+          })
+        )
+      } else {
+        return (
+          this.props.children && React.cloneElement(this.props.children, {
+             articlesActions:                   this.props.articlesActions,
+             articlesFieldsActions:             this.props.articlesFieldsActions,
+             articlesSizingPositionningActions: this.props.articlesSizingPositionningActions,
+             siteEditMode:                      this.props.siteEditMode,
+             articles:                          this.props.articles,
+             articlesWIPStatesOfFields:         this.props.articlesWIPStatesOfFields,
+             articlesEditStates:                this.props.articlesEditStates,
+             articlesDOMProps:                  this.props.articlesDOMProps,
+             articlesPassedInUiProps:           this.props.articlesPassedInUiProps
+          })
+        )
+      }
+    }
   },
 
   render() {
