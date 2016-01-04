@@ -1,21 +1,23 @@
-`window.React = require('react');
+`
+window.React = require('react');
 window.DOM = React.DOM
 `
 
 # `NewsEditableFieldToolbar = require('./news_editable_field_toolbar.js.coffee').NewsEditableFieldToolbar`
-`NewsTitleTeaserZone = require('./news_title_teaser_zone.js.coffee').NewsTitleTeaserZone;
-NewsImage = require('./image.jsx').NewsImage`
+`
+NewsTitleTeaserZone = require('./lower_news_components/news_content_components/news_title_teaser_zone.js.coffee').NewsTitleTeaserZone;
+NewsToolbar = require('./lower_news_components/news_edit_tools/news_toolbar.js.coffee').NewsToolbar;
+NewsImage = require('./lower_news_components/news_content_components/image.jsx').NewsImage
+`
 
-`Link = require('react-router').Link`
-
+`
+Link = require('react-router').Link
+`
 
 ########################################
 ## Card Component
 ########################################
 NewsCard = React.createClass
-
-  # rawMarkup: (raw) ->
-  #   { __html: raw }
 
   # Card equalization
   componentDidMount: ->
@@ -54,7 +56,6 @@ NewsCard = React.createClass
     @props.articlesActions.handleUpdateArticle(@props.card.id, fieldName)
 
   newsToolbar: ->
-    `NewsToolbar = require('./news_toolbar.js.coffee').NewsToolbar`
     React.createElement NewsToolbar,
       articlesPassedInUiProps: @props.articlesPassedInUiProps
       cardNumber:              @props.cardNumber,
@@ -94,7 +95,7 @@ NewsCard = React.createClass
           minHeight: "0px"
         ####
 
-        # article edit toolbar
+        # Article edit toolbar
         if @props.siteEditMode.mode
           @newsToolbar()
         ####
@@ -107,7 +108,7 @@ NewsCard = React.createClass
             minHeight: @props.articlesDOMProps.reqDivHeight
           ####
 
-          # content / image
+          # Content / image
           React.createElement Link,
             className: "news-anchor-link-wrapper"
             to: "/article/#{@props.card.id}"
@@ -119,7 +120,7 @@ NewsCard = React.createClass
               className: "news-picture-overlay"
           ####
 
-          # content / Title and teaser
+          # Content / Title and teaser
           DOM.div
             className: "news-teaser-wrapper"
             @createFieldZone(fieldName) for fieldName in ["title", "teaser"]

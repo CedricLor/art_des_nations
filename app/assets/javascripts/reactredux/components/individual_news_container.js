@@ -1,6 +1,7 @@
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Link } from 'react-router';
-import { NewsToolbar } from './news_toolbar';
+import { NewsToolbar } from './lower_news_components/news_edit_tools/news_toolbar';
+import { NewsTitleTeaserZone } from './lower_news_components/news_content_components/news_title_teaser_zone';
 
 export const IndividualNewsContainer = React.createClass({
 

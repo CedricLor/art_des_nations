@@ -44,20 +44,17 @@ export const NewsEditButtonEditableZoneSwitch = React.createClass({
   },
 
   editButtonEditableZoneSwitch() {
-    // # if site edit mode on show edit tools
-    if (this.props.siteEditMode.mode) {
-      if (this.props.articlesEditStates[this.props.name]) {
-        // # if field edit mode is on, show inputs or textarea and field toolbar
-        if (this.props.type === "textarea") {
-          return this.newsTextArea()
-        } else {
-          return this.newsInput()
-        }
-        // # else show pencil button
+    if (this.props.articlesEditStates[this.props.name]) {
+      // # if field edit mode is on, show inputs or textarea and field toolbar
+      if (this.props.type === "textarea") {
+        return this.newsTextArea()
+      } else {
+        return this.newsInput()
       }
-      else {
-        return this.editButton()
-      }
+      // # else show pencil button
+    }
+    else {
+      return this.editButton()
     }
   },
 
