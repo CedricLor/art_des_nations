@@ -1,6 +1,36 @@
 import { NewsEditableFieldToolbar } from './news_editable_field_toolbar';
 
-export const NewsTextArea = React.createClass({
+export const NewsCkEditor = React.createClass({
+  getInitialState() {
+    return {
+      "myCkeditor": ""
+    }
+  },
+
+  componentDidMount() {
+    let myCkeditor = CKEDITOR.replace( `${this.props.name}_${this.props.card.id}`, {
+      allowedContent : true,
+      pasteFromWordRemoveFontStyles : false,
+      pasteFromWordRemoveStyles : false
+      });
+    myCkeditor.on( 'change', (evt) => {
+      console.log( 'Total bytes: ' + evt.editor.getData().length );
+      this.pushChangesUp(evt.editor.getData());
+    });
+    // console.log(CKEDITOR.instances[`${this.props.name}_${this.props.card.id}`].getData());
+    // console.log("called");
+    // console.log(this.state);
+  },
+
+  componentWillUnmout() {
+    CKEDITOR.instances[`${this.props.name}_${this.props.card.id}`].destroy();
+  },
+
+  pushChangesUp(newText) {
+    const [fieldName, fieldValue] = [this.props.name, newText];
+    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.card.id, fieldName, fieldValue);
+  },
+
   handleChange(e) {
     const [fieldName, fieldValue] = [e.target.name, e.target.value];
     this.props.articlesFieldsActions.changeFieldOfArticle(this.props.card.id, fieldName, fieldValue);
@@ -31,6 +61,9 @@ export const NewsTextArea = React.createClass({
           handleEditField=             {this.props.handleEditField}
           handleDeleteText=            {this.props.handleDeleteText}
           handleRestoreText=           {this.props.handleRestoreText}/>
+        <div>
+          { this.state["myCkeditor"] }
+        </div>
       </div>
     )
   }

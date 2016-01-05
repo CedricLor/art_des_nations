@@ -1,6 +1,6 @@
 import { ADD_NEW_ARTICLE, CHANGE_FIELD_OF_NEW_ARTICLE, RESET_FIELDS_OF_NEW_ARTICLE } from '../constants/ActionTypes'
 
-export function addNewArticle({id, title, teaser, body, created_at, updated_at}) {
+function addNewArticle({id, title, teaser, body, created_at, updated_at}) {
   return {
     type: ADD_NEW_ARTICLE,
     id,
@@ -20,7 +20,7 @@ export function changeNewArticleFields(fieldName, text) {
   }
 }
 
-function resetNewArticleFields() {
+export function resetNewArticleFields() {
   return {
     type: RESET_FIELDS_OF_NEW_ARTICLE
   }

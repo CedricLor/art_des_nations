@@ -2,9 +2,26 @@ import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { NewsCard } from './news_card';
 import { IndividualNewsContainer } from './individual_news_container';
+import { ArticleBasicForm} from './article_basic_form';
 
 export const NewsCardsContainer = React.createClass({
 // export class NewsCardsContainer extends React.Component {
+
+  renderNewArticleBasicForm() {
+    if ( this.props.siteEditMode.mode === true) {
+      return (
+        <span>
+          <hr />
+          <ArticleBasicForm
+            siteEditMode=             {this.props.siteEditMode}
+            newArticleActions=        {this.props.newArticleActions}
+            newArticleFields=         {this.props.newArticleFields}
+            articlesPassedInUiProps=  {this.props.articlesPassedInUiProps} />
+          <hr />
+        </span>
+      )
+    }
+  },
 
   createCards() {
     return (
@@ -65,16 +82,19 @@ export const NewsCardsContainer = React.createClass({
 
     return (
       <div className="row">
-        <ReactCSSTransitionGroup
-          transitionName="react-news-container"
-          transitionEnterTimeout={300}
-          transitionLeaveTimeout={300}
-          transitionAppear={true}
-          transitionAppearTimeout={4000}>
-          <div className="col-xs-12">
-            { cards }
+        <div className="col-xs-12">
+          {this.renderNewArticleBasicForm()}
+          <div className="row">
+            <ReactCSSTransitionGroup
+              transitionName="react-news-container"
+              transitionEnterTimeout={300}
+              transitionLeaveTimeout={300}
+              transitionAppear={true}
+              transitionAppearTimeout={4000}>
+              { cards }
+            </ReactCSSTransitionGroup>
           </div>
-        </ReactCSSTransitionGroup>
+        </div>
       </div>
     )
   }

@@ -2,8 +2,8 @@
 // Constants for articles reducers
 ////////////////////////////////////
 export const initialStateForNewArticle = {
-    title:  '',
-    teaser: '',
+    title:  'Enter the title of your article here',
+    teaser: 'Enter a teaser for your article here',
     body:   ''
   }
 

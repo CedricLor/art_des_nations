@@ -1,7 +1,7 @@
 import {NewsEditButtonEditableZoneSwitch} from '../news_edit_tools/news_edit_button_editable_zone_switch';
 import { inlineBlockStyleForReadOnly } from '../../component_helpers/news_forms_helpers';
 
-export const NewsTeaserZone = React.createClass({
+export const NewsBodyZone = React.createClass({
 
   rawMarkup(raw) {
     return { __html: raw }
@@ -27,16 +27,16 @@ export const NewsTeaserZone = React.createClass({
     }
   },
 
-  articleTeaserForIndex() {
-    let styleForTeaser = {}
-    styleForTeaser = inlineBlockStyleForReadOnly(styleForTeaser, this.props.siteEditMode.mode)
+  render() {
+    let styleForBody = {}
+    styleForBody = inlineBlockStyleForReadOnly(styleForBody, this.props.siteEditMode.mode)
 
     return (
-      <div key= 'teaser_read_only'>
+      <div key= 'body_read_only'>
         <div
-          className=               "teaser"
-          style=                   {styleForTeaser}
-          dangerouslySetInnerHTML= {this.rawMarkup(this.props.card.teaser)}
+          className=               "body"
+          style=                   {styleForBody}
+          dangerouslySetInnerHTML= {this.rawMarkup(this.props.card.body)}
           >
         </div>
         {this.editButtonEditableZoneSwitch()}
@@ -44,24 +44,4 @@ export const NewsTeaserZone = React.createClass({
     )
   },
 
-  articleTeaserForSinglePage() {
-    return this.articleTeaserForIndex()
-  },
-
-  switchTeaserType(viewType) {
-    switch (viewType) {
-      case "indexView":
-        return this.articleTeaserForIndex()
-      case "articleView":
-        return this.articleTeaserForSinglePage()
-      default:
-        return this.articleTitleForIndex()
-    }
-  },
-
-  render() {
-    return (
-      this.switchTeaserType(this.props.viewType)
-    )
-  }
 })

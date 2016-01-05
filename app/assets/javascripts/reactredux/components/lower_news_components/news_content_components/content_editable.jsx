@@ -8,7 +8,6 @@ export default class ContentEditable extends React.Component {
 
   render() {
     return React.createElement(
-      // "div",
       this.props.eltType,
       {
         ref:                     (e) => this.htmlEl = e,

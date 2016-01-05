@@ -1,5 +1,7 @@
 import {NewsEditButtonEditableZoneSwitch} from '../news_edit_tools/news_edit_button_editable_zone_switch';
 import ContentEditable from './content_editable';
+import { inlineBlockStyleForReadOnly } from '../../component_helpers/news_forms_helpers';
+
 import {Link} from 'react-router';
 
 export const NewsTitleZone = React.createClass({
@@ -29,20 +31,12 @@ export const NewsTitleZone = React.createClass({
     }
   },
 
-  inlineBlockStyleForReadOnly(styleObject) {
-    if (this.props.siteEditMode.mode == true) {
-      return Object.assign(styleObject, { "display": "inline-block" })
-    } else {
-      return styleObject
-    }
-  },
-
   articleTitleForIndex() {
     let styleForH3 = {}
     if (this.props.cardImageSource == "") {
       styleForH3["marginTop"] = 0;
     }
-    styleForH3 = this.inlineBlockStyleForReadOnly(styleForH3);
+    styleForH3 = inlineBlockStyleForReadOnly(styleForH3, this.props.siteEditMode.mode)
 
     return (
       <span>
@@ -61,8 +55,8 @@ export const NewsTitleZone = React.createClass({
 
   articleTitleForSinglePage() {
     let styleForH1 = {};
-    styleForH1 = this.inlineBlockStyleForReadOnly(styleForH1);
-    if (this.props.siteEditMode.mode) {
+    styleForH1 = inlineBlockStyleForReadOnly(styleForH1, this.props.siteEditMode.mode)
+    if (this.props.siteEditMode.mode && this.props.articlesEditStates.article) {
       return (
         <ContentEditable
           eltType=  "h1"
@@ -81,24 +75,6 @@ export const NewsTitleZone = React.createClass({
         </h1>
       )
     }
-
-    // return (
-    //   <span>
-    //     <ContentEditable
-    //       eltType=  "h1"
-    //       name=     {this.props.name}
-    //       style=    {styleForH1}
-    //       html=     {this.props.card.title}
-    //       disabled= {false}
-    //       onChange= {this.handleChange}
-    //       />
-    //     <h1
-    //       style=           {styleForH1} >
-    //       {this.props.card.title}
-    //     </h1>
-    //     {this.editButtonEditableZoneSwitch()}
-    //   </span>
-    // )
   },
 
   switchTitleType(viewType) {

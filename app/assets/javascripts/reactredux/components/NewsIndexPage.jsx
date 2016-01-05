@@ -2,7 +2,6 @@
 import React from 'react';
 import { NewsCardsContainer } from './news_cards_container';
 import { AdminSwitchButton } from './admin_switch_button';
-import { ArticleForm} from './article_form';
 
 export const NewsIndexPage = React.createClass({
   getDefaultProps() {
@@ -51,23 +50,9 @@ export const NewsIndexPage = React.createClass({
     return window.removeEventListener('resize');
   },
 
-  renderNewArticleForm() {
-    if ( this.props.siteEditMode.mode === true) {
-      return (
-        <span>
-          <hr />
-          <ArticleForm
-            newArticleActions=        {this.props.newArticleActions}
-            newArticleFields=         {this.props.newArticleFields}
-            articlesPassedInUiProps=  {this.props.articlesPassedInUiProps} />
-          <hr />
-        </span>
-      )
-    }
-  },
-
   renderChildren() {
     if (this.props.children && this.props.children.props.location) {
+      // if the children requested via the router is a single article
       if (this.props.children.props.location.pathname.match(/\/article\//) != null) {
         const currentArticle = _.find(this.props.articles, { 'id': parseInt(this.props.children.props.params.id)});
         return (
@@ -84,18 +69,21 @@ export const NewsIndexPage = React.createClass({
             articlesPassedInUiProps:           this.props.articlesPassedInUiProps
           })
         )
+      // else what is requested is the articles index
       } else {
         return (
           this.props.children && React.cloneElement(this.props.children, {
-             articlesActions:                   this.props.articlesActions,
-             articlesFieldsActions:             this.props.articlesFieldsActions,
-             articlesSizingPositionningActions: this.props.articlesSizingPositionningActions,
-             siteEditMode:                      this.props.siteEditMode,
-             articles:                          this.props.articles,
-             articlesWIPStatesOfFields:         this.props.articlesWIPStatesOfFields,
-             articlesEditStates:                this.props.articlesEditStates,
-             articlesDOMProps:                  this.props.articlesDOMProps,
-             articlesPassedInUiProps:           this.props.articlesPassedInUiProps
+            articlesActions:                   this.props.articlesActions,
+            articlesFieldsActions:             this.props.articlesFieldsActions,
+            articlesSizingPositionningActions: this.props.articlesSizingPositionningActions,
+            siteEditMode:                      this.props.siteEditMode,
+            articles:                          this.props.articles,
+            articlesWIPStatesOfFields:         this.props.articlesWIPStatesOfFields,
+            articlesEditStates:                this.props.articlesEditStates,
+            articlesDOMProps:                  this.props.articlesDOMProps,
+            articlesPassedInUiProps:           this.props.articlesPassedInUiProps,
+            newArticleActions:                 this.props.newArticleActions,
+            newArticleFields:                  this.props.newArticleFields
           })
         )
       }
@@ -109,7 +97,6 @@ export const NewsIndexPage = React.createClass({
           <div className="row">
             <div className="col-xs-12">
               <AdminSwitchButton siteEditModePassedInProps={this.props.site} siteEditMode={this.props.siteEditMode} onToggleSiteEditMode={this.props.siteActions.toggleSiteEditMode} />
-              {this.renderNewArticleForm()}
             </div>
             {this.renderChildren()}
           </div>

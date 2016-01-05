@@ -1,3 +1,6 @@
+window.React = require('react');
+window.DOM = React.DOM;
+
 ########################################
 ## NewsEditableFieldToolbarButton Component
 ########################################

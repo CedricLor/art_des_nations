@@ -1,9 +1,9 @@
-`Link = require('react-router').Link`
-
 `NewsTitleZone = require('./news_title_zone').NewsTitleZone`
 `NewsTeaserZone = require('./news_teaser_zone').NewsTeaserZone`
+`NewsBodyZone = require('./news_body_zone').NewsBodyZone`
+# `NewsDefaultZone = require('./news_default_zone').NewsDefaultZone`
 
-NewsTitleTeaserZone = React.createClass
+NewsContentZoneSwitch = React.createClass
 
   handleEditField: (e) ->
     e.preventDefault()
@@ -52,25 +52,36 @@ NewsTitleTeaserZone = React.createClass
       handleDeleteText:            this.handleDeleteText,
       handleRestoreText:           this.handleRestoreText
 
+  bodyReadOnly: ->
+    React.createElement NewsBodyZone,
+      viewType:                    this.props.viewType,
+      cardImageSource:             this.props.cardImageSource,
+      name:                        this.props.name,
+      type:                        "ckeditor",
+      siteEditMode:                this.props.siteEditMode,
+      card:                        this.props.card,
+      articlesEditStates:          this.props.articlesEditStates,
+      articlesPassedInUiProps:     this.props.articlesPassedInUiProps,
+      articlesWIPStatesOfFields:   this.props.articlesWIPStatesOfFields,
+      articlesFieldsActions:       this.props.articlesFieldsActions,
+      handleUpdate:                this.props.handleUpdate,
+      handleEditField:             this.handleEditField,
+      handleDeleteText:            this.handleDeleteText,
+      handleRestoreText:           this.handleRestoreText
+
   switchTextZones: ->
     switch this.props.name
       when "title" then return this.titleReadOnly()
       when "teaser" then return this.teaserReadOnly()
-      # case "body":
-      #   return this.bodyReadOnly()
-      # case "author":
-      #   return this.authorReadOnly()
-      # case "tags":
-      #   return this.tagsReadOnly()
-      # case "created_at":
-      #   return this.postedAtReadOnly()
-      # case "posted_at":
+      when "body" then return this.bodyReadOnly()
+      when "author" then return this.authorReadOnly()
+      when "tags" then return this.tagsReadOnly()
+      when "created_at" then return this.createdAtReadOnly()
       else return this.teaserReadOnly()
-        # return this.defaultReadOnly()
 
   render: ->
     this.switchTextZones()
 
 `module.exports = {
-  NewsTitleTeaserZone: NewsTitleTeaserZone
+  NewsContentZoneSwitch: NewsContentZoneSwitch
 };`

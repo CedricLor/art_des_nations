@@ -1,7 +1,7 @@
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Link } from 'react-router';
 import { NewsToolbar } from './lower_news_components/news_edit_tools/news_toolbar';
-import { NewsTitleTeaserZone } from './lower_news_components/news_content_components/news_title_teaser_zone';
+import { NewsContentZoneSwitch } from './lower_news_components/news_content_components/news_content_zone_switch';
 
 export const IndividualNewsContainer = React.createClass({
 
@@ -28,7 +28,7 @@ export const IndividualNewsContainer = React.createClass({
 
   createFieldZone(fieldName) {
     return React.createElement(
-      NewsTitleTeaserZone,
+      NewsContentZoneSwitch,
       {
         key:                         `${this.props.articlesDOMProps.cardNumber}_${fieldName}`,
         viewType:                    "articleView",
