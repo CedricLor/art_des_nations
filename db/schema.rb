@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(version: 20151215194108) do
     t.string   "title"
     t.text     "body"
     t.text     "teaser"
+    t.string   "status"
+    t.datetime "posted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

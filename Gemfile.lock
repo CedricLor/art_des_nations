@@ -80,6 +80,8 @@ GEM
     debug_inspector (0.0.2)
     erubis (2.7.0)
     execjs (2.6.0)
+    faker (1.6.1)
+      i18n (~> 0.5)
     figaro (1.1.1)
       thor (~> 0.14)
     font-awesome-sass (4.5.0)
@@ -200,12 +202,13 @@ PLATFORMS
 DEPENDENCIES
   autoprefixer-rails
   aws-sdk (< 2.0)
-  better_errors
+  better_errors (~> 2.1, >= 2.1.1)
   binding_of_caller
   bootstrap-sass (~> 3.3.6)
   byebug
   ckeditor
   coffee-rails (~> 4.1.0)
+  faker (~> 1.6, >= 1.6.1)
   figaro
   font-awesome-sass (~> 4.5.0)
   globalize (~> 5.0.0)

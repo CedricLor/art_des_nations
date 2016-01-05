@@ -102,34 +102,29 @@ export const IndividualNewsContainer = React.createClass({
         transitionEnterTimeout={300}
         transitionLeaveTimeout={300}
         transitionAppear={true}
-        transitionAppearTimeout={4000}>
+        transitionAppearTimeout={2000}>
+
+
         <article className="news">
           <div className="row">
             <div className="col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
 
-              {/*# article edit toolbar*/}
               {this.newsToolbar()}
-              {/*// ####*/}
-
 
               {this.createFieldZone("title")}
-              {/*<h1>{ this.props.currentArticle.title }</h1>*/}
 
               {this.createFieldZone("posted_at")}
-              {/*{<h3 className="posted-at">}
-                { this.props.currentArticle.created_at }
-              {</h3>}*/}
 
               {this.renderTags()}
 
               <div className="news-teaser">
                 {this.createFieldZone("teaser")}
-                {/* this.props.currentArticle.teaser */}
               </div>
+
+              <hr/>
 
               <div className="news-body">
                 {this.createFieldZone("body")}
-                {/* this.props.currentArticle.body */}
               </div>
 
               {/*this.renderAuthor()*/}
@@ -137,6 +132,8 @@ export const IndividualNewsContainer = React.createClass({
             </div>
           </div>
         </article>
+
+
       </ReactCSSTransitionGroup>
     )
   }

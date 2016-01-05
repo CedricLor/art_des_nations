@@ -24,13 +24,15 @@ export function initialDataReceived(jsonFetchedArticles) {
   }
 }
 
-function updateArticle({id, title, teaser, body, created_at, updated_at}) {
+function updateArticle({id, title, body, teaser, status, posted_at, created_at, updated_at}) {
   return {
     type: UPDATE_ARTICLE,
     id,
     title,
-    teaser,
     body,
+    teaser,
+    status,
+    posted_at,
     created_at,
     updated_at
   }

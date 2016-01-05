@@ -89,19 +89,26 @@ NewsEditableFieldToolbar = React.createClass
       btnFunction:  @handleExitEditField,
       btnText:      @props.articlesPassedInUiProps.exitEditField.text
 
+  saveFieldButton: ->
+    React.createElement NewsEditableFieldToolbarButton,
+      btnName:              'save_button_for_',
+      forFieldName:         @props.forFieldName,
+      handleUpdate:         @props.handleUpdate,
+      additionalClassNames: ''
+
+  carretToggleButton: ->
+    React.createElement NewsEditableFieldToolbarButton,
+      btnName:              '',
+      forFieldName:         '',
+      additionalClassNames: ' dropdown-toggle',
+      carret:               true
+
   buttonsForEditable: ->
     DOM.div
       className: 'input-group-btn'
-      React.createElement NewsEditableFieldToolbarButton,
-        btnName:              'save_button_for_',
-        forFieldName:         @props.forFieldName,
-        handleUpdate:         @props.handleUpdate,
-        additionalClassNames: ''
-      React.createElement NewsEditableFieldToolbarButton,
-        btnName:              '',
-        forFieldName:         '',
-        additionalClassNames: ' dropdown-toggle',
-        carret:               true
+      @saveFieldButton()
+      @carretToggleButton()
+
       DOM.ul
         className: "dropdown-menu dropdown-menu-right"
         if @props.articlesWIPStatesOfFields[@props.forFieldName]

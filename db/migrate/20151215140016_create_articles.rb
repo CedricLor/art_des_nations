@@ -4,6 +4,8 @@ class CreateArticles < ActiveRecord::Migration
       t.string :title
       t.text :body
       t.text :teaser
+      t.string :status
+      t.datetime :posted_at
 
       t.timestamps null: false
     end

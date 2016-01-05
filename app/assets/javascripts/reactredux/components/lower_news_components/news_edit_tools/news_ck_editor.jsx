@@ -14,7 +14,6 @@ export const NewsCkEditor = React.createClass({
       pasteFromWordRemoveStyles : false
       });
     myCkeditor.on( 'change', (evt) => {
-      console.log( 'Total bytes: ' + evt.editor.getData().length );
       this.pushChangesUp(evt.editor.getData());
     });
     // console.log(CKEDITOR.instances[`${this.props.name}_${this.props.card.id}`].getData());

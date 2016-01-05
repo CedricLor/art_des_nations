@@ -62,7 +62,8 @@ export const NewsEditButtonEditableZoneSwitch = React.createClass({
     if (this.props.articlesEditStates[this.props.name]) {
       // # if field edit mode is on, show inputs, textarea or ckeditor and field toolbar
       switch (this.props.type) {
-        case "input":
+        case "text":
+        case "date":
           return this.newsInput();
         case "textarea":
           return this.newsTextArea();

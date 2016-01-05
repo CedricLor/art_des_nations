@@ -45,6 +45,8 @@ function article(state, action) {
         title: action.title,
         teaser: action.teaser,
         body: action.body,
+        status: action.status,
+        posted_at: action.posted_at,
         created_at: action.created_at,
         updated_at: action.updated_at
       }
@@ -57,6 +59,8 @@ function article(state, action) {
         title: action.title,
         teaser: action.teaser,
         body: action.body,
+        status: action.status,
+        posted_at: action.posted_at,
         created_at: action.created_at,
         updated_at: action.updated_at
       })

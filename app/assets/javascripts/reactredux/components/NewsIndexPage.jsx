@@ -96,7 +96,12 @@ export const NewsIndexPage = React.createClass({
         <div className="container">
           <div className="row">
             <div className="col-xs-12">
-              <AdminSwitchButton siteEditModePassedInProps={this.props.site} siteEditMode={this.props.siteEditMode} onToggleSiteEditMode={this.props.siteActions.toggleSiteEditMode} />
+              <AdminSwitchButton
+                siteEditModePassedInProps=       {this.props.site}
+                siteEditMode=                    {this.props.siteEditMode}
+                onToggleSiteEditMode=            {this.props.siteActions.toggleSiteEditMode}
+                articlesVisibilityFilter=        {this.props.articlesVisibilityFilter}
+                articlesVisibilityFilterActions= {this.props.articlesVisibilityFilterActions} />
             </div>
             {this.renderChildren()}
           </div>

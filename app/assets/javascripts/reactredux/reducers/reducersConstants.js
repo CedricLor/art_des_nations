@@ -1,23 +1,34 @@
 ////////////////////////////////////
 // Constants for articles reducers
 ////////////////////////////////////
+export function setDateForNewArticle() {
+  let d = new Date();
+  return d.setDate(d.getDate())
+}
+
 export const initialStateForNewArticle = {
-    title:  'Enter the title of your article here',
-    teaser: 'Enter a teaser for your article here',
-    body:   ''
+    title:      'Enter the title of your article here',
+    teaser:     'Enter a teaser for your article here',
+    body:       '',
+    posted_at:  setDateForNewArticle(),
+    status:     "draft"
   }
 
 export const initialEditState = {
-  article: false,
-  title:   false,
-  teaser:  false,
-  body:    false
+  article:    false,
+  title:      false,
+  teaser:     false,
+  body:       false,
+  posted_at:  false,
+  status:     false
 }
 
 export const initialWIPState = {
-  title:  false,
-  teaser: false,
-  body:   false
+  title:      false,
+  teaser:     false,
+  body:       false,
+  posted_at:  false,
+  status:     false
 }
 
 ////////////////////////////////////

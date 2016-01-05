@@ -163,6 +163,10 @@ export const ArticleBasicForm = React.createClass({
             >
             {this.newArticleToolbar()}
 
+            <div
+              className= "inner-wrapper-news-div"
+              ref=       "new_article_inner_div"
+              >
             {/* changed
               ref=       { this.props.cardNumber }
               to
@@ -171,14 +175,10 @@ export const ArticleBasicForm = React.createClass({
               See comment above
               style=     { styleForInnerWrapperDiv }
             */}
-            <div
-              className= "inner-wrapper-news-div"
-              ref=       "new_article_inner_div"
-              >
 
               {/*
                 // //////////////////////
-                // No linked images in new articles at this stage.
+                // No linked images in new articles at this stage of the creation process of a new article.
                 // {this.imageLinkedToArticle()}
               */}
               {this.createNewsTeaserWrapper()}

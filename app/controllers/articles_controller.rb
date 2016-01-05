@@ -1,7 +1,7 @@
 class ArticlesController < ApplicationController
 
   def index
-    @articles = Article.order("created_at DESC")
+    @articles = Article.order("posted_at DESC")
     render json: @articles
   end
 
@@ -54,7 +54,7 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
-    params.require(:article).permit(:title, :body, :teaser)
+    params.require(:article).permit(:title, :body, :teaser, :posted_at, :status)
   end
 
 end

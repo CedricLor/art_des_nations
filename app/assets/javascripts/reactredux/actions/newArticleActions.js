@@ -1,12 +1,14 @@
 import { ADD_NEW_ARTICLE, CHANGE_FIELD_OF_NEW_ARTICLE, RESET_FIELDS_OF_NEW_ARTICLE } from '../constants/ActionTypes'
 
-function addNewArticle({id, title, teaser, body, created_at, updated_at}) {
+function addNewArticle({id, title, body, teaser, status, posted_at, created_at, updated_at}) {
   return {
     type: ADD_NEW_ARTICLE,
     id,
     title,
-    teaser,
     body,
+    teaser,
+    posted_at,
+    status,
     created_at,
     updated_at
   }

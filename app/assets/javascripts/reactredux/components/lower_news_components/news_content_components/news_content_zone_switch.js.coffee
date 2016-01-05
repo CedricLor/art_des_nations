@@ -1,6 +1,7 @@
 `NewsTitleZone = require('./news_title_zone').NewsTitleZone`
 `NewsTeaserZone = require('./news_teaser_zone').NewsTeaserZone`
 `NewsBodyZone = require('./news_body_zone').NewsBodyZone`
+`NewsPostedAtZone = require('./news_posted_at_zone').NewsPostedAtZone`
 # `NewsDefaultZone = require('./news_default_zone').NewsDefaultZone`
 
 NewsContentZoneSwitch = React.createClass
@@ -69,6 +70,23 @@ NewsContentZoneSwitch = React.createClass
       handleDeleteText:            this.handleDeleteText,
       handleRestoreText:           this.handleRestoreText
 
+  postedAtReadOnly: ->
+    React.createElement NewsPostedAtZone,
+      viewType:                    this.props.viewType,
+      cardImageSource:             this.props.cardImageSource,
+      name:                        this.props.name,
+      type:                        "date",
+      siteEditMode:                this.props.siteEditMode,
+      card:                        this.props.card,
+      articlesEditStates:          this.props.articlesEditStates,
+      articlesPassedInUiProps:     this.props.articlesPassedInUiProps,
+      articlesWIPStatesOfFields:   this.props.articlesWIPStatesOfFields,
+      articlesFieldsActions:       this.props.articlesFieldsActions,
+      handleUpdate:                this.props.handleUpdate,
+      handleEditField:             this.handleEditField,
+      handleDeleteText:            this.handleDeleteText,
+      handleRestoreText:           this.handleRestoreText
+
   switchTextZones: ->
     switch this.props.name
       when "title" then return this.titleReadOnly()
@@ -76,7 +94,7 @@ NewsContentZoneSwitch = React.createClass
       when "body" then return this.bodyReadOnly()
       when "author" then return this.authorReadOnly()
       when "tags" then return this.tagsReadOnly()
-      when "created_at" then return this.createdAtReadOnly()
+      when "posted_at" then return this.postedAtReadOnly()
       else return this.teaserReadOnly()
 
   render: ->

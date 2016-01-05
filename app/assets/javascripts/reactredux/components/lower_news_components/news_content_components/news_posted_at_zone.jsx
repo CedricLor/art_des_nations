@@ -1,11 +1,6 @@
 import { NewsEditButtonEditableZoneSwitch } from '../news_edit_tools/news_edit_button_editable_zone_switch';
-import { inlineBlockStyleForReadOnly } from '../../component_helpers/news_forms_helpers';
 
-export const NewsBodyZone = React.createClass({
-
-  rawMarkup(raw) {
-    return { __html: raw }
-  },
+export const NewsPostedAtZone = React.createClass({
 
   editButtonEditableZoneSwitch() {
     if (this.props.siteEditMode.mode) {
@@ -28,20 +23,13 @@ export const NewsBodyZone = React.createClass({
   },
 
   render() {
-    let styleForBody = {}
-    styleForBody = inlineBlockStyleForReadOnly(styleForBody, this.props.siteEditMode.mode)
-
     return (
-      <div key= 'body_read_only'>
-        <div
-          className=               "body"
-          style=                   {styleForBody}
-          dangerouslySetInnerHTML= {this.rawMarkup(this.props.card.body)}
-          >
-        </div>
+      <div>
+        <h3 className="posted-at">
+          { this.props.card.posted_at }
+        </h3>
         {this.editButtonEditableZoneSwitch()}
       </div>
     )
-  },
-
+  }
 })

@@ -90,7 +90,7 @@ export const NewsCardsContainer = React.createClass({
               transitionEnterTimeout={300}
               transitionLeaveTimeout={300}
               transitionAppear={true}
-              transitionAppearTimeout={4000}>
+              transitionAppearTimeout={2000}>
               { cards }
             </ReactCSSTransitionGroup>
           </div>
