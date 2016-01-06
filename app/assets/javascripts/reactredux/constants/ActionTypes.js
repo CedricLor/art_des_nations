@@ -25,7 +25,7 @@ export const ArticlesVisibilityFilters = {
 
 export const UPDATE_ARTICLE = 'UPDATE_ARTICLE'
 export const DELETE_ARTICLE = 'DELETE_ARTICLE'
-
+export const REORDER_ARTICLES_ARRAY = 'REORDER_ARTICLES_ARRAY'
 
 
 export const CHANGE_FIELD_OF_ARTICLE = 'CHANGE_FIELD_OF_ARTICLE'

@@ -38,9 +38,6 @@ const ArticlesVisibilityFilterSwitch = React.createClass({
   },
 
   render() {
-    if (this.props.siteEditMode.mode === false) {
-      return (<div></div>)
-    }
     return (
       <div className="btn-group">
         <button type="button" className="btn btn-default">Filter articles:</button>
@@ -60,7 +57,6 @@ const ArticlesVisibilityFilterSwitch = React.createClass({
   }
 })
 
-
 /////////////////////////////
 // AdminSwitchButton(s)!!! //
 /////////////////////////////
@@ -69,6 +65,18 @@ export const AdminSwitchButton = React.createClass({
   handleToggleSiteEditMode(e) {
     e.preventDefault();
     this.props.onToggleSiteEditMode();
+  },
+
+  renderArticlesVisibilityFilterSwitch() {
+    if (this.props.siteEditMode.mode === true) {
+      return (
+        <ArticlesVisibilityFilterSwitch
+          siteEditMode=             {this.props.siteEditMode}
+          articlesVisibilityFilter= {this.props.articlesVisibilityFilter}
+          onFilterChange=           {this.props.articlesVisibilityFilterActions.setArticlesVisibilityFilter}
+        />
+      )
+    }
   },
 
   render() {
@@ -80,11 +88,7 @@ export const AdminSwitchButton = React.createClass({
         <Link to="/articles" className='btn btn-default'>
           {"Link to articles"}
         </Link>
-        <ArticlesVisibilityFilterSwitch
-          siteEditMode=             {this.props.siteEditMode}
-          articlesVisibilityFilter= {this.props.articlesVisibilityFilter}
-          onFilterChange=           {this.props.articlesVisibilityFilterActions.setArticlesVisibilityFilter}
-        />
+        { this.renderArticlesVisibilityFilterSwitch() }
       </span>
     );
   }

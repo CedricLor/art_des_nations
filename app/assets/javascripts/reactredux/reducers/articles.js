@@ -13,7 +13,8 @@ import {
   TOGGLE_EDIT_STATE_OF_FIELD_OF_ARTICLE,
   RESET_ALL_EDIT_STATES_FOR_ARTICLE,
   CHANGE_FIELD_OF_NEW_ARTICLE,
-  RESET_FIELDS_OF_NEW_ARTICLE } from '../constants/ActionTypes'
+  RESET_FIELDS_OF_NEW_ARTICLE,
+  REORDER_ARTICLES_ARRAY } from '../constants/ActionTypes'
 
 import {
   initialStateForNewArticle,
@@ -111,6 +112,9 @@ export function articles(state = [], action) {
         ...state.slice(0, index),
         ...state.slice(index+1)
       ]
+
+    case REORDER_ARTICLES_ARRAY:
+      return _.sortByOrder(state, 'posted_at', 'desc')
 
     default:
       return state

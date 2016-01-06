@@ -95,6 +95,7 @@ export const NewsCard = React.createClass({
       <div className= "news-teaser-wrapper">
         {this.createFieldZone("title")}
         {this.createFieldZone("teaser")}
+        {this.createFieldZone("posted_at")}
       </div>
     )
   },

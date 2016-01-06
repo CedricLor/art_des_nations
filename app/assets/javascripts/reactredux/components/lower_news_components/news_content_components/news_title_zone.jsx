@@ -77,8 +77,8 @@ export const NewsTitleZone = React.createClass({
     }
   },
 
-  switchTitleType(viewType) {
-    switch (viewType) {
+  switchTitleType() {
+    switch (this.props.viewType) {
       case "indexView":
         return this.articleTitleForIndex()
       case "articleView":
@@ -90,7 +90,7 @@ export const NewsTitleZone = React.createClass({
 
   render() {
     return (
-      this.switchTitleType(this.props.viewType)
+      this.switchTitleType()
     )
   }
 })

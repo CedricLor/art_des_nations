@@ -1,4 +1,4 @@
-import { UPDATE_ARTICLE, DELETE_ARTICLE, LOAD_INITIAL_DATA, LOADED_INITIAL_DATA } from '../constants/ActionTypes'
+import { UPDATE_ARTICLE, DELETE_ARTICLE, LOAD_INITIAL_DATA, LOADED_INITIAL_DATA, REORDER_ARTICLES_ARRAY } from '../constants/ActionTypes'
 import { refreshArticlesSizingPositionning } from './articlesSizingPositionningActions';
 import { updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle, successCallBackForRestoreText, resetAllEditAndWIPStatesForField, changeArticleEditStateOfField } from './articleFieldsActions';
 import { createInitialState } from '../stores/storeCreationHelpers'
@@ -24,6 +24,13 @@ export function initialDataReceived(jsonFetchedArticles) {
   }
 }
 
+// Methods for update article (and fields)
+function reOrderArticlesArray() {
+  return {
+    type: REORDER_ARTICLES_ARRAY
+  }
+}
+
 function updateArticle({id, title, body, teaser, status, posted_at, created_at, updated_at}) {
   return {
     type: UPDATE_ARTICLE,
@@ -38,9 +45,10 @@ function updateArticle({id, title, body, teaser, status, posted_at, created_at, 
   }
 }
 
-function updateArticleAndRefresh(data) {
+function updateArticleAndRefresh(data, fieldName) {
   return function (dispatch) {
     dispatch(updateArticle(data));
+    if (fieldName === "posted_at" || fieldName === "article") { dispatch(reOrderArticlesArray()) };
     dispatch(refreshArticlesSizingPositionning());
   }
 }
@@ -56,7 +64,7 @@ function sendUpdateByAjax(data, id, fieldName) {
       },
       success: (function(respData) {
         dispatch(updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle(id, fieldName));
-        dispatch(updateArticleAndRefresh(respData));
+        dispatch(updateArticleAndRefresh(respData, fieldName));
       })
     });
   }

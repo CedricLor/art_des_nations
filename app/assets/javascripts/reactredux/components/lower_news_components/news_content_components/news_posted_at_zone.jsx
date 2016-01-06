@@ -1,4 +1,5 @@
 import { NewsEditButtonEditableZoneSwitch } from '../news_edit_tools/news_edit_button_editable_zone_switch';
+import { inlineBlockStyleForReadOnly } from '../../component_helpers/news_forms_helpers';
 
 export const NewsPostedAtZone = React.createClass({
 
@@ -22,12 +23,40 @@ export const NewsPostedAtZone = React.createClass({
     }
   },
 
+  articleCreatedAtForIndex() {
+    const style = {}
+
+    return (
+      <p
+        style= { style }>
+          {this.props.card.posted_at}
+      </p>
+    )
+  },
+
+  articleCreatedAtForSinglePage() {
+    return (
+      <h3 className="posted-at">
+        {this.props.card.posted_at}
+      </h3>
+    )
+  },
+
+  switchCreatedAtType() {
+    switch (this.props.viewType) {
+      case "indexView":
+        return this.articleCreatedAtForIndex()
+      case "articleView":
+        return this.articleCreatedAtForSinglePage()
+      default:
+        return this.articleCreatedAtForIndex()
+    }
+  },
+
   render() {
     return (
       <div>
-        <h3 className="posted-at">
-          { this.props.card.posted_at }
-        </h3>
+        {this.switchCreatedAtType()}
         {this.editButtonEditableZoneSwitch()}
       </div>
     )

@@ -69,15 +69,6 @@ export const NewsCardsContainer = React.createClass({
   },
 
   render() {
-    let colClassForIndex = "";
-    let colClassForArticle = "";
-    if (this.props.children) {
-      colClassForIndex = "col-xs-3";
-      colClassForArticle = "col-xs-9";
-    } else {
-      colClassForIndex = "col-xs-12";
-      colClassForArticle = "hidden";
-    }
     let cards = this.createCards();
 
     return (
