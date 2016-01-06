@@ -31,9 +31,10 @@ export function resetNewArticleFields() {
 import { refreshArticlesSizingPositionning } from './articlesSizingPositionningActions';
 export function handleSubmitNewArticle() {
   return function (dispatch, getState) {
+    const newArticleData = getState().newArticleFields;
     $.post(
       '/articles',
-      { article: getState().newArticleFields },
+      { article: newArticleData },
       (function(_this) {
         return function(data) {
           dispatch(addNewArticle(data));

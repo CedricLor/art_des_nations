@@ -97,11 +97,20 @@ export const ArticleBasicForm = React.createClass({
     )
   },
 
+  createFieldZone(fieldName) {
+    return (
+      <div>
+        { this.props.newArticleFields.posted_at }
+      </div>
+    )
+  },
+
   createNewsTeaserWrapper() {
     return (
       <div className= "news-teaser-wrapper">
         {this.createNewArticleTitle()}
         {this.createNewArticleTeaser()}
+        {this.createFieldZone("posted_at")}
       </div>
     )
   },

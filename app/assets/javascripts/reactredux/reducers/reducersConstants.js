@@ -3,7 +3,7 @@
 ////////////////////////////////////
 export function setDateForNewArticle() {
   let d = new Date();
-  return d.setDate(d.getDate())
+  return d.toString()
 }
 
 export const initialStateForNewArticle = {

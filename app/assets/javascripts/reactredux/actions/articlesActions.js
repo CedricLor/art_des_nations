@@ -130,6 +130,7 @@ export function handleDeleteArticle(id) {
       dataType: 'JSON',
       success: (function() {
         dispatch(deleteArticle(id));
+        dispatch(reOrderArticlesArray());
       })
     });
   }
