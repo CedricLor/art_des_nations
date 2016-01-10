@@ -7,49 +7,6 @@ export const NewsPostedAtZone = React.createClass({
     viewType:                  PropTypes.string.isRequired,
     children:                  PropTypes.element
   },
-  // PropTypes: {
-  //   name:                      PropTypes.string.isRequired,
-  //   type:                      PropTypes.string.isRequired,
-  //   sourceId:                  PropTypes.string.isRequired,
-  //   value:                     PropTypes.string.isRequired,
-
-  //   siteEditMode:              PropTypes.object.isRequired,
-
-  //   articlesPassedInUiProps:   PropTypes.object.isRequired,
-  //   currArtWIPStateCurrField:  PropTypes.string.isRequired,
-  //   currArtEditStateCurrField: PropTypes.string.isRequired,
-
-  //   handleChange:              PropTypes.func.isRequired,
-  //   handleUpdate:              PropTypes.func.isRequired,
-  //   handleEditField:           PropTypes.func.isRequired,
-  //   handleExitEditField:       PropTypes.func.isRequired,
-  //   handleDeleteText:          PropTypes.func.isRequired,
-  //   handleRestoreText:         PropTypes.func.isRequired
-  // },
-
-  // editButtonEditableZoneSwitch() {
-  //   if (this.props.siteEditMode.mode) {
-  //     return (
-  //       <NewsEditButtonEditableZoneSwitch
-  //         name=                        {this.props.name}
-  //         type=                        {this.props.type}
-  //         sourceId=                    {this.props.sourceId}
-  //         value=                       {this.props.value}
-
-  //         articlesPassedInUiProps=     {this.props.articlesPassedInUiProps}
-
-  //         currArtWIPStateCurrField=    {this.props.currArtWIPStateCurrField}
-  //         currArtEditStateCurrField=   {this.props.currArtEditStateCurrField}
-
-  //         handleChange=                {this.props.handleChange}
-  //         handleUpdate=                {this.props.handleUpdate}
-  //         handleEditField=             {this.props.handleEditField}
-  //         handleExitEditField=         {this.props.handleExitEditField}
-  //         handleDeleteText=            {this.props.handleDeleteText}
-  //         handleRestoreText=           {this.props.handleRestoreText}/>
-  //     )
-  //   }
-  // },
 
   articleCreatedAtForIndex() {
     const style = {}

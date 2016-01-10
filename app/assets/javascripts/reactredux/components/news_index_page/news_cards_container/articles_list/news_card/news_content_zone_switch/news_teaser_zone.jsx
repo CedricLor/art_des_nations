@@ -11,30 +11,6 @@ export const NewsTeaserZone = React.createClass({
     children:                  PropTypes.element
   },
 
-  // editButtonEditableZoneSwitch() {
-  //   if (this.props.siteEditMode.mode) {
-  //     return (
-  //       <NewsEditButtonEditableZoneSwitch
-  //         name=                        {this.props.name}
-  //         type=                        {this.props.type}
-  //         sourceId=                    {this.props.sourceId}
-  //         value=                       {this.props.value}
-
-  //         articlesPassedInUiProps=     {this.props.articlesPassedInUiProps}
-
-  //         currArtWIPStateCurrField=    {this.props.currArtWIPStateCurrField}
-  //         currArtEditStateCurrField=   {this.props.currArtEditStateCurrField}
-
-  //         handleChange=                {this.props.handleChange}
-  //         handleUpdate=                {this.props.handleUpdate}
-  //         handleEditField=             {this.props.handleEditField}
-  //         handleExitEditField=         {this.props.handleExitEditField}
-  //         handleDeleteText=            {this.props.handleDeleteText}
-  //         handleRestoreText=           {this.props.handleRestoreText}/>
-  //     )
-  //   }
-  // },
-
   articleTeaserForIndex() {
     let styleForTeaser = {}
     styleForTeaser = inlineBlockStyleForReadOnly(styleForTeaser, this.props.siteEditMode.mode)
@@ -47,7 +23,6 @@ export const NewsTeaserZone = React.createClass({
           dangerouslySetInnerHTML= {rawMarkup(this.props.value)}
           >
         </div>
-        {/*this.editButtonEditableZoneSwitch()*/}
         {this.props.children}
       </div>
     )

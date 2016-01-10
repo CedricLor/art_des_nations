@@ -1,8 +1,10 @@
-
 import React from 'react';
 import { NavBar } from './news_index_page/nav_bar';
 
+window.ReactIntl = require('react-intl');
+
 export const NewsIndexPage = React.createClass({
+
   getDefaultProps() {
     return {
       site: {

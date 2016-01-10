@@ -19,7 +19,7 @@ export const NewsTitleZone = React.createClass({
   handleChange(e) {
     const fieldValue = e.target.value;
     // this.props.articlesFieldsActions.changeFieldOfArticle(this.props.card.id, fieldName, fieldValue)  ;
-    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.sourceId, this.props.value, fieldValue)  ;
+    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.sourceId, this.props.value, fieldValue);
   },
 
   articleTitleForIndex() {
@@ -39,7 +39,6 @@ export const NewsTitleZone = React.createClass({
               {this.props.value}
           </h3>
         </Link>
-        {/*this.editButtonEditableZoneSwitch()*/}
         {this.props.children}
       </span>
     )

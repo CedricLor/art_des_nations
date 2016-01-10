@@ -5,6 +5,19 @@ import { NewsToolbarSwitch } from './news_cards_container/articles_list/news_car
 import { NewsContentZoneSwitch } from './news_cards_container/articles_list/news_card/news_content_zone_switch';
 
 export const IndividualNewsContainer = React.createClass({
+  // propTypes: {
+  //   articlesActions:            PropTypes.object,
+  //   articlesFieldsActions:      PropTypes.object,
+
+  //   siteEditMode:               PropTypes.object,
+  //   currentArticle:             PropTypes.object.isRequired,
+  //   // # redux passed in Edit and Wip States
+  //   articlesWIPStatesOfFields:  PropTypes.object.isRequired,
+  //   articlesEditStates:         PropTypes.object.isRequired,
+  //   // # redux passedInDomProps
+  //   articlesDOMProps:           PropTypes.object.isRequired,
+  //   articlesPassedInUiProps:    PropTypes.object.isRequired
+  // },
 
   handleDelete(e) {
     e.preventDefault();
@@ -21,33 +34,35 @@ export const IndividualNewsContainer = React.createClass({
     this.props.articlesActions.handleCancelEditArticle(this.props.currentArticle.id);
   },
 
-  handleUpdate(e) {
-    e.preventDefault();
-    const fieldName = e.target.parentNode.getAttribute("name").match(/(_for_)(\S+)/)[2];
-    this.props.articlesActions.handleUpdateArticle(this.props.currentArticle.id, fieldName);
+  handleUpdate(fieldName) {
+    this.props.articlesActions.handleUpdateArticle(this.props.card.id, fieldName)
+  },
+
+  handleChange(fieldName, fieldValue) {
+    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.card.id, fieldName, fieldValue);
   },
 
   createFieldZone(fieldName) {
-    return React.createElement(
-      NewsContentZoneSwitch,
-      {
-        key:                         `${this.props.articlesDOMProps.cardNumber}_${fieldName}`,
-        viewType:                    "articleView",
-        name:                        fieldName,
-        card:                        this.props.currentArticle,
-        articlesPassedInUiProps:     this.props.articlesPassedInUiProps,
-        // redux store properties
-        siteEditMode:                this.props.siteEditMode,
-        articlesEditStates:          this.props.articlesEditStates,
-        articlesWIPStatesOfFields:   this.props.articlesWIPStatesOfFields,
-        // unset properties
-        cardImageSource:             this.props.cardImageSource,
-        // redux actions
-        articlesFieldsActions:       this.props.articlesFieldsActions,
-        // local functions
-        handleUpdate:                this.handleUpdate
-      }
-    );
+    return (
+      <NewsContentZoneSwitch
+        key=                         {`${this.props.currentArticle.id}_${fieldName}`}
+        viewType=                    "articleView"
+        name=                        {fieldName}
+        value=                       {this.props.currentArticle[fieldName]}
+        sourceId=                    {this.props.currentArticle.id}
+
+        siteEditMode=                {this.props.siteEditMode}
+        articlesPassedInUiProps=     {this.props.articlesPassedInUiProps}
+        currArtWIPStateCurrField=    {this.props.articlesWIPStatesOfFields[fieldName]}
+        currArtEditStateCurrField=   {this.props.articlesEditStates[fieldName]}
+
+        cardImageSource=             {this.props.cardImageSource}
+
+        articlesFieldsActions=       {this.props.articlesFieldsActions}
+        handleUpdate=                {this.handleUpdate.bind(this, fieldName)}
+        handleChange=                {this.handleChange.bind(this, fieldName)}
+        />
+    )
   },
 
   newsToolbarSwitch() {
@@ -97,6 +112,7 @@ export const IndividualNewsContainer = React.createClass({
   },
 
   render() {
+    console.log(this.props)
     return (
       <ReactCSSTransitionGroup
         transitionName="react-news-container"

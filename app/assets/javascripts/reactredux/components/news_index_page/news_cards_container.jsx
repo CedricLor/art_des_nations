@@ -3,7 +3,6 @@ import { ArticlesList } from './news_cards_container/articles_list';
 import { ArticleBasicForm} from './news_cards_container/article_basic_form';
 
 export const NewsCardsContainer = React.createClass({
-
   renderNewArticleBasicForm() {
     if ( this.props.siteEditMode.mode === true) {
       return (

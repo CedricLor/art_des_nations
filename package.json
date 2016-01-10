@@ -18,6 +18,8 @@
   "dependencies": {
     "es6-promise": "^3.0.2",
     "history": "^1.17.0",
+    "intl": "^1.0.1",
+    "intl-locales-supported": "^1.0.0",
     "isomorphic-fetch": "^2.2.0",
     "lodash": "^3.10.1",
     "moment": "^2.11.0",
@@ -25,6 +27,7 @@
     "react-addons-css-transition-group": "^0.14.3",
     "react-addons-update": "^0.14.3",
     "react-dom": "^0.14.3",
+    "react-intl": "^1.2.2",
     "react-redux": "^4.0.3",
     "react-router": "^2.0.0-rc4",
     "redux": "^3.0.5",

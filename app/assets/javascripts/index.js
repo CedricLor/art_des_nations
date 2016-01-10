@@ -19,13 +19,15 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import createHistory from 'history/lib/createBrowserHistory'
 import { syncReduxAndRouter } from 'redux-simple-router'
 
+import { loadI18nPolyfills } from './i18n_init'
+loadI18nPolyfills();
+
 const initialState = { isFetching: {initialData: true } }
 const store = configureStore(initialState);
 const history = createHistory();
 history.__v2_compatible__ = true;
 
 syncReduxAndRouter(history, store)
-
 
 $.ajax({
   method: "GET",

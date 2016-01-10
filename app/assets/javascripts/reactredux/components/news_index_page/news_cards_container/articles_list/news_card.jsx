@@ -4,14 +4,13 @@ import {Link} from 'react-router';
 import { NewsContentZoneSwitch } from './news_card/news_content_zone_switch';
 import { NewsToolbarSwitch } from './news_card/news_toolbar_switch';
 import { NewsImage } from './news_card/image';
-
+import { ReadMoreBtn } from '../dumb_components/read_more_button';
 
 // ########################################
 // ## Card Component
 // ########################################
 
 export const NewsCard = React.createClass({
-
   // # Card equalization
   componentDidMount() {
     const callback = () =>
@@ -52,9 +51,6 @@ export const NewsCard = React.createClass({
   },
 
   handleChange(fieldName, fieldValue) {
-    console.log("---------")
-    console.log(fieldName)
-    console.log(fieldValue)
     this.props.articlesFieldsActions.changeFieldOfArticle(this.props.card.id, fieldName, fieldValue);
   },
 
@@ -123,19 +119,6 @@ export const NewsCard = React.createClass({
     )
   },
 
-  createReadMoreButton() {
-    return (
-      <p className= "btn-container read-more-news-btn-container">
-        <Link
-          to=        {`/article/${this.props.card.id}`}
-          className= "btn btn-lg black-square-btn news-read-more-btn"
-          >
-          { this.props.articlesPassedInUiProps.localizedReadMore }
-        </Link>
-      </p>
-    )
-  },
-
   render() {
     let styleForOuterWrapperDiv = { minHeight: "0px" }
     let styleForInnerWrapperDiv = { minHeight: this.props.articlesDOMProps.reqDivHeight }
@@ -155,7 +138,10 @@ export const NewsCard = React.createClass({
             style=     { styleForInnerWrapperDiv }>
             {this.imageLinkedToArticle()}
             {this.createNewsTeaserWrapper()}
-            {this.createReadMoreButton()}
+            <ReadMoreBtn
+              articlesPassedInUiProps= {this.props.articlesPassedInUiProps}
+              sourceId=                {this.props.card.id}
+            />
           </div>
         </div>
       </div>
