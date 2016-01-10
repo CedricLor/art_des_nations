@@ -1,16 +1,11 @@
 ////////////////////////////////////
 // Constants for articles reducers
 ////////////////////////////////////
-export function setDateForNewArticle() {
-  let d = new Date();
-  return d.toString()
-}
-
 export const initialStateForNewArticle = {
     title:      'Enter the title of your article here',
     teaser:     'Enter a teaser for your article here',
     body:       '',
-    posted_at:  setDateForNewArticle(),
+    posted_at:  `${new Date().toISOString()}`,
     status:     "draft"
   }
 

@@ -20,6 +20,7 @@
     "history": "^1.17.0",
     "isomorphic-fetch": "^2.2.0",
     "lodash": "^3.10.1",
+    "moment": "^2.11.0",
     "react": "^0.14.3",
     "react-addons-css-transition-group": "^0.14.3",
     "react-addons-update": "^0.14.3",

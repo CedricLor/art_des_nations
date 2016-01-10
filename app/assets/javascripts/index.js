@@ -12,8 +12,8 @@ import { initialDataReceived } from './reactredux/actions/articlesActions'
 
 import App from './reactredux/containers/App'
 import { NewsIndexPage } from './reactredux/components/NewsIndexPage'
-import { NewsCardsContainer } from './reactredux/components/news_cards_container'
-import { IndividualNewsContainer } from './reactredux/components/individual_news_container'
+import { NewsCardsContainer } from './reactredux/components/news_index_page/news_cards_container'
+import { IndividualNewsContainer } from './reactredux/components/news_index_page/individual_news_container'
 
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import createHistory from 'history/lib/createBrowserHistory'

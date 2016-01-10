@@ -1,7 +1,6 @@
 
 import React from 'react';
-import { NewsCardsContainer } from './news_cards_container';
-import { AdminSwitchButton } from './admin_switch_button';
+import { NavBar } from './news_index_page/nav_bar';
 
 export const NewsIndexPage = React.createClass({
   getDefaultProps() {
@@ -95,14 +94,12 @@ export const NewsIndexPage = React.createClass({
       <div className= "news-index-page-body">
         <div className="container">
           <div className="row">
-            <div className="col-xs-12">
-              <AdminSwitchButton
-                siteEditModePassedInProps=       {this.props.site}
-                siteEditMode=                    {this.props.siteEditMode}
-                onToggleSiteEditMode=            {this.props.siteActions.toggleSiteEditMode}
-                articlesVisibilityFilter=        {this.props.articlesVisibilityFilter}
-                articlesVisibilityFilterActions= {this.props.articlesVisibilityFilterActions} />
-            </div>
+            <NavBar
+              siteEditModePassedInProps=       {this.props.site}
+              siteEditMode=                    {this.props.siteEditMode}
+              onToggleSiteEditMode=            {this.props.siteActions.toggleSiteEditMode}
+              articlesVisibilityFilter=        {this.props.articlesVisibilityFilter}
+              articlesVisibilityFilterActions= {this.props.articlesVisibilityFilterActions} />
             {this.renderChildren()}
           </div>
         </div>
