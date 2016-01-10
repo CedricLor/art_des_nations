@@ -4,7 +4,7 @@ import {
   RESET_DOM_PROPS_OF_ALL_THE_ARTICLES
 } from '../constants/ActionTypes'
 
-function changeNeedResizingStateOfArticle(id, stateValue) {
+function changeArticleNeedResizingState(id, stateValue) {
   return {
     type: CHANGE_NEED_RESIZING_STATE_OF_ARTICLE,
     id,
@@ -30,10 +30,10 @@ function resetDOMPropsOfAllTheArticles() {
 
 export function refreshArticlesSizingPositionning() {
   return function (dispatch, getState) {
-    const needResizingStatesOfArticles = getState().needResizingStatesOfArticles
+    const articlesNeedResizingStates = getState().articlesNeedResizingStates
     _.forOwn(
-      needResizingStatesOfArticles,
-      [ function(value, id) { dispatch(changeNeedResizingStateOfArticle(id, true)) } ],
+      articlesNeedResizingStates,
+      [ function(value, id) { dispatch(changeArticleNeedResizingState(id, true)) } ],
       [this]
       );
     dispatch(resetDOMPropsOfAllTheArticles());

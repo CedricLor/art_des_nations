@@ -44,7 +44,10 @@ export const GenericEditableFieldToolbar = React.createClass({
 // ########################################
 export const GenericStatusSwitcherToolbar = React.createClass({
   PropTypes: {
-    arrayOfStatus:  PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string.isRequired).isRequired).isRequired,
+    arrayOfStatus:  PropTypes.arrayOf(PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      action: PropTypes.string.isRequired
+    }).isRequired).isRequired,
     activeStatus: PropTypes.string.isRequired,
     onStatusChange: PropTypes.func.isRequired,
     mainBtnText:    PropTypes.string.isRequired

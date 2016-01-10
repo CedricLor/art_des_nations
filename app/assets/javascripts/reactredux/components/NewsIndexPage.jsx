@@ -51,9 +51,9 @@ export const NewsIndexPage = React.createClass({
 
   renderChildren() {
     if (this.props.children && this.props.children.props.location) {
-      // if the children requested via the router is a single article
+      // if the children requested via the router is a single article (i.e. for the articleView)
       if (this.props.children.props.location.pathname.match(/\/article\//) != null) {
-        const currentArticle = _.find(this.props.articles, { 'id': parseInt(this.props.children.props.params.id)});
+        const currentArticle = _.find(this.props.visibleArticles, { 'id': parseInt(this.props.children.props.params.id)});
         return (
           this.props.children && React.cloneElement(this.props.children, {
             articlesActions:                   this.props.articlesActions,
@@ -68,7 +68,7 @@ export const NewsIndexPage = React.createClass({
             articlesPassedInUiProps:           this.props.articlesPassedInUiProps
           })
         )
-      // else what is requested is the articles index
+      // else what is requested is the articles index (i.e. for the indexView)
       } else {
         return (
           this.props.children && React.cloneElement(this.props.children, {
@@ -76,7 +76,7 @@ export const NewsIndexPage = React.createClass({
             articlesFieldsActions:             this.props.articlesFieldsActions,
             articlesSizingPositionningActions: this.props.articlesSizingPositionningActions,
             siteEditMode:                      this.props.siteEditMode,
-            articles:                          this.props.articles,
+            articles:                          this.props.visibleArticles,
             articlesWIPStatesOfFields:         this.props.articlesWIPStatesOfFields,
             articlesEditStates:                this.props.articlesEditStates,
             articlesDOMProps:                  this.props.articlesDOMProps,
@@ -90,6 +90,7 @@ export const NewsIndexPage = React.createClass({
   },
 
   render() {
+    console.log(this.props)
     return (
       <div className= "news-index-page-body">
         <div className="container">

@@ -11,13 +11,13 @@ import { equalizePreviousRowIfFirstCardOfNextRow } from './helpersForArticlesSiz
 import { initialArticlesDOMPropsState } from './reducersConstants';
 
 
-export function needResizingStatesOfArticles(state = {}, action) {
+export function articlesNeedResizingStates(state = {}, action) {
   const new_state = Object.assign({}, state);
 
   switch (action.type) {
 
     case LOAD_INITIAL_DATA:
-      return action.initialState.needResizingStatesOfArticles
+      return action.initialState.articlesNeedResizingStates
 
     case CHANGE_NEED_RESIZING_STATE_OF_ARTICLE:
     case ADD_NEW_ARTICLE:

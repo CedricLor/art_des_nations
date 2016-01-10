@@ -9,20 +9,26 @@ import * as ArticlesVisibilityFilterActions from '../actions/articlesVisibilityF
 import * as NewArticleActions from '../actions/newArticleActions'
 import * as SiteActions from '../actions/siteActions'
 
-import { ArticlesVisibilityFilters } from '../constants/ActionTypes.js'
+import { visibleArticlesAndStatesSelector } from '../selectors/index'
+
 
 function mapStateToProps(state) {
+  const memoizedFilteredArticles = visibleArticlesAndStatesSelector(state);
+
   return {
     routing:                         state.routing,
     isFetching:                      state.isFetching,
     siteEditMode:                    state.siteEditMode,
-    articlesVisibilityFilter:        state.articlesVisibilityFilter,
-    articles:                        selectArticles(state.articles, state.articlesVisibilityFilter),
+
     newArticleFields:                state.newArticleFields,
-    articlesWIPStatesOfFields:       state.articlesWIPStatesOfFields,
-    articlesEditStates:              state.articlesEditStates,
-    needResizingStatesOfArticles:    state.needResizingStatesOfArticles,
-    articlesDOMProps:                state.articlesDOMProps
+
+    articlesVisibilityFilter:        memoizedFilteredArticles.articlesVisibilityFilter,
+    visibleArticles:                 memoizedFilteredArticles.visibleArticles,
+
+    articlesWIPStatesOfFields:       memoizedFilteredArticles.visibleArticlesWIPStatesOfFields,
+    articlesEditStates:              memoizedFilteredArticles.visibleArticlesEditStates,
+    articlesNeedResizingStates:      memoizedFilteredArticles.visibleArticlesNeedResizingStates,
+    articlesDOMProps:                memoizedFilteredArticles.visibleArticlesDOMProps
   }
 }
 
@@ -35,23 +41,6 @@ function mapDispatchToProps(dispatch) {
     articlesVisibilityFilterActions:   bindActionCreators(ArticlesVisibilityFilterActions, dispatch),
     newArticleActions:                 bindActionCreators(NewArticleActions, dispatch),
     siteActions:                       bindActionCreators(SiteActions, dispatch)
-  }
-}
-
-// FIXME: (i) use reselect and (ii) make selections on the associated articles states
-// Note: use https://github.com/faassen/reselect for better performance.
-function selectArticles(articles, filter) {
-  switch (filter) {
-    case ArticlesVisibilityFilters.SHOW_ALL:
-      return articles
-    case ArticlesVisibilityFilters.SHOW_DRAFT:
-      return articles.filter(article => article.status === "draft")
-    case ArticlesVisibilityFilters.SHOW_PUBLISHED:
-      return articles.filter(article => article.status === "published" || article.status === "featured")
-    case ArticlesVisibilityFilters.SHOW_FEATURED:
-      return articles.filter(article => article.status === "featured")
-    case ArticlesVisibilityFilters.SHOW_ARCHIVED:
-      return articles.filter(article => article.status === "archived")
   }
 }
 

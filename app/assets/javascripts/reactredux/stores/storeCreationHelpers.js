@@ -19,25 +19,25 @@ function createInitialWIPAndEditStatesForArticles(jsonFetchedArticles) {
 }
 
 function createInitialNeedResizingAndDOMPropsStatesOfArticles(jsonFetchedArticlesIds) {
-  const [needResizingStatesOfArticles, articlesDOMProps] = [{}, {}]
+  const [articlesNeedResizingStates, articlesDOMProps] = [{}, {}]
 
   for (let articleId of jsonFetchedArticlesIds) {
-    [needResizingStatesOfArticles[articleId], articlesDOMProps[articleId]] = [false, initialArticlesDOMPropsState];
+    [articlesNeedResizingStates[articleId], articlesDOMProps[articleId]] = [false, initialArticlesDOMPropsState];
   }
 
-  return [needResizingStatesOfArticles, articlesDOMProps]
+  return [articlesNeedResizingStates, articlesDOMProps]
 }
 
 export function createInitialState(jsonFetchedArticles) {
   const [initialArticlesWIPStatesOfFields, initialArticlesEditStates] = createInitialWIPAndEditStatesForArticles(jsonFetchedArticles);
   const jsonFetchedArticlesIds = _.map(jsonFetchedArticles, function(value){ return value.id });
-  const [initialNeedResizingStatesOfArticles, initialArticlesDOMProps] = createInitialNeedResizingAndDOMPropsStatesOfArticles(jsonFetchedArticlesIds);
+  const [initialArticlesNeedResizingStates, initialArticlesDOMProps] = createInitialNeedResizingAndDOMPropsStatesOfArticles(jsonFetchedArticlesIds);
 
   const initialState = {
     articles:                     jsonFetchedArticles,
     articlesWIPStatesOfFields:    initialArticlesWIPStatesOfFields,
     articlesEditStates:           initialArticlesEditStates,
-    needResizingStatesOfArticles: initialNeedResizingStatesOfArticles,
+    articlesNeedResizingStates:   initialArticlesNeedResizingStates,
     articlesDOMProps:             initialArticlesDOMProps
   }
 

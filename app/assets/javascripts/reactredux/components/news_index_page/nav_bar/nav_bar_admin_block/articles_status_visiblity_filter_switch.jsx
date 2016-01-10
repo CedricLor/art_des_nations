@@ -1,7 +1,5 @@
 import React, {PropTypes} from 'react';
 
-import { GenericToolbarCaretDropdownButton } from '../../../dumb_components/generic_buttons';
-import { GenericMenuItemForDropDownMenu, GenericMenuItemInactiveForDropDownMenu } from '../../../dumb_components/generic_dropdown_menu';
 import { GenericStatusSwitcherToolbar } from '../../../dumb_components/generic_toolbars';
 /////////////////////////////
 // Visiblity Filter Switch //

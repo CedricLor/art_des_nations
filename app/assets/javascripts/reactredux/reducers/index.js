@@ -4,7 +4,7 @@ import { routeReducer } from 'redux-simple-router'
 import { isFetching } from './isFetching'
 import { siteEditMode } from './site'
 import { articles, newArticleFields, articlesWIPStatesOfFields, articlesEditStates } from './articles'
-import { needResizingStatesOfArticles, articlesDOMProps } from './articlesSizingPositionning'
+import { articlesNeedResizingStates, articlesDOMProps } from './articlesSizingPositionning'
 import { articlesVisibilityFilter } from './articlesVisibilityFilters'
 
 const rootReducer = combineReducers(
@@ -12,13 +12,15 @@ const rootReducer = combineReducers(
     routing: routeReducer,
     isFetching,
     siteEditMode,
-    articles,
+
     newArticleFields,
+
+    articlesVisibilityFilter,
+    articles,
     articlesWIPStatesOfFields,
     articlesEditStates,
-    needResizingStatesOfArticles,
-    articlesDOMProps,
-    articlesVisibilityFilter
+    articlesNeedResizingStates,
+    articlesDOMProps
   }
 )
 
