@@ -41,12 +41,12 @@ $.ajax({
 
 $( document ).ready(function() {
   render(
-    <Provider store={store}>
+    <Provider store={ store }>
       <Router history={ history }>
-        <Route path="/" component={App}>
-        <IndexRoute component={ NewsCardsContainer }/>
-        <Route path="/articles" component={ NewsCardsContainer }/>
-        <Route path="/article/:id" component={IndividualNewsContainer}/>
+        <Route path="/(:locale/)" component={ App }>
+          <IndexRoute component={ NewsCardsContainer }/>
+          <Route path="/(:locale/)articles" component={ NewsCardsContainer }/>
+          <Route path="/(:locale/)article/:id" component={ IndividualNewsContainer }/>
         </Route>
       </Router>
     </Provider>,

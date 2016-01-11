@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavBar } from './news_index_page/nav_bar';
+import { Footer } from './news_index_page/footer';
 
 window.ReactIntl = require('react-intl');
 
@@ -39,7 +40,14 @@ export const NewsIndexPage = React.createClass({
         restoreText:{
           text: "Restore text"
         }
-      }
+      },
+      translations: {
+        localesText: {
+          en: "En",
+          fr: "Fr"
+        }
+      },
+      availableLocales: ['en', 'fr']
     }
   },
 
@@ -102,10 +110,18 @@ export const NewsIndexPage = React.createClass({
               siteEditMode=                    {this.props.siteEditMode}
               onToggleSiteEditMode=            {this.props.siteActions.toggleSiteEditMode}
               articlesVisibilityFilter=        {this.props.articlesVisibilityFilter}
-              articlesVisibilityFilterActions= {this.props.articlesVisibilityFilterActions} />
+              articlesVisibilityFilterActions= {this.props.articlesVisibilityFilterActions}
+              availableLocales=                {this.props.availableLocales}
+              routeParams=                     {this.props.routeParams} />
             {this.renderChildren()}
           </div>
         </div>
+        <Footer
+          localesTranslations=     {this.props.translations.localesText}
+          availableLocales=        {this.props.availableLocales}
+          routing=                 {this.props.routing}
+          routeParams=             {this.props.routeParams}
+        />
       </div>
     )
   }
