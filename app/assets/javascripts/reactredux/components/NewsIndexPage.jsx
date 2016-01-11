@@ -2,12 +2,13 @@ import React from 'react';
 import { NavBar } from './news_index_page/nav_bar';
 import { Footer } from './news_index_page/footer';
 
-window.ReactIntl = require('react-intl');
+import {FormattedMessage} from 'react-intl';
 
 export const NewsIndexPage = React.createClass({
 
   getDefaultProps() {
     return {
+      locales: ['en-US'],
       site: {
         site_edit_mode_button_props:{
           button_text: {
@@ -40,14 +41,7 @@ export const NewsIndexPage = React.createClass({
         restoreText:{
           text: "Restore text"
         }
-      },
-      translations: {
-        localesText: {
-          en: "En",
-          fr: "Fr"
-        }
-      },
-      availableLocales: ['en', 'fr']
+      }
     }
   },
 
@@ -101,6 +95,7 @@ export const NewsIndexPage = React.createClass({
 
   render() {
     console.log(this.props)
+    console.log(this.context)
     return (
       <div className= "news-index-page-body">
         <div className="container">
@@ -117,12 +112,18 @@ export const NewsIndexPage = React.createClass({
           </div>
         </div>
         <Footer
-          localesTranslations=     {this.props.translations.localesText}
+          localesTranslations=     {this.props.languageSwitcher.localesText}
           availableLocales=        {this.props.availableLocales}
           routing=                 {this.props.routing}
           routeParams=             {this.props.routeParams}
+        />
+        <FormattedMessage
+            id="greeting"
+            description="Welcome greeting to the user"
+            defaultMessage="Hello! How are you today?"
         />
       </div>
     )
   }
 });
+

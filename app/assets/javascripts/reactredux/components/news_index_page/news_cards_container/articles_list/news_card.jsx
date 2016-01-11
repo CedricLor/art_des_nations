@@ -148,3 +148,4 @@ export const NewsCard = React.createClass({
     )
   }
 })
+

@@ -25,9 +25,9 @@ export const SiteWideLanguageSwitcher = React.createClass({
 
     links = _.map(
       this.props.availableLocales,
-      (targetLocale) => {
+      (targetLocale, index) => {
         return (
-          <Link to={`/${targetLocale}${path}`} className='btn btn-default'>
+          <Link key={index} to={`/${targetLocale}${path}`} className='btn btn-default'>
             { this.props.localesTranslations[targetLocale] }
           </Link>
         )

@@ -11,7 +11,6 @@ import * as SiteActions from '../actions/siteActions'
 
 import { visibleArticlesAndStatesSelector } from '../selectors/index'
 
-
 function mapStateToProps(state) {
   const memoizedFilteredArticles = visibleArticlesAndStatesSelector(state);
 
@@ -28,7 +27,10 @@ function mapStateToProps(state) {
     articlesWIPStatesOfFields:       memoizedFilteredArticles.visibleArticlesWIPStatesOfFields,
     articlesEditStates:              memoizedFilteredArticles.visibleArticlesEditStates,
     articlesNeedResizingStates:      memoizedFilteredArticles.visibleArticlesNeedResizingStates,
-    articlesDOMProps:                memoizedFilteredArticles.visibleArticlesDOMProps
+    articlesDOMProps:                memoizedFilteredArticles.visibleArticlesDOMProps,
+
+    languageSwitcher:                state.languageSwitcher,
+    availableLocales:                state.availableLocales
   }
 }
 

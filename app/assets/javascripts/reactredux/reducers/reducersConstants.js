@@ -36,3 +36,16 @@ export const initialArticlesDOMPropsState = {
   cardNumber:   0
 }
 
+////////////////////////////////////
+// Constants for languageSwitcher reducers
+////////////////////////////////////
+export const initialLanguageSwitcherState = {
+  localesText: {
+    en: "En",
+    fr: "Fr",
+    ru: "Py",
+    zh: "中文"
+  }
+}
+
+export const initialAvailableLocales = ['en', 'fr', 'ru', 'zh']

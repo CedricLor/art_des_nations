@@ -3,9 +3,13 @@ import { routeReducer } from 'redux-simple-router'
 
 import { isFetching } from './isFetching'
 import { siteEditMode } from './site'
+
 import { articles, newArticleFields, articlesWIPStatesOfFields, articlesEditStates } from './articles'
 import { articlesNeedResizingStates, articlesDOMProps } from './articlesSizingPositionning'
 import { articlesVisibilityFilter } from './articlesVisibilityFilters'
+
+import { languageSwitcher } from './languageSwitcher'
+import { availableLocales } from './availableLocales'
 
 const rootReducer = combineReducers(
   {
@@ -20,7 +24,10 @@ const rootReducer = combineReducers(
     articlesWIPStatesOfFields,
     articlesEditStates,
     articlesNeedResizingStates,
-    articlesDOMProps
+    articlesDOMProps,
+
+    languageSwitcher,
+    availableLocales
   }
 )
 

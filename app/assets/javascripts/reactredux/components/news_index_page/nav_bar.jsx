@@ -13,7 +13,6 @@ export const NavBar = React.createClass({
     articlesVisibilityFilter:         PropTypes.string.isRequired,
     articlesVisibilityFilterActions:  PropTypes.objectOf(PropTypes.func.isRequired),
     availableLocales:                 PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    routing:                          PropTypes.object.isRequired,
     routeParams:                      PropTypes.object.isRequired
   },
 

@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import {Link} from 'react-router';
-const IntlMixin = ReactIntl.IntlMixin;
+// const IntlMixin = ReactIntl.IntlMixin;
 
 
 export const ReadMoreBtnForNewArticleForm = React.createClass({
-  mixins: [IntlMixin],
+  // mixins: [IntlMixin],
 
   propTypes: {
     articlesPassedInUiProps: PropTypes.object.isRequired
@@ -22,7 +22,7 @@ export const ReadMoreBtnForNewArticleForm = React.createClass({
 })
 
 export const ReadMoreBtnForExistingNewsCard = React.createClass({
-  mixins: [IntlMixin],
+  // mixins: [IntlMixin],
 
   propTypes: {
     articlesPassedInUiProps: PropTypes.object.isRequired,
@@ -42,7 +42,7 @@ export const ReadMoreBtnForExistingNewsCard = React.createClass({
 
 const ReadMoreBtn = React.createClass({
   propTypes: {
-    text: PropTypes.object.isRequired,
+    text: PropTypes.string.isRequired,
     url:  PropTypes.string.isRequired
   },
 

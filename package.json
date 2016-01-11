@@ -27,7 +27,7 @@
     "react-addons-css-transition-group": "^0.14.3",
     "react-addons-update": "^0.14.3",
     "react-dom": "^0.14.3",
-    "react-intl": "^1.2.2",
+    "react-intl": "^2.0.0-beta-2",
     "react-redux": "^4.0.3",
     "react-router": "^2.0.0-rc4",
     "redux": "^3.0.5",
