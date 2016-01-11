@@ -1,9 +1,9 @@
 // Loading the polyfill for server side on Node.
 // See instructions on https://github.com/andyearnshaw/Intl.js
 // Consider bundling various browser packages depending on user chosen locale
-var areIntlLocalesSupported = require('intl-locales-supported');
+const areIntlLocalesSupported = require('intl-locales-supported');
 
-var appLocales = ['fr', 'en', 'ru', 'zh'];
+const appLocales = ['fr', 'en', 'ru', 'zh'];
 
 export const loadI18nPolyfills = () => {
   if (global.Intl) {
