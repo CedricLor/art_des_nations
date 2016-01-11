@@ -35,11 +35,11 @@ export const IndividualNewsContainer = React.createClass({
   },
 
   handleUpdate(fieldName) {
-    this.props.articlesActions.handleUpdateArticle(this.props.card.id, fieldName)
+    this.props.articlesActions.handleUpdateArticle(this.props.currentArticle.id, fieldName)
   },
 
   handleChange(fieldName, fieldValue) {
-    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.card.id, fieldName, fieldValue);
+    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.currentArticle.id, fieldName, fieldValue);
   },
 
   createFieldZone(fieldName) {
@@ -67,18 +67,18 @@ export const IndividualNewsContainer = React.createClass({
 
   newsToolbarSwitch() {
     if (this.props.siteEditMode.mode) {
-      return React.createElement(
-        NewsToolbarSwitch,
-        {
-          articlesPassedInUiProps: this.props.articlesPassedInUiProps,
-          cardNumber:              this.props.articlesDOMProps.cardNumber,
-          articlesEditStates:      this.props.articlesEditStates,
-          // local functions
-          handleUpdate:            this.handleUpdate,
-          handleEdit:              this.handleEdit,
-          handleCancel:            this.handleCancel,
-          handleDelete:            this.handleDelete
-        }
+      return (
+        <NewsToolbarSwitch
+          status=                  {this.props.currentArticle.status}
+          articlesPassedInUiProps= {this.props.articlesPassedInUiProps}
+          parentIdentification=    {this.props.cardNumber}
+          articlesEditStates=      {this.props.articlesEditStates}
+
+          handleUpdate=            {this.handleUpdate.bind(this, "article")}
+          handleEdit=              {this.handleEdit}
+          handleCancel=            {this.handleCancel}
+          handleDelete=            {this.handleDelete}
+          handleStatusChange=      {this.handleChange.bind(this, "status")}/>
       )
     }
   },
@@ -132,7 +132,7 @@ export const IndividualNewsContainer = React.createClass({
 
               {this.createFieldZone("posted_at")}
 
-              {this.renderTags()}
+              {/*this.renderTags()*/}
 
               <div className="news-teaser">
                 {this.createFieldZone("teaser")}

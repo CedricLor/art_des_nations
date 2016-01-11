@@ -5,6 +5,7 @@ import { NewsToolbarReusable } from './articles_list/news_card/news_toolbar_swit
 import ContentEditable from './articles_list/news_card/news_content_zone_switch/news_title_zone/content_editable';
 import { NewsImage } from './articles_list/news_card/image';
 import { NewsInput } from './articles_list/news_card/news_content_zone_switch/commons/news_edit_button_editable_zone_switch//news_input';
+import { ReadMoreBtnForNewArticleForm } from './dumb_components/read_more_button';
 
 import { inlineBlockStyleForReadOnly } from './component_helpers/news_forms_helpers';
 
@@ -154,20 +155,6 @@ export const ArticleBasicForm = React.createClass({
     )
   },
 
-  renderReadMoreButton() {
-    return (
-      <p className= "btn-container read-more-news-btn-container">
-        <Link
-          to=        "#"
-          className= "btn btn-lg black-square-btn news-read-more-btn"
-          >
-          { this.props.articlesPassedInUiProps.localizedReadMore }
-        </Link>
-      </p>
-    )
-  },
-
-
   render() {
     let styleForOuterWrapperDiv = { minHeight: "0px" }
 
@@ -181,11 +168,6 @@ export const ArticleBasicForm = React.createClass({
         ref=       "new_article_form"
         className= "row">
 
-        {/* changed
-          ref=       {`main_article_div_${this.props.card.id}`}
-          to
-          ref=       "new_article_main_div"
-        */}
         <div
           ref=       "new_article_main_div"
           className= {`news-listing ${this.props.articlesPassedInUiProps.colClasses}`}>
@@ -217,7 +199,9 @@ export const ArticleBasicForm = React.createClass({
               */}
               {this.renderNewsTeaserWrapper()}
 
-              {this.renderReadMoreButton()}
+              <ReadMoreBtnForNewArticleForm
+                articlesPassedInUiProps= {this.props.articlesPassedInUiProps}
+              />
             </div>
           </div>
           <hr/>

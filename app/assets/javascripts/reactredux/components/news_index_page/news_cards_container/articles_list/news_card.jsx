@@ -4,7 +4,7 @@ import {Link} from 'react-router';
 import { NewsContentZoneSwitch } from './news_card/news_content_zone_switch';
 import { NewsToolbarSwitch } from './news_card/news_toolbar_switch';
 import { NewsImage } from './news_card/image';
-import { ReadMoreBtn } from '../dumb_components/read_more_button';
+import { ReadMoreBtnForExistingNewsCard } from '../dumb_components/read_more_button';
 
 // ########################################
 // ## Card Component
@@ -138,7 +138,7 @@ export const NewsCard = React.createClass({
             style=     { styleForInnerWrapperDiv }>
             {this.imageLinkedToArticle()}
             {this.createNewsTeaserWrapper()}
-            <ReadMoreBtn
+            <ReadMoreBtnForExistingNewsCard
               articlesPassedInUiProps= {this.props.articlesPassedInUiProps}
               sourceId=                {this.props.card.id}
             />
