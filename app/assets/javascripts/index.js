@@ -13,7 +13,6 @@ import ReactDOM, { render } from 'react-dom'
 // ********************************************
 // Internationalization features
 import { loadI18nPolyfills } from './i18n_init'
-loadI18nPolyfills();
 
 import { addLocaleData, IntlProvider } from 'react-intl'
 import en from 'react-intl/lib/locale-data/en'
@@ -60,15 +59,6 @@ const store = configureStore(initialState);
 
 
 // ********************************************
-// Set the history for the router and connect the router, the history and the store
-const history = createHistory();
-history.__v2_compatible__ = true;
-
-syncReduxAndRouter(history, store)
-// ********************************************
-
-
-// ********************************************
 // Start fetching the data from Rails
 $.ajax({
   method: "GET",
@@ -80,7 +70,19 @@ $.ajax({
 });
 // ********************************************
 
+
 // ********************************************
+// Set the history for the router and connect the router, the history and the store
+const history = createHistory();
+history.__v2_compatible__ = true;
+
+syncReduxAndRouter(history, store)
+// ********************************************
+
+
+// ********************************************
+// add the i18n polyfills for Safari and older browsers
+loadI18nPolyfills();
 // addLocaleData to the ReactIntl data store
 addLocaleData(en)
 addLocaleData(fr)
