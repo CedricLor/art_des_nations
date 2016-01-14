@@ -1,8 +1,11 @@
 import React, { PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Link } from 'react-router';
-import { NewsToolbarSwitch } from './news_cards_container/articles_list/news_card/news_toolbar_switch';
+import NewsToolbarSwitch from './news_cards_container/articles_list/news_card/news_toolbar_switch';
 import { NewsContentZoneSwitch } from './news_cards_container/articles_list/news_card/news_content_zone_switch';
+import GenericContentEditable from '../dumb_components/generic_content_editable';
+
+import { inlineBlockStyleForReadOnly } from './component_helpers/news_forms_helpers';
 
 export const IndividualNewsContainer = React.createClass({
   // propTypes: {
@@ -42,6 +45,31 @@ export const IndividualNewsContainer = React.createClass({
     this.props.articlesFieldsActions.changeFieldOfArticle(this.props.currentArticle.id, fieldName, fieldValue);
   },
 
+  renderTitle() {
+    let styleForH1 = {};
+    styleForH1 = inlineBlockStyleForReadOnly(styleForH1, this.props.siteEditMode.mode)
+    // Two conditions for the content editable to be on: (i) the site must be in site edit mode == on
+    // (ii) the article must be in edit mode (otherwise, there is no way to save the changes made by the user)
+    if (this.props.siteEditMode.mode && this.props.articlesEditStates.article) {
+      return (
+        <GenericContentEditable
+          eltType=  "h1"
+          style=    {styleForH1}
+          html=     {this.props.currentArticle["title"]}
+          disabled= {false}
+          onChange= {this.handleChange.bind(this, "title")}
+          />
+      )
+    } else {
+      return (
+        <h1
+          style= {styleForH1} >
+          {this.props.currentArticle["title"]}
+        </h1>
+      )
+    }
+  },
+
   createFieldZone(fieldName) {
     return (
       <NewsContentZoneSwitch
@@ -58,7 +86,6 @@ export const IndividualNewsContainer = React.createClass({
 
         cardImageSource=             {this.props.cardImageSource}
 
-        articlesFieldsActions=       {this.props.articlesFieldsActions}
         handleUpdate=                {this.handleUpdate.bind(this, fieldName)}
         handleChange=                {this.handleChange.bind(this, fieldName)}
         />
@@ -128,7 +155,7 @@ export const IndividualNewsContainer = React.createClass({
 
               {this.newsToolbarSwitch()}
 
-              {this.createFieldZone("title")}
+              {this.renderTitle()}
 
               {this.createFieldZone("posted_at")}
 

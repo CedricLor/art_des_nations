@@ -1,16 +1,18 @@
 import React from 'react';
 import { ArticlesList } from './news_cards_container/articles_list';
-import { ArticleBasicForm} from './news_cards_container/article_basic_form';
+import ArticleBasicForm from './news_cards_container/article_basic_form';
 
 export const NewsCardsContainer = React.createClass({
   renderNewArticleBasicForm() {
     if ( this.props.siteEditMode.mode === true) {
       return (
         <ArticleBasicForm
-          siteEditMode=             {this.props.siteEditMode}
-          newArticleActions=        {this.props.newArticleActions}
-          newArticleFields=         {this.props.newArticleFields}
-          articlesPassedInUiProps=  {this.props.articlesPassedInUiProps} />
+          siteEditMode=            {this.props.siteEditMode}
+          newArticleActions=       {this.props.newArticleActions}
+          newArticleFields=        {this.props.newArticleFields}
+          articlesPassedInUiProps= {this.props.articlesPassedInUiProps}
+          routeParams=             {this.props.routeParams}
+        />
       )
     }
   },
@@ -32,6 +34,8 @@ export const NewsCardsContainer = React.createClass({
         articlesActions=                   {this.props.articlesActions}
         articlesFieldsActions=             {this.props.articlesFieldsActions}
         articlesSizingPositionningActions= {this.props.articlesSizingPositionningActions}
+
+        routeParams=                       {this.props.routeParams}
       />
     )
   },

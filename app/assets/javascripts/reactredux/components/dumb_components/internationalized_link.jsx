@@ -3,7 +3,6 @@ import {Link} from 'react-router';
 
 export const InternationalizedLink = React.createClass({
   PropTypes: {
-    availableLocales: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     routeParams:      PropTypes.object.isRequired,
     to:               PropTypes.string.isRequired,
     text:             PropTypes.string.isRequired,

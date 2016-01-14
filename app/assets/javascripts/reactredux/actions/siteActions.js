@@ -5,4 +5,3 @@ export function toggleSiteEditMode() {
     type: TOGGLE_SITE_EDIT_MODE
   }
 }
-

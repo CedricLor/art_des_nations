@@ -2,11 +2,17 @@
 // Constants for articles reducers
 ////////////////////////////////////
 export const initialStateForNewArticle = {
-    title:      'Enter the title of your article here',
-    teaser:     'Enter a teaser for your article here',
-    body:       '',
-    posted_at:  `${new Date().toISOString()}`,
-    status:     "draft"
+    title:                '',
+    teaser:               '',
+    body:                 '',
+    posted_at:            `${new Date().toISOString()}`,
+    status:               "draft",
+    hasReceivedUserInput: false
+  }
+
+export const initialWIPStateForNewArticle = {
+    title:      false,
+    teaser:     false
   }
 
 export const initialEditState = {
@@ -39,13 +45,11 @@ export const initialArticlesDOMPropsState = {
 ////////////////////////////////////
 // Constants for languageSwitcher reducers
 ////////////////////////////////////
-export const initialLanguageSwitcherState = {
-  localesText: {
-    en: "En",
-    fr: "Fr",
-    ru: "Py",
-    zh: "中文"
-  }
+export const initialSiteLanguageSwitcherTextState = {
+  en: "En",
+  fr: "Fr",
+  ru: "Py",
+  zh: "中文"
 }
 
-export const initialAvailableLocales = ['en', 'fr', 'ru', 'zh']
+export const initialSiteAvailableLocales = ['en', 'fr', 'ru', 'zh']

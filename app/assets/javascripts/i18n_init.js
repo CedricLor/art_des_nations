@@ -1,11 +1,11 @@
-import { initialAvailableLocales } from './reactredux/reducers/reducersConstants'
+import { initialSiteAvailableLocales } from './reactredux/reducers/reducersConstants'
 
 // Loading the polyfill for server side on Node.
 // See instructions on https://github.com/andyearnshaw/Intl.js
 // Consider bundling various browser packages depending on user chosen locale
 const areIntlLocalesSupported = require('intl-locales-supported');
 
-const appLocales = initialAvailableLocales;
+const appLocales = initialSiteAvailableLocales;
 
 export const loadI18nPolyfills = () => {
   if (global.Intl) {

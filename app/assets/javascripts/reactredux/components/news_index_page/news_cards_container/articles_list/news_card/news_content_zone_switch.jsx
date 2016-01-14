@@ -21,7 +21,8 @@ export const NewsContentZoneSwitch = React.createClass ({
     currArtWIPStateCurrField:  PropTypes.string.isRequired,
     currArtEditStateCurrField: PropTypes.string.isRequired,
 
-    handleUpdate:              PropTypes.func.isRequired
+    handleUpdate:              PropTypes.func.isRequired,
+    handleChange:              PropTypes.func.isRequired
   },
 
   handleEditField(e) {

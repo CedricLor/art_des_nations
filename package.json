@@ -6,12 +6,6 @@
     "babel-preset-react": "^6.3.13",
     "babelify": "^7.2.0",
     "browserify": "^12.0.1",
-    "coffee-reactify": "^4.0.0",
-    "coffeeify": "^2.0.1",
-    "grunt": "^0.4.5",
-    "grunt-browserify": "^4.0.1",
-    "grunt-contrib-watch": "^0.6.1",
-    "reactify": "^1.1.1",
     "redux-devtools": "^3.0.0",
     "watchify": "^3.6.1"
   },
@@ -20,12 +14,12 @@
     "history": "^1.17.0",
     "intl": "^1.0.1",
     "intl-locales-supported": "^1.0.0",
-    "isomorphic-fetch": "^2.2.0",
     "lodash": "^3.10.1",
-    "moment": "^2.11.0",
+    "moment": "^2.11.1",
     "react": "^0.14.3",
     "react-addons-css-transition-group": "^0.14.3",
     "react-addons-update": "^0.14.3",
+    "react-datepicker": "^0.18.0",
     "react-dom": "^0.14.3",
     "react-intl": "^2.0.0-beta-2",
     "react-redux": "^4.0.3",
@@ -37,10 +31,7 @@
     "reselect": "^2.0.1"
   },
   "scripts": {
-    "bundle": "browserify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/components_bundle.js",
-    "bundle_full": "browserify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js app/assets/javascripts/components/news_index_page_.js.coffee -o app/assets/javascripts/components_bundle.js",
-    "watch_full": "watchify -t coffeeify --extension=\".js.coffee\" app/assets/javascripts/components.js -o app/assets/javascripts/components_bundle.js",
-    "watch_full2": "watchify -t coffeeify --extension=\".js.coffee\" -t [ reactify --extension=\".js.coffee\" ] -t [ babelify --presets [ es2015 react ] ] app/assets/javascripts/components.js -o app/assets/javascripts/components_bundle.js",
-    "watch_redux": "watchify -d --extension=js --extension=jsx -t coffeeify --extension=\".js.coffee\" -t [ babelify --presets [ es2015 react ] ]  app/assets/javascripts/index.js -o app/assets/javascripts/redux_bundle.js"
+    "watch_redux": "watchify -d --extension=js --extension=jsx -t [ babelify --presets [ es2015 react ] ] app/assets/javascripts/index.js -o app/assets/javascripts/redux_bundle.js",
+    "bundle_redux": "browserify -d --extension=js --extension=jsx -t [ babelify --presets [ es2015 react ] ] app/assets/javascripts/index.js -o app/assets/javascripts/redux_bundle.js"
   }
 }

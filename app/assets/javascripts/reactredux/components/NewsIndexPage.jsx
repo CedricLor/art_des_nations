@@ -2,8 +2,6 @@ import React from 'react';
 import { NavBar } from './news_index_page/nav_bar';
 import { Footer } from './news_index_page/footer';
 
-import {FormattedMessage} from 'react-intl';
-
 export const NewsIndexPage = React.createClass({
 
   getDefaultProps() {
@@ -55,7 +53,7 @@ export const NewsIndexPage = React.createClass({
 
   renderChildren() {
     if (this.props.children && this.props.children.props.location) {
-      // if the children requested via the router is a single article (i.e. for the articleView)
+      // if the children requested via the router is a single article (individualNewsContainer) (i.e. for the articleView)
       if (this.props.children.props.location.pathname.match(/\/article\//) != null) {
         const currentArticle = _.find(this.props.visibleArticles, { 'id': parseInt(this.props.children.props.params.id)});
         return (
@@ -69,10 +67,11 @@ export const NewsIndexPage = React.createClass({
             articlesEditStates:                this.props.articlesEditStates[this.props.children.props.params.id],
             // # redux passedInDomProps
             articlesDOMProps:                  this.props.articlesDOMProps[this.props.children.props.params.id],
-            articlesPassedInUiProps:           this.props.articlesPassedInUiProps
+            articlesPassedInUiProps:           this.props.articlesPassedInUiProps,
+            routeParams:                       this.props.routeParams
           })
         )
-      // else what is requested is the articles index (i.e. for the indexView)
+      // else what is requested is the articles index (newsCardContainer) (i.e. for the indexView)
       } else {
         return (
           this.props.children && React.cloneElement(this.props.children, {
@@ -86,7 +85,8 @@ export const NewsIndexPage = React.createClass({
             articlesDOMProps:                  this.props.articlesDOMProps,
             articlesPassedInUiProps:           this.props.articlesPassedInUiProps,
             newArticleActions:                 this.props.newArticleActions,
-            newArticleFields:                  this.props.newArticleFields
+            newArticleFields:                  this.props.newArticleFields,
+            routeParams:                       this.props.routeParams
           })
         )
       }
@@ -94,8 +94,6 @@ export const NewsIndexPage = React.createClass({
   },
 
   render() {
-    console.log(this.props)
-    console.log(this.context)
     return (
       <div className= "news-index-page-body">
         <div className="container">
@@ -106,21 +104,16 @@ export const NewsIndexPage = React.createClass({
               onToggleSiteEditMode=            {this.props.siteActions.toggleSiteEditMode}
               articlesVisibilityFilter=        {this.props.articlesVisibilityFilter}
               articlesVisibilityFilterActions= {this.props.articlesVisibilityFilterActions}
-              availableLocales=                {this.props.availableLocales}
               routeParams=                     {this.props.routeParams} />
             {this.renderChildren()}
           </div>
         </div>
         <Footer
-          localesTranslations=     {this.props.languageSwitcher.localesText}
+          localesTranslations=     {this.props.siteLanguageSwitcherText}
+          siteAvailableLocales=    {this.props.siteAvailableLocales}
           availableLocales=        {this.props.availableLocales}
           routing=                 {this.props.routing}
           routeParams=             {this.props.routeParams}
-        />
-        <FormattedMessage
-            id="greeting"
-            description="Welcome greeting to the user"
-            defaultMessage="Hello! How are you today?"
         />
       </div>
     )

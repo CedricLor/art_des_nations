@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {NewsEditButtonEditableZoneSwitch} from './commons/news_edit_button_editable_zone_switch';
-import { inlineBlockStyleForReadOnly, rawMarkup } from '../../../component_helpers/news_forms_helpers';
+import { inlineBlockStyleForReadOnly, rawMarkup } from '../../../../component_helpers/news_forms_helpers';
 
 export const NewsBodyZone = React.createClass({
   PropTypes: {

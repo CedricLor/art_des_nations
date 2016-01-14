@@ -5,7 +5,9 @@ export const SiteWideLanguageSwitcher = React.createClass({
   PropTypes: {
     localesTranslations: PropTypes.shape({
       en: PropTypes.string.isRequired,
-      fr: PropTypes.string.isRequired
+      fr: PropTypes.string.isRequired,
+      ru: PropTypes.string.isRequired,
+      zh: PropTypes.string.isRequired
     }).isRequired,
     availableLocales: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     routing: PropTypes.object.isRequired,
@@ -27,9 +29,11 @@ export const SiteWideLanguageSwitcher = React.createClass({
       this.props.availableLocales,
       (targetLocale, index) => {
         return (
-          <Link key={index} to={`/${targetLocale}${path}`} className='btn btn-default'>
-            { this.props.localesTranslations[targetLocale] }
-          </Link>
+          <span key={index}>
+            <Link key={index} to={`/${targetLocale}${path}`} className='btn btn-default'>
+              { this.props.localesTranslations[targetLocale] }
+            </Link>
+          </span>
         )
       }
     )

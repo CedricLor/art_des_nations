@@ -1,26 +1,37 @@
 import React, {PropTypes} from 'react';
+import {intlShape, injectIntl, defineMessages} from 'react-intl';
 import { InternationalizedLink } from '../../dumb_components/internationalized_link';
 
+const messages = defineMessages({
+  backToArticlesBtn: {
+    id:             'site.user.toolbar.backToArticles',
+    description:    'Back to articles button',
+    defaultMessage: 'Back to articles'
+  }
+});
 /////////////////////////////
 // NavBarUserBlock!!! //
 /////////////////////////////
-export const NavBarUserBlock = React.createClass({
+const NavBarUserBlock = React.createClass({
   PropTypes: {
-    availableLocales: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    routeParams:      PropTypes.object.isRequired
+    routeParams: PropTypes.object.isRequired,
+    intl:        intlShape.isRequired
   },
 
   render() {
+    const {formatMessage} = this.props.intl;
+
     return (
       <ul className="inline-list">
         <InternationalizedLink
-          availableLocales= {this.props.availableLocales}
           routeParams=      {this.props.routeParams}
           to=               "articles"
-          text=             "Link to articles"
+          text=             {formatMessage(messages.backToArticlesBtn)}
           className=        "btn btn-default"
         />
       </ul>
     )
   }
 })
+
+export default injectIntl(NavBarUserBlock);

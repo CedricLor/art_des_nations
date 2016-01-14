@@ -6,19 +6,15 @@ export const NewsInput = React.createClass({
   PropTypes: {
     name:                      PropTypes.string.isRequired,
     type:                      PropTypes.string.isRequired,
-    sourceId:                  PropTypes.string,
     value:                     PropTypes.string.isRequired,
+    handleChange:              PropTypes.func.isRequired,
+
     articlesPassedInUiProps:   PropTypes.object.isRequired,
     currArtWIPStateCurrField:  PropTypes.string.isRequired,
-    handleChange:              PropTypes.func.isRequired,
     handleUpdate:              PropTypes.func.isRequired,
     handleExitEditField:       PropTypes.func.isRequired,
     handleDeleteText:          PropTypes.func.isRequired,
     handleRestoreText:         PropTypes.func.isRequired
-  },
-
-  handleChange(e) {
-    this.props.handleChange(e.target.value);
   },
 
   renderNewsEditableFieldToolbar() {
@@ -37,11 +33,12 @@ export const NewsInput = React.createClass({
     return(
       <input
         className=    'form-control'
+        ref=          {this.props.name}
         type=         {this.props.type}
-        onChange=     {this.handleChange}
         defaultValue= {this.props.value}
         value=        {this.props.value}
-        ref=          {this.props.name}/>
+        onChange=     {this.props.handleChange}
+      />
     )
   },
 

@@ -15,7 +15,10 @@
 //= require bootstrap-sprockets
 //= require ckeditor/init
 
-// require react
-// require react_ujs
-// require components_bundle
+//= require moment
+//= require moment/fr.js
+//= require moment/ru.js
+//= require moment/zh-cn.js
+
+//= require bootstrap-datetimepicker
 //= require redux_bundle

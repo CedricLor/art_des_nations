@@ -1,42 +1,42 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import {Link} from 'react-router';
 
-import { NewsToolbarReusable } from './articles_list/news_card/news_toolbar_switch/news_toolbar_reusable';
-import ContentEditable from './articles_list/news_card/news_content_zone_switch/news_title_zone/content_editable';
+import NewsFormToolbarController from './article_basic_form/news_form_toolbar_controller';
+import NewsFormContentEditableController from './article_basic_form/news_form_content_editable_controller';
+import NewsPostedAtOnZone from '../shared_components/news_posted_at_on_zone';
 import { NewsImage } from './articles_list/news_card/image';
-import { NewsInput } from './articles_list/news_card/news_content_zone_switch/commons/news_edit_button_editable_zone_switch//news_input';
-import { ReadMoreBtnForNewArticleForm } from './dumb_components/read_more_button';
+import ReadMoreBtn from './dumb_components/read_more_button';
 
-import { inlineBlockStyleForReadOnly } from './component_helpers/news_forms_helpers';
+import { inlineBlockStyleForReadOnly } from '../component_helpers/news_forms_helpers';
+
+import {intlShape, injectIntl, defineMessages} from 'react-intl';
+
+const messages = defineMessages({
+  titleMeta: {
+    id:             'newArticle.edit.newsForm.titleMeta',
+    description:    'Translation of the word "title" of an article',
+    defaultMessage: 'the title'
+  },
+  teaserMeta: {
+    id:             'newArticle.edit.newsForm.teaserMeta',
+    description:    'Translation of the word "teaser" of an article',
+    defaultMessage: 'the teaser'
+  },
+});
 
 // ########################################
 // ## ArticleBasicForm Component
 // ########################################
 
 export const ArticleBasicForm = React.createClass({
+  propTypes: {
+    newArticleActions:        PropTypes.object.isRequired,
+    newArticleFields:         PropTypes.object.isRequired,
+    articlesPassedInUiProps:  PropTypes.object.isRequired,
+    routeParams:              PropTypes.object.isRequired,
+    intl:                     intlShape.isRequired
+  },
 
-  // # Card equalization
-  // NO NEED FOR THAT IN THE FORM
-  // componentDidMount() {
-  //   const callback = () =>
-  //     this.props.articlesSizingPositionningActions.assignRealDomValuesToDOMPropsOfArticle(
-  //       this.props.card.id,
-  //       this.refs["new_article_main_div"+parseInt(this.props.card.id)].getBoundingClientRect().top,
-  //       this.refs[parseInt(this.props.cardNumber)].clientHeight,
-  //       this.props.cardNumber)
-  //   setTimeout(callback, 0)
-  // },
-
-  // componentDidUpdate: (nextProps) ->
-  //   # callback = ( ->
-  //   #   @props.articlesSizingPositionningActions.assignRealDomValuesToDOMPropsOfArticle @props.card.id,
-  //   #     @refs["new_article_main_div#{@props.card.id}"].getBoundingClientRect().top,
-  //   #     @refs["#{@props.cardNumber}"].clientHeight,
-  //   #     @props.cardNumber
-  //   # ).bind(@)
-  //   # setTimeout callback, 0 if nextProps.passedInStates.needs_resizing == true
-
-  // WHAT IS REQUIRED
   // Reset all the fields in the new article
   handleReset(e) {
     e.preventDefault();
@@ -50,92 +50,52 @@ export const ArticleBasicForm = React.createClass({
   },
 
   // handle changes in the fields
-  handleChange(e) {
-    this.props.newArticleActions.changeNewArticleFields(e.target.name, e.target.value);
-  },
+  // handleChange(e) {
+  //   this.props.newArticleActions.changeNewArticleFields(e.target.name, e.target.value);
+  // },
 
-  valid() {
-    this.props.newArticleFields.title && this.props.newArticleFields.teaser
+  handleChange(fieldName, newHtml) {
+    this.props.newArticleActions.changeNewArticleFields(fieldName, newHtml);
   },
 
   renderNewArticleToolbar() {
     return (
-      <NewsToolbarReusable
-        parentIdentification=    "new_article"
+      <NewsFormToolbarController
+        isToolbarActive=         {!this.props.newArticleFields.hasReceivedUserInput}
+
         functionForFirstButton=  {this.handleReset}
-        textForFirstButton=      "Reset"
-        disabledForFirstButton=  {!this.valid}
-        classNameForFirstBtn=    "btn-danger"
+        classNameForFirstBtn=    "btn btn-danger"
+
         functionForSecondButton= {this.handleSubmit}
-        textForSecondButton=     "Save new article"
-        classNameForSecondBtn=   "btn-default"
-        disabledForSecondButton= {!this.valid}
+        classNameForSecondBtn=   "btn btn-default"
       />
     )
   },
 
-  renderNewArticleTitle() {
-    return (
-      <ContentEditable
-        eltType=  "h3"
-        name=     "title"
-        html=     {this.props.newArticleFields.title}
-        disabled= {false}
-        onChange= {this.handleChange}
-        />
-    )
-  },
-
-  renderNewArticleTeaser() {
-    return (
-      <ContentEditable
-        eltType=  "div"
-        name=     "teaser"
-        html=     {this.props.newArticleFields.teaser}
-        disabled= {false}
-        onChange= {this.handleChange}
-        />
-    )
-  },
-
-  renderNewArticlePostedAt(fieldName) {
-    var moment = require('moment');
-    // const timeFormatArray = _.map(
-    //   ['YYYY', 'MM', 'DD', 'HH', 'mm'],
-    //   (dateTimeFormat) => { moment((this.props.newArticleFields.posted_at).toString()).format(dateTimeFormat) }
-    // );
-
-    const dateValue = moment((this.props.newArticleFields.posted_at).toString()).format('YYYY-MM-DD');
-    const timeValue = moment((this.props.newArticleFields.posted_at).toString()).format('HH:mm');
-
-    return (
-      <div>
-        { `Posted at ${timeValue} on ${dateValue} ` }
-        <div
-          className="form-inline">
-          <NewsInput
-            type=         "date"
-            onChange=     {this.handleChange}
-            defaultValue= {dateValue}
-            value=        {dateValue}
-            name=         "newArticleDate_posted_at"/>
-          <NewsInput
-            type=         "time"
-            onChange=     {this.handleChange}
-            defaultValue= {timeValue}
-            value=        {timeValue}
-            name=         "newArticleTime_posted_at"/>
-        </div>
-      </div>
-    )
-  },
-
   renderNewsTeaserWrapper() {
+    const {formatMessage} = this.props.intl;
+
     return (
       <div className= "news-teaser-wrapper">
-        {this.renderNewArticleTitle()}
-        {this.renderNewArticleTeaser()}
-        {this.renderNewArticlePostedAt("posted_at")}
+        <NewsFormContentEditableController
+          fieldName={formatMessage(messages.titleMeta)}
+          eltType=  "h3"
+          html=     {this.props.newArticleFields.title}
+          disabled= {false}
+          onChange= {this.handleChange.bind(this, "title")}
+        />
+        <NewsFormContentEditableController
+          fieldName={formatMessage(messages.teaserMeta)}
+          eltType=  "div"
+          html=     {this.props.newArticleFields.teaser}
+          disabled= {false}
+          onChange= {this.handleChange.bind(this, "teaser")}
+        />
+        <NewsPostedAtOnZone
+          onChange=   {this.handleChange.bind(this, "posted_at")}
+          value=      {this.props.newArticleFields.posted_at}
+          routeParams={this.props.routeParams}
+        />
       </div>
     )
   },
@@ -199,8 +159,8 @@ export const ArticleBasicForm = React.createClass({
               */}
               {this.renderNewsTeaserWrapper()}
 
-              <ReadMoreBtnForNewArticleForm
-                articlesPassedInUiProps= {this.props.articlesPassedInUiProps}
+              <ReadMoreBtn
+                routeParams=             {this.props.routeParams}
               />
             </div>
           </div>
@@ -212,3 +172,26 @@ export const ArticleBasicForm = React.createClass({
     )
   }
 })
+
+export default injectIntl(ArticleBasicForm);
+
+  // # Card equalization
+  // NO NEED FOR THAT IN THE FORM
+  // componentDidMount() {
+  //   const callback = () =>
+  //     this.props.articlesSizingPositionningActions.assignRealDomValuesToDOMPropsOfArticle(
+  //       this.props.card.id,
+  //       this.refs["new_article_main_div"+parseInt(this.props.card.id)].getBoundingClientRect().top,
+  //       this.refs[parseInt(this.props.cardNumber)].clientHeight,
+  //       this.props.cardNumber)
+  //   setTimeout(callback, 0)
+  // },
+
+  // componentDidUpdate: (nextProps) ->
+  //   # callback = ( ->
+  //   #   @props.articlesSizingPositionningActions.assignRealDomValuesToDOMPropsOfArticle @props.card.id,
+  //   #     @refs["new_article_main_div#{@props.card.id}"].getBoundingClientRect().top,
+  //   #     @refs["#{@props.cardNumber}"].clientHeight,
+  //   #     @props.cardNumber
+  //   # ).bind(@)
+  //   # setTimeout callback, 0 if nextProps.passedInStates.needs_resizing == true

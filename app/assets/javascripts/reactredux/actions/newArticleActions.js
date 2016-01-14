@@ -29,6 +29,7 @@ export function resetNewArticleFields() {
 }
 
 import { refreshArticlesSizingPositionning } from './articlesSizingPositionningActions';
+
 export function handleSubmitNewArticle() {
   return function (dispatch, getState) {
     const newArticleData = getState().newArticleFields;

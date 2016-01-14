@@ -18,6 +18,8 @@ function mapStateToProps(state) {
     routing:                         state.routing,
     isFetching:                      state.isFetching,
     siteEditMode:                    state.siteEditMode,
+    siteAvailableLocales:            state.siteAvailableLocales,
+    siteLanguageSwitcherText:        state.siteLanguageSwitcherText,
 
     newArticleFields:                state.newArticleFields,
 
@@ -28,9 +30,6 @@ function mapStateToProps(state) {
     articlesEditStates:              memoizedFilteredArticles.visibleArticlesEditStates,
     articlesNeedResizingStates:      memoizedFilteredArticles.visibleArticlesNeedResizingStates,
     articlesDOMProps:                memoizedFilteredArticles.visibleArticlesDOMProps,
-
-    languageSwitcher:                state.languageSwitcher,
-    availableLocales:                state.availableLocales
   }
 }
 

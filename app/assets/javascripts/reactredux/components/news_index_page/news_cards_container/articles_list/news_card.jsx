@@ -1,16 +1,34 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import {Link} from 'react-router';
 
 import { NewsContentZoneSwitch } from './news_card/news_content_zone_switch';
-import { NewsToolbarSwitch } from './news_card/news_toolbar_switch';
+import NewsToolbarSwitch from './news_card/news_toolbar_switch';
 import { NewsImage } from './news_card/image';
-import { ReadMoreBtnForExistingNewsCard } from '../dumb_components/read_more_button';
+import ReadMoreBtn from '../dumb_components/read_more_button';
 
 // ########################################
 // ## Card Component
 // ########################################
 
 export const NewsCard = React.createClass({
+  propTypes: {
+    cardNumber:                        PropTypes.number.isRequired,
+    card:                              PropTypes.object.isRequired,
+    articlesPassedInUiProps:           PropTypes.object.isRequired,
+
+    articlesActions:                   PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+    articlesFieldsActions:             PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+    articlesSizingPositionningActions: PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+
+    articlesWIPStatesOfFields:         PropTypes.object.isRequired,
+    articlesEditStates:                PropTypes.object.isRequired,
+
+    articlesDOMProps:                  PropTypes.object.isRequired,
+
+    siteEditMode:                      PropTypes.objectOf(PropTypes.bool.isRequired).isRequired,
+    routeParams:                       PropTypes.object.isRequired,
+  },
+
   // # Card equalization
   componentDidMount() {
     const callback = () =>
@@ -60,7 +78,6 @@ export const NewsCard = React.createClass({
         <NewsToolbarSwitch
           status=                  {this.props.card.status}
           articlesPassedInUiProps= {this.props.articlesPassedInUiProps}
-          parentIdentification=    {this.props.cardNumber}
           articlesEditStates=      {this.props.articlesEditStates}
 
           handleUpdate=            {this.handleUpdate.bind(this, "article")}
@@ -138,8 +155,8 @@ export const NewsCard = React.createClass({
             style=     { styleForInnerWrapperDiv }>
             {this.imageLinkedToArticle()}
             {this.createNewsTeaserWrapper()}
-            <ReadMoreBtnForExistingNewsCard
-              articlesPassedInUiProps= {this.props.articlesPassedInUiProps}
+            <ReadMoreBtn
+              routeParams=             {this.props.routeParams}
               sourceId=                {this.props.card.id}
             />
           </div>

@@ -12,7 +12,8 @@ export const ArticlesList = React.createClass({
     articlesWIPStatesOfFields:         PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
     articlesEditStates:                PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
     articlesDOMProps:                  PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
-    siteEditMode:                      PropTypes.objectOf(PropTypes.bool.isRequired).isRequired
+    siteEditMode:                      PropTypes.objectOf(PropTypes.bool.isRequired).isRequired,
+    routeParams:                       PropTypes.object.isRequired,
   },
 
   createCards() {
@@ -34,7 +35,8 @@ export const ArticlesList = React.createClass({
             // # redux passedInDomProps
             articlesDOMProps=                  {this.props.articlesDOMProps[card.id]}
             // # redux global site edit mode
-            siteEditMode=                      {this.props.siteEditMode}/>;
+            siteEditMode=                      {this.props.siteEditMode}
+            routeParams=                       {this.props.routeParams}/>;
           return element;
         }
       )

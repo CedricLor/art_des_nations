@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import { EditSwitchButton } from './nav_bar_admin_block/edit_switch_button';
-import { ArticlesStatusVisibilityFilterSwitch } from './nav_bar_admin_block/articles_status_visiblity_filter_switch';
+import ArticlesStatusVisibilityFilterSwitch from './nav_bar_admin_block/articles_status_visiblity_filter_switch';
 
 /////////////////////////////
 // NavBarAdminBlock!!! //

@@ -71,6 +71,3 @@ gem 'figaro'
 # Adding support for paperclip
 gem 'aws-sdk', '< 2.0'
 gem 'paperclip'
-
-# React
-gem 'react-rails', '~> 1.5.0'

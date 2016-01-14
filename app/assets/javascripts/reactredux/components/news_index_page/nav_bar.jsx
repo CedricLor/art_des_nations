@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import { NavBarAdminBlock } from './nav_bar/nav_bar_admin_block';
-import { NavBarUserBlock } from './nav_bar/nav_bar_user_block';
+import NavBarUserBlock from './nav_bar/nav_bar_user_block';
 
 /////////////////////////////
 // NavBar //
@@ -12,7 +12,6 @@ export const NavBar = React.createClass({
     onToggleSiteEditMode:             PropTypes.func.isRequired,
     articlesVisibilityFilter:         PropTypes.string.isRequired,
     articlesVisibilityFilterActions:  PropTypes.objectOf(PropTypes.func.isRequired),
-    availableLocales:                 PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     routeParams:                      PropTypes.object.isRequired
   },
 
@@ -27,7 +26,6 @@ export const NavBar = React.createClass({
           articlesVisibilityFilterActions= {this.props.articlesVisibilityFilterActions}
         />
         <NavBarUserBlock
-          availableLocales=                {this.props.availableLocales}
           routeParams=                     {this.props.routeParams}
         />
       </div>

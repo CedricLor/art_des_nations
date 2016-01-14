@@ -1,6 +1,5 @@
 import {
-  SET_ARTICLES_VISIBILITY_FILTER,
-  ArticlesVisibilityFilters
+  SET_ARTICLES_VISIBILITY_FILTER
 } from '../constants/ActionTypes'
 
 
