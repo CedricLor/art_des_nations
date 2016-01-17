@@ -1,9 +1,9 @@
 import React, {PropTypes} from 'react';
 import {NewsEditButtonEditableZoneSwitch} from './commons/news_edit_button_editable_zone_switch';
-import GenericContentEditable from '../../../../../dumb_components/generic_content_editable';
+// import GenericContentEditable from 'dumb_components/generic_content_editable';
 import { inlineBlockStyleForReadOnly } from '../../../../component_helpers/news_forms_helpers';
 
-import {Link} from 'react-router';
+import {InternationalizedLink} from 'dumb_components/internationalized_link';
 
 export const NewsTitleZone = React.createClass({
   PropTypes: {
@@ -13,6 +13,7 @@ export const NewsTitleZone = React.createClass({
     siteEditMode:              PropTypes.object.isRequired,
     viewType:                  PropTypes.string.isRequired,
     cardImageSource:           PropTypes.string.isRequired,
+    routeParams:               PropTypes.object.isRequired,
     children:                  PropTypes.element
   },
 
@@ -22,23 +23,31 @@ export const NewsTitleZone = React.createClass({
   //   this.props.articlesFieldsActions.changeFieldOfArticle(this.props.sourceId, this.props.value, fieldValue);
   // },
 
-  articleTitleForIndex() {
+  renderWrappedTitle() {
     let styleForH3 = {}
     if (this.props.cardImageSource == "") {
       styleForH3["marginTop"] = 0;
     }
     styleForH3 = inlineBlockStyleForReadOnly(styleForH3, this.props.siteEditMode.mode)
 
+    return(
+      <h3
+        style= { styleForH3 }>
+          {this.props.value}
+      </h3>
+    )
+  },
+
+  articleTitleForIndex() {
+
     return (
       <span>
-        <Link
-          key= 'title_read_only'
-          to=  {`/article/${this.props.sourceId}`}>
-          <h3
-            style= { styleForH3 }>
-              {this.props.value}
-          </h3>
-        </Link>
+        <InternationalizedLink
+          key=         'title_read_only'
+          routeParams= {this.props.routeParams}
+          to=          {`article/${this.props.sourceId}`}
+          children=    {this.renderWrappedTitle()}
+        />
         {this.props.children}
       </span>
     )

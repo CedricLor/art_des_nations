@@ -3,10 +3,10 @@ import {Link} from 'react-router';
 
 export const InternationalizedLink = React.createClass({
   PropTypes: {
-    routeParams:      PropTypes.object.isRequired,
-    to:               PropTypes.string.isRequired,
-    text:             PropTypes.string.isRequired,
-    className:        PropTypes.string.isRequired
+    routeParams:  PropTypes.object.isRequired,
+    to:           PropTypes.string.isRequired,
+    children:     PropTypes.string.isRequired,
+    className:    PropTypes.string.isRequired
   },
 
   render() {
@@ -17,7 +17,7 @@ export const InternationalizedLink = React.createClass({
 
     return (
       <Link to={`/${path}`} className={this.props.className}>
-        {this.props.text}
+        {this.props.children}
       </Link>
     )
   }

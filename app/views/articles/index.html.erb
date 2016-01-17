@@ -4,6 +4,9 @@
 
 <% @articles.each do |article| %>
   <h3><%= article.title.html_safe %></h3>
+  <% if article.galleries.last %>
+    <%= image_tag article.galleries.last.media_containers.last.media.url(:medium) %>
+  <% end %>
   <%#= image_tag article.picture.url(:medium) %>
   <p><%= article.teaser.nil? ? "" : article.teaser.html_safe %></p>
   <p><%= article.body.html_safe %></p>

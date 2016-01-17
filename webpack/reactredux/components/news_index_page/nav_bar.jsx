@@ -12,7 +12,16 @@ export const NavBar = React.createClass({
     onToggleSiteEditMode:             PropTypes.func.isRequired,
     articlesVisibilityFilter:         PropTypes.string.isRequired,
     articlesVisibilityFilterActions:  PropTypes.objectOf(PropTypes.func.isRequired),
-    routeParams:                      PropTypes.object.isRequired
+    routeParams:                      PropTypes.object.isRequired,
+
+    localesTranslations: PropTypes.shape({
+      en: PropTypes.string.isRequired,
+      fr: PropTypes.string.isRequired,
+      ru: PropTypes.string.isRequired,
+      zh: PropTypes.string.isRequired
+    }).isRequired,
+    siteAvailableLocales: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    routing: PropTypes.object.isRequired,
   },
 
   render() {
@@ -26,6 +35,9 @@ export const NavBar = React.createClass({
           articlesVisibilityFilterActions= {this.props.articlesVisibilityFilterActions}
         />
         <NavBarUserBlock
+          localesTranslations=             {this.props.localesTranslations}
+          siteAvailableLocales=            {this.props.siteAvailableLocales}
+          routing=                         {this.props.routing}
           routeParams=                     {this.props.routeParams}
         />
       </div>

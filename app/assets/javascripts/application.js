@@ -20,5 +20,4 @@
 // require moment/ru.js
 // require moment/zh-cn.js
 
-// require bootstrap-datetimepicker
 //= require redux_bundle

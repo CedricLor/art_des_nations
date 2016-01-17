@@ -3,7 +3,7 @@ import { NewsToolbarReusable } from '../articles_list/news_card/news_toolbar_swi
 
 import {intlShape, injectIntl, defineMessages} from 'react-intl';
 
-import GenericContentEditable from '../../../dumb_components/generic_content_editable';
+import GenericContentEditable from 'dumb_components/generic_content_editable';
 
 const messages = defineMessages({
   defaultHtml: {

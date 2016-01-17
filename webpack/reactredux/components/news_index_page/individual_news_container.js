@@ -2,8 +2,10 @@ import React, { PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Link } from 'react-router';
 import NewsToolbarSwitch from './news_cards_container/articles_list/news_card/news_toolbar_switch';
-import { NewsContentZoneSwitch } from './news_cards_container/articles_list/news_card/news_content_zone_switch';
+
 import GenericContentEditable from '../dumb_components/generic_content_editable';
+import NewsPostedAtOnZone from 'news_shared_components/news_posted_at_on_zone';
+import { NewsContentZoneSwitch } from './news_cards_container/articles_list/news_card/news_content_zone_switch';
 
 import { inlineBlockStyleForReadOnly } from './component_helpers/news_forms_helpers';
 
@@ -110,6 +112,19 @@ export const IndividualNewsContainer = React.createClass({
     }
   },
 
+  renderCreatedAtZone() {
+
+    return(
+      <h3>
+        <NewsPostedAtOnZone
+          siteEditMode= {this.props.siteEditMode.mode}
+          onChange=     {this.handleChange.bind(this, "posted_at")}
+          value=        {this.props.currentArticle["posted_at"]}
+        />
+      </h3>
+    )
+  },
+
   renderTags() {
     if ( this.props.currentArticleTags ) {
           tagElementsArray = this.props.articleTags.map( (tag) => {
@@ -139,7 +154,7 @@ export const IndividualNewsContainer = React.createClass({
   },
 
   render() {
-    console.log(this.props)
+
     return (
       <ReactCSSTransitionGroup
         transitionName="react-news-container"
@@ -157,7 +172,7 @@ export const IndividualNewsContainer = React.createClass({
 
               {this.renderTitle()}
 
-              {this.createFieldZone("posted_at")}
+              {this.renderCreatedAtZone()}
 
               {/*this.renderTags()*/}
 

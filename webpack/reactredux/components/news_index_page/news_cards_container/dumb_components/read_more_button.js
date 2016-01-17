@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import {intlShape, injectIntl, defineMessages} from 'react-intl';
-import {InternationalizedLink} from '../../../dumb_components/internationalized_link';
+import {InternationalizedLink} from 'dumb_components/internationalized_link';
 
 const messages = defineMessages({
   readMoreBtn: {
@@ -40,7 +40,7 @@ const ReadMoreBtn = React.createClass({
         <InternationalizedLink
           routeParams= {this.props.routeParams}
           to=          {this.renderUrl()}
-          text=        {formatMessage(messages.readMoreBtn)}
+          children=    {formatMessage(messages.readMoreBtn)}
           className=   "btn btn-lg black-square-btn news-read-more-btn"
         />
       </p>

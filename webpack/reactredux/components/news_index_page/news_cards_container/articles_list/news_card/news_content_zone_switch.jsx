@@ -3,7 +3,6 @@ import React, { PropTypes } from 'react';
 import { NewsTitleZone } from './news_content_zone_switch/news_title_zone';
 import { NewsTeaserZone } from './news_content_zone_switch/news_teaser_zone';
 import { NewsBodyZone } from './news_content_zone_switch/news_body_zone';
-import { NewsPostedAtZone } from './news_content_zone_switch/news_posted_at_zone';
 
 import { NewsEditButtonEditableZoneSwitch } from './news_content_zone_switch/commons/news_edit_button_editable_zone_switch';
 
@@ -22,7 +21,9 @@ export const NewsContentZoneSwitch = React.createClass ({
     currArtEditStateCurrField: PropTypes.string.isRequired,
 
     handleUpdate:              PropTypes.func.isRequired,
-    handleChange:              PropTypes.func.isRequired
+    handleChange:              PropTypes.func.isRequired,
+
+    routeParams:               PropTypes.object.isRequired
   },
 
   handleEditField(e) {
@@ -63,7 +64,10 @@ export const NewsContentZoneSwitch = React.createClass ({
           handleEditField=             {this.handleEditField}
           handleExitEditField=         {this.handleExitEditField}
           handleDeleteText=            {this.handleDeleteText}
-          handleRestoreText=           {this.handleRestoreText}/>
+          handleRestoreText=           {this.handleRestoreText}
+
+          routeParams=                 {this.props.routeParams}
+          />
       )
     }
   },
@@ -80,6 +84,7 @@ export const NewsContentZoneSwitch = React.createClass ({
           viewType:                    this.props.viewType,
           cardImageSource:             this.props.cardImageSource,
           children:                    this.renderEditButtonEditableZoneSwitch(childRessourceType),
+          routeParams:                 this.props.routeParams,
         }
       )
     )
@@ -97,8 +102,6 @@ export const NewsContentZoneSwitch = React.createClass ({
         return this.renderChildRessource(NewsAuthorZone, "text");
       case "tags":
         return this.renderChildRessource(NewsTagsZone, "text");
-      case "posted_at":
-        return this.renderChildRessource(NewsPostedAtZone, "date");
       default:
         return this.renderChildRessource(NewsTeaserZone, "textarea");
     }

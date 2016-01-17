@@ -1,13 +1,14 @@
 import React, { PropTypes } from 'react';
 
-import { NewsInput } from '../news_cards_container/articles_list/news_card/news_content_zone_switch/commons/news_edit_button_editable_zone_switch/news_input';
+import {intlShape, injectIntl, defineMessages, FormattedMessage, FormattedTime, FormattedDate} from 'react-intl';
 
-import {intlShape, injectIntl, defineMessages} from 'react-intl';
+import moment from 'moment';
 
-var DatePicker = require('react-datepicker');
-var moment = require('moment');
+require('react-date-picker/index.css');
+require('react-date-picker/theme/hackerone.css');
 
-// require('react-datepicker/dist/react-datepicker.css');
+import DatePicker from 'react-date-picker';
+import TimePicker from 'react-time-picker';
 
 const messages = defineMessages({
   postedAtOn: {
@@ -23,92 +24,173 @@ const messages = defineMessages({
 
 export const NewsPostedAtOnZone = React.createClass({
   propTypes: {
-    onChange: PropTypes.func.isRequired,
-    value:    PropTypes.string.isRequired
+    siteEditMode: PropTypes.bool.isRequired,
+    onChange:     PropTypes.func.isRequired,
+    value:        PropTypes.string.isRequired,
+    intl:         intlShape.isRequired
   },
 
-  handleChange(e) {
-    console.log(e)
-    // let newValue = "";
-    // if ( e.target.valueAsDate !== null ) {
-    //   if ( e.target.valueAsNumber < 86400 ) {
-    //     const newHour = 'T' + moment(e.target.valueAsNumber).format('HH:mm:SS') + '.000Z';
-    //     const unchangedDate = moment(this.props.value).format('YYYY-MM-DD');
-    //     newValue = unchangedDate + newHour;
-    //   } else {
-    //     const unchangedHour = 'T' + moment((this.props.value).toString()).format('HH:mm:SS') + '.000Z';
-    //     const newDate = moment(e.target.valueAsNumber).format('YYYY-MM-DD');
-    //     newValue = newDate + unchangedHour;
-    //   }
-    // }
-    // // add stuff to handle rebuilding the date from the time and date zones
-    // this.props.onChange(newValue);
+  getInitialState() {
+    return {displayDateOrTimePicker: 'none'};
+  },
+
+  displayDatePicker(e) {
+    e.preventDefault();
+    this.setState({displayDateOrTimePicker: 'datePicker'});
+  },
+
+  displayTimePicker(e) {
+    e.preventDefault();
+    this.setState({displayDateOrTimePicker: 'timePicker'});
+  },
+
+  removeAllPickers(e) {
+    e.preventDefault();
+    this.setState({displayDateOrTimePicker: 'none'});
+  },
+
+  handleChange(momentObj) {
+    const newDateStr = momentObj.format('YYYY-MM-DD')
+          + "T"
+          + momentObj.format('HH:mm:SS.SSS')
+          + "Z";
+    this.props.onChange(newDateStr);
+  },
+
+  handleDateChange(newDate) {
+    const momentObj = moment( newDate + 'T' + moment(this.props.value).format('HH:mm') ).subtract(1, "hours");
+    this.handleChange(momentObj);
+  },
+
+  handleTimeChange(newTime) {
+    const momentObj = moment( moment(this.props.value).format('YYYY-MM-DD') + 'T' + newTime ).subtract(1, "hours");
+    this.handleChange(momentObj);
+  },
+
+  stylesOnEditModeOn() {
+    return {
+      styleOfTimeAndDateZone: { "position": "relative", "zIndex": "3000" },
+      styleForInput: {"display": "block", "zIndex": "2500"},
+      styleForPickerRemover: {"position": "fixed", "top": "0", "bottom": "0", "left": "0", "right": "0", "zIndex": "2000"}
+    }
+  },
+
+  renderDateInput(dateOrTimePicker, locale) {
+    const { styleForInput, styleForPickerRemover } = this.stylesOnEditModeOn();
+    const dateValue = moment((this.props.value)).format('YYYY-MM-DD');
+    dateOrTimePicker =
+      <div className="dropdown-menu form-inline" style={styleForInput} aria-labelledby="dLabel">
+        <DatePicker
+            date=       {dateValue}
+            onChange=   {this.handleDateChange}
+            locale=     {locale}
+            hideFooter= "true"
+        />
+      </div>
+
+    return [dateOrTimePicker, styleForPickerRemover]
+  },
+
+  renderTimeInput(dateOrTimePicker, locale) {
+    const { styleForInput, styleForPickerRemover } = this.stylesOnEditModeOn();
+    let format;
+    format = (( locale === "fr" || locale === "ru") ? "HH:mm" : "hh:mm a");
+    let timeValue = moment((this.props.value)).format(format);
+    dateOrTimePicker =
+      <div className="dropdown-menu form-inline" style={styleForInput} aria-labelledby="dLabel">
+        <TimePicker
+            value=      {timeValue}
+            onChange=   {this.handleTimeChange}
+        />
+      </div>
+
+    return [dateOrTimePicker, styleForPickerRemover]
+  },
+
+  renderTimeAndDateZoneForInputs() {
+    const styleOfTimeAndDateZone = this.stylesOnEditModeOn().styleOfTimeAndDateZone;
+    const timeElt =
+      <FormattedTime value={this.props.value} hour="numeric" minute="numeric">
+        {(formattedTime) => (
+            <a value={this.props.value} style={styleOfTimeAndDateZone} onClick={this.displayTimePicker}>{formattedTime}</a>
+        )}
+      </FormattedTime>
+
+    const dateElt =
+      <FormattedDate value={this.props.value}>
+        {(formattedDate) => (
+            <a value={this.props.value} style={styleOfTimeAndDateZone} onClick={this.displayDatePicker}>{formattedDate}</a>
+        )}
+      </FormattedDate>
+
+    return (
+      <FormattedMessage {...messages.postedAtOn} values={{
+        time: timeElt,
+        date: dateElt
+      }} />
+    )
   },
 
   renderTimeAndDateInputs() {
+    let dateOrTimePicker;
+    let styleForPickerRemover;
+    let {locale} = this.props.intl;
+    locale = (locale === "zh" ? "zh-cn" : locale);
 
-    const dateValue = moment((this.props.value).toString()).format('YYYY-MM-DD');
-    const timeValue = moment((this.props.value).toString()).format('HH:mm');
+    switch (this.state.displayDateOrTimePicker) {
+      case 'none':
+        dateOrTimePicker = '';
+        styleForPickerRemover = {};
+        break
+
+      case 'datePicker':
+        [ dateOrTimePicker, styleForPickerRemover ] = this.renderDateInput(dateOrTimePicker, locale);
+        break
+
+      case 'timePicker':
+        [ dateOrTimePicker, styleForPickerRemover ] = this.renderTimeInput(dateOrTimePicker, locale);
+        break
+
+      default:
+        dateOrTimePicker = '';
+        styleForPickerRemover = {};
+    }
 
     return (
-      <div
-        className="form-inline">
-        <NewsInput
-          type=         "date"
-          handleChange= {this.handleChange}
-          defaultValue= {dateValue}
-          value=        {dateValue}
-          name=         "newArticleDate_posted_at"/>
-        <NewsInput
-          type=         "time"
-          handleChange= {this.handleChange}
-          defaultValue= {timeValue}
-          value=        {timeValue}
-          name=         "newArticleTime_posted_at"/>
+      <div className="dropdown">
+        <span type="button" className="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          {this.renderTimeAndDateZoneForInputs()}
+        </span>
+          {dateOrTimePicker}
+        <div onClick={this.removeAllPickers} style={styleForPickerRemover}></div>
       </div>
     )
-    // return (
-    //   <div className="form-group">
-    //       <div className='input-group date' ref={(datePicker) => {
-    //         const locale = this.props.routeParams.locale || 'fr';
-    //         $(datePicker).datetimepicker({
-    //           locale: locale,
-    //           // defaultDate: date, moment, string,
-    //           showTodayButton: true
-    //         });
-    //         $(datePicker).on("dp.change", (e) => {this.handleChange(e)})
-    //       }}
-    //         >
-    //           <input type='text' className="form-control" onChange={this.handleChange} ref={
-    //             (input) => input.addEventListener('change', this.handleChange)
-    //           } />
-    //           <span className="input-group-addon">
-    //               <span className="glyphicon glyphicon-calendar"></span>
-    //           </span>
-    //       </div>
-    //   </div>
-    // )
   },
 
   renderTimeAndDateZone() {
-    const {formatMessage, formatDate, formatTime} = this.props.intl;
 
-    return formatMessage(
-      messages.postedAtOn,
-      {
-        time: formatTime(this.props.value, {hour: "numeric", minute: "numeric"}),
-        date: formatDate(this.props.value)
-      }
+    const timeElt = <FormattedTime value={this.props.value} hour="numeric" minute="numeric"/>
+    const dateElt = <FormattedDate value={this.props.value} />
+
+    return (
+      <FormattedMessage {...messages.postedAtOn} values={{
+        time: timeElt,
+        date: dateElt
+      }} />
     )
   },
 
   render() {
-    // const {formatMessage, formatDate, formatTime} = this.props.intl;
+    let timeAndDate;
+    if (this.props.siteEditMode === true ) {
+      timeAndDate = this.renderTimeAndDateInputs()
+    } else {
+      timeAndDate = this.renderTimeAndDateZone()
+    }
 
     return (
-      <div>
-        {this.renderTimeAndDateZone()}
-        {this.renderTimeAndDateInputs()}
+      <div className="date-time-zone-wrapper">
+        {timeAndDate}
       </div>
     )
   }

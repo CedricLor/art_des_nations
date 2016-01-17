@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import {Link} from 'react-router';
 
-import { NewsContentZoneSwitch } from './news_card/news_content_zone_switch';
 import NewsToolbarSwitch from './news_card/news_toolbar_switch';
+import { NewsContentZoneSwitch } from './news_card/news_content_zone_switch';
+import NewsPostedAtOnZone from 'news_shared_components/news_posted_at_on_zone';
 import { NewsImage } from './news_card/image';
 import ReadMoreBtn from '../dumb_components/read_more_button';
 
@@ -107,7 +108,10 @@ export const NewsCard = React.createClass({
 
         articlesFieldsActions=       {this.props.articlesFieldsActions}
         handleUpdate=                {this.handleUpdate.bind(this, fieldName)}
-        handleChange=                {this.handleChange.bind(this, fieldName)}/>
+        handleChange=                {this.handleChange.bind(this, fieldName)}
+
+        routeParams=                 {this.props.routeParams}
+      />
     )
   },
 
@@ -116,7 +120,11 @@ export const NewsCard = React.createClass({
       <div className= "news-teaser-wrapper">
         {this.createFieldZone("title")}
         {this.createFieldZone("teaser")}
-        {this.createFieldZone("posted_at")}
+        <NewsPostedAtOnZone
+          siteEditMode= {this.props.siteEditMode.mode}
+          onChange=     {this.handleChange.bind(this, "posted_at")}
+          value=        {this.props.card["posted_at"]}
+        />
       </div>
     )
   },

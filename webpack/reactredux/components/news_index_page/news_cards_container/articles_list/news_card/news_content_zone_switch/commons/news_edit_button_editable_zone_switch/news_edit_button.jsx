@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-import { GenericGlyphiconButton } from '../../../../../../../dumb_components/generic_buttons';
+import { GenericGlyphiconButton } from 'dumb_components/generic_buttons';
 
 // Imported by NewsEditButtonEditableZoneSwitch
 export const NewsEditButton = React.createClass({

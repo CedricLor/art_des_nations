@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 
 import NewsFormToolbarController from './article_basic_form/news_form_toolbar_controller';
 import NewsFormContentEditableController from './article_basic_form/news_form_content_editable_controller';
-import NewsPostedAtOnZone from '../shared_components/news_posted_at_on_zone';
+import NewsPostedAtOnZone from 'news_shared_components/news_posted_at_on_zone';
 import { NewsImage } from './articles_list/news_card/image';
 import ReadMoreBtn from './dumb_components/read_more_button';
 
@@ -50,12 +50,8 @@ export const ArticleBasicForm = React.createClass({
   },
 
   // handle changes in the fields
-  // handleChange(e) {
-  //   this.props.newArticleActions.changeNewArticleFields(e.target.name, e.target.value);
-  // },
-
-  handleChange(fieldName, newHtml) {
-    this.props.newArticleActions.changeNewArticleFields(fieldName, newHtml);
+  handleChange(fieldName, newValue) {
+    this.props.newArticleActions.changeNewArticleFields(fieldName, newValue);
   },
 
   renderNewArticleToolbar() {
@@ -92,9 +88,9 @@ export const ArticleBasicForm = React.createClass({
           onChange= {this.handleChange.bind(this, "teaser")}
         />
         <NewsPostedAtOnZone
-          onChange=   {this.handleChange.bind(this, "posted_at")}
-          value=      {this.props.newArticleFields.posted_at}
-          routeParams={this.props.routeParams}
+          siteEditMode= {true}
+          onChange=     {this.handleChange.bind(this, "posted_at")}
+          value=        {this.props.newArticleFields.posted_at}
         />
       </div>
     )

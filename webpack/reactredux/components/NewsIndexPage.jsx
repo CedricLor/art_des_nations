@@ -104,6 +104,10 @@ export const NewsIndexPage = React.createClass({
               onToggleSiteEditMode=            {this.props.siteActions.toggleSiteEditMode}
               articlesVisibilityFilter=        {this.props.articlesVisibilityFilter}
               articlesVisibilityFilterActions= {this.props.articlesVisibilityFilterActions}
+
+              localesTranslations=              {this.props.siteLanguageSwitcherText}
+              siteAvailableLocales=            {this.props.siteAvailableLocales}
+              routing=                         {this.props.routing}
               routeParams=                     {this.props.routeParams} />
             {this.renderChildren()}
           </div>
@@ -111,7 +115,6 @@ export const NewsIndexPage = React.createClass({
         <Footer
           localesTranslations=     {this.props.siteLanguageSwitcherText}
           siteAvailableLocales=    {this.props.siteAvailableLocales}
-          availableLocales=        {this.props.availableLocales}
           routing=                 {this.props.routing}
           routeParams=             {this.props.routeParams}
         />
