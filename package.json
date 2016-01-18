@@ -15,9 +15,12 @@
   },
   "dependencies": {
     "es6-promise": "^3.0.2",
+    "expose-loader": "^0.7.1",
     "history": "^1.17.0",
     "intl": "^1.0.1",
     "intl-locales-supported": "^1.0.0",
+    "jquery": "^2.2.0",
+    "jquery-ujs": "^1.1.0-1",
     "lodash": "^3.10.1",
     "moment": "^2.11.1",
     "react": "^0.14.3",

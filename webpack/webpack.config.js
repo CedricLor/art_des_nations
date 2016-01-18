@@ -2,14 +2,11 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
-  externals: {
-    jquery: "var jQuery"
-  },
   // the project dir
   context: __dirname,
   // context: './webpack/',
   entry: {
-    index: './index.js'
+    index: ['jquery', 'jquery-ujs', './index.js']
   },
 
   devtool: 'source-map',
@@ -19,11 +16,10 @@ module.exports = {
     filename: "redux_bundle.js"
   },
 
-  externals: {
-    jquery: "var jQuery"
-  },
   module: {
     loaders: [
+      {test: require.resolve('jquery'), loader: 'expose?jQuery'},
+      {test: require.resolve('jquery'), loader: 'expose?$'},
       {
         test: /\.js|\.jsx$/,
         loader: 'babel-loader',
@@ -37,7 +33,6 @@ module.exports = {
         test: /\.css$/,
         loader: "style-loader!css-loader"
       },
-
     ]
   },
   resolve: {

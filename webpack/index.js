@@ -2,7 +2,6 @@ window._ = require('lodash');
 
 import "babel-polyfill"
 
-
 // ********************************************
 // React basics
 import React from 'react'
