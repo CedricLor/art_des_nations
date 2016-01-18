@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20151215194108) do
     t.string   "title"
     t.text     "body"
     t.text     "teaser"
+    t.string   "status"
   end
 
   add_index "article_translations", ["article_id"], name: "index_article_translations_on_article_id", using: :btree

@@ -9,7 +9,7 @@ class CreateArticles < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    Article.create_translation_table! :title => :string, :body => :text, :teaser => :text
+    Article.create_translation_table! :title => :string, :body => :text, :teaser => :text, :status => :string
   end
 
   def down

@@ -20,11 +20,11 @@ end
 
 20.times do
   article = Article.create({
-    title:      "Fr - #{Faker::Hipster.sentence(3, true, 4)}",
-    teaser:     Faker::Hipster.paragraph(4),
-    body:       fakerForBody,
-    status:     statusOfArticles.sample,
-    posted_at:  Faker::Date.backward(rand(5..30))
+    title:     "Fr - #{Faker::Hipster.sentence(3, true, 4)}",
+    teaser:    Faker::Hipster.paragraph(4),
+    body:      fakerForBody,
+    status:    statusOfArticles.sample,
+    posted_at: Faker::Date.backward(rand(5..30))
   })
 end
 
@@ -34,6 +34,7 @@ Article.all.each do | article |
   article.update({
     title:  "En -#{Faker::Hipster.sentence(3, true, 4)}",
     teaser: Faker::Hipster.paragraph(4),
+    status: statusOfArticles.sample,
     body:   fakerForBody
   })
 end
