@@ -24,5 +24,8 @@ export default {
   'newArticle.edit.newsForm.defaultHtmlForTitle': 'Enter {fieldName} of your article here',
   'newArticle.edit.newsForm.titleMeta': 'the title',
   'newArticle.edit.newsForm.teaserMeta': 'the teaser',
-  'newArticle.edit.newsForm.postedAtOnMeta': 'Posted at {time} on {date}'
+  'newArticle.edit.newsForm.postedAtOnMeta': 'Posted at {time} on {date}',
+  'article.edit.field.exitEditMenuItem': 'Exit edit',
+  'article.edit.field.deleteTextMenuItem': 'Delete text',
+  'article.edit.field.restoreTextMenuItem': 'Restore initial text'
 }

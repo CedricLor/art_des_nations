@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-import { NewsEditableFieldToolbar } from './commons/news_editable_field_toolbar';
+import NewsEditableFieldToolbar from './commons/news_editable_field_toolbar';
 
 export const NewsInput = React.createClass({
   PropTypes: {
@@ -15,6 +15,10 @@ export const NewsInput = React.createClass({
     handleExitEditField:       PropTypes.func.isRequired,
     handleDeleteText:          PropTypes.func.isRequired,
     handleRestoreText:         PropTypes.func.isRequired
+  },
+
+  handleChange(e) {
+    this.props.handleChange(e.target.value);
   },
 
   renderNewsEditableFieldToolbar() {
@@ -37,7 +41,7 @@ export const NewsInput = React.createClass({
         type=         {this.props.type}
         defaultValue= {this.props.value}
         value=        {this.props.value}
-        onChange=     {this.props.handleChange}
+        onChange=     {this.handleChange}
       />
     )
   },

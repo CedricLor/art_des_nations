@@ -10,7 +10,7 @@ export default {
   'site.edit.statusSwitcher.menuItems.viewArchivedOnly': 'View seulement les articles archivés',
   'site.user.toolbar.backToArticles': 'Revenir aux articles',
   'article.user.btn.readMore': 'Lire la suite',
-  'article.edit.mainStatusSwitchBtn': 'Régler le statut de cet article:',
+  'article.edit.mainStatusSwitchBtn': 'Changer le statut de cet article:',
   'article.edit.statusSwitcher.menuItems.setAsDraft': 'brouillon',
   'article.edit.statusSwitcher.menuItems.setAsPublished': 'publié',
   'article.edit.statusSwitcher.menuItems.setAsFeatured': 'à la une',
@@ -24,5 +24,8 @@ export default {
   'newArticle.edit.newsForm.defaultHtmlForTitle': 'Entrez {fieldName} de votre article ici',
   'newArticle.edit.newsForm.titleMeta': 'le titre',
   'newArticle.edit.newsForm.teaserMeta': 'le chapeau',
-  'newArticle.edit.newsForm.postedAtOnMeta': 'Publié à {time} le {date}'
+  'newArticle.edit.newsForm.postedAtOnMeta': 'Publié à {time} le {date}',
+  'article.edit.field.exitEditMenuItem': 'Sortir du mode édition du champs',
+  'article.edit.field.deleteTextMenuItem': 'Effacer le texte',
+  'article.edit.field.restoreTextMenuItem': 'Restaurer le texte initial'
 }

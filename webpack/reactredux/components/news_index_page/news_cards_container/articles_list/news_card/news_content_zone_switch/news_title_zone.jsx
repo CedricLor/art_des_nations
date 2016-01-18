@@ -90,8 +90,11 @@ export const NewsTitleZone = React.createClass({
   },
 
   render() {
+
     return (
-      this.switchTitleType()
+      <div>
+        {this.switchTitleType()}
+      </div>
     )
   }
 })

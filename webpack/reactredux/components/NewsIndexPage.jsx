@@ -6,39 +6,8 @@ export const NewsIndexPage = React.createClass({
 
   getDefaultProps() {
     return {
-      locales: ['en-US'],
-      site: {
-        site_edit_mode_button_props:{
-          button_text: {
-            "false": "Edit website",
-            "true": "Exit edit website mode"
-          }
-        }
-      },
       articlesPassedInUiProps: {
-        localizedReadMore: "Read more",
         colClasses: "col-xs-12 col-sm-12 col-md-8 col-md-offset-2",
-        editArticle: {
-          text: "Edit"
-        },
-        cancelEditArticle: {
-          text: "Cancel"
-        },
-        update: {
-          text: "Save"
-        },
-        destroy: {
-          text: "Delete"
-        },
-        exitEditField: {
-          text: "Exit edit"
-        },
-        deleteText: {
-          text: "Delete text"
-        },
-        restoreText:{
-          text: "Restore text"
-        }
       }
     }
   },
@@ -99,7 +68,6 @@ export const NewsIndexPage = React.createClass({
         <div className="container">
           <div className="row">
             <NavBar
-              siteEditModePassedInProps=       {this.props.site}
               siteEditMode=                    {this.props.siteEditMode}
               onToggleSiteEditMode=            {this.props.siteActions.toggleSiteEditMode}
               articlesVisibilityFilter=        {this.props.articlesVisibilityFilter}

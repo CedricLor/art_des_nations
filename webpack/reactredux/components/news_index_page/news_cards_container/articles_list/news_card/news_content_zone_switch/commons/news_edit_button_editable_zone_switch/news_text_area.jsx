@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import { NewsEditableFieldToolbar } from './commons/news_editable_field_toolbar';
+import NewsEditableFieldToolbar from './commons/news_editable_field_toolbar';
 
 export const NewsTextArea = React.createClass({
   PropTypes: {

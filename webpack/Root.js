@@ -73,7 +73,6 @@ const initialState = { isFetching: {initialData: true } }
 export const store = configureStore(initialState);
 // ********************************************
 
-
 // ********************************************
 // Set the history for the router and connect the router, the history and the store
 const history = createHistory();
@@ -117,6 +116,8 @@ const Root = React.createClass({
   },
 
   render () {
+    console.log("------ IN ROOOOOOOOOOTTTTT")
+
     return (
       <div>{getRootChildren(this.props)}</div>
     )

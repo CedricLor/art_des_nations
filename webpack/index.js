@@ -65,7 +65,7 @@ import Root, { store } from './Root'
 // Start fetching the data from Rails
 $.ajax({
   method: "GET",
-  url: "/articles",
+  url: `/${store.getState().siteCurrentLocale}/articles`,
   dataType: 'JSON'
   })
   .success(function( data ) {

@@ -7,7 +7,6 @@ import NavBarUserBlock from './nav_bar/nav_bar_user_block';
 /////////////////////////////
 export const NavBar = React.createClass({
   propTypes: {
-    siteEditModePassedInProps:        PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
     siteEditMode:                     PropTypes.objectOf(PropTypes.bool.isRequired).isRequired,
     onToggleSiteEditMode:             PropTypes.func.isRequired,
     articlesVisibilityFilter:         PropTypes.string.isRequired,
@@ -28,7 +27,6 @@ export const NavBar = React.createClass({
     return (
       <div className="col-xs-12">
         <NavBarAdminBlock
-          siteEditModePassedInProps=       {this.props.siteEditModePassedInProps}
           siteEditMode=                    {this.props.siteEditMode}
           onToggleSiteEditMode=            {this.props.onToggleSiteEditMode}
           articlesVisibilityFilter=        {this.props.articlesVisibilityFilter}

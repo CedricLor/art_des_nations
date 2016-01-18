@@ -6,8 +6,8 @@ import {defineMessages, FormattedMessage} from 'react-intl';
 /////////////////////////////
 export const EditSwitchButton = React.createClass({
   propTypes: {
-    siteEditModePassedInProps: PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
-    siteEditMode:              PropTypes.objectOf(PropTypes.bool.isRequired).isRequired
+    siteEditMode:              PropTypes.objectOf(PropTypes.bool.isRequired).isRequired,
+    onToggleSiteEditMode:      PropTypes.func.isRequired
   },
 
   getDefaultProps() {
