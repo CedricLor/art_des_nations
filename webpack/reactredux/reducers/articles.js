@@ -1,5 +1,6 @@
 import {
-  LOAD_INITIAL_DATA,
+  LOADED_INITIAL_ARTICLES,
+  LOADED_ADDITIONNAL_LOCALE_ARTICLES,
   TOGGLE_SITE_EDIT_MODE,
   ADD_NEW_ARTICLE,
   UPDATE_ARTICLE,
@@ -14,7 +15,8 @@ import {
   RESET_ALL_EDIT_STATES_FOR_ARTICLE,
   CHANGE_FIELD_OF_NEW_ARTICLE,
   RESET_FIELDS_OF_NEW_ARTICLE,
-  REORDER_ARTICLES_ARRAY } from '../constants/ActionTypes'
+  REORDER_ARTICLES_ARRAY,
+  REORDER_ALL_THE_ARTICLES_ARRAYS } from '../constants/ActionTypes'
 
 import {
   initialStateForNewArticle,
@@ -85,37 +87,57 @@ function article(state, action) {
   }
 }
 
-export function articles(state = [], action) {
+export function articles(state = {}, action) {
   switch (action.type) {
 
-    case LOAD_INITIAL_DATA:
+    case LOADED_INITIAL_ARTICLES:
       return action.initialState.articles
 
+    case LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+      return Object.assign({}, state, action.additionalStates.articles)
+
     case ADD_NEW_ARTICLE:
-      return [
-        article(undefined, action),
-        ...state
-      ]
+      const newStateWithNewArticle = {};
+      // FIXME - Check that newStateWithNewArticle is accessible from within forOwn
+      _.forOwn(state, (localeArticlesArray, locale) => {
+        newStateWithNewArticle[locale] = [
+          article({}, action),
+          ...state[locale]
+        ];
+      })
+      return newStateWithNewArticle
 
     case UPDATE_ARTICLE:
-      return state.map(art =>
-        article(art, action)
-      )
-
     case CHANGE_FIELD_OF_ARTICLE:
-      return state.map(art =>
-        article(art, action)
-      )
+      const localizedArticleStateAfterChanges = {};
+      localizedArticleStateAfterChanges[action.locale] = state[action.locale].map(art =>
+        article(art, action));
+      return Object.assign({}, state, localizedArticleStateAfterChanges)
 
     case DELETE_ARTICLE:
-      let index = _.findIndex(state, {id: action.id});
-      return [
-        ...state.slice(0, index),
-        ...state.slice(index+1)
-      ]
+      const newState = {};
+      // FIXME - Check that newState is accessible from within forOwn
+      _.forOwn(state, (localeArticlesArray, locale) => {
+        let index = _.findIndex(state[locale], {id: action.id});
+        newState[locale] = [
+          ...state[locale].slice(0, index),
+          ...state[locale].slice(index+1)
+        ]
+      })
+      return newState
 
     case REORDER_ARTICLES_ARRAY:
-      return _.sortByOrder(state, 'posted_at', 'desc')
+      const localizedReorderedState = {};
+      localizedReorderedState[action.locale] = _.sortByOrder(state[action.locale], 'posted_at', 'desc');
+      return Object.assign({}, state, localizedReorderedState)
+
+    case REORDER_ALL_THE_ARTICLES_ARRAYS:
+      const reOrderedState = {};
+      // FIXME - Check that reOrderedState is accessible from within forOwn
+      _.forOwn(state, (localeArticlesArray, locale) => {
+        reOrderedState[locale] = _.sortByOrder(localeArticlesArray, 'posted_at', 'desc')
+      })
+      return reOrderedState
 
     default:
       return state
@@ -126,35 +148,41 @@ export function articlesEditStates(state = {}, action) {
   const new_state = Object.assign({}, state);
   switch (action.type) {
 
-    case LOAD_INITIAL_DATA:
+    case LOADED_INITIAL_ARTICLES:
       return action.initialState.articlesEditStates
 
+    case LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+      return Object.assign({}, state, action.additionalStates.articlesEditStates)
+
     case ADD_NEW_ARTICLE:
-      new_state[action.id] = initialEditState
+      // FIXME - Check that new_state is effectively being modified
+      _.forOwn(new_state, (localeEditStatesArray, locale) => {
+        new_state[locale][action.id] = initialEditState
+      })
       return new_state
 
     case CHANGE_EDIT_STATE_OF_FIELD_OF_ARTICLE:
+
       // if changing the edit state of the article, change the edit state of all the fields
       if ( action.fieldName === "article" ) {
-        _.forOwn(new_state[action.id], function(value, fieldName) { new_state[action.id][fieldName] = action.editStateValue });
+        _.forOwn(new_state[action.locale][action.id], (value, fieldName) => { new_state[action.locale][action.id][fieldName] = action.editStateValue });
       // else change only the edit state of the relevant field
       } else {
-        new_state[action.id][action.fieldName] = action.editStateValue;
+        new_state[action.locale][action.id][action.fieldName] = action.editStateValue;
       }
+
       // if any of the edit state of the field is true, set the article edit state to true
       // 1. Create a copy of the current article's edit states
-      const statesOfFieldsExceptArticleState = Object.assign({}, new_state[action.id]);
+      const statesOfFieldsExceptArticleState = Object.assign({}, new_state[action.locale][action.id]);
       // 2. Delete the edit state of the article to keep only the fields edit states
       delete statesOfFieldsExceptArticleState.article;
-      // QUICKFIX!!!! FIXME!!!
-      delete statesOfFieldsExceptArticleState.body;
       // 3. Loop around the values of the states of the fields, and if any edit state is on
       // turn the article's edit state to true
       if ( _.includes( _.values( statesOfFieldsExceptArticleState ), true ) ) {
-        new_state[action.id].article = true;
+        new_state[action.locale][action.id].article = true;
       // 4. Else, turn it to false (it means nothing is currently in edit mode in this article)
       } else {
-        new_state[action.id].article = false;
+        new_state[action.locale][action.id].article = false;
       }
       return new_state
 
@@ -163,15 +191,17 @@ export function articlesEditStates(state = {}, action) {
       return new_state
 
     case RESET_ALL_EDIT_STATES_FOR_ARTICLE:
-      _.forOwn(new_state[action.id], function(value, fieldName){
+      _.forOwn(new_state[action.locale][action.id], (value, fieldName) => {
         // if (fieldName === 'article' || fieldName === 'title' || fieldName === 'teaser' || fieldName === 'body') {
-          new_state[action.id][fieldName] = action.resetValue;
+        new_state[action.locale][action.id][fieldName] = action.resetValue;
         // }
       })
       return new_state
 
     case DELETE_ARTICLE:
-      delete new_state[action.id];
+      _.forOwn(new_state, (localeEditStatesArray, locale) => {
+        delete new_state[locale][action.id];
+      })
       return new_state
 
     default:
@@ -183,31 +213,39 @@ export function articlesWIPStatesOfFields(state = {}, action) {
   const new_state = Object.assign({}, state);
   switch (action.type) {
 
-    case LOAD_INITIAL_DATA:
+    case LOADED_INITIAL_ARTICLES:
       return action.initialState.articlesWIPStatesOfFields
 
+    case LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+      return Object.assign({}, state, action.additionalStates.articlesWIPStatesOfFields)
+
     case ADD_NEW_ARTICLE:
-      new_state[action.id] = initialWIPState
+      // FIXME - Check that new_state is effectively being modified
+      _.forOwn(new_state, (localeWIPStatesArray, locale) => {
+        new_state[locale][action.id] = initialWIPState
+      })
       return new_state
 
     case CHANGE_FIELD_OF_ARTICLE:
-      new_state[action.id][action.fieldName] = true
+      new_state[action.locale][action.id][action.fieldName] = true
       return new_state
 
     case CHANGE_WIP_STATE_OF_FIELD_OF_ARTICLE:
-      new_state[action.id][action.fieldName] = action.WIPStateValue;
+      new_state[action.locale][action.id][action.fieldName] = action.WIPStateValue;
       return new_state
 
     case RESET_ALL_WIP_STATES_FOR_ARTICLE:
-      _.forOwn(new_state[action.id], function(value, fieldName){
+      _.forOwn(new_state[action.locale][action.id], (value, fieldName) => {
         // if (fieldName === 'title' || fieldName === 'teaser' || fieldName === 'body') {
-          new_state[action.id][fieldName] = false;
+          new_state[action.locale][action.id][fieldName] = false;
         // }
       })
       return new_state
 
     case DELETE_ARTICLE:
-      delete new_state[action.id];
+      _.forOwn(new_state, (localeWIPStatesArray, locale) => {
+        delete new_state[locale][action.id];
+      })
       return new_state
 
     default:

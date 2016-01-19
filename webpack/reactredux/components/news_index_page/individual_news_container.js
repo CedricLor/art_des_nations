@@ -31,20 +31,20 @@ export const IndividualNewsContainer = React.createClass({
 
   handleEdit(e) {
     e.preventDefault();
-    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.currentArticle.id, 'article', true);
+    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.currentArticle.id, 'article', true, this.props.siteCurrentLocale);
   },
 
   handleCancel(e) {
     e.preventDefault();
-    this.props.articlesActions.handleCancelEditArticle(this.props.currentArticle.id);
+    this.props.articlesActions.handleCancelEditArticle(this.props.currentArticle.id, this.props.siteCurrentLocale);
   },
 
   handleUpdate(fieldName) {
-    this.props.articlesActions.handleUpdateArticle(this.props.currentArticle.id, fieldName)
+    this.props.articlesActions.handleUpdateArticle(this.props.currentArticle.id, fieldName, this.props.siteCurrentLocale)
   },
 
   handleChange(fieldName, fieldValue) {
-    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.currentArticle.id, fieldName, fieldValue);
+    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.currentArticle.id, fieldName, fieldValue, this.props.siteCurrentLocale);
   },
 
   renderTitle() {
@@ -154,6 +154,7 @@ export const IndividualNewsContainer = React.createClass({
   },
 
   render() {
+    console.log(this.props)
 
     return (
       <ReactCSSTransitionGroup

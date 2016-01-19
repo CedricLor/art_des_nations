@@ -1,7 +1,12 @@
 import { ArticlesVisibilityFilters } from '../constants/ActionTypes'
 
 
-export function selectArticles(articles, filter) {
+export function selectArticlesOnLanguage(articles, locale) {
+  return articles[locale]
+}
+
+
+export function selectArticlesOnVisibilityStatus(articles, filter) {
   switch (filter) {
     case ArticlesVisibilityFilters.SHOW_ALL:
       return articles
@@ -16,7 +21,7 @@ export function selectArticles(articles, filter) {
   }
 }
 
-export function selectVisibleArticlesStates(visibleArticles, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps) {
+export function selectVisibleArticlesStates(visibleArticles, siteCurrentLocale, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps) {
   const visibleArticlesStates = {
     "articlesWIPStatesOfFields": {},
     "articlesEditStates": {},
@@ -24,10 +29,10 @@ export function selectVisibleArticlesStates(visibleArticles, articlesWIPStatesOf
     "articlesDOMProps": {}
   }
   _.forEach(visibleArticles, (article) => {
-    visibleArticlesStates["articlesWIPStatesOfFields"][article.id] = articlesWIPStatesOfFields[article.id];
-    visibleArticlesStates["articlesEditStates"][article.id] = articlesEditStates[article.id];
-    visibleArticlesStates["articlesNeedResizingStates"][article.id] = articlesNeedResizingStates[article.id];
-    visibleArticlesStates["articlesDOMProps"][article.id] = articlesDOMProps[article.id];
+    visibleArticlesStates["articlesWIPStatesOfFields"][article.id] =   articlesWIPStatesOfFields[siteCurrentLocale][article.id];
+    visibleArticlesStates["articlesEditStates"][article.id] =          articlesEditStates[siteCurrentLocale][article.id];
+    visibleArticlesStates["articlesNeedResizingStates"][article.id] =  articlesNeedResizingStates[siteCurrentLocale][article.id];
+    visibleArticlesStates["articlesDOMProps"][article.id] =            articlesDOMProps[siteCurrentLocale][article.id];
   })
   return visibleArticlesStates;
 }

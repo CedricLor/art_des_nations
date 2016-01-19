@@ -7,87 +7,91 @@ import {
   RESET_ALL_EDIT_STATES_FOR_ARTICLE
 } from '../constants/ActionTypes'
 
-
-export function changeFieldOfArticle(id, fieldName, fieldValue) {
+export function changeFieldOfArticle(id, fieldName, fieldValue, locale) {
   return {
     type: CHANGE_FIELD_OF_ARTICLE,
     id,
     fieldName,
-    fieldValue
+    fieldValue,
+    locale
   }
 }
 
 
-export function successCallBackForRestoreText(data, fieldName) {
+export function successCallBackForRestoreText(data, locale, fieldName) {
   return function (dispatch) {
-    dispatch(changeFieldOfArticle(data.id, fieldName, data[fieldName]));
-    dispatch(resetEditAndWIPStatesForField(data.id, fieldName, false));
+    dispatch(changeFieldOfArticle(data.id, fieldName, data[fieldName], locale));
+    dispatch(resetEditAndWIPStatesForField(data.id, fieldName, false, locale));
   }
 }
 
 import { getInitialDataByAjax } from './articlesActions'
-export function handleRestoreText(id, fieldName) {
+export function handleRestoreText(id, fieldName, locale) {
   return function(dispatch) {
     const successCallBack = successCallBackForRestoreText;
-    dispatch(getInitialDataByAjax(id, successCallBack, fieldName));
+    dispatch(getInitialDataByAjax(id, successCallBack, fieldName, locale));
   }
 }
 
 
-function changeWIPStateOfFieldOfArticle(id, fieldName, WIPStateValue) {
+function changeWIPStateOfFieldOfArticle(id, fieldName, WIPStateValue, locale) {
   return {
     type: CHANGE_WIP_STATE_OF_FIELD_OF_ARTICLE,
     id,
     fieldName,
-    WIPStateValue
+    WIPStateValue,
+    locale
   }
 }
 
-function resetAllWIPStatesForArticle(id) {
+function resetAllWIPStatesForArticle(id, locale) {
   return {
     type: RESET_ALL_WIP_STATES_FOR_ARTICLE,
-    id
+    id,
+    locale
   }
 }
 
 
-export function changeArticleEditStateOfField(id, fieldName, editStateValue) {
+export function changeArticleEditStateOfField(id, fieldName, editStateValue, locale) {
   return {
     type: CHANGE_EDIT_STATE_OF_FIELD_OF_ARTICLE,
     id,
     fieldName,
-    editStateValue
+    editStateValue,
+    locale
   }
 }
 
-function resetAllEditStatesForArticle(id, resetValue) {
+function resetAllEditStatesForArticle(id, resetValue, locale) {
   return {
     type: RESET_ALL_EDIT_STATES_FOR_ARTICLE,
     id,
-    resetValue
+    resetValue,
+    locale
   }
 }
 
-function resetEditAndWIPStatesForField(id, fieldName, resetValue) {
+function resetEditAndWIPStatesForField(id, fieldName, resetValue, locale) {
   return function (dispatch) {
-    dispatch(changeWIPStateOfFieldOfArticle(id, fieldName, resetValue));
-    dispatch(changeArticleEditStateOfField(id, fieldName, resetValue));
+    dispatch(changeWIPStateOfFieldOfArticle(id, fieldName, resetValue, locale));
+    dispatch(changeArticleEditStateOfField(id, fieldName, resetValue, locale));
   }
 }
 
-export function resetAllEditAndWIPStatesForField(id, resetValue) {
+export function resetAllEditAndWIPStatesForField(id, resetValue, locale) {
   return function (dispatch) {
-    dispatch(resetAllEditStatesForArticle(id, resetValue));
-    dispatch(resetAllWIPStatesForArticle(id));
+    dispatch(resetAllEditStatesForArticle(id, resetValue, locale));
+    dispatch(resetAllWIPStatesForArticle(id, locale));
   }
 }
 
-export function updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle(articleId, fieldName) {
+export function updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle(articleId, fieldName, locale) {
   return function (dispatch) {
     if (fieldName == 'article') {
-      dispatch(resetAllEditAndWIPStatesForField(articleId, false))
+      dispatch(resetAllEditAndWIPStatesForField(articleId, false, locale))
     } else {
-      dispatch(resetEditAndWIPStatesForField(articleId, fieldName, false))
+      dispatch(resetEditAndWIPStatesForField(articleId, fieldName, false, locale))
     }
   }
 }

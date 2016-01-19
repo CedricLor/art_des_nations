@@ -13,7 +13,7 @@ export const NewsIndexPage = React.createClass({
   },
 
   componentDidMount() {
-    return window.addEventListener('resize', this.props.articlesSizingPositionningActions.refreshArticlesSizingPositionning);
+    return window.addEventListener('resize', this.props.articlesSizingPositionningActions.refreshArticlesSizingPositionning(this.props.siteCurrentLocale));
   },
 
   componentWillUnmount() {
@@ -37,7 +37,8 @@ export const NewsIndexPage = React.createClass({
             // # redux passedInDomProps
             articlesDOMProps:                  this.props.articlesDOMProps[this.props.children.props.params.id],
             articlesPassedInUiProps:           this.props.articlesPassedInUiProps,
-            routeParams:                       this.props.routeParams
+            routeParams:                       this.props.routeParams,
+            siteCurrentLocale:                 this.props.siteCurrentLocale
           })
         )
       // else what is requested is the articles index (newsCardContainer) (i.e. for the indexView)
@@ -55,7 +56,8 @@ export const NewsIndexPage = React.createClass({
             articlesPassedInUiProps:           this.props.articlesPassedInUiProps,
             newArticleActions:                 this.props.newArticleActions,
             newArticleFields:                  this.props.newArticleFields,
-            routeParams:                       this.props.routeParams
+            routeParams:                       this.props.routeParams,
+            siteCurrentLocale:                 this.props.siteCurrentLocale
           })
         )
       }
@@ -63,6 +65,7 @@ export const NewsIndexPage = React.createClass({
   },
 
   render() {
+    console.log("-----------", this.props)
     return (
       <div className= "news-index-page-body">
         <div className="container">
@@ -76,7 +79,8 @@ export const NewsIndexPage = React.createClass({
               localesTranslations=              {this.props.siteLanguageSwitcherText}
               siteAvailableLocales=            {this.props.siteAvailableLocales}
               routing=                         {this.props.routing}
-              routeParams=                     {this.props.routeParams} />
+              routeParams=                     {this.props.routeParams}
+            />
             {this.renderChildren()}
           </div>
         </div>

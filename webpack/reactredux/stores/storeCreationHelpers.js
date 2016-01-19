@@ -1,45 +1,40 @@
 import { initialArticlesDOMPropsState } from '../reducers/reducersConstants'
 
-
-function createInitialWIPAndEditStatesForArticles(jsonFetchedArticles) {
-  const [initialWIPStates, initialEditStates] = [{}, {}];
+function createAncillaryStatesForArticles(jsonFetchedArticles, locale) {
+  const [initialWIPStates, initialEditStates, articlesNeedResizingStates, articlesDOMProps] = [{}, {}, {}, {}];
 
   for (let article of jsonFetchedArticles) {
-    [initialWIPStates[article.id], initialEditStates[article.id]] = [{}, { 'article': false }];
+    const articleId = article.id;
+    [initialWIPStates[articleId], initialEditStates[articleId]] = [{}, { 'article': false }];
+    [articlesNeedResizingStates[articleId], articlesDOMProps[articleId]] = [false, initialArticlesDOMPropsState];
 
     for (let fieldName in article) {
       if (fieldName != 'id' && fieldName != 'created_at' && fieldName != 'updated_at') {
-        [initialWIPStates[article.id][fieldName], initialEditStates[article.id][fieldName]] = [false, false];
+        [initialWIPStates[articleId][fieldName], initialEditStates[articleId][fieldName]] = [false, false];
       }
     };
 
   };
 
-  return [initialWIPStates, initialEditStates]
+  return [initialWIPStates, initialEditStates, articlesNeedResizingStates, articlesDOMProps]
 }
 
-function createInitialNeedResizingAndDOMPropsStatesOfArticles(jsonFetchedArticlesIds) {
-  const [articlesNeedResizingStates, articlesDOMProps] = [{}, {}]
+export function createArticleStates(jsonFetchedArticles, locale) {
+  const [articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps] = createAncillaryStatesForArticles(jsonFetchedArticles, locale);
 
-  for (let articleId of jsonFetchedArticlesIds) {
-    [articlesNeedResizingStates[articleId], articlesDOMProps[articleId]] = [false, initialArticlesDOMPropsState];
-  }
+  const articlesState = Object.assign({
+    articles: {},
+    articlesWIPStatesOfFields: {},
+    articlesEditStates: {},
+    articlesNeedResizingStates: {},
+    articlesDOMProps: {}
+  });
 
-  return [articlesNeedResizingStates, articlesDOMProps]
-}
+  articlesState.articles[locale] =                   jsonFetchedArticles;
+  articlesState.articlesWIPStatesOfFields[locale] =  articlesWIPStatesOfFields;
+  articlesState.articlesEditStates[locale] =         articlesEditStates;
+  articlesState.articlesNeedResizingStates[locale] = articlesNeedResizingStates;
+  articlesState.articlesDOMProps[locale] =           articlesDOMProps;
 
-export function createInitialState(jsonFetchedArticles) {
-  const [initialArticlesWIPStatesOfFields, initialArticlesEditStates] = createInitialWIPAndEditStatesForArticles(jsonFetchedArticles);
-  const jsonFetchedArticlesIds = _.map(jsonFetchedArticles, function(value){ return value.id });
-  const [initialArticlesNeedResizingStates, initialArticlesDOMProps] = createInitialNeedResizingAndDOMPropsStatesOfArticles(jsonFetchedArticlesIds);
-
-  const initialState = {
-    articles:                     jsonFetchedArticles,
-    articlesWIPStatesOfFields:    initialArticlesWIPStatesOfFields,
-    articlesEditStates:           initialArticlesEditStates,
-    articlesNeedResizingStates:   initialArticlesNeedResizingStates,
-    articlesDOMProps:             initialArticlesDOMProps
-  }
-
-  return initialState;
+  return articlesState;
 }

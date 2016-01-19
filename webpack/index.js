@@ -33,53 +33,9 @@ import { initialDataReceived } from './reactredux/actions/articlesActions'
 // ********************************************
 
 
-// // ********************************************
+// ********************************************
+// Import the Root element and the store to pass it to the ReactDOM render function
 import Root, { store } from './Root'
-
-// // ********************************************
-// // Import the react components to build the router
-// import App from './reactredux/containers/App'
-// import { NewsIndexPage } from './reactredux/components/NewsIndexPage'
-// import { NewsCardsContainer } from './reactredux/components/news_index_page/news_cards_container'
-// import { IndividualNewsContainer } from './reactredux/components/news_index_page/individual_news_container'
-// // ********************************************
-
-
-// // ********************************************
-// // Import the Router shizzle
-// import { Router, Route, IndexRoute, browserHistory } from 'react-router'
-// import createHistory from 'history/lib/createBrowserHistory'
-// import { syncReduxAndRouter } from 'redux-simple-router'
-// // ********************************************
-
-
-// // ********************************************
-// // Set the store's initial state and configure it
-// const initialState = { isFetching: {initialData: true } }
-// const store = configureStore(initialState);
-// // ********************************************
-
-
-// ********************************************
-// Start fetching the data from Rails
-$.ajax({
-  method: "GET",
-  url: `/${store.getState().siteCurrentLocale}/articles`,
-  dataType: 'JSON'
-  })
-  .success(function( data ) {
-    store.dispatch(initialDataReceived(data));
-});
-// ********************************************
-
-
-// // ********************************************
-// // Set the history for the router and connect the router, the history and the store
-// const history = createHistory();
-// history.__v2_compatible__ = true;
-
-// syncReduxAndRouter(history, store)
-// // ********************************************
 
 
 // ********************************************
@@ -92,8 +48,7 @@ addLocaleData(ru);
 addLocaleData(zh);
 
 // ********************************************
-// Render the redux provider (with the store), the IntlProvider (with the current locale) and
-// the Router and Routes
+// Render the redux provider (with the store) and the Root component (which now manages almost everything)
 $( document ).ready(function() {
 
   render(

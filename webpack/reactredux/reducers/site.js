@@ -1,7 +1,5 @@
 import { TOGGLE_SITE_EDIT_MODE } from '../constants/ActionTypes'
 
-const INIT_PATH = "@@router/INIT_PATH"
-
 export function siteEditMode(state = { mode: false }, action) {
   switch (action.type) {
     case TOGGLE_SITE_EDIT_MODE:
@@ -18,6 +16,7 @@ export function siteAvailableLocales(state = initialSiteAvailableLocales, action
 }
 
 import { UPDATE_PATH } from 'redux-simple-router'
+const INIT_PATH = "@@router/INIT_PATH"
 
 export function siteCurrentLocale(state = "fr", action) {
   switch (action.type) {

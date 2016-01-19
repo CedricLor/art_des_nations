@@ -1,5 +1,7 @@
 import {
-  LOADED_INITIAL_DATA,
+  LOADED_INITIAL_ARTICLES,
+  LOADING_ADDITIONAL_LOCALE_ARTICLES,
+  LOADED_ADDITIONNAL_LOCALE_ARTICLES,
   FETCHING_INFINITE_SCROLL_DATA,
   RECEIVED_INFINITE_SCROLL_DATA
 } from '../constants/ActionTypes'
@@ -12,8 +14,14 @@ import {
 export function isFetching(state = {}, action) {
   switch (action.type) {
 
-    case LOADED_INITIAL_DATA:
+    case LOADED_INITIAL_ARTICLES:
       return Object.assign({}, state, {initialData: false})
+
+    case LOADING_ADDITIONAL_LOCALE_ARTICLES:
+      return Object.assign({}, state, {additionalLocaleArticle: true})
+
+    case LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+      return Object.assign({}, state, {additionalLocaleArticle: false})
 
     case FETCHING_INFINITE_SCROLL_DATA:
       return state[infiniteScrollData] = true

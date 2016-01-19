@@ -23,27 +23,28 @@ export const NewsContentZoneSwitch = React.createClass ({
     handleUpdate:              PropTypes.func.isRequired,
     handleChange:              PropTypes.func.isRequired,
 
-    routeParams:               PropTypes.object.isRequired
+    routeParams:               PropTypes.object.isRequired,
+    siteCurrentLocale:         PropTypes.string.isRequired
   },
 
   handleEditField(e) {
     e.preventDefault();
-    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.sourceId, this.props.name, true);
+    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.sourceId, this.props.name, true, this.props.siteCurrentLocale);
   },
 
   handleExitEditField(e) {
     e.preventDefault();
-    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.sourceId, this.props.name, false)
+    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.sourceId, this.props.name, false, this.props.siteCurrentLocale)
   },
 
   handleDeleteText(e) {
     e.preventDefault();
-    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.sourceId, this.props.name, '');
+    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.sourceId, this.props.name, '', this.props.siteCurrentLocale);
   },
 
   handleRestoreText(e) {
     e.preventDefault();
-    this.props.articlesFieldsActions.handleRestoreText(this.props.sourceId, this.props.name);
+    this.props.articlesFieldsActions.handleRestoreText(this.props.sourceId, this.props.name, this.props.siteCurrentLocale);
   },
 
   renderEditButtonEditableZoneSwitch(childRessourceType) {

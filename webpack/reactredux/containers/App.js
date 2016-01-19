@@ -20,6 +20,7 @@ function mapStateToProps(state) {
     siteEditMode:                    state.siteEditMode,
     siteAvailableLocales:            state.siteAvailableLocales,
     siteLanguageSwitcherText:        state.siteLanguageSwitcherText,
+    siteCurrentLocale:               state.siteCurrentLocale,
 
     newArticleFields:                state.newArticleFields,
 

@@ -4,38 +4,41 @@ import {
   RESET_DOM_PROPS_OF_ALL_THE_ARTICLES
 } from '../constants/ActionTypes'
 
-function changeArticleNeedResizingState(id, stateValue) {
+function changeArticleNeedResizingState(id, stateValue, locale) {
   return {
     type: CHANGE_NEED_RESIZING_STATE_OF_ARTICLE,
     id,
-    stateValue
+    stateValue,
+    locale
   }
 }
 
-export function assignRealDomValuesToDOMPropsOfArticle(id, posTop, divHeight, cardNumber) {
+export function assignRealDomValuesToDOMPropsOfArticle(id, posTop, divHeight, cardNumber, locale) {
   return {
     type: ASSIGN_REAL_DOM_VALUES_TO_DOM_PROPS_OF_ARTICLE,
     id,
     posTop,
     divHeight,
-    cardNumber
+    cardNumber,
+    locale
   }
 }
 
-function resetDOMPropsOfAllTheArticles() {
+function resetDOMPropsOfAllTheArticles(locale) {
   return {
-    type: RESET_DOM_PROPS_OF_ALL_THE_ARTICLES
+    type: RESET_DOM_PROPS_OF_ALL_THE_ARTICLES,
+    locale
   }
 }
 
-export function refreshArticlesSizingPositionning() {
+export function refreshArticlesSizingPositionning(locale) {
   return function (dispatch, getState) {
-    const articlesNeedResizingStates = getState().articlesNeedResizingStates
+    const localizedArticlesNeedResizingStates = getState().articlesNeedResizingStates[locale]
     _.forOwn(
-      articlesNeedResizingStates,
-      [ function(value, id) { dispatch(changeArticleNeedResizingState(id, true)) } ],
+      localizedArticlesNeedResizingStates,
+      [ function(value, id) { dispatch(changeArticleNeedResizingState(id, true, locale)) } ],
       [this]
       );
-    dispatch(resetDOMPropsOfAllTheArticles());
+    dispatch(resetDOMPropsOfAllTheArticles(locale));
   }
 }

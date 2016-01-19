@@ -20,7 +20,7 @@ export const NewsTitleZone = React.createClass({
   // handleChange(e) {
   //   const fieldValue = e.target.value;
   //   // this.props.articlesFieldsActions.changeFieldOfArticle(this.props.card.id, fieldName, fieldValue)  ;
-  //   this.props.articlesFieldsActions.changeFieldOfArticle(this.props.sourceId, this.props.value, fieldValue);
+  //   this.props.articlesFieldsActions.changeFieldOfArticle(this.props.sourceId, this.props.value, fieldValue, this.props.siteCurrentLocale);
   // },
 
   renderWrappedTitle() {

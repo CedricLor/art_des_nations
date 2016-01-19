@@ -10534,47 +10534,8 @@
 	
 	// ********************************************
 	
-	// // ********************************************
-	
-	// // ********************************************
-	// // Import the react components to build the router
-	// import App from './reactredux/containers/App'
-	// import { NewsIndexPage } from './reactredux/components/NewsIndexPage'
-	// import { NewsCardsContainer } from './reactredux/components/news_index_page/news_cards_container'
-	// import { IndividualNewsContainer } from './reactredux/components/news_index_page/individual_news_container'
-	// // ********************************************
-	
-	// // ********************************************
-	// // Import the Router shizzle
-	// import { Router, Route, IndexRoute, browserHistory } from 'react-router'
-	// import createHistory from 'history/lib/createBrowserHistory'
-	// import { syncReduxAndRouter } from 'redux-simple-router'
-	// // ********************************************
-	
-	// // ********************************************
-	// // Set the store's initial state and configure it
-	// const initialState = { isFetching: {initialData: true } }
-	// const store = configureStore(initialState);
-	// // ********************************************
-	
 	// ********************************************
-	// Start fetching the data from Rails
-	$.ajax({
-	  method: "GET",
-	  url: '/' + _Root.store.getState().siteCurrentLocale + '/articles',
-	  dataType: 'JSON'
-	}).success(function (data) {
-	  _Root.store.dispatch((0, _articlesActions.initialDataReceived)(data));
-	});
-	// ********************************************
-	
-	// // ********************************************
-	// // Set the history for the router and connect the router, the history and the store
-	// const history = createHistory();
-	// history.__v2_compatible__ = true;
-	
-	// syncReduxAndRouter(history, store)
-	// // ********************************************
+	// Import the Root element and the store to pass it to the ReactDOM render function
 	
 	// ********************************************
 	// add the i18n polyfills for Safari and older browsers
@@ -10586,8 +10547,7 @@
 	(0, _reactIntl.addLocaleData)(_zh2.default);
 	
 	// ********************************************
-	// Render the redux provider (with the store), the IntlProvider (with the current locale) and
-	// the Router and Routes
+	// Render the redux provider (with the store) and the Root component (which now manages almost everything)
 	$(document).ready(function () {
 	
 	  (0, _reactDom.render)(_react2.default.createElement(
@@ -44540,7 +44500,8 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.initialDataReceived = initialDataReceived;
+	exports.fetchInitialArticles = fetchInitialArticles;
+	exports.fetchAdditionalLocaleArticles = fetchAdditionalLocaleArticles;
 	exports.handleUpdateArticle = handleUpdateArticle;
 	exports.getInitialDataByAjax = getInitialDataByAjax;
 	exports.handleCancelEditArticle = handleCancelEditArticle;
@@ -44554,35 +44515,63 @@
 	
 	var _storeCreationHelpers = __webpack_require__(427);
 	
-	function loadInitialData(initialState) {
+	// Loading initial articles
+	function dispatchLoadInitialArticles(jsonFetchedArticles, locale) {
+	  var initialState = (0, _storeCreationHelpers.createArticleStates)(jsonFetchedArticles, locale);
 	  return {
-	    type: _ActionTypes.LOAD_INITIAL_DATA,
+	    type: _ActionTypes.LOADED_INITIAL_ARTICLES,
 	    initialState: initialState
 	  };
 	}
 	
-	function dispatchLoadedInitialData() {
-	  return {
-	    type: _ActionTypes.LOADED_INITIAL_DATA
-	  };
-	}
-	
-	function initialDataReceived(jsonFetchedArticles) {
-	  var initialState = (0, _storeCreationHelpers.createInitialState)(jsonFetchedArticles);
+	function fetchInitialArticles(locale) {
 	  return function (dispatch) {
-	    dispatch(loadInitialData(initialState));
-	    dispatch(dispatchLoadedInitialData());
+	    $.ajax({
+	      method: "GET",
+	      url: '/' + locale + '/articles',
+	      dataType: 'JSON'
+	    }).success(function (data) {
+	      dispatch(dispatchLoadInitialArticles(data, locale));
+	    });
 	  };
 	}
 	
-	// Methods for update article (and fields)
-	function reOrderArticlesArray() {
+	// Loading additional articles
+	function dispatchLoadAdditionalLocaleArticles(jsonFetchedArticles, locale) {
+	  var additionalStates = (0, _storeCreationHelpers.createArticleStates)(jsonFetchedArticles, locale);
 	  return {
-	    type: _ActionTypes.REORDER_ARTICLES_ARRAY
+	    type: _ActionTypes.LOADED_ADDITIONNAL_LOCALE_ARTICLES,
+	    additionalStates: additionalStates
 	  };
 	}
 	
-	function updateArticle(_ref) {
+	function dispatchLoadingAdditionalLocaleArticles() {
+	  return {
+	    type: _ActionTypes.LOADING_ADDITIONAL_LOCALE_ARTICLES
+	  };
+	}
+	
+	function fetchAdditionalLocaleArticles(locale) {
+	  return function (dispatch) {
+	    dispatch(dispatchLoadingAdditionalLocaleArticles());
+	    $.ajax({
+	      method: "GET",
+	      url: '/' + locale + '/articles',
+	      dataType: 'JSON'
+	    }).success(function (data) {
+	      dispatch(dispatchLoadAdditionalLocaleArticles(data, locale));
+	    });
+	  };
+	}
+	// Methods for update article (and fields)
+	function reOrderArticlesArray(locale) {
+	  return {
+	    type: _ActionTypes.REORDER_ARTICLES_ARRAY,
+	    locale: locale
+	  };
+	}
+	
+	function updateArticle(_ref, locale) {
 	  var id = _ref.id;
 	  var title = _ref.title;
 	  var body = _ref.body;
@@ -44601,82 +44590,83 @@
 	    status: status,
 	    posted_at: posted_at,
 	    created_at: created_at,
-	    updated_at: updated_at
+	    updated_at: updated_at,
+	    locale: locale
 	  };
 	}
 	
-	function updateArticleAndRefresh(data, fieldName) {
+	function updateArticleAndRefresh(data, locale, fieldName) {
 	  return function (dispatch) {
-	    dispatch(updateArticle(data));
+	    dispatch(updateArticle(data, locale));
 	    if (fieldName === "posted_at" || fieldName === "article") {
-	      dispatch(reOrderArticlesArray());
+	      dispatch(reOrderArticlesArray(locale));
 	    };
-	    dispatch((0, _articlesSizingPositionningActions.refreshArticlesSizingPositionning)());
+	    dispatch((0, _articlesSizingPositionningActions.refreshArticlesSizingPositionning)(locale));
 	  };
 	}
 	
-	function sendUpdateByAjax(data, id, fieldName) {
+	function sendUpdateByAjax(data, id, fieldName, locale) {
 	  return function (dispatch) {
 	    $.ajax({
 	      method: 'PUT',
-	      url: "/articles/" + id,
+	      url: '/' + locale + '/articles/' + id,
 	      dataType: 'JSON',
-	      data: {
-	        article: data
-	      },
+	      data: { article: data },
 	      success: function success(respData) {
-	        dispatch((0, _articleFieldsActions.updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle)(id, fieldName));
-	        dispatch(updateArticleAndRefresh(respData, fieldName));
+	        dispatch((0, _articleFieldsActions.updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle)(id, fieldName, locale));
+	        dispatch(updateArticleAndRefresh(respData, locale, fieldName));
 	      }
 	    });
 	  };
 	}
 	
-	function handleUpdateArticle(id, fieldName) {
+	function handleUpdateArticle(id, fieldName, locale) {
 	  return function (dispatch, getState) {
-	    var data = _.omit(_.find(getState().articles, { 'id': id }), ['created_at', 'updated_at']);
+	    var articles = getState().articles[locale];
+	    var data = _.omit(_.find(articles, { 'id': id }), ['created_at', 'updated_at']);
 	    if (fieldName != 'article') {
 	      data = _.pick(data, fieldName);
 	    }
-	    dispatch(sendUpdateByAjax(data, id, fieldName));
+	    dispatch(sendUpdateByAjax(data, id, fieldName, locale));
 	  };
 	}
 	
 	// Methods for cancel edit
-	function getInitialDataByAjax(id, successCallBack, fieldName) {
+	function getInitialDataByAjax(id, successCallBack, fieldName, locale) {
 	  return function (dispatch) {
 	    $.ajax({
 	      method: 'GET',
-	      url: "/articles/" + id,
+	      url: '/' + locale + '/articles/' + id,
 	      dataType: 'JSON',
 	      success: (function (_this) {
 	        return function (data) {
-	          dispatch(successCallBack(data, fieldName));
+	          dispatch(successCallBack(data, locale, fieldName));
 	        };
 	      })(this)
 	    });
 	  };
 	}
 	
-	function successCallBackForCancelEditArticle(data) {
+	function successCallBackForCancelEditArticle(data, locale) {
 	  return function (dispatch) {
-	    dispatch((0, _articleFieldsActions.resetAllEditAndWIPStatesForField)(data.id, false));
-	    dispatch(updateArticleAndRefresh(data));
+	    dispatch((0, _articleFieldsActions.resetAllEditAndWIPStatesForField)(data.id, false, locale));
+	    dispatch(updateArticleAndRefresh(data, locale));
 	  };
 	}
 	
-	function handleCancelEditArticle(id) {
+	function handleCancelEditArticle(id, locale) {
 	  return function (dispatch, getState) {
-	    var WIPStates = getState().articlesWIPStatesOfFields[id];
+	    var WIPStates = getState().articlesWIPStatesOfFields[locale][id];
 	    if (_.includes(_.values(WIPStates), true)) {
-	      dispatch(getInitialDataByAjax(id, successCallBackForCancelEditArticle, null));
+	      dispatch(getInitialDataByAjax(id, successCallBackForCancelEditArticle, null, locale));
 	    } else {
-	      dispatch((0, _articleFieldsActions.changeArticleEditStateOfField)(id, 'article', false));
+	      dispatch((0, _articleFieldsActions.changeArticleEditStateOfField)(id, 'article', false, locale));
 	    }
 	  };
 	}
 	
 	// Methods for delete article
+	// DESIGN CHOICE - Deleting an article mean deleting in all the languages
 	function deleteArticle(id) {
 	  return {
 	    type: _ActionTypes.DELETE_ARTICLE,
@@ -44684,15 +44674,21 @@
 	  };
 	}
 	
+	function reOrderAllTheArticlesArray() {
+	  return {
+	    type: _ActionTypes.REORDER_ALL_THE_ARTICLES_ARRAYS
+	  };
+	}
+	
 	function handleDeleteArticle(id) {
-	  return function (dispatch) {
+	  return function (dispatch, getState) {
 	    $.ajax({
 	      method: 'DELETE',
 	      url: "/articles/" + id,
 	      dataType: 'JSON',
 	      success: function success() {
 	        dispatch(deleteArticle(id));
-	        dispatch(reOrderArticlesArray());
+	        dispatch(reOrderAllTheArticlesArray());
 	      }
 	    });
 	  };
@@ -44713,10 +44709,12 @@
 	
 	var TOGGLE_SITE_EDIT_MODE = exports.TOGGLE_SITE_EDIT_MODE = 'TOGGLE_SITE_EDIT_MODE';
 	
-	var LOAD_INITIAL_DATA = exports.LOAD_INITIAL_DATA = 'LOAD_INITIAL_DATA';
-	var LOADED_INITIAL_DATA = exports.LOADED_INITIAL_DATA = 'LOADED_INITIAL_DATA';
+	var LOADING_INITIAL_ARTICLES = exports.LOADING_INITIAL_ARTICLES = 'LOAD_INITIAL_ARTICLES';
+	var LOADED_INITIAL_ARTICLES = exports.LOADED_INITIAL_ARTICLES = 'LOADED_INITIAL_ARTICLES';
 	var FETCHING_INFINITE_SCROLL_DATA = exports.FETCHING_INFINITE_SCROLL_DATA = 'FETCHING_INFINITE_SCROLL_DATA';
 	var RECEIVED_INFINITE_SCROLL_DATA = exports.RECEIVED_INFINITE_SCROLL_DATA = 'RECEIVED_INFINITE_SCROLL_DATA';
+	var LOADING_ADDITIONAL_LOCALE_ARTICLES = exports.LOADING_ADDITIONAL_LOCALE_ARTICLES = 'LOADING_ADDITIONAL_LOCALE_ARTICLES';
+	var LOADED_ADDITIONNAL_LOCALE_ARTICLES = exports.LOADED_ADDITIONNAL_LOCALE_ARTICLES = 'LOADED_ADDITIONNAL_LOCALE_ARTICLES';
 	
 	var SET_ARTICLES_VISIBILITY_FILTER = exports.SET_ARTICLES_VISIBILITY_FILTER = 'SET_ARTICLES_VISIBILITY_FILTER';
 	
@@ -44731,6 +44729,7 @@
 	var UPDATE_ARTICLE = exports.UPDATE_ARTICLE = 'UPDATE_ARTICLE';
 	var DELETE_ARTICLE = exports.DELETE_ARTICLE = 'DELETE_ARTICLE';
 	var REORDER_ARTICLES_ARRAY = exports.REORDER_ARTICLES_ARRAY = 'REORDER_ARTICLES_ARRAY';
+	var REORDER_ALL_THE_ARTICLES_ARRAYS = exports.REORDER_ALL_THE_ARTICLES_ARRAYS = 'REORDER_ALL_THE_ARTICLES_ARRAYS';
 	
 	var CHANGE_FIELD_OF_ARTICLE = exports.CHANGE_FIELD_OF_ARTICLE = 'CHANGE_FIELD_OF_ARTICLE';
 	
@@ -44763,37 +44762,40 @@
 	
 	var _ActionTypes = __webpack_require__(424);
 	
-	function changeArticleNeedResizingState(id, stateValue) {
+	function changeArticleNeedResizingState(id, stateValue, locale) {
 	  return {
 	    type: _ActionTypes.CHANGE_NEED_RESIZING_STATE_OF_ARTICLE,
 	    id: id,
-	    stateValue: stateValue
+	    stateValue: stateValue,
+	    locale: locale
 	  };
 	}
 	
-	function assignRealDomValuesToDOMPropsOfArticle(id, posTop, divHeight, cardNumber) {
+	function assignRealDomValuesToDOMPropsOfArticle(id, posTop, divHeight, cardNumber, locale) {
 	  return {
 	    type: _ActionTypes.ASSIGN_REAL_DOM_VALUES_TO_DOM_PROPS_OF_ARTICLE,
 	    id: id,
 	    posTop: posTop,
 	    divHeight: divHeight,
-	    cardNumber: cardNumber
+	    cardNumber: cardNumber,
+	    locale: locale
 	  };
 	}
 	
-	function resetDOMPropsOfAllTheArticles() {
+	function resetDOMPropsOfAllTheArticles(locale) {
 	  return {
-	    type: _ActionTypes.RESET_DOM_PROPS_OF_ALL_THE_ARTICLES
+	    type: _ActionTypes.RESET_DOM_PROPS_OF_ALL_THE_ARTICLES,
+	    locale: locale
 	  };
 	}
 	
-	function refreshArticlesSizingPositionning() {
+	function refreshArticlesSizingPositionning(locale) {
 	  return function (dispatch, getState) {
-	    var articlesNeedResizingStates = getState().articlesNeedResizingStates;
-	    _.forOwn(articlesNeedResizingStates, [function (value, id) {
-	      dispatch(changeArticleNeedResizingState(id, true));
+	    var localizedArticlesNeedResizingStates = getState().articlesNeedResizingStates[locale];
+	    _.forOwn(localizedArticlesNeedResizingStates, [function (value, id) {
+	      dispatch(changeArticleNeedResizingState(id, true, locale));
 	    }], [this]);
-	    dispatch(resetDOMPropsOfAllTheArticles());
+	    dispatch(resetDOMPropsOfAllTheArticles(locale));
 	  };
 	}
 
@@ -44817,82 +44819,87 @@
 	
 	var _articlesActions = __webpack_require__(423);
 	
-	function changeFieldOfArticle(id, fieldName, fieldValue) {
+	function changeFieldOfArticle(id, fieldName, fieldValue, locale) {
 	  return {
 	    type: _ActionTypes.CHANGE_FIELD_OF_ARTICLE,
 	    id: id,
 	    fieldName: fieldName,
-	    fieldValue: fieldValue
+	    fieldValue: fieldValue,
+	    locale: locale
 	  };
 	}
 	
-	function successCallBackForRestoreText(data, fieldName) {
+	function successCallBackForRestoreText(data, locale, fieldName) {
 	  return function (dispatch) {
-	    dispatch(changeFieldOfArticle(data.id, fieldName, data[fieldName]));
-	    dispatch(resetEditAndWIPStatesForField(data.id, fieldName, false));
+	    dispatch(changeFieldOfArticle(data.id, fieldName, data[fieldName], locale));
+	    dispatch(resetEditAndWIPStatesForField(data.id, fieldName, false, locale));
 	  };
 	}
 	
-	function handleRestoreText(id, fieldName) {
+	function handleRestoreText(id, fieldName, locale) {
 	  return function (dispatch) {
 	    var successCallBack = successCallBackForRestoreText;
-	    dispatch((0, _articlesActions.getInitialDataByAjax)(id, successCallBack, fieldName));
+	    dispatch((0, _articlesActions.getInitialDataByAjax)(id, successCallBack, fieldName, locale));
 	  };
 	}
 	
-	function changeWIPStateOfFieldOfArticle(id, fieldName, WIPStateValue) {
+	function changeWIPStateOfFieldOfArticle(id, fieldName, WIPStateValue, locale) {
 	  return {
 	    type: _ActionTypes.CHANGE_WIP_STATE_OF_FIELD_OF_ARTICLE,
 	    id: id,
 	    fieldName: fieldName,
-	    WIPStateValue: WIPStateValue
+	    WIPStateValue: WIPStateValue,
+	    locale: locale
 	  };
 	}
 	
-	function resetAllWIPStatesForArticle(id) {
+	function resetAllWIPStatesForArticle(id, locale) {
 	  return {
 	    type: _ActionTypes.RESET_ALL_WIP_STATES_FOR_ARTICLE,
-	    id: id
+	    id: id,
+	    locale: locale
 	  };
 	}
 	
-	function changeArticleEditStateOfField(id, fieldName, editStateValue) {
+	function changeArticleEditStateOfField(id, fieldName, editStateValue, locale) {
 	  return {
 	    type: _ActionTypes.CHANGE_EDIT_STATE_OF_FIELD_OF_ARTICLE,
 	    id: id,
 	    fieldName: fieldName,
-	    editStateValue: editStateValue
+	    editStateValue: editStateValue,
+	    locale: locale
 	  };
 	}
 	
-	function resetAllEditStatesForArticle(id, resetValue) {
+	function resetAllEditStatesForArticle(id, resetValue, locale) {
 	  return {
 	    type: _ActionTypes.RESET_ALL_EDIT_STATES_FOR_ARTICLE,
 	    id: id,
-	    resetValue: resetValue
+	    resetValue: resetValue,
+	    locale: locale
 	  };
 	}
 	
-	function resetEditAndWIPStatesForField(id, fieldName, resetValue) {
+	function resetEditAndWIPStatesForField(id, fieldName, resetValue, locale) {
 	  return function (dispatch) {
-	    dispatch(changeWIPStateOfFieldOfArticle(id, fieldName, resetValue));
-	    dispatch(changeArticleEditStateOfField(id, fieldName, resetValue));
+	    dispatch(changeWIPStateOfFieldOfArticle(id, fieldName, resetValue, locale));
+	    dispatch(changeArticleEditStateOfField(id, fieldName, resetValue, locale));
 	  };
 	}
 	
-	function resetAllEditAndWIPStatesForField(id, resetValue) {
+	function resetAllEditAndWIPStatesForField(id, resetValue, locale) {
 	  return function (dispatch) {
-	    dispatch(resetAllEditStatesForArticle(id, resetValue));
-	    dispatch(resetAllWIPStatesForArticle(id));
+	    dispatch(resetAllEditStatesForArticle(id, resetValue, locale));
+	    dispatch(resetAllWIPStatesForArticle(id, locale));
 	  };
 	}
 	
-	function updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle(articleId, fieldName) {
+	function updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle(articleId, fieldName, locale) {
 	  return function (dispatch) {
 	    if (fieldName == 'article') {
-	      dispatch(resetAllEditAndWIPStatesForField(articleId, false));
+	      dispatch(resetAllEditAndWIPStatesForField(articleId, false, locale));
 	    } else {
-	      dispatch(resetEditAndWIPStatesForField(articleId, fieldName, false));
+	      dispatch(resetEditAndWIPStatesForField(articleId, fieldName, false, locale));
 	    }
 	  };
 	}
@@ -44908,13 +44915,15 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.createInitialState = createInitialState;
+	exports.createArticleStates = createArticleStates;
 	
 	var _reducersConstants = __webpack_require__(354);
 	
-	function createInitialWIPAndEditStatesForArticles(jsonFetchedArticles) {
+	function createAncillaryStatesForArticles(jsonFetchedArticles, locale) {
 	  var initialWIPStates = {};
 	  var initialEditStates = {};
+	  var articlesNeedResizingStates = {};
+	  var articlesDOMProps = {};
 	  var _iteratorNormalCompletion = true;
 	  var _didIteratorError = false;
 	  var _iteratorError = undefined;
@@ -44923,15 +44932,20 @@
 	
 	    for (var _iterator = jsonFetchedArticles[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 	      var article = _step.value;
+	
+	      var articleId = article.id;
 	      var _ref = [{}, { 'article': false }];
-	      initialWIPStates[article.id] = _ref[0];
-	      initialEditStates[article.id] = _ref[1];
+	      initialWIPStates[articleId] = _ref[0];
+	      initialEditStates[articleId] = _ref[1];
+	      var _ref2 = [false, _reducersConstants.initialArticlesDOMPropsState];
+	      articlesNeedResizingStates[articleId] = _ref2[0];
+	      articlesDOMProps[articleId] = _ref2[1];
 	
 	      for (var fieldName in article) {
 	        if (fieldName != 'id' && fieldName != 'created_at' && fieldName != 'updated_at') {
-	          var _ref2 = [false, false];
-	          initialWIPStates[article.id][fieldName] = _ref2[0];
-	          initialEditStates[article.id][fieldName] = _ref2[1];
+	          var _ref3 = [false, false];
+	          initialWIPStates[articleId][fieldName] = _ref3[0];
+	          initialEditStates[articleId][fieldName] = _ref3[1];
 	        }
 	      };
 	    }
@@ -44952,70 +44966,34 @@
 	
 	  ;
 	
-	  return [initialWIPStates, initialEditStates];
+	  return [initialWIPStates, initialEditStates, articlesNeedResizingStates, articlesDOMProps];
 	}
 	
-	function createInitialNeedResizingAndDOMPropsStatesOfArticles(jsonFetchedArticlesIds) {
-	  var articlesNeedResizingStates = {};
-	  var articlesDOMProps = {};
-	  var _iteratorNormalCompletion2 = true;
-	  var _didIteratorError2 = false;
-	  var _iteratorError2 = undefined;
+	function createArticleStates(jsonFetchedArticles, locale) {
+	  var _createAncillaryState = createAncillaryStatesForArticles(jsonFetchedArticles, locale);
 	
-	  try {
+	  var _createAncillaryState2 = _slicedToArray(_createAncillaryState, 4);
 	
-	    for (var _iterator2 = jsonFetchedArticlesIds[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	      var articleId = _step2.value;
-	      var _ref3 = [false, _reducersConstants.initialArticlesDOMPropsState];
-	      articlesNeedResizingStates[articleId] = _ref3[0];
-	      articlesDOMProps[articleId] = _ref3[1];
-	    }
-	  } catch (err) {
-	    _didIteratorError2 = true;
-	    _iteratorError2 = err;
-	  } finally {
-	    try {
-	      if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	        _iterator2.return();
-	      }
-	    } finally {
-	      if (_didIteratorError2) {
-	        throw _iteratorError2;
-	      }
-	    }
-	  }
+	  var articlesWIPStatesOfFields = _createAncillaryState2[0];
+	  var articlesEditStates = _createAncillaryState2[1];
+	  var articlesNeedResizingStates = _createAncillaryState2[2];
+	  var articlesDOMProps = _createAncillaryState2[3];
 	
-	  return [articlesNeedResizingStates, articlesDOMProps];
-	}
-	
-	function createInitialState(jsonFetchedArticles) {
-	  var _createInitialWIPAndE = createInitialWIPAndEditStatesForArticles(jsonFetchedArticles);
-	
-	  var _createInitialWIPAndE2 = _slicedToArray(_createInitialWIPAndE, 2);
-	
-	  var initialArticlesWIPStatesOfFields = _createInitialWIPAndE2[0];
-	  var initialArticlesEditStates = _createInitialWIPAndE2[1];
-	
-	  var jsonFetchedArticlesIds = _.map(jsonFetchedArticles, function (value) {
-	    return value.id;
+	  var articlesState = Object.assign({
+	    articles: {},
+	    articlesWIPStatesOfFields: {},
+	    articlesEditStates: {},
+	    articlesNeedResizingStates: {},
+	    articlesDOMProps: {}
 	  });
 	
-	  var _createInitialNeedRes = createInitialNeedResizingAndDOMPropsStatesOfArticles(jsonFetchedArticlesIds);
+	  articlesState.articles[locale] = jsonFetchedArticles;
+	  articlesState.articlesWIPStatesOfFields[locale] = articlesWIPStatesOfFields;
+	  articlesState.articlesEditStates[locale] = articlesEditStates;
+	  articlesState.articlesNeedResizingStates[locale] = articlesNeedResizingStates;
+	  articlesState.articlesDOMProps[locale] = articlesDOMProps;
 	
-	  var _createInitialNeedRes2 = _slicedToArray(_createInitialNeedRes, 2);
-	
-	  var initialArticlesNeedResizingStates = _createInitialNeedRes2[0];
-	  var initialArticlesDOMProps = _createInitialNeedRes2[1];
-	
-	  var initialState = {
-	    articles: jsonFetchedArticles,
-	    articlesWIPStatesOfFields: initialArticlesWIPStatesOfFields,
-	    articlesEditStates: initialArticlesEditStates,
-	    articlesNeedResizingStates: initialArticlesNeedResizingStates,
-	    articlesDOMProps: initialArticlesDOMProps
-	  };
-	
-	  return initialState;
+	  return articlesState;
 	}
 
 /***/ },
@@ -45054,6 +45032,8 @@
 	
 	// ********************************************
 	// Import the translated files
+	
+	// ********************************************
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -45094,49 +45074,29 @@
 	
 	var i18n = _interopRequireWildcard(_i18n);
 	
+	var _articlesActions = __webpack_require__(423);
+	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// ********************************************
-	
-	// const {
-	//   About,
-	//   Account,
-	//   AccountHome,
-	//   Application,
-	//   GithubStargazers,
-	//   GithubRepo,
-	//   GithubUser,
-	//   Home,
-	//   Login,
-	//   SuperSecretArea
-	// } = components
-	
-	// const initialState = {
-	//   application: {
-	//     token: storage.get('token'),
-	//     locale: storage.get('locale') || 'en',
-	//     user: { permissions: [/*'manage_account'*/] }
-	//   }
-	// }
-	
-	// export const store = configureStore(initialState)
-	
-	// ********************************************
 	// Set the store's initial state and configure it
 	var initialState = { isFetching: { initialData: true } };
 	var store = exports.store = (0, _configureStore2.default)(initialState);
+	// Start fetching the data from Rails and load it to the store
+	store.dispatch((0, _articlesActions.fetchInitialArticles)(store.getState().siteCurrentLocale));
 	// ********************************************
 	
 	// ********************************************
-	// Set the history for the router and connect the router, the history and the store
+	// Set the history for the router and connect the the history to the store
 	var history = (0, _createBrowserHistory2.default)();
 	history.__v2_compatible__ = true;
 	
 	(0, _reduxSimpleRouter.syncReduxAndRouter)(history, store);
 	// ********************************************
 	
+	// ********************************************
 	function getRootChildren(props) {
 	  var intlData = {
 	    locale: props.siteCurrentLocale,
@@ -45162,15 +45122,52 @@
 	  return _react2.default.createElement(_reactRouter.Router, { history: history, routes: routeConfig });
 	}
 	
+	// ++++++++++++++++++++++++++++++++++++++++++++
+	
 	var Root = _react2.default.createClass({
 	  displayName: 'Root',
 	
 	  PropTypes: {
-	    siteCurrentLocale: _react.PropTypes.string.isRequired
+	    siteCurrentLocale: _react.PropTypes.string.isRequired,
+	    isFetching: _react.PropTypes.object.isRequired
 	  },
 	
+	  getInitialState: function getInitialState() {
+	    return {
+	      timeOut: false
+	    };
+	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (this.props.siteCurrentLocale !== nextProps.siteCurrentLocale && !(nextProps.siteCurrentLocale in nextProps.articles)) {
+	      this.setState({ timeOut: true });
+	      store.dispatch((0, _articlesActions.fetchAdditionalLocaleArticles)(nextProps.siteCurrentLocale));
+	    } else {
+	      this.setState({ timeOut: false });
+	    }
+	  },
 	  render: function render() {
-	    console.log("------ IN ROOOOOOOOOOTTTTT");
+	
+	    if (this.props.isFetching.initialData === true) {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        'Currently fetching initial data'
+	      );
+	    }
+	    if (this.props.isFetching.additionalLocaleArticle === true) {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        'Currently fetching articles in your local language'
+	      );
+	    }
+	    if (this.state.timeOut === true) {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        'Please wait'
+	      );
+	    }
 	
 	    return _react2.default.createElement(
 	      'div',
@@ -45182,8 +45179,43 @@
 	
 	exports.default = (0, _reactRedux.connect)(function (_ref) {
 	  var siteCurrentLocale = _ref.siteCurrentLocale;
-	  return { siteCurrentLocale: siteCurrentLocale };
+	  var isFetching = _ref.isFetching;
+	  var articles = _ref.articles;
+	  return { siteCurrentLocale: siteCurrentLocale, isFetching: isFetching, articles: articles };
 	})(Root);
+	
+	// ***********************************************
+	// +**********************************************
+	// ***********************************************
+	// import { createConnector } from 'redux-rx/react';
+	// import { bindActionCreators } from 'redux-rx';
+
+	// const AppSuperContainer = createConnector((props$, state$, dispatch$) => {
+	//   const actionCreators$ = bindActionCreators(actionCreators, dispatch$);
+	//   const pushState$ = actionCreators$.map(ac => ac.pushState);
+
+	//   // Detect locale change
+	//   const didChangeLocale$ = state$
+	//     .distinctUntilChanged(state => state.siteCurrentLocale)
+	//     .filter(state => state.siteCurrentLocale);
+
+	//   // Redirect on change locale!
+	//   const redirect$ = didChangeLocale$
+	//     .withLatestFrom(
+	//       pushState$,
+	//       // Use query parameter as redirect path
+	//       (state, pushState) => () => pushState(null, state.router.query.redirect || '/')
+	//     )
+	//     .do(go => go());
+
+	//   return combineLatest(
+	//     props$, actionCreators$, redirect$,
+	//     (props, actionCreators) => ({
+	//       ...props,
+	//       ...actionCreators
+	//     })
+	//   );
+	// }, Root);
 
 /***/ },
 /* 429 */
@@ -50486,8 +50518,14 @@
 	
 	  switch (action.type) {
 	
-	    case _ActionTypes.LOADED_INITIAL_DATA:
+	    case _ActionTypes.LOADED_INITIAL_ARTICLES:
 	      return Object.assign({}, state, { initialData: false });
+	
+	    case _ActionTypes.LOADING_ADDITIONAL_LOCALE_ARTICLES:
+	      return Object.assign({}, state, { additionalLocaleArticle: true });
+	
+	    case _ActionTypes.LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+	      return Object.assign({}, state, { additionalLocaleArticle: false });
 	
 	    case _ActionTypes.FETCHING_INFINITE_SCROLL_DATA:
 	      return state[infiniteScrollData] = true;
@@ -50520,8 +50558,6 @@
 	
 	var _reduxSimpleRouter = __webpack_require__(484);
 	
-	var INIT_PATH = "@@router/INIT_PATH";
-	
 	function siteEditMode() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? { mode: false } : arguments[0];
 	  var action = arguments[1];
@@ -50540,6 +50576,8 @@
 	
 	  return state;
 	}
+	
+	var INIT_PATH = "@@router/INIT_PATH";
 	
 	function siteCurrentLocale() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? "fr" : arguments[0];
@@ -50652,33 +50690,54 @@
 	}
 	
 	function articles() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
 	
 	  switch (action.type) {
 	
-	    case _ActionTypes.LOAD_INITIAL_DATA:
+	    case _ActionTypes.LOADED_INITIAL_ARTICLES:
 	      return action.initialState.articles;
 	
+	    case _ActionTypes.LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+	      return Object.assign({}, state, action.additionalStates.articles);
+	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
-	      return [article(undefined, action)].concat(_toConsumableArray(state));
+	      var newStateWithNewArticle = {};
+	      // FIXME - Check that newStateWithNewArticle is accessible from within forOwn
+	      _.forOwn(state, function (localeArticlesArray, locale) {
+	        newStateWithNewArticle[locale] = [article({}, action)].concat(_toConsumableArray(state[locale]));
+	      });
+	      return newStateWithNewArticle;
 	
 	    case _ActionTypes.UPDATE_ARTICLE:
-	      return state.map(function (art) {
-	        return article(art, action);
-	      });
-	
 	    case _ActionTypes.CHANGE_FIELD_OF_ARTICLE:
-	      return state.map(function (art) {
+	      var localizedArticleStateAfterChanges = {};
+	      localizedArticleStateAfterChanges[action.locale] = state[action.locale].map(function (art) {
 	        return article(art, action);
 	      });
+	      return Object.assign({}, state, localizedArticleStateAfterChanges);
 	
 	    case _ActionTypes.DELETE_ARTICLE:
-	      var index = _.findIndex(state, { id: action.id });
-	      return [].concat(_toConsumableArray(state.slice(0, index)), _toConsumableArray(state.slice(index + 1)));
+	      var newState = {};
+	      // FIXME - Check that newState is accessible from within forOwn
+	      _.forOwn(state, function (localeArticlesArray, locale) {
+	        var index = _.findIndex(state[locale], { id: action.id });
+	        newState[locale] = [].concat(_toConsumableArray(state[locale].slice(0, index)), _toConsumableArray(state[locale].slice(index + 1)));
+	      });
+	      return newState;
 	
 	    case _ActionTypes.REORDER_ARTICLES_ARRAY:
-	      return _.sortByOrder(state, 'posted_at', 'desc');
+	      var localizedReorderedState = {};
+	      localizedReorderedState[action.locale] = _.sortByOrder(state[action.locale], 'posted_at', 'desc');
+	      return Object.assign({}, state, localizedReorderedState);
+	
+	    case _ActionTypes.REORDER_ALL_THE_ARTICLES_ARRAYS:
+	      var reOrderedState = {};
+	      // FIXME - Check that reOrderedState is accessible from within forOwn
+	      _.forOwn(state, function (localeArticlesArray, locale) {
+	        reOrderedState[locale] = _.sortByOrder(localeArticlesArray, 'posted_at', 'desc');
+	      });
+	      return reOrderedState;
 	
 	    default:
 	      return state;
@@ -50692,37 +50751,43 @@
 	  var new_state = Object.assign({}, state);
 	  switch (action.type) {
 	
-	    case _ActionTypes.LOAD_INITIAL_DATA:
+	    case _ActionTypes.LOADED_INITIAL_ARTICLES:
 	      return action.initialState.articlesEditStates;
 	
+	    case _ActionTypes.LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+	      return Object.assign({}, state, action.additionalStates.articlesEditStates);
+	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
-	      new_state[action.id] = _reducersConstants.initialEditState;
+	      // FIXME - Check that new_state is effectively being modified
+	      _.forOwn(new_state, function (localeEditStatesArray, locale) {
+	        new_state[locale][action.id] = _reducersConstants.initialEditState;
+	      });
 	      return new_state;
 	
 	    case _ActionTypes.CHANGE_EDIT_STATE_OF_FIELD_OF_ARTICLE:
+	
 	      // if changing the edit state of the article, change the edit state of all the fields
 	      if (action.fieldName === "article") {
-	        _.forOwn(new_state[action.id], function (value, fieldName) {
-	          new_state[action.id][fieldName] = action.editStateValue;
+	        _.forOwn(new_state[action.locale][action.id], function (value, fieldName) {
+	          new_state[action.locale][action.id][fieldName] = action.editStateValue;
 	        });
 	        // else change only the edit state of the relevant field
 	      } else {
-	          new_state[action.id][action.fieldName] = action.editStateValue;
+	          new_state[action.locale][action.id][action.fieldName] = action.editStateValue;
 	        }
+	
 	      // if any of the edit state of the field is true, set the article edit state to true
 	      // 1. Create a copy of the current article's edit states
-	      var statesOfFieldsExceptArticleState = Object.assign({}, new_state[action.id]);
+	      var statesOfFieldsExceptArticleState = Object.assign({}, new_state[action.locale][action.id]);
 	      // 2. Delete the edit state of the article to keep only the fields edit states
 	      delete statesOfFieldsExceptArticleState.article;
-	      // QUICKFIX!!!! FIXME!!!
-	      delete statesOfFieldsExceptArticleState.body;
 	      // 3. Loop around the values of the states of the fields, and if any edit state is on
 	      // turn the article's edit state to true
 	      if (_.includes(_.values(statesOfFieldsExceptArticleState), true)) {
-	        new_state[action.id].article = true;
+	        new_state[action.locale][action.id].article = true;
 	        // 4. Else, turn it to false (it means nothing is currently in edit mode in this article)
 	      } else {
-	          new_state[action.id].article = false;
+	          new_state[action.locale][action.id].article = false;
 	        }
 	      return new_state;
 	
@@ -50731,15 +50796,17 @@
 	      return new_state;
 	
 	    case _ActionTypes.RESET_ALL_EDIT_STATES_FOR_ARTICLE:
-	      _.forOwn(new_state[action.id], function (value, fieldName) {
+	      _.forOwn(new_state[action.locale][action.id], function (value, fieldName) {
 	        // if (fieldName === 'article' || fieldName === 'title' || fieldName === 'teaser' || fieldName === 'body') {
-	        new_state[action.id][fieldName] = action.resetValue;
+	        new_state[action.locale][action.id][fieldName] = action.resetValue;
 	        // }
 	      });
 	      return new_state;
 	
 	    case _ActionTypes.DELETE_ARTICLE:
-	      delete new_state[action.id];
+	      _.forOwn(new_state, function (localeEditStatesArray, locale) {
+	        delete new_state[locale][action.id];
+	      });
 	      return new_state;
 	
 	    default:
@@ -50754,31 +50821,39 @@
 	  var new_state = Object.assign({}, state);
 	  switch (action.type) {
 	
-	    case _ActionTypes.LOAD_INITIAL_DATA:
+	    case _ActionTypes.LOADED_INITIAL_ARTICLES:
 	      return action.initialState.articlesWIPStatesOfFields;
 	
+	    case _ActionTypes.LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+	      return Object.assign({}, state, action.additionalStates.articlesWIPStatesOfFields);
+	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
-	      new_state[action.id] = _reducersConstants.initialWIPState;
+	      // FIXME - Check that new_state is effectively being modified
+	      _.forOwn(new_state, function (localeWIPStatesArray, locale) {
+	        new_state[locale][action.id] = _reducersConstants.initialWIPState;
+	      });
 	      return new_state;
 	
 	    case _ActionTypes.CHANGE_FIELD_OF_ARTICLE:
-	      new_state[action.id][action.fieldName] = true;
+	      new_state[action.locale][action.id][action.fieldName] = true;
 	      return new_state;
 	
 	    case _ActionTypes.CHANGE_WIP_STATE_OF_FIELD_OF_ARTICLE:
-	      new_state[action.id][action.fieldName] = action.WIPStateValue;
+	      new_state[action.locale][action.id][action.fieldName] = action.WIPStateValue;
 	      return new_state;
 	
 	    case _ActionTypes.RESET_ALL_WIP_STATES_FOR_ARTICLE:
-	      _.forOwn(new_state[action.id], function (value, fieldName) {
+	      _.forOwn(new_state[action.locale][action.id], function (value, fieldName) {
 	        // if (fieldName === 'title' || fieldName === 'teaser' || fieldName === 'body') {
-	        new_state[action.id][fieldName] = false;
+	        new_state[action.locale][action.id][fieldName] = false;
 	        // }
 	      });
 	      return new_state;
 	
 	    case _ActionTypes.DELETE_ARTICLE:
-	      delete new_state[action.id];
+	      _.forOwn(new_state, function (localeWIPStatesArray, locale) {
+	        delete new_state[locale][action.id];
+	      });
 	      return new_state;
 	
 	    default:
@@ -50812,16 +50887,21 @@
 	
 	  switch (action.type) {
 	
-	    case _ActionTypes.LOAD_INITIAL_DATA:
+	    case _ActionTypes.LOADED_INITIAL_ARTICLES:
 	      return action.initialState.articlesNeedResizingStates;
+	
+	    case _ActionTypes.LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+	      return Object.assign({}, state, action.additionalStates.articlesNeedResizingStates);
 	
 	    case _ActionTypes.CHANGE_NEED_RESIZING_STATE_OF_ARTICLE:
 	    case _ActionTypes.ADD_NEW_ARTICLE:
-	      new_state[action.id] = action.stateValue;
+	      new_state[action.locale][action.id] = action.stateValue;
 	      return new_state;
 	
 	    case _ActionTypes.DELETE_ARTICLE:
-	      delete new_state[action.id];
+	      _.forOwn(new_state, function (localeNeedResizingStatesObjects, locale) {
+	        delete new_state[locale][action.id];
+	      });
 	      return new_state;
 	
 	    default:
@@ -50837,26 +50917,34 @@
 	
 	  switch (action.type) {
 	
-	    case _ActionTypes.LOAD_INITIAL_DATA:
+	    case _ActionTypes.LOADED_INITIAL_ARTICLES:
 	      return action.initialState.articlesDOMProps;
 	
+	    case _ActionTypes.LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+	      return Object.assign({}, state, action.additionalStates.articlesDOMProps);
+	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
-	      new_state[action.id] = _reducersConstants.initialArticlesDOMPropsState;
-	      // increment cardnumbers of all the articles
-	      var i = 1;
-	      new_state = _.forOwn(new_state, function (value) {
-	        value.cardNumber = i;
-	        i++;
+	      _.forOwn(new_state, function (localeArticleDOMPropsObjects, locale) {
+	        // Create the record for the new article in all the localized versions of articlesDOMProps state
+	        new_state[locale][action.id] = _reducersConstants.initialArticlesDOMPropsState;
+	        // increment cardnumbers of all the articles in all the localized versions of articlesDOMProps state
+	        var i = 1;
+	        new_state = _.forOwn(new_state, function (domPropsObjects) {
+	          domPropsObjects.cardNumber = i;
+	          i++;
+	        });
+	        // end increment
 	      });
-	      // end increment
 	      return new_state;
 	
 	    case _ActionTypes.DELETE_ARTICLE:
-	      delete new_state[action.id];
+	      _.forOwn(new_state, function (localeArticleDOMPropsObjects, locale) {
+	        delete new_state[locale][action.id];
+	      });
 	      return new_state;
 	
 	    case _ActionTypes.ASSIGN_REAL_DOM_VALUES_TO_DOM_PROPS_OF_ARTICLE:
-	      new_state[action.id] = {
+	      new_state[action.locale][action.id] = {
 	        posTop: action.posTop,
 	        divHeight: action.divHeight,
 	        cardNumber: action.cardNumber
@@ -50865,10 +50953,11 @@
 	      return new_state;
 	
 	    case _ActionTypes.RESET_DOM_PROPS_OF_ALL_THE_ARTICLES:
-	      _.forOwn(new_state, function (value, key) {
-	        key: _reducersConstants.initialArticlesDOMPropsState;
+	      var localizedDOMPropsAfterChanges = {};
+	      localizedDOMPropsAfterChanges[action.locale] = _.forOwn(state[action.locale], function (domPropsObjects, id) {
+	        id: _reducersConstants.initialArticlesDOMPropsState;
 	      });
-	      return new_state;
+	      return Object.assign({}, state, localizedDOMPropsAfterChanges);
 	
 	    default:
 	      return state;
@@ -51029,6 +51118,7 @@
 	    siteEditMode: state.siteEditMode,
 	    siteAvailableLocales: state.siteAvailableLocales,
 	    siteLanguageSwitcherText: state.siteLanguageSwitcherText,
+	    siteCurrentLocale: state.siteCurrentLocale,
 	
 	    newArticleFields: state.newArticleFields,
 	
@@ -51087,7 +51177,7 @@
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
-	    return window.addEventListener('resize', this.props.articlesSizingPositionningActions.refreshArticlesSizingPositionning);
+	    return window.addEventListener('resize', this.props.articlesSizingPositionningActions.refreshArticlesSizingPositionning(this.props.siteCurrentLocale));
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    return window.removeEventListener('resize');
@@ -51108,7 +51198,8 @@
 	          // # redux passedInDomProps
 	          articlesDOMProps: this.props.articlesDOMProps[this.props.children.props.params.id],
 	          articlesPassedInUiProps: this.props.articlesPassedInUiProps,
-	          routeParams: this.props.routeParams
+	          routeParams: this.props.routeParams,
+	          siteCurrentLocale: this.props.siteCurrentLocale
 	        });
 	        // else what is requested is the articles index (newsCardContainer) (i.e. for the indexView)
 	      } else {
@@ -51124,12 +51215,14 @@
 	            articlesPassedInUiProps: this.props.articlesPassedInUiProps,
 	            newArticleActions: this.props.newArticleActions,
 	            newArticleFields: this.props.newArticleFields,
-	            routeParams: this.props.routeParams
+	            routeParams: this.props.routeParams,
+	            siteCurrentLocale: this.props.siteCurrentLocale
 	          });
 	        }
 	    }
 	  },
 	  render: function render() {
+	    console.log("-----------", this.props);
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'news-index-page-body' },
@@ -51148,7 +51241,8 @@
 	            localesTranslations: this.props.siteLanguageSwitcherText,
 	            siteAvailableLocales: this.props.siteAvailableLocales,
 	            routing: this.props.routing,
-	            routeParams: this.props.routeParams }),
+	            routeParams: this.props.routeParams
+	          }),
 	          this.renderChildren()
 	        )
 	      ),
@@ -52059,7 +52153,7 @@
 	
 	var _articlesSizingPositionningActions = __webpack_require__(425);
 	
-	function addNewArticle(_ref) {
+	function addNewArticle(_ref, locale) {
 	  var id = _ref.id;
 	  var title = _ref.title;
 	  var body = _ref.body;
@@ -52078,7 +52172,8 @@
 	    posted_at: posted_at,
 	    status: status,
 	    created_at: created_at,
-	    updated_at: updated_at
+	    updated_at: updated_at,
+	    locale: locale
 	  };
 	}
 	
@@ -52096,16 +52191,20 @@
 	  };
 	}
 	
-	function handleSubmitNewArticle() {
+	function handleSubmitNewArticle(locale) {
 	  return function (dispatch, getState) {
 	    var newArticleData = getState().newArticleFields;
-	    $.post('/articles', { article: newArticleData }, (function (_this) {
-	      return function (data) {
-	        dispatch(addNewArticle(data));
-	        dispatch((0, _articlesSizingPositionningActions.refreshArticlesSizingPositionning)());
+	    $.ajax({
+	      type: "POST",
+	      url: '/' + locale + '/articles',
+	      dataType: 'JSON',
+	      data: { article: newArticleData },
+	      success: function success(data) {
+	        dispatch(addNewArticle(data, locale));
+	        dispatch((0, _articlesSizingPositionningActions.refreshArticlesSizingPositionning)(locale));
 	        dispatch(resetNewArticleFields());
-	      };
-	    })(this), 'JSON');
+	      }
+	    });
 	  };
 	}
 
@@ -52149,6 +52248,10 @@
 	 * of the store in cases where no calculations are needed
 	 * and memoization wouldn't provide any benefits.
 	 */
+	var siteCurrentLocaleSelector = function siteCurrentLocaleSelector(state) {
+	  return state.siteCurrentLocale;
+	};
+	
 	var articlesVisibilityFilterSelector = function articlesVisibilityFilterSelector(state) {
 	  return state.articlesVisibilityFilter;
 	};
@@ -52176,16 +52279,34 @@
 	 * memoization is applied. Hence, these selectors are only recomputed when the
 	 * value of their input-selectors change. If none of the input-selectors return
 	 * a new value, the previously computed value is returned.
+	 *********************************************************
+	 ********* README ****************************************
+	 *********************************************************
+	 * IMPORTANT: In combined selectors, the parameters passed to the callback correspond to the values
+	 * returned by the input-selectors (or parent-selectors) tested previously, in the same order.
+	 * So: below, the articles
 	 */
-	var visibleArticlesSelector = (0, _reselect.createSelector)(articlesVisibilityFilterSelector, articlesSelector, function (articlesVisibilityFilter, articles) {
+	
+	var localeArticlesSelector = (0, _reselect.createSelector)(siteCurrentLocaleSelector, articlesSelector, function (siteCurrentLocale, articles) {
 	  return {
+	    siteCurrentLocale: siteCurrentLocale,
+	    localeArticles: (0, _articlesSelects.selectArticlesOnLanguage)(articles, siteCurrentLocale)
+	  };
+	});
+	
+	var visibleArticlesSelector = (0, _reselect.createSelector)(articlesVisibilityFilterSelector, localeArticlesSelector,
+	// articlesSelector,
+	function (articlesVisibilityFilter, localeArticlesAndSiteCurrentLocale) {
+	  return {
+	    siteCurrentLocale: localeArticlesAndSiteCurrentLocale.siteCurrentLocale,
 	    articlesVisibilityFilter: articlesVisibilityFilter,
-	    visibleArticles: (0, _articlesSelects.selectArticles)(articles, articlesVisibilityFilter)
+	    // visibleArticles: selectArticlesOnVisibilityStatus(articles, articlesVisibilityFilter)
+	    visibleArticles: (0, _articlesSelects.selectArticlesOnVisibilityStatus)(localeArticlesAndSiteCurrentLocale.localeArticles, articlesVisibilityFilter)
 	  };
 	});
 	
 	var visibleArticlesAndStatesSelector = exports.visibleArticlesAndStatesSelector = (0, _reselect.createSelector)(visibleArticlesSelector, articlesWIPStatesOfFieldsSelector, articlesEditStatesSelector, articlesNeedResizingStatesSelector, articlesDOMPropsSelector, function (visibleArticlesAndVisibilityFilter, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps) {
-	  var visibleArticleStates = (0, _articlesSelects.selectVisibleArticlesStates)(visibleArticlesAndVisibilityFilter.visibleArticles, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps);
+	  var visibleArticleStates = (0, _articlesSelects.selectVisibleArticlesStates)(visibleArticlesAndVisibilityFilter.visibleArticles, visibleArticlesAndVisibilityFilter.siteCurrentLocale, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps);
 	  return {
 	    articlesVisibilityFilter: visibleArticlesAndVisibilityFilter.articlesVisibilityFilter,
 	    visibleArticles: visibleArticlesAndVisibilityFilter.visibleArticles,
@@ -52323,12 +52444,17 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.selectArticles = selectArticles;
+	exports.selectArticlesOnLanguage = selectArticlesOnLanguage;
+	exports.selectArticlesOnVisibilityStatus = selectArticlesOnVisibilityStatus;
 	exports.selectVisibleArticlesStates = selectVisibleArticlesStates;
 	
 	var _ActionTypes = __webpack_require__(424);
 	
-	function selectArticles(articles, filter) {
+	function selectArticlesOnLanguage(articles, locale) {
+	  return articles[locale];
+	}
+	
+	function selectArticlesOnVisibilityStatus(articles, filter) {
 	  switch (filter) {
 	    case _ActionTypes.ArticlesVisibilityFilters.SHOW_ALL:
 	      return articles;
@@ -52351,7 +52477,7 @@
 	  }
 	}
 	
-	function selectVisibleArticlesStates(visibleArticles, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps) {
+	function selectVisibleArticlesStates(visibleArticles, siteCurrentLocale, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps) {
 	  var visibleArticlesStates = {
 	    "articlesWIPStatesOfFields": {},
 	    "articlesEditStates": {},
@@ -52359,10 +52485,10 @@
 	    "articlesDOMProps": {}
 	  };
 	  _.forEach(visibleArticles, function (article) {
-	    visibleArticlesStates["articlesWIPStatesOfFields"][article.id] = articlesWIPStatesOfFields[article.id];
-	    visibleArticlesStates["articlesEditStates"][article.id] = articlesEditStates[article.id];
-	    visibleArticlesStates["articlesNeedResizingStates"][article.id] = articlesNeedResizingStates[article.id];
-	    visibleArticlesStates["articlesDOMProps"][article.id] = articlesDOMProps[article.id];
+	    visibleArticlesStates["articlesWIPStatesOfFields"][article.id] = articlesWIPStatesOfFields[siteCurrentLocale][article.id];
+	    visibleArticlesStates["articlesEditStates"][article.id] = articlesEditStates[siteCurrentLocale][article.id];
+	    visibleArticlesStates["articlesNeedResizingStates"][article.id] = articlesNeedResizingStates[siteCurrentLocale][article.id];
+	    visibleArticlesStates["articlesDOMProps"][article.id] = articlesDOMProps[siteCurrentLocale][article.id];
 	  });
 	  return visibleArticlesStates;
 	}
@@ -52399,7 +52525,9 @@
 	        newArticleActions: this.props.newArticleActions,
 	        newArticleFields: this.props.newArticleFields,
 	        articlesPassedInUiProps: this.props.articlesPassedInUiProps,
-	        routeParams: this.props.routeParams
+	
+	        routeParams: this.props.routeParams,
+	        siteCurrentLocale: this.props.siteCurrentLocale
 	      });
 	    }
 	  },
@@ -52420,7 +52548,8 @@
 	      articlesFieldsActions: this.props.articlesFieldsActions,
 	      articlesSizingPositionningActions: this.props.articlesSizingPositionningActions,
 	
-	      routeParams: this.props.routeParams
+	      routeParams: this.props.routeParams,
+	      siteCurrentLocale: this.props.siteCurrentLocale
 	    });
 	  },
 	  render: function render() {
@@ -52466,14 +52595,17 @@
 	  propTypes: {
 	    articles: _react.PropTypes.array.isRequired,
 	    articlesPassedInUiProps: _react.PropTypes.object.isRequired,
+	
 	    articlesActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
 	    articlesFieldsActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
 	    articlesSizingPositionningActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
 	    articlesWIPStatesOfFields: _react.PropTypes.objectOf(_react.PropTypes.object.isRequired).isRequired,
 	    articlesEditStates: _react.PropTypes.objectOf(_react.PropTypes.object.isRequired).isRequired,
 	    articlesDOMProps: _react.PropTypes.objectOf(_react.PropTypes.object.isRequired).isRequired,
+	
 	    siteEditMode: _react.PropTypes.objectOf(_react.PropTypes.bool.isRequired).isRequired,
-	    routeParams: _react.PropTypes.object.isRequired
+	    routeParams: _react.PropTypes.object.isRequired,
+	    siteCurrentLocale: _react.PropTypes.string.isRequired
 	  },
 	
 	  createCards: function createCards() {
@@ -52496,7 +52628,9 @@
 	        , articlesDOMProps: _this.props.articlesDOMProps[card.id]
 	        // # redux global site edit mode
 	        , siteEditMode: _this.props.siteEditMode,
-	        routeParams: _this.props.routeParams });
+	        routeParams: _this.props.routeParams,
+	        siteCurrentLocale: _this.props.siteCurrentLocale
+	      });
 	      return element;
 	    });
 	  },
@@ -53371,7 +53505,8 @@
 	    articlesDOMProps: _react.PropTypes.object.isRequired,
 	
 	    siteEditMode: _react.PropTypes.objectOf(_react.PropTypes.bool.isRequired).isRequired,
-	    routeParams: _react.PropTypes.object.isRequired
+	    routeParams: _react.PropTypes.object.isRequired,
+	    siteCurrentLocale: _react.PropTypes.string.isRequired
 	  },
 	
 	  // # Card equalization
@@ -53379,7 +53514,7 @@
 	    var _this = this;
 	
 	    var callback = function callback() {
-	      return _this.props.articlesSizingPositionningActions.assignRealDomValuesToDOMPropsOfArticle(_this.props.card.id, _this.refs["main_article_div_" + parseInt(_this.props.card.id)].getBoundingClientRect().top, _this.refs[parseInt(_this.props.cardNumber)].clientHeight, _this.props.cardNumber);
+	      return _this.props.articlesSizingPositionningActions.assignRealDomValuesToDOMPropsOfArticle(_this.props.card.id, _this.refs["main_article_div_" + parseInt(_this.props.card.id)].getBoundingClientRect().top, _this.refs[parseInt(_this.props.cardNumber)].clientHeight, _this.props.cardNumber, _this.props.siteCurrentLocale);
 	    };
 	    setTimeout(callback, 0);
 	  },
@@ -53399,17 +53534,17 @@
 	  },
 	  handleEdit: function handleEdit(e) {
 	    e.preventDefault();
-	    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.card.id, 'article', true);
+	    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.card.id, 'article', true, this.props.siteCurrentLocale);
 	  },
 	  handleCancel: function handleCancel(e) {
 	    e.preventDefault();
-	    this.props.articlesActions.handleCancelEditArticle(this.props.card.id);
+	    this.props.articlesActions.handleCancelEditArticle(this.props.card.id, this.props.siteCurrentLocale);
 	  },
 	  handleUpdate: function handleUpdate(fieldName) {
-	    this.props.articlesActions.handleUpdateArticle(this.props.card.id, fieldName);
+	    this.props.articlesActions.handleUpdateArticle(this.props.card.id, fieldName, this.props.siteCurrentLocale);
 	  },
 	  handleChange: function handleChange(fieldName, fieldValue) {
-	    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.card.id, fieldName, fieldValue);
+	    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.card.id, fieldName, fieldValue, this.props.siteCurrentLocale);
 	  },
 	  newsToolbarSwitch: function newsToolbarSwitch() {
 	    if (this.props.siteEditMode.mode) {
@@ -53444,7 +53579,8 @@
 	      handleUpdate: this.handleUpdate.bind(this, fieldName),
 	      handleChange: this.handleChange.bind(this, fieldName),
 	
-	      routeParams: this.props.routeParams
+	      routeParams: this.props.routeParams,
+	      siteCurrentLocale: this.props.siteCurrentLocale
 	    });
 	  },
 	  createNewsTeaserWrapper: function createNewsTeaserWrapper() {
@@ -53806,24 +53942,25 @@
 	    handleUpdate: _react.PropTypes.func.isRequired,
 	    handleChange: _react.PropTypes.func.isRequired,
 	
-	    routeParams: _react.PropTypes.object.isRequired
+	    routeParams: _react.PropTypes.object.isRequired,
+	    siteCurrentLocale: _react.PropTypes.string.isRequired
 	  },
 	
 	  handleEditField: function handleEditField(e) {
 	    e.preventDefault();
-	    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.sourceId, this.props.name, true);
+	    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.sourceId, this.props.name, true, this.props.siteCurrentLocale);
 	  },
 	  handleExitEditField: function handleExitEditField(e) {
 	    e.preventDefault();
-	    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.sourceId, this.props.name, false);
+	    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.sourceId, this.props.name, false, this.props.siteCurrentLocale);
 	  },
 	  handleDeleteText: function handleDeleteText(e) {
 	    e.preventDefault();
-	    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.sourceId, this.props.name, '');
+	    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.sourceId, this.props.name, '', this.props.siteCurrentLocale);
 	  },
 	  handleRestoreText: function handleRestoreText(e) {
 	    e.preventDefault();
-	    this.props.articlesFieldsActions.handleRestoreText(this.props.sourceId, this.props.name);
+	    this.props.articlesFieldsActions.handleRestoreText(this.props.sourceId, this.props.name, this.props.siteCurrentLocale);
 	  },
 	  renderEditButtonEditableZoneSwitch: function renderEditButtonEditableZoneSwitch(childRessourceType) {
 	    if (this.props.siteEditMode.mode) {
@@ -53922,7 +54059,7 @@
 	  // handleChange(e) {
 	  //   const fieldValue = e.target.value;
 	  //   // this.props.articlesFieldsActions.changeFieldOfArticle(this.props.card.id, fieldName, fieldValue)  ;
-	  //   this.props.articlesFieldsActions.changeFieldOfArticle(this.props.sourceId, this.props.value, fieldValue);
+	  //   this.props.articlesFieldsActions.changeFieldOfArticle(this.props.sourceId, this.props.value, fieldValue, this.props.siteCurrentLocale);
 	  // },
 	
 	  renderWrappedTitle: function renderWrappedTitle() {
@@ -71629,6 +71766,7 @@
 	    newArticleFields: _react.PropTypes.object.isRequired,
 	    articlesPassedInUiProps: _react.PropTypes.object.isRequired,
 	    routeParams: _react.PropTypes.object.isRequired,
+	    siteCurrentLocale: _react.PropTypes.string.isRequired,
 	    intl: _reactIntl.intlShape.isRequired
 	  },
 	
@@ -71641,7 +71779,7 @@
 	  // Save the article
 	  handleSubmit: function handleSubmit(e) {
 	    e.preventDefault();
-	    this.props.newArticleActions.handleSubmitNewArticle();
+	    this.props.newArticleActions.handleSubmitNewArticle(this.props.siteCurrentLocale);
 	  },
 	
 	  // handle changes in the fields
@@ -72071,17 +72209,17 @@
 	  },
 	  handleEdit: function handleEdit(e) {
 	    e.preventDefault();
-	    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.currentArticle.id, 'article', true);
+	    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.currentArticle.id, 'article', true, this.props.siteCurrentLocale);
 	  },
 	  handleCancel: function handleCancel(e) {
 	    e.preventDefault();
-	    this.props.articlesActions.handleCancelEditArticle(this.props.currentArticle.id);
+	    this.props.articlesActions.handleCancelEditArticle(this.props.currentArticle.id, this.props.siteCurrentLocale);
 	  },
 	  handleUpdate: function handleUpdate(fieldName) {
-	    this.props.articlesActions.handleUpdateArticle(this.props.currentArticle.id, fieldName);
+	    this.props.articlesActions.handleUpdateArticle(this.props.currentArticle.id, fieldName, this.props.siteCurrentLocale);
 	  },
 	  handleChange: function handleChange(fieldName, fieldValue) {
-	    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.currentArticle.id, fieldName, fieldValue);
+	    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.currentArticle.id, fieldName, fieldValue, this.props.siteCurrentLocale);
 	  },
 	  renderTitle: function renderTitle() {
 	    var styleForH1 = {};
@@ -72186,6 +72324,7 @@
 	    );
 	  },
 	  render: function render() {
+	    console.log(this.props);
 	
 	    return _react2.default.createElement(
 	      _reactAddonsCssTransitionGroup2.default,

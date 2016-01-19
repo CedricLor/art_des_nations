@@ -34,6 +34,7 @@ export const ArticleBasicForm = React.createClass({
     newArticleFields:         PropTypes.object.isRequired,
     articlesPassedInUiProps:  PropTypes.object.isRequired,
     routeParams:              PropTypes.object.isRequired,
+    siteCurrentLocale:        PropTypes.string.isRequired,
     intl:                     intlShape.isRequired
   },
 
@@ -46,7 +47,7 @@ export const ArticleBasicForm = React.createClass({
   // Save the article
   handleSubmit(e) {
     e.preventDefault();
-    this.props.newArticleActions.handleSubmitNewArticle();
+    this.props.newArticleActions.handleSubmitNewArticle(this.props.siteCurrentLocale);
   },
 
   // handle changes in the fields

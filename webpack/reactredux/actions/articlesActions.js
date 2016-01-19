@@ -1,37 +1,67 @@
-import { UPDATE_ARTICLE, DELETE_ARTICLE, LOAD_INITIAL_DATA, LOADED_INITIAL_DATA, REORDER_ARTICLES_ARRAY } from '../constants/ActionTypes'
+import { UPDATE_ARTICLE, DELETE_ARTICLE, LOADED_INITIAL_ARTICLES, LOADING_ADDITIONAL_LOCALE_ARTICLES, LOADED_ADDITIONNAL_LOCALE_ARTICLES, REORDER_ARTICLES_ARRAY, REORDER_ALL_THE_ARTICLES_ARRAYS } from '../constants/ActionTypes'
 import { refreshArticlesSizingPositionning } from './articlesSizingPositionningActions';
 import { updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle, successCallBackForRestoreText, resetAllEditAndWIPStatesForField, changeArticleEditStateOfField } from './articleFieldsActions';
-import { createInitialState } from '../stores/storeCreationHelpers'
+import { createArticleStates } from '../stores/storeCreationHelpers'
 
-function loadInitialData(initialState) {
+// Loading initial articles
+function dispatchLoadInitialArticles(jsonFetchedArticles, locale) {
+  const initialState = createArticleStates(jsonFetchedArticles, locale);
   return {
-    type: LOAD_INITIAL_DATA,
+    type: LOADED_INITIAL_ARTICLES,
     initialState
   }
 }
 
-function dispatchLoadedInitialData() {
-  return {
-    type: LOADED_INITIAL_DATA
+export function fetchInitialArticles(locale) {
+  return function(dispatch) {
+    $.ajax({
+      method: "GET",
+      url: `/${locale}/articles`,
+      dataType: 'JSON'
+      })
+      .success(function(data) {
+        dispatch(dispatchLoadInitialArticles(data, locale));
+    });
   }
 }
 
-export function initialDataReceived(jsonFetchedArticles) {
-  const initialState = createInitialState(jsonFetchedArticles);
+// Loading additional articles
+function dispatchLoadAdditionalLocaleArticles(jsonFetchedArticles, locale) {
+  const additionalStates = createArticleStates(jsonFetchedArticles, locale);
+  return {
+    type: LOADED_ADDITIONNAL_LOCALE_ARTICLES,
+    additionalStates
+  }
+}
+
+function dispatchLoadingAdditionalLocaleArticles() {
+  return {
+    type: LOADING_ADDITIONAL_LOCALE_ARTICLES
+  }
+}
+
+export function fetchAdditionalLocaleArticles(locale) {
   return function (dispatch) {
-    dispatch(loadInitialData(initialState));
-    dispatch(dispatchLoadedInitialData());
+    dispatch(dispatchLoadingAdditionalLocaleArticles());
+    $.ajax({
+      method: "GET",
+      url: `/${locale}/articles`,
+      dataType: 'JSON'
+      })
+      .success(function(data) {
+        dispatch(dispatchLoadAdditionalLocaleArticles(data, locale));
+    });
   }
 }
-
 // Methods for update article (and fields)
-function reOrderArticlesArray() {
+function reOrderArticlesArray(locale) {
   return {
-    type: REORDER_ARTICLES_ARRAY
+    type: REORDER_ARTICLES_ARRAY,
+    locale
   }
 }
 
-function updateArticle({id, title, body, teaser, status, posted_at, created_at, updated_at}) {
+function updateArticle({id, title, body, teaser, status, posted_at, created_at, updated_at}, locale) {
   return {
     type: UPDATE_ARTICLE,
     id,
@@ -41,80 +71,81 @@ function updateArticle({id, title, body, teaser, status, posted_at, created_at, 
     status,
     posted_at,
     created_at,
-    updated_at
+    updated_at,
+    locale
   }
 }
 
-function updateArticleAndRefresh(data, fieldName) {
+function updateArticleAndRefresh(data, locale, fieldName) {
   return function (dispatch) {
-    dispatch(updateArticle(data));
-    if (fieldName === "posted_at" || fieldName === "article") { dispatch(reOrderArticlesArray()) };
-    dispatch(refreshArticlesSizingPositionning());
+    dispatch(updateArticle(data, locale));
+    if (fieldName === "posted_at" || fieldName === "article") { dispatch(reOrderArticlesArray(locale)) };
+    dispatch(refreshArticlesSizingPositionning(locale));
   }
 }
 
-function sendUpdateByAjax(data, id, fieldName) {
+function sendUpdateByAjax(data, id, fieldName, locale) {
   return function (dispatch) {
     $.ajax({
       method: 'PUT',
-      url: "/articles/" + id,
+      url: `/${locale}/articles/${id}`,
       dataType: 'JSON',
-      data: {
-        article: data
-      },
+      data: { article: data },
       success: (function(respData) {
-        dispatch(updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle(id, fieldName));
-        dispatch(updateArticleAndRefresh(respData, fieldName));
+        dispatch(updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle(id, fieldName, locale));
+        dispatch(updateArticleAndRefresh(respData, locale, fieldName));
       })
     });
   }
 }
 
-export function handleUpdateArticle(id, fieldName) {
+export function handleUpdateArticle(id, fieldName, locale) {
   return function (dispatch, getState) {
-    let data = _.omit( _.find( getState().articles, { 'id': id } ), ['created_at', 'updated_at'] );
+    const articles = getState().articles[locale]
+    let data = _.omit( _.find( articles, { 'id': id } ), ['created_at', 'updated_at'] );
     if (fieldName != 'article') {
       data = _.pick(data, fieldName);
     }
-    dispatch(sendUpdateByAjax(data, id, fieldName));
+    dispatch(sendUpdateByAjax(data, id, fieldName, locale));
   }
 }
 
 // Methods for cancel edit
-export function getInitialDataByAjax(id, successCallBack, fieldName) {
+export function getInitialDataByAjax(id, successCallBack, fieldName, locale) {
   return function (dispatch) {
     $.ajax({
       method: 'GET',
-      url: "/articles/" + id,
+      url: `/${locale}/articles/${id}`,
       dataType: 'JSON',
       success: (function(_this) {
         return function(data) {
-          dispatch(successCallBack(data, fieldName));
+          dispatch(successCallBack(data, locale, fieldName));
         };
       })(this)
     });
   }
 }
 
-function successCallBackForCancelEditArticle(data) {
+function successCallBackForCancelEditArticle(data, locale) {
   return function (dispatch) {
-    dispatch(resetAllEditAndWIPStatesForField(data.id, false));
-    dispatch(updateArticleAndRefresh(data));
+    dispatch(resetAllEditAndWIPStatesForField(data.id, false, locale));
+    dispatch(updateArticleAndRefresh(data, locale));
   }
 }
 
-export function handleCancelEditArticle(id) {
+export function handleCancelEditArticle(id, locale) {
   return function (dispatch, getState) {
-    const WIPStates = getState().articlesWIPStatesOfFields[id]
+    const WIPStates = getState().articlesWIPStatesOfFields[locale][id]
     if (_.includes(_.values(WIPStates), true)) {
-      dispatch(getInitialDataByAjax(id, successCallBackForCancelEditArticle, null))
+      dispatch(getInitialDataByAjax(id, successCallBackForCancelEditArticle, null, locale))
     } else {
-      dispatch(changeArticleEditStateOfField(id, 'article', false));
+      dispatch(changeArticleEditStateOfField(id, 'article', false, locale));
     }
   }
 }
 
 // Methods for delete article
+// DESIGN CHOICE - Deleting an article mean deleting in all the languages
 function deleteArticle(id) {
   return {
     type: DELETE_ARTICLE,
@@ -122,15 +153,21 @@ function deleteArticle(id) {
   }
 }
 
+function reOrderAllTheArticlesArray() {
+  return {
+    type: REORDER_ALL_THE_ARTICLES_ARRAYS
+  }
+}
+
 export function handleDeleteArticle(id) {
-  return function (dispatch) {
+  return function (dispatch, getState) {
     $.ajax({
       method: 'DELETE',
       url: "/articles/" + id,
       dataType: 'JSON',
       success: (function() {
         dispatch(deleteArticle(id));
-        dispatch(reOrderArticlesArray());
+        dispatch(reOrderAllTheArticlesArray());
       })
     });
   }

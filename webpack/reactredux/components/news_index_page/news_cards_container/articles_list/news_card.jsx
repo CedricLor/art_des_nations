@@ -28,6 +28,7 @@ export const NewsCard = React.createClass({
 
     siteEditMode:                      PropTypes.objectOf(PropTypes.bool.isRequired).isRequired,
     routeParams:                       PropTypes.object.isRequired,
+    siteCurrentLocale:                 PropTypes.string.isRequired,
   },
 
   // # Card equalization
@@ -37,7 +38,8 @@ export const NewsCard = React.createClass({
         this.props.card.id,
         this.refs["main_article_div_"+parseInt(this.props.card.id)].getBoundingClientRect().top,
         this.refs[parseInt(this.props.cardNumber)].clientHeight,
-        this.props.cardNumber)
+        this.props.cardNumber,
+        this.props.siteCurrentLocale)
     setTimeout(callback, 0)
   },
 
@@ -57,20 +59,20 @@ export const NewsCard = React.createClass({
 
   handleEdit(e) {
     e.preventDefault();
-    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.card.id, 'article', true);
+    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.card.id, 'article', true, this.props.siteCurrentLocale);
   },
 
   handleCancel(e) {
     e.preventDefault();
-    this.props.articlesActions.handleCancelEditArticle(this.props.card.id);
+    this.props.articlesActions.handleCancelEditArticle(this.props.card.id, this.props.siteCurrentLocale);
   },
 
   handleUpdate(fieldName) {
-    this.props.articlesActions.handleUpdateArticle(this.props.card.id, fieldName)
+    this.props.articlesActions.handleUpdateArticle(this.props.card.id, fieldName, this.props.siteCurrentLocale)
   },
 
   handleChange(fieldName, fieldValue) {
-    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.card.id, fieldName, fieldValue);
+    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.card.id, fieldName, fieldValue, this.props.siteCurrentLocale);
   },
 
   newsToolbarSwitch() {
@@ -111,6 +113,7 @@ export const NewsCard = React.createClass({
         handleChange=                {this.handleChange.bind(this, fieldName)}
 
         routeParams=                 {this.props.routeParams}
+        siteCurrentLocale=           {this.props.siteCurrentLocale}
       />
     )
   },

@@ -44,44 +44,25 @@ import { IndividualNewsContainer } from './reactredux/components/news_index_page
 import * as i18n from './reactredux/i18n'
 // ********************************************
 
-// const {
-//   About,
-//   Account,
-//   AccountHome,
-//   Application,
-//   GithubStargazers,
-//   GithubRepo,
-//   GithubUser,
-//   Home,
-//   Login,
-//   SuperSecretArea
-// } = components
-
-// const initialState = {
-//   application: {
-//     token: storage.get('token'),
-//     locale: storage.get('locale') || 'en',
-//     user: { permissions: [/*'manage_account'*/] }
-//   }
-// }
-
-// export const store = configureStore(initialState)
+import { fetchInitialArticles, fetchAdditionalLocaleArticles } from './reactredux/actions/articlesActions'
 
 // ********************************************
 // Set the store's initial state and configure it
 const initialState = { isFetching: {initialData: true } }
 export const store = configureStore(initialState);
+// Start fetching the data from Rails and load it to the store
+store.dispatch(fetchInitialArticles(store.getState().siteCurrentLocale));
 // ********************************************
 
 // ********************************************
-// Set the history for the router and connect the router, the history and the store
+// Set the history for the router and connect the the history to the store
 const history = createHistory();
 history.__v2_compatible__ = true;
 
-syncReduxAndRouter(history, store)
+syncReduxAndRouter(history, store);
 // ********************************************
 
-
+// ********************************************
 function getRootChildren (props) {
   const intlData = {
     locale:   props.siteCurrentLocale,
@@ -108,20 +89,76 @@ function renderRoutes () {
   return ( <Router history={ history } routes={routeConfig}/> )
 }
 
-
+// ++++++++++++++++++++++++++++++++++++++++++++
 
 const Root = React.createClass({
   PropTypes: {
-    siteCurrentLocale: PropTypes.string.isRequired
+    siteCurrentLocale: PropTypes.string.isRequired,
+    isFetching:        PropTypes.object.isRequired
+  },
+
+  getInitialState() {
+    return {
+      timeOut: false
+    }
+  },
+
+  componentWillReceiveProps(nextProps) {
+    if ( (this.props.siteCurrentLocale !== nextProps.siteCurrentLocale) &&  !(nextProps.siteCurrentLocale in nextProps.articles) ) {
+      this.setState({ timeOut: true })
+      store.dispatch(fetchAdditionalLocaleArticles(nextProps.siteCurrentLocale))
+    } else {
+      this.setState({ timeOut: false })
+    }
   },
 
   render () {
-    console.log("------ IN ROOOOOOOOOOTTTTT")
 
-    return (
-      <div>{getRootChildren(this.props)}</div>
-    )
+    if (this.props.isFetching.initialData === true ) {
+      return <div>Currently fetching initial data</div>
+    }
+    if (this.props.isFetching.additionalLocaleArticle === true) {
+      return <div>Currently fetching articles in your local language</div>
+    }
+    if (this.state.timeOut === true ) {
+      return <div>Please wait</div>
+    }
+
+    return <div>{getRootChildren(this.props)}</div>
   }
 })
 
-export default connect(({ siteCurrentLocale }) => ({ siteCurrentLocale }))(Root)
+export default connect(({ siteCurrentLocale, isFetching, articles }) => ({ siteCurrentLocale, isFetching, articles }))(Root)
+
+// ***********************************************
+// +**********************************************
+// ***********************************************
+// import { createConnector } from 'redux-rx/react';
+// import { bindActionCreators } from 'redux-rx';
+
+// const AppSuperContainer = createConnector((props$, state$, dispatch$) => {
+//   const actionCreators$ = bindActionCreators(actionCreators, dispatch$);
+//   const pushState$ = actionCreators$.map(ac => ac.pushState);
+
+//   // Detect locale change
+//   const didChangeLocale$ = state$
+//     .distinctUntilChanged(state => state.siteCurrentLocale)
+//     .filter(state => state.siteCurrentLocale);
+
+//   // Redirect on change locale!
+//   const redirect$ = didChangeLocale$
+//     .withLatestFrom(
+//       pushState$,
+//       // Use query parameter as redirect path
+//       (state, pushState) => () => pushState(null, state.router.query.redirect || '/')
+//     )
+//     .do(go => go());
+
+//   return combineLatest(
+//     props$, actionCreators$, redirect$,
+//     (props, actionCreators) => ({
+//       ...props,
+//       ...actionCreators
+//     })
+//   );
+// }, Root);

@@ -1,5 +1,6 @@
 import {
-  LOAD_INITIAL_DATA,
+  LOADED_INITIAL_ARTICLES,
+  LOADED_ADDITIONNAL_LOCALE_ARTICLES,
   CHANGE_NEED_RESIZING_STATE_OF_ARTICLE,
   ADD_NEW_ARTICLE,
   DELETE_ARTICLE,
@@ -16,16 +17,21 @@ export function articlesNeedResizingStates(state = {}, action) {
 
   switch (action.type) {
 
-    case LOAD_INITIAL_DATA:
+    case LOADED_INITIAL_ARTICLES:
       return action.initialState.articlesNeedResizingStates
+
+    case LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+      return Object.assign({}, state, action.additionalStates.articlesNeedResizingStates)
 
     case CHANGE_NEED_RESIZING_STATE_OF_ARTICLE:
     case ADD_NEW_ARTICLE:
-      new_state[action.id] = action.stateValue;
+      new_state[action.locale][action.id] = action.stateValue;
       return new_state
 
     case DELETE_ARTICLE:
-      delete new_state[action.id];
+      _.forOwn(new_state, (localeNeedResizingStatesObjects, locale) => {
+        delete new_state[locale][action.id];
+      })
       return new_state
 
     default:
@@ -38,26 +44,34 @@ export function articlesDOMProps(state = {}, action) {
 
   switch (action.type) {
 
-    case LOAD_INITIAL_DATA:
+    case LOADED_INITIAL_ARTICLES:
       return action.initialState.articlesDOMProps
 
+    case LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+      return Object.assign({}, state, action.additionalStates.articlesDOMProps)
+
     case ADD_NEW_ARTICLE:
-      new_state[action.id] = initialArticlesDOMPropsState
-      // increment cardnumbers of all the articles
-      let i = 1;
-      new_state = _.forOwn(new_state, function(value) {
-        value.cardNumber = i;
-        i++;
+      _.forOwn(new_state, (localeArticleDOMPropsObjects, locale) => {
+        // Create the record for the new article in all the localized versions of articlesDOMProps state
+        new_state[locale][action.id] = initialArticlesDOMPropsState
+        // increment cardnumbers of all the articles in all the localized versions of articlesDOMProps state
+        let i = 1;
+        new_state = _.forOwn(new_state, function(domPropsObjects) {
+          domPropsObjects.cardNumber = i;
+          i++;
+        });
+        // end increment
       });
-      // end increment
       return new_state
 
     case DELETE_ARTICLE:
-      delete new_state[action.id];
+      _.forOwn(new_state, (localeArticleDOMPropsObjects, locale) => {
+        delete new_state[locale][action.id];
+      })
       return new_state
 
     case ASSIGN_REAL_DOM_VALUES_TO_DOM_PROPS_OF_ARTICLE:
-      new_state[action.id] = {
+      new_state[action.locale][action.id] = {
         posTop:     action.posTop,
         divHeight:  action.divHeight,
         cardNumber: action.cardNumber
@@ -66,8 +80,9 @@ export function articlesDOMProps(state = {}, action) {
       return new_state
 
     case RESET_DOM_PROPS_OF_ALL_THE_ARTICLES:
-      _.forOwn(new_state, function(value, key) { key: initialArticlesDOMPropsState });
-      return new_state
+      const localizedDOMPropsAfterChanges = {};
+      localizedDOMPropsAfterChanges[action.locale] = _.forOwn(state[action.locale], (domPropsObjects, id) => { id: initialArticlesDOMPropsState });
+      return Object.assign({}, state, localizedDOMPropsAfterChanges)
 
     default:
       return state

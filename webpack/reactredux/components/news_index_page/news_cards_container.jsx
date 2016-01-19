@@ -11,7 +11,9 @@ export const NewsCardsContainer = React.createClass({
           newArticleActions=       {this.props.newArticleActions}
           newArticleFields=        {this.props.newArticleFields}
           articlesPassedInUiProps= {this.props.articlesPassedInUiProps}
+
           routeParams=             {this.props.routeParams}
+          siteCurrentLocale=       {this.props.siteCurrentLocale}
         />
       )
     }
@@ -36,6 +38,7 @@ export const NewsCardsContainer = React.createClass({
         articlesSizingPositionningActions= {this.props.articlesSizingPositionningActions}
 
         routeParams=                       {this.props.routeParams}
+        siteCurrentLocale=                 {this.props.siteCurrentLocale}
       />
     )
   },
