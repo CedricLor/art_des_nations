@@ -3,6 +3,10 @@ import { ArticlesList } from './news_cards_container/articles_list';
 import ArticleBasicForm from './news_cards_container/article_basic_form';
 
 export const NewsCardsContainer = React.createClass({
+  // propTypes: {
+  //   articlePictures:  React.PropTypes.object.isRequired
+  // },
+
   renderNewArticleBasicForm() {
     if ( this.props.siteEditMode.mode === true) {
       return (
@@ -39,6 +43,9 @@ export const NewsCardsContainer = React.createClass({
 
         routeParams=                       {this.props.routeParams}
         siteCurrentLocale=                 {this.props.siteCurrentLocale}
+
+        mediaContainers=                   {this.props.mediaContainers}
+        articlePictures=                   {this.props.articlePictures}
       />
     )
   },

@@ -7,14 +7,18 @@ export const initialStateForNewArticle = {
     body:                 '',
     posted_at:            `${new Date().toISOString()}`,
     status:               "draft",
+    articlePictureIds:    [],
     hasReceivedUserInput: false
   }
 
+// FIXME -- body, status, articlePictureIds should probably have an initial WIP state also
+// FIXME -- posted_at review how the WIP state is handled
 export const initialWIPStateForNewArticle = {
     title:      false,
     teaser:     false
   }
 
+// FIXME -- articlePictureIds should probably have an initial Edit state also
 export const initialEditState = {
   article:    false,
   title:      false,
@@ -24,6 +28,7 @@ export const initialEditState = {
   status:     false
 }
 
+// FIXME -- articlePictureIds should probably have an initial Edit state also
 export const initialWIPState = {
   title:      false,
   teaser:     false,

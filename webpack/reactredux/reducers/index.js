@@ -2,15 +2,14 @@ import { combineReducers } from 'redux'
 import { routeReducer } from 'redux-simple-router'
 
 import { isFetching } from './isFetching'
-import { siteEditMode } from './site'
-import { siteCurrentLocale } from './site'
-import { siteAvailableLocales } from './site'
-import { siteLanguageSwitcherText } from './site'
+import { siteEditMode, siteCurrentLocale, siteAvailableLocales, siteLanguageSwitcherText } from './site'
 
 import { articles, newArticleFields, articlesWIPStatesOfFields, articlesEditStates } from './articles'
 import { articlesNeedResizingStates, articlesDOMProps } from './articlesSizingPositionning'
 import { articlesVisibilityFilter } from './articlesVisibilityFilters'
 
+import { mediaContainers } from './mediaContainers'
+import { articlePictures } from './articlePictures'
 
 const rootReducer = combineReducers(
   {
@@ -29,6 +28,9 @@ const rootReducer = combineReducers(
     articlesEditStates,
     articlesNeedResizingStates,
     articlesDOMProps,
+
+    mediaContainers,
+    articlePictures
   }
 )
 

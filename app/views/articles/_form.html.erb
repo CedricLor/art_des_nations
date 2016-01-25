@@ -18,48 +18,72 @@
   <div>
     <%= f.text_area :article_teaser, rows: 5 %>
   </div>
+  <!--
   <div>
-    <%= f.label :article_body %>
+    <%#= f.label :article_body %>
   </div>
   <div>
-    <%= f.cktext_area :article_body, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+    <%#= f.cktext_area :article_body, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+  </div>
+  -->
+  <div>
+    <%= f.label :article_status %>
   </div>
   <div>
-    <%= f.label :gallery_title %>
+    <%= f.text_field :article_status %>
   </div>
   <div>
-    <%= f.text_field :gallery_title %>
+    <%= f.label :article_posted_at %>
   </div>
   <div>
-    <%= f.label :media_title %>
+    <%= f.date_field :article_posted_at %>
+  </div>
+  <!--
+  <div>
+    <%#= f.label :media_title %>
   </div>
   <div>
-    <%= f.text_field :media_title %>
+    <%#= f.text_field :media_title %>
   </div>
   <div>
-    <%= f.label :media_author %>
+    <%#= f.label :media_author %>
   </div>
   <div>
-    <%= f.text_field :media_author %>
+    <%#= f.text_field :media_author %>
   </div>
   <div>
-    <%= f.label :media_source %>
+    <%#= f.label :media_source %>
   </div>
   <div>
-    <%= f.text_field :media_source %>
+    <%#= f.text_field :media_source %>
   </div>
   <div>
-    <%= f.label :media_creation_date %>
+    <%#= f.label :media_creation_date %>
   </div>
   <div>
-    <%= f.date_field :media_creation_date %>
+    <%#= f.date_field :media_creation_date %>
   </div>
+  -->
   <div>
     <%= f.label :media_file %>
   </div>
   <div>
     <%= f.file_field :media_file %>
   </div>
+  <!--
+  <div>
+    <%#= f.label :picture_for_card %>
+  </div>
+  <div>
+    <%#= select_tag(:picture_for_card, options_for_select([["True", "true"], ["False", "false"]], "false")) %>
+  </div>
+  <div>
+    <%#= f.label :picture_for_carousel %>
+  </div>
+  <div>
+    <%#= select_tag(:picture_for_carousel, options_for_select([["True", "true"], ["False", "false"]], "false")) %>
+  </div>
+  -->
   <div>
     <%= f.submit %>
   </div>

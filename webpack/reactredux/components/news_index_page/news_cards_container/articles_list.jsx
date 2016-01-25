@@ -17,17 +17,38 @@ export const ArticlesList = React.createClass({
     siteEditMode:                      PropTypes.objectOf(PropTypes.bool.isRequired).isRequired,
     routeParams:                       PropTypes.object.isRequired,
     siteCurrentLocale:                 PropTypes.string.isRequired,
+    articlePictures:                   PropTypes.object.isRequired,
+    mediaContainers:                   PropTypes.object.isRequired
+  },
+
+  getMediaContainerForCard(card) {
+    let mediaContainer = undefined;
+    // FIXME -- In Rails, create a field cardPictureId with a direct ref to the id of the relevant image container
+    // and set the relevant ref on save in the form object to get rid of this loop
+    _.forEach(
+        card.article_picture_ids,
+        (article_picture_id) => {
+          if ( this.props.articlePictures[article_picture_id].for_card === "true" ) {
+            mediaContainer = this.props.mediaContainers[this.props.articlePictures[article_picture_id].media_container_id]
+          }
+        }
+      )
+    return mediaContainer
   },
 
   createCards() {
     return (
       this.props.articles.map(
         (card, i) => {
+          // Iterate over the articles pictures and get the corresponding mediaContainer
+          const cardMediaContainer = this.getMediaContainerForCard(card);
+          // Create the card element
           let element =
             <NewsCard
               key=                               {i}
               cardNumber=                        {i}
               card=                              {card}
+              cardMediaContainer=                {cardMediaContainer}
               articlesPassedInUiProps=           {this.props.articlesPassedInUiProps}
               // # redux actions
               articlesActions=                   {this.props.articlesActions}

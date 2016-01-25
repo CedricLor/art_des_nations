@@ -26,13 +26,6 @@ import zh from 'react-intl/lib/locale-data/zh'
 // import configureStore from './reactredux/stores/configureStore'
 import { Provider } from 'react-redux'
 
-
-// ********************************************
-// Redux action for loading data received from Rails into the store
-import { initialDataReceived } from './reactredux/actions/articlesActions'
-// ********************************************
-
-
 // ********************************************
 // Import the Root element and the store to pass it to the ReactDOM render function
 import Root, { store } from './Root'

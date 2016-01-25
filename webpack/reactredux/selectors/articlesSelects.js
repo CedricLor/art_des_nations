@@ -1,12 +1,18 @@
 import { ArticlesVisibilityFilters } from '../constants/ActionTypes'
 
 
+// Selector of the articles depending on the requested visibility status
 export function selectArticlesOnLanguage(articles, locale) {
   return articles[locale]
 }
 
+// Selector of the article pictures depending on the requested visibility status
+export function selectArticlePicturesOnLanguage(articlePictures, locale) {
+  return articlePictures[locale]
+}
 
-export function selectArticlesOnVisibilityStatus(articles, filter) {
+// Selector of the articles depending on the requested visibility status
+export function selectArticlesAndArticlePicturesOnVisibilityStatus(articles, filter) {
   switch (filter) {
     case ArticlesVisibilityFilters.SHOW_ALL:
       return articles
@@ -18,9 +24,12 @@ export function selectArticlesOnVisibilityStatus(articles, filter) {
       return articles.filter(article => article.status === "featured")
     case ArticlesVisibilityFilters.SHOW_ARCHIVED:
       return articles.filter(article => article.status === "archived")
+    default:
+      return articles
   }
 }
 
+// Selector of the articles ancillary states based on the selected articles (i) locales and (ii) visibility status
 export function selectVisibleArticlesStates(visibleArticles, siteCurrentLocale, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps) {
   const visibleArticlesStates = {
     "articlesWIPStatesOfFields": {},

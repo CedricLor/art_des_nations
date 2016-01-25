@@ -1,9 +1,8 @@
 Rails.application.routes.draw do
 
-  resources :media_containers
-  resources :galleries
-  scope '(:locale)', locale: /fr|en|ru|zh-CN/ do
+  scope '(:locale)', locale: /fr|en|ru|zh/ do
     resources :articles
+    resources :media_containers
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -62,6 +61,9 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+
+  # Redirect to the main articles React page when calling the wrong URL
+  # get '*path' => redirect('/')
 
   end
 

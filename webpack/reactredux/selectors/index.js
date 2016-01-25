@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
-import { selectArticlesOnVisibilityStatus, selectVisibleArticlesStates, selectArticlesOnLanguage } from './articlesSelects'
+import { selectArticlesAndArticlePicturesOnVisibilityStatus, selectVisibleArticlesStates, selectArticlesOnLanguage, selectArticlePicturesOnLanguage } from './articlesSelects'
+import { selectMediaContainersOnLanguage } from './mediaContainersSelects'
 
 /*
  * Definition of input-selectors.
@@ -17,6 +18,9 @@ const articlesEditStatesSelector = state => state.articlesEditStates
 const articlesNeedResizingStatesSelector = state => state.articlesNeedResizingStates
 const articlesDOMPropsSelector = state => state.articlesDOMProps
 
+const articlePicturesSelector = state => state.articlePictures
+const mediaContainersSelector = state => state.mediaContainers
+
 /*
  * Definition of combined-selector.
  * In combined-selector, input-selectors are combined to derive new
@@ -32,55 +36,77 @@ const articlesDOMPropsSelector = state => state.articlesDOMProps
  * So: below, the articles
  */
 
-const localeArticlesSelector = createSelector(
+const localeArticlesAndArticlePicturesSelector = createSelector(
   siteCurrentLocaleSelector,
   articlesSelector,
-  (siteCurrentLocale, articles) => {
+  articlePicturesSelector,
+  (siteCurrentLocale, articles, articlePictures) => {
+    // the siteCurrentLocale, articles and articlePictures params passed into this anonymous function
+    // correspond to the whole state as selected in the input-selectors
     return {
       siteCurrentLocale,
-      localeArticles: selectArticlesOnLanguage(articles, siteCurrentLocale)
+      localeArticles: selectArticlesOnLanguage(articles, siteCurrentLocale),
+      localeArticlePictures: selectArticlePicturesOnLanguage(articlePictures, siteCurrentLocale)
     }
   }
 )
 
-const visibleArticlesSelector = createSelector(
+
+
+const visibleArticlesLocaleArticlePicturesSelector = createSelector(
   articlesVisibilityFilterSelector,
-  localeArticlesSelector,
-  // articlesSelector,
-  (articlesVisibilityFilter, localeArticlesAndSiteCurrentLocale) => {
+  localeArticlesAndArticlePicturesSelector,
+  (articlesVisibilityFilter, localeArticlesArticlePicturesAndSiteCurrentLocale) => {
     return {
-      siteCurrentLocale: localeArticlesAndSiteCurrentLocale.siteCurrentLocale,
+      siteCurrentLocale: localeArticlesArticlePicturesAndSiteCurrentLocale.siteCurrentLocale,
       articlesVisibilityFilter,
-      // visibleArticles: selectArticlesOnVisibilityStatus(articles, articlesVisibilityFilter)
-      visibleArticles: selectArticlesOnVisibilityStatus(
-        localeArticlesAndSiteCurrentLocale.localeArticles,
-        articlesVisibilityFilter)
+      visibleArticles: selectArticlesAndArticlePicturesOnVisibilityStatus(
+        localeArticlesArticlePicturesAndSiteCurrentLocale.localeArticles,
+        articlesVisibilityFilter),
+      // FIXME --- At some point, will be smart to memoize pictures by visible articles
+      localeArticlesArticlePictures: localeArticlesArticlePicturesAndSiteCurrentLocale.localeArticlePictures
     }
   }
 )
+
+
+
+const localeMediaContainersSelector = createSelector(
+  siteCurrentLocaleSelector,
+  mediaContainersSelector,
+  (siteCurrentLocale, mediaContainersStates) => {
+    return selectMediaContainersOnLanguage(mediaContainersStates, siteCurrentLocale)
+  }
+)
+
+
 
 export const visibleArticlesAndStatesSelector = createSelector(
-  visibleArticlesSelector,
+  visibleArticlesLocaleArticlePicturesSelector,
   articlesWIPStatesOfFieldsSelector,
   articlesEditStatesSelector,
   articlesNeedResizingStatesSelector,
   articlesDOMPropsSelector,
-  (visibleArticlesAndVisibilityFilter, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps) => {
+  localeMediaContainersSelector,
+  (visibleArticlesLocaleArticlePicturesAndVisibilityFilter, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps, localeMediaContainersSates) => {
     const visibleArticleStates = selectVisibleArticlesStates(
-      visibleArticlesAndVisibilityFilter.visibleArticles,
-      visibleArticlesAndVisibilityFilter.siteCurrentLocale,
+      visibleArticlesLocaleArticlePicturesAndVisibilityFilter.visibleArticles,
+      visibleArticlesLocaleArticlePicturesAndVisibilityFilter.siteCurrentLocale,
       articlesWIPStatesOfFields,
       articlesEditStates,
       articlesNeedResizingStates,
-      articlesDOMProps
+      articlesDOMProps,
+      visibleArticlesLocaleArticlePicturesAndVisibilityFilter.visibleArticlesArticlePictures
     );
     return {
-      articlesVisibilityFilter:           visibleArticlesAndVisibilityFilter.articlesVisibilityFilter,
-      visibleArticles:                    visibleArticlesAndVisibilityFilter.visibleArticles,
+      articlesVisibilityFilter:           visibleArticlesLocaleArticlePicturesAndVisibilityFilter.articlesVisibilityFilter,
+      visibleArticles:                    visibleArticlesLocaleArticlePicturesAndVisibilityFilter.visibleArticles,
       visibleArticlesWIPStatesOfFields:   visibleArticleStates.articlesWIPStatesOfFields,
       visibleArticlesEditStates:          visibleArticleStates.articlesEditStates,
       visibleArticlesNeedResizingStates:  visibleArticleStates.articlesNeedResizingStates,
-      visibleArticlesDOMProps:            visibleArticleStates.articlesDOMProps
+      visibleArticlesDOMProps:            visibleArticleStates.articlesDOMProps,
+      localeArticlesArticlePictures:      visibleArticlesLocaleArticlePicturesAndVisibilityFilter.localeArticlesArticlePictures,
+      localeMediaContainers:              localeMediaContainersSates
     }
   }
 )

@@ -31,6 +31,10 @@ function mapStateToProps(state) {
     articlesEditStates:              memoizedFilteredArticles.visibleArticlesEditStates,
     articlesNeedResizingStates:      memoizedFilteredArticles.visibleArticlesNeedResizingStates,
     articlesDOMProps:                memoizedFilteredArticles.visibleArticlesDOMProps,
+
+    articlePictures:                 memoizedFilteredArticles.localeArticlesArticlePictures,
+    // FIXME: the select and memoization for mediaContainers will probably need to be detached from the articles' selection and memoization
+    mediaContainers:                 memoizedFilteredArticles.localeMediaContainers,
   }
 }
 

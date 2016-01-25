@@ -1,8 +1,45 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import { NavBar } from './news_index_page/nav_bar';
 import { Footer } from './news_index_page/footer';
 
 export const NewsIndexPage = React.createClass({
+  propTypes: {
+    newArticleActions:                  PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+    newArticleFields:                   PropTypes.object.isRequired,
+
+    visibleArticles:                    PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+    articlesActions:                    PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+    articlesFieldsActions:              PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+    articlesSizingPositionningActions:  PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+
+    articlesDOMProps:                   PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
+    articlesEditStates:                 PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
+    articlesWIPStatesOfFields:          PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
+    articlesNeedResizingStates:         PropTypes.objectOf(PropTypes.bool.isRequired).isRequired,
+
+    siteActions:                        PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+    siteAvailableLocales:               PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    siteCurrentLocale:                  PropTypes.string.isRequired,
+    siteEditMode:                       PropTypes.objectOf(PropTypes.bool.isRequired).isRequired,
+    siteLanguageSwitcherText:           PropTypes.objectOf(PropTypes.string.isRequired).isRequired,
+
+    articlesVisibilityFilter:           PropTypes.string.isRequired,
+    articlesVisibilityFilterActions:    PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+
+    mediaContainers:                    PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
+    articlePictures:                    PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
+
+    children:                           PropTypes.element.isRequired,
+
+    history:                            PropTypes.object,
+    isFetching:                         PropTypes.objectOf(PropTypes.bool),
+    location:                           PropTypes.object,
+    params:                             PropTypes.object,
+    route:                              PropTypes.object,
+    routeParams:                        PropTypes.object,
+    routes:                             PropTypes.array,
+    routing:                            PropTypes.object,
+  },
 
   getDefaultProps() {
     return {
@@ -38,7 +75,10 @@ export const NewsIndexPage = React.createClass({
             articlesDOMProps:                  this.props.articlesDOMProps[this.props.children.props.params.id],
             articlesPassedInUiProps:           this.props.articlesPassedInUiProps,
             routeParams:                       this.props.routeParams,
-            siteCurrentLocale:                 this.props.siteCurrentLocale
+            siteCurrentLocale:                 this.props.siteCurrentLocale,
+
+            articlePictures:                   this.props.articlePictures,
+            mediaContainers:                   this.props.mediaContainers
           })
         )
       // else what is requested is the articles index (newsCardContainer) (i.e. for the indexView)
@@ -57,7 +97,10 @@ export const NewsIndexPage = React.createClass({
             newArticleActions:                 this.props.newArticleActions,
             newArticleFields:                  this.props.newArticleFields,
             routeParams:                       this.props.routeParams,
-            siteCurrentLocale:                 this.props.siteCurrentLocale
+            siteCurrentLocale:                 this.props.siteCurrentLocale,
+
+            articlePictures:                   this.props.articlePictures,
+            mediaContainers:                   this.props.mediaContainers
           })
         )
       }

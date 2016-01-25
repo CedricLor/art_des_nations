@@ -16,6 +16,28 @@ ActiveRecord::Schema.define(version: 20151215194108) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "article_picture_translations", force: :cascade do |t|
+    t.integer  "article_picture_id", null: false
+    t.string   "locale",             null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.string   "for_card"
+    t.string   "for_carousel"
+  end
+
+  add_index "article_picture_translations", ["article_picture_id"], name: "index_article_picture_translations_on_article_picture_id", using: :btree
+  add_index "article_picture_translations", ["locale"], name: "index_article_picture_translations_on_locale", using: :btree
+
+  create_table "article_pictures", force: :cascade do |t|
+    t.integer "article_id"
+    t.integer "media_container_id"
+    t.string  "for_card"
+    t.string  "for_carousel"
+  end
+
+  add_index "article_pictures", ["article_id"], name: "index_article_pictures_on_article_id", using: :btree
+  add_index "article_pictures", ["media_container_id"], name: "index_article_pictures_on_media_container_id", using: :btree
+
   create_table "article_translations", force: :cascade do |t|
     t.integer  "article_id", null: false
     t.string   "locale",     null: false
@@ -39,31 +61,6 @@ ActiveRecord::Schema.define(version: 20151215194108) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
-
-  create_table "articles_galleries", id: false, force: :cascade do |t|
-    t.integer "article_id"
-    t.integer "gallery_id"
-  end
-
-  add_index "articles_galleries", ["article_id"], name: "index_articles_galleries_on_article_id", using: :btree
-  add_index "articles_galleries", ["gallery_id"], name: "index_articles_galleries_on_gallery_id", using: :btree
-
-  create_table "galleries", force: :cascade do |t|
-    t.string   "title"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "gallery_translations", force: :cascade do |t|
-    t.integer  "gallery_id", null: false
-    t.string   "locale",     null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string   "title"
-  end
-
-  add_index "gallery_translations", ["gallery_id"], name: "index_gallery_translations_on_gallery_id", using: :btree
-  add_index "gallery_translations", ["locale"], name: "index_gallery_translations_on_locale", using: :btree
 
   create_table "media_container_translations", force: :cascade do |t|
     t.integer  "media_container_id", null: false
@@ -89,10 +86,6 @@ ActiveRecord::Schema.define(version: 20151215194108) do
     t.string   "media_content_type"
     t.integer  "media_file_size"
     t.datetime "media_updated_at"
-    t.integer  "gallery_id"
   end
 
-  add_index "media_containers", ["gallery_id"], name: "index_media_containers_on_gallery_id", using: :btree
-
-  add_foreign_key "media_containers", "galleries"
 end

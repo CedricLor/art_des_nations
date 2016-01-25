@@ -10,3 +10,8 @@ export class NewsImage extends React.Component {
     );
   }
 }
+
+NewsImage.propTypes = {
+  cardImageSource: PropTypes.string,
+  newsTitle:       PropTypes.string
+};

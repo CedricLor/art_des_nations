@@ -1,5 +1,7 @@
 class MediaContainer < ActiveRecord::Base
-  belongs_to :gallery, inverse_of: :media_containers
+  has_many :article_pictures, inverse_of: :media_container
+  has_many :articles, through: :article_pictures
+
   translates :title, :author, :source
 
   has_attached_file :media,

@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import {Link} from 'react-router';
+import { InternationalizedLink } from 'dumb_components/internationalized_link';
 
 import NewsToolbarSwitch from './news_card/news_toolbar_switch';
 import { NewsContentZoneSwitch } from './news_card/news_content_zone_switch';
@@ -15,6 +15,9 @@ export const NewsCard = React.createClass({
   propTypes: {
     cardNumber:                        PropTypes.number.isRequired,
     card:                              PropTypes.object.isRequired,
+    cardMediaContainer:                PropTypes.object,
+    // cardImageSource:                   PropTypes.string,
+    // cardImageTitle:                    PropTypes.string,
     articlesPassedInUiProps:           PropTypes.object.isRequired,
 
     articlesActions:                   PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
@@ -29,6 +32,15 @@ export const NewsCard = React.createClass({
     siteEditMode:                      PropTypes.objectOf(PropTypes.bool.isRequired).isRequired,
     routeParams:                       PropTypes.object.isRequired,
     siteCurrentLocale:                 PropTypes.string.isRequired,
+  },
+
+  getDefaultProps() {
+    return {
+      cardMediaContainer: {
+        media: undefined,
+        title: undefined
+      }
+    }
   },
 
   // # Card equalization
@@ -106,7 +118,7 @@ export const NewsCard = React.createClass({
         currArtWIPStateCurrField=    {this.props.articlesWIPStatesOfFields[fieldName]}
         currArtEditStateCurrField=   {this.props.articlesEditStates[fieldName]}
 
-        cardImageSource=             {this.props.cardImageSource}
+        cardImageSource=             {this.props.cardMediaContainer.media}
 
         articlesFieldsActions=       {this.props.articlesFieldsActions}
         handleUpdate=                {this.handleUpdate.bind(this, fieldName)}
@@ -133,17 +145,23 @@ export const NewsCard = React.createClass({
   },
 
   imageLinkedToArticle() {
-    return (
-      <Link
-        className= "news-anchor-link-wrapper"
-        to=        {`/article/${this.props.card.id}`}>
+    const newsImage =
+      <span>
         <NewsImage
-          cardImageSource= {this.props.cardImageSource}
-          newsTitle=       {this.props.newsTitle}
+          cardImageSource= {this.props.cardMediaContainer.media}
+          newsTitle=       {this.props.cardMediaContainer.title}
           />
         <div className= "news-picture-overlay">
         </div>
-      </Link>
+      </span>
+
+    return (
+      <InternationalizedLink
+        routeParams= {this.props.routeParams}
+        to=          {`article/${this.props.card.id}`}
+        children=    {newsImage}
+        className=   "news-anchor-link-wrapper"
+      />
     )
   },
 

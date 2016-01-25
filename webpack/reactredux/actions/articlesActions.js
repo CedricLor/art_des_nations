@@ -4,8 +4,8 @@ import { updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle, successCallBackForRes
 import { createArticleStates } from '../stores/storeCreationHelpers'
 
 // Loading initial articles
-function dispatchLoadInitialArticles(jsonFetchedArticles, locale) {
-  const initialState = createArticleStates(jsonFetchedArticles, locale);
+function dispatchLoadInitialArticles(jsonFetchedArticlesAndEmbeddedData, locale) {
+  const initialState = createArticleStates(jsonFetchedArticlesAndEmbeddedData, locale);
   return {
     type: LOADED_INITIAL_ARTICLES,
     initialState
@@ -49,6 +49,7 @@ export function fetchAdditionalLocaleArticles(locale) {
       dataType: 'JSON'
       })
       .success(function(data) {
+        console.log("Aaaaaaaaddditionall articles fetchedddd", data)
         dispatch(dispatchLoadAdditionalLocaleArticles(data, locale));
     });
   }
