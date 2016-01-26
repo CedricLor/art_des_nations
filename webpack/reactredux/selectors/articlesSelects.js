@@ -12,7 +12,7 @@ export function selectArticlePicturesOnLanguage(articlePictures, locale) {
 }
 
 // Selector of the articles depending on the requested visibility status
-export function selectArticlesAndArticlePicturesOnVisibilityStatus(articles, filter) {
+export function selectArticlesOnVisibilityStatus(articles, filter) {
   switch (filter) {
     case ArticlesVisibilityFilters.SHOW_ALL:
       return articles

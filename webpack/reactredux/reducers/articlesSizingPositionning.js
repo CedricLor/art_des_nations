@@ -23,8 +23,11 @@ export function articlesNeedResizingStates(state = {}, action) {
     case LOADED_ADDITIONNAL_LOCALE_ARTICLES:
       return Object.assign({}, state, action.additionalStates.articlesNeedResizingStates)
 
-    case CHANGE_NEED_RESIZING_STATE_OF_ARTICLE:
     case ADD_NEW_ARTICLE:
+      new_state[action.locale][action.article.id] = true;
+      return new_state
+
+    case CHANGE_NEED_RESIZING_STATE_OF_ARTICLE:
       new_state[action.locale][action.id] = action.stateValue;
       return new_state
 
@@ -53,7 +56,7 @@ export function articlesDOMProps(state = {}, action) {
     case ADD_NEW_ARTICLE:
       _.forOwn(new_state, (localeArticleDOMPropsObjects, locale) => {
         // Create the record for the new article in all the localized versions of articlesDOMProps state
-        new_state[locale][action.id] = initialArticlesDOMPropsState
+        new_state[locale][action.article.id] = initialArticlesDOMPropsState
         // increment cardnumbers of all the articles in all the localized versions of articlesDOMProps state
         let i = 1;
         new_state = _.forOwn(new_state, function(domPropsObjects) {

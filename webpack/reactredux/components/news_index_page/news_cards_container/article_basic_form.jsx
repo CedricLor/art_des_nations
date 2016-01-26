@@ -74,6 +74,7 @@ export const ArticleBasicForm = React.createClass({
 
     return (
       <div className= "news-teaser-wrapper">
+        <input type="file" name="article_creation_form[media_file]" id="article_creation_form_media_file"/>
         <NewsFormContentEditableController
           fieldName={formatMessage(messages.titleMeta)}
           eltType=  "h3"

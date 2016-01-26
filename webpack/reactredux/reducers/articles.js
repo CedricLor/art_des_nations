@@ -45,14 +45,13 @@ function article(state, action) {
 
     case ADD_NEW_ARTICLE:
       return {
-        id: action.id,
-        title: action.title,
-        teaser: action.teaser,
-        body: action.body,
-        status: action.status,
-        posted_at: action.posted_at,
-        created_at: action.created_at,
-        updated_at: action.updated_at
+        id: action.article.id,
+        title: action.article.title,
+        teaser: action.article.teaser,
+        body: action.article.body,
+        status: action.article.status,
+        posted_at: action.article.posted_at,
+        article_picture_ids: action.article.article_picture_ids
       }
 
     case UPDATE_ARTICLE:
@@ -98,7 +97,6 @@ export function articles(state = {}, action) {
 
     case ADD_NEW_ARTICLE:
       const newStateWithNewArticle = {};
-      // FIXME - Check that newStateWithNewArticle is accessible from within forOwn
       _.forOwn(state, (localeArticlesArray, locale) => {
         newStateWithNewArticle[locale] = [
           article({}, action),
@@ -116,7 +114,6 @@ export function articles(state = {}, action) {
 
     case DELETE_ARTICLE:
       const newState = {};
-      // FIXME - Check that newState is accessible from within forOwn
       _.forOwn(state, (localeArticlesArray, locale) => {
         let index = _.findIndex(state[locale], {id: action.id});
         newState[locale] = [
@@ -133,7 +130,6 @@ export function articles(state = {}, action) {
 
     case REORDER_ALL_THE_ARTICLES_ARRAYS:
       const reOrderedState = {};
-      // FIXME - Check that reOrderedState is accessible from within forOwn
       _.forOwn(state, (localeArticlesArray, locale) => {
         reOrderedState[locale] = _.sortByOrder(localeArticlesArray, 'posted_at', 'desc')
       })
@@ -155,9 +151,8 @@ export function articlesEditStates(state = {}, action) {
       return Object.assign({}, state, action.additionalStates.articlesEditStates)
 
     case ADD_NEW_ARTICLE:
-      // FIXME - Check that new_state is effectively being modified
       _.forOwn(new_state, (localeEditStatesArray, locale) => {
-        new_state[locale][action.id] = initialEditState
+        new_state[locale][action.article.id] = initialEditState
       })
       return new_state
 
@@ -220,9 +215,8 @@ export function articlesWIPStatesOfFields(state = {}, action) {
       return Object.assign({}, state, action.additionalStates.articlesWIPStatesOfFields)
 
     case ADD_NEW_ARTICLE:
-      // FIXME - Check that new_state is effectively being modified
       _.forOwn(new_state, (localeWIPStatesArray, locale) => {
-        new_state[locale][action.id] = initialWIPState
+        new_state[locale][action.article.id] = initialWIPState
       })
       return new_state
 

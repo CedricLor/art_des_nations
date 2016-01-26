@@ -20,8 +20,9 @@ class ArticlesController < ApplicationController
   end
 
   def show
+    # Used by Rails only
     @article = Article.find(params[:id])
-    render json: @article, root: false
+    render json: @article, serializer: ArticleSerializer
   end
 
   def new
@@ -29,25 +30,17 @@ class ArticlesController < ApplicationController
   end
 
   def create
+    params.has_key?("media_file") ? create_from_react : @article_form = ArticleCreationForm.new(article_creation_params(:article_creation_form))
 
-    respond_to do |format|
-      if @article_form.save
-          format.html {redirect_to articles_path, notice: "The article has been successfully created."}
-          format.json {render json: @article, root: false}
-      else
-          format.html {render action: "new"}
-          format.json {render json: @article.errors, status: :unprocessable_entity}
-      end
+    if @article_form.save
+      render json: @article_form.article, serializer: ArticleSerializer
+    else
+      render json: @article.errors, status: :unprocessable_entity
     end
-
-    # if params.has_key?("article_form")
-    #   create_from_rails(params)
-    # else
-    #   create_from_react(params)
-    # end
   end
 
   def edit
+    # Used by Rails only
     @article = Article.find(params[:id])
   end
 
@@ -68,27 +61,17 @@ class ArticlesController < ApplicationController
 
   private
 
+  def article_creation_params(required_root_param)
+    params.require(required_root_param).permit(:title, :teaser, :posted_at, :status, :media_file)
+  end
+
   def article_params
     params.require(:article).permit(:title, :body, :teaser, :posted_at, :status)
   end
 
-  def create_from_rails(params)
-    @article_form = ArticleCreationForm.new(params[:article_form])
-
-    if @article_form.save
-        redirect_to articles_path, notice: "The article has been successfully created."
-    else
-        render action: "new"
-    end
-  end
-
-  def create_from_react(params)
-    @article = Article.new(article_params)
-
-    if @article.save
-      render json: @article, root: false
-    else
-      render json: @article.errors, status: :unprocessable_entity
-    end
+  def create_from_react
+    params[:article_form] = JSON.parse(params[:article_form])
+    params[:article_form]["media_file"] = params[:media_file]
+    @article_form = ArticleCreationForm.new(article_creation_params(:article_form))
   end
 end

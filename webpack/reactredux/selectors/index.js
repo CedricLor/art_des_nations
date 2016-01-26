@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { selectArticlesAndArticlePicturesOnVisibilityStatus, selectVisibleArticlesStates, selectArticlesOnLanguage, selectArticlePicturesOnLanguage } from './articlesSelects'
+import { selectArticlesOnVisibilityStatus, selectVisibleArticlesStates, selectArticlesOnLanguage, selectArticlePicturesOnLanguage } from './articlesSelects'
 import { selectMediaContainersOnLanguage } from './mediaContainersSelects'
 
 /*
@@ -36,78 +36,72 @@ const mediaContainersSelector = state => state.mediaContainers
  * So: below, the articles
  */
 
-const localeArticlesAndArticlePicturesSelector = createSelector(
+const localeArticlesSelector = createSelector(
   siteCurrentLocaleSelector,
   articlesSelector,
-  articlePicturesSelector,
-  (siteCurrentLocale, articles, articlePictures) => {
-    // the siteCurrentLocale, articles and articlePictures params passed into this anonymous function
-    // correspond to the whole state as selected in the input-selectors
+  (siteCurrentLocale, articles) => {
     return {
       siteCurrentLocale,
-      localeArticles: selectArticlesOnLanguage(articles, siteCurrentLocale),
-      localeArticlePictures: selectArticlePicturesOnLanguage(articlePictures, siteCurrentLocale)
+      localeArticles: selectArticlesOnLanguage(articles, siteCurrentLocale)
     }
   }
 )
 
 
-
-const visibleArticlesLocaleArticlePicturesSelector = createSelector(
+const visibleArticlesLocaleAndVisibilityFilterSelector = createSelector(
   articlesVisibilityFilterSelector,
-  localeArticlesAndArticlePicturesSelector,
-  (articlesVisibilityFilter, localeArticlesArticlePicturesAndSiteCurrentLocale) => {
+  localeArticlesSelector,
+  (articlesVisibilityFilter, localeArticlesAndSiteCurrentLocale) => {
     return {
-      siteCurrentLocale: localeArticlesArticlePicturesAndSiteCurrentLocale.siteCurrentLocale,
+      siteCurrentLocale: localeArticlesAndSiteCurrentLocale.siteCurrentLocale,
       articlesVisibilityFilter,
-      visibleArticles: selectArticlesAndArticlePicturesOnVisibilityStatus(
-        localeArticlesArticlePicturesAndSiteCurrentLocale.localeArticles,
-        articlesVisibilityFilter),
-      // FIXME --- At some point, will be smart to memoize pictures by visible articles
-      localeArticlesArticlePictures: localeArticlesArticlePicturesAndSiteCurrentLocale.localeArticlePictures
+      visibleArticles: selectArticlesOnVisibilityStatus(
+        localeArticlesAndSiteCurrentLocale.localeArticles,
+        articlesVisibilityFilter)
     }
   }
 )
 
 
+export const visibleArticlesAndStatesSelector = createSelector(
+  visibleArticlesLocaleAndVisibilityFilterSelector,
+  articlesWIPStatesOfFieldsSelector,
+  articlesEditStatesSelector,
+  articlesNeedResizingStatesSelector,
+  articlesDOMPropsSelector,
+  (visibleArticlesLocaleAndVisibilityFilter, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps) => {
 
-const localeMediaContainersSelector = createSelector(
+    const visibleArticleStates = selectVisibleArticlesStates(
+      visibleArticlesLocaleAndVisibilityFilter.visibleArticles,
+      visibleArticlesLocaleAndVisibilityFilter.siteCurrentLocale,
+      articlesWIPStatesOfFields,
+      articlesEditStates,
+      articlesNeedResizingStates,
+      articlesDOMProps
+    );
+    return {
+      articlesVisibilityFilter:           visibleArticlesLocaleAndVisibilityFilter.articlesVisibilityFilter,
+      visibleArticles:                    visibleArticlesLocaleAndVisibilityFilter.visibleArticles,
+      visibleArticlesWIPStatesOfFields:   visibleArticleStates.articlesWIPStatesOfFields,
+      visibleArticlesEditStates:          visibleArticleStates.articlesEditStates,
+      visibleArticlesNeedResizingStates:  visibleArticleStates.articlesNeedResizingStates,
+      visibleArticlesDOMProps:            visibleArticleStates.articlesDOMProps
+    }
+  }
+)
+
+export const localeArticlePicturesSelector = createSelector(
+  siteCurrentLocaleSelector,
+  articlePicturesSelector,
+  (siteCurrentLocale, articlePictures) => {
+    return articlePictures[siteCurrentLocale]
+  }
+)
+
+export const localeMediaContainersSelector = createSelector(
   siteCurrentLocaleSelector,
   mediaContainersSelector,
   (siteCurrentLocale, mediaContainersStates) => {
     return selectMediaContainersOnLanguage(mediaContainersStates, siteCurrentLocale)
   }
 )
-
-
-
-export const visibleArticlesAndStatesSelector = createSelector(
-  visibleArticlesLocaleArticlePicturesSelector,
-  articlesWIPStatesOfFieldsSelector,
-  articlesEditStatesSelector,
-  articlesNeedResizingStatesSelector,
-  articlesDOMPropsSelector,
-  localeMediaContainersSelector,
-  (visibleArticlesLocaleArticlePicturesAndVisibilityFilter, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps, localeMediaContainersSates) => {
-    const visibleArticleStates = selectVisibleArticlesStates(
-      visibleArticlesLocaleArticlePicturesAndVisibilityFilter.visibleArticles,
-      visibleArticlesLocaleArticlePicturesAndVisibilityFilter.siteCurrentLocale,
-      articlesWIPStatesOfFields,
-      articlesEditStates,
-      articlesNeedResizingStates,
-      articlesDOMProps,
-      visibleArticlesLocaleArticlePicturesAndVisibilityFilter.visibleArticlesArticlePictures
-    );
-    return {
-      articlesVisibilityFilter:           visibleArticlesLocaleArticlePicturesAndVisibilityFilter.articlesVisibilityFilter,
-      visibleArticles:                    visibleArticlesLocaleArticlePicturesAndVisibilityFilter.visibleArticles,
-      visibleArticlesWIPStatesOfFields:   visibleArticleStates.articlesWIPStatesOfFields,
-      visibleArticlesEditStates:          visibleArticleStates.articlesEditStates,
-      visibleArticlesNeedResizingStates:  visibleArticleStates.articlesNeedResizingStates,
-      visibleArticlesDOMProps:            visibleArticleStates.articlesDOMProps,
-      localeArticlesArticlePictures:      visibleArticlesLocaleArticlePicturesAndVisibilityFilter.localeArticlesArticlePictures,
-      localeMediaContainers:              localeMediaContainersSates
-    }
-  }
-)
-

@@ -9,10 +9,11 @@ import * as ArticlesVisibilityFilterActions from '../actions/articlesVisibilityF
 import * as NewArticleActions from '../actions/newArticleActions'
 import * as SiteActions from '../actions/siteActions'
 
-import { visibleArticlesAndStatesSelector } from '../selectors/index'
+import { visibleArticlesAndStatesSelector, localeArticlePicturesSelector, localeMediaContainersSelector } from '../selectors/index'
 
 function mapStateToProps(state) {
   const memoizedFilteredArticles = visibleArticlesAndStatesSelector(state);
+  console.log(state)
 
   return {
     routing:                         state.routing,
@@ -32,9 +33,9 @@ function mapStateToProps(state) {
     articlesNeedResizingStates:      memoizedFilteredArticles.visibleArticlesNeedResizingStates,
     articlesDOMProps:                memoizedFilteredArticles.visibleArticlesDOMProps,
 
-    articlePictures:                 memoizedFilteredArticles.localeArticlesArticlePictures,
+    articlePictures:                 localeArticlePicturesSelector(state),
     // FIXME: the select and memoization for mediaContainers will probably need to be detached from the articles' selection and memoization
-    mediaContainers:                 memoizedFilteredArticles.localeMediaContainers,
+    mediaContainers:                 localeMediaContainersSelector(state),
   }
 }
 

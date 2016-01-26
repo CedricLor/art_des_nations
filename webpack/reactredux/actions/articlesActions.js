@@ -3,6 +3,9 @@ import { refreshArticlesSizingPositionning } from './articlesSizingPositionningA
 import { updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle, successCallBackForRestoreText, resetAllEditAndWIPStatesForField, changeArticleEditStateOfField } from './articleFieldsActions';
 import { createArticleStates } from '../stores/storeCreationHelpers'
 
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
+
 // Loading initial articles
 function dispatchLoadInitialArticles(jsonFetchedArticlesAndEmbeddedData, locale) {
   const initialState = createArticleStates(jsonFetchedArticlesAndEmbeddedData, locale);
@@ -14,14 +17,16 @@ function dispatchLoadInitialArticles(jsonFetchedArticlesAndEmbeddedData, locale)
 
 export function fetchInitialArticles(locale) {
   return function(dispatch) {
-    $.ajax({
-      method: "GET",
-      url: `/${locale}/articles`,
-      dataType: 'JSON'
+    fetch(`/${locale}/articles`)
+      .then(function(response) {
+          if (response.status >= 400) {
+              throw new Error("Bad response from server");
+          }
+          return response.json();
       })
-      .success(function(data) {
-        dispatch(dispatchLoadInitialArticles(data, locale));
-    });
+      .then(function(articles) {
+        dispatch(dispatchLoadInitialArticles(articles, locale));
+      })
   }
 }
 
@@ -49,7 +54,6 @@ export function fetchAdditionalLocaleArticles(locale) {
       dataType: 'JSON'
       })
       .success(function(data) {
-        console.log("Aaaaaaaaddditionall articles fetchedddd", data)
         dispatch(dispatchLoadAdditionalLocaleArticles(data, locale));
     });
   }
