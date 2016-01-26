@@ -13,7 +13,6 @@ import { visibleArticlesAndStatesSelector, localeArticlePicturesSelector, locale
 
 function mapStateToProps(state) {
   const memoizedFilteredArticles = visibleArticlesAndStatesSelector(state);
-  console.log(state)
 
   return {
     routing:                         state.routing,

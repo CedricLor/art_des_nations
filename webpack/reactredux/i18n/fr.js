@@ -25,7 +25,8 @@ export default {
   'newArticle.edit.newsForm.titleMeta': 'le titre',
   'newArticle.edit.newsForm.teaserMeta': 'le chapeau',
   'newArticle.edit.newsForm.postedAtOnMeta': 'Publié à {time} le {date}',
+  'newArticle.edit.newsForm.dropZone.infoText': "Glisser ici l'image qui sera utilisée sur la page d'index pour cet article ou cliquer pour sélectionner le fichier à télécharger.",
   'article.edit.field.exitEditMenuItem': 'Sortir du mode édition du champs',
   'article.edit.field.deleteTextMenuItem': 'Effacer le texte',
-  'article.edit.field.restoreTextMenuItem': 'Restaurer le texte initial'
+  'article.edit.field.restoreTextMenuItem': 'Restaurer le texte initial',
 }

@@ -14,11 +14,11 @@ function addNewArticle(articleWithPicturesAndMediaContainers, locale) {
   }
 }
 
-export function changeNewArticleFields(fieldName, text) {
+export function changeNewArticleFields(fieldName, value) {
   return {
     type: CHANGE_FIELD_OF_NEW_ARTICLE,
     fieldName,
-    text
+    value
   }
 }
 
@@ -28,14 +28,19 @@ export function resetNewArticleFields() {
   }
 }
 
+function preProcessorForHandleSubmitNewArticle(getState) {
+  const data = new FormData();
+  data.append('authenticity_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+  data.append('media_file', getState().newArticleFields.card_picture);
+  const articleFields = getState().newArticleFields;
+  articleFields["card_picture"] = {};
+  data.append('article_form', JSON.stringify(articleFields));
+  return data
+}
+
 export function handleSubmitNewArticle(locale) {
   return function (dispatch, getState) {
-    const data = new FormData();
-    // FIXME -- Push the reading into the dom of the authenticity token and the media_file back to the React components
-    // This should not be in the actions
-    data.append('authenticity_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-    data.append('article_form', JSON.stringify(getState().newArticleFields));
-    data.append('media_file', document.querySelector('input[type="file"]').files[0]);
+    const data = preProcessorForHandleSubmitNewArticle(getState);
 
     fetch(`/${locale}/articles`, {
       method: 'post',

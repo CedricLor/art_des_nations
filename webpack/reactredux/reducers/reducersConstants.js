@@ -7,7 +7,7 @@ export const initialStateForNewArticle = {
     body:                 '',
     posted_at:            `${new Date().toISOString()}`,
     status:               "draft",
-    articlePictureIds:    [],
+    card_picture:         {},
     hasReceivedUserInput: false
   }
 

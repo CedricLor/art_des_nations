@@ -1,10 +1,13 @@
 import React, { PropTypes } from 'react';
-import {Link} from 'react-router';
+
+import { InternationalizedLink } from 'dumb_components/internationalized_link';
 
 import NewsFormToolbarController from './article_basic_form/news_form_toolbar_controller';
 import NewsFormContentEditableController from './article_basic_form/news_form_content_editable_controller';
+import NewsFormDropZoneController from './article_basic_form/news_form_drop_zone_controller';
+
 import NewsPostedAtOnZone from 'news_shared_components/news_posted_at_on_zone';
-import { NewsImage } from './articles_list/news_card/image';
+import {NewsImage} from './articles_list/news_card/image';
 import ReadMoreBtn from './dumb_components/read_more_button';
 
 import { inlineBlockStyleForReadOnly } from '../component_helpers/news_forms_helpers';
@@ -28,7 +31,7 @@ const messages = defineMessages({
 // ## ArticleBasicForm Component
 // ########################################
 
-export const ArticleBasicForm = React.createClass({
+const ArticleBasicForm = React.createClass({
   propTypes: {
     newArticleActions:        PropTypes.object.isRequired,
     newArticleFields:         PropTypes.object.isRequired,
@@ -74,7 +77,6 @@ export const ArticleBasicForm = React.createClass({
 
     return (
       <div className= "news-teaser-wrapper">
-        <input type="file" name="article_creation_form[media_file]" id="article_creation_form_media_file"/>
         <NewsFormContentEditableController
           fieldName={formatMessage(messages.titleMeta)}
           eltType=  "h3"
@@ -100,16 +102,17 @@ export const ArticleBasicForm = React.createClass({
 
   imageLinkedToArticle() {
     return (
-      <Link
-        className= "news-anchor-link-wrapper"
-        to=        {`/article/${this.props.card.id}`}>
-        <NewsImage
-          cardImageSource= {this.props.cardImageSource}
-          newsTitle=       {this.props.newsTitle}
-          />
+      <span
+        className=  "news-anchor-link-wrapper"
+        style=      {{cursor: "pointer"}}
+      >
+        <NewsFormDropZoneController
+          onPictureChange=            {this.handleChange.bind(this, "card_picture")}
+          newArticleCardPictureField= {this.props.newArticleFields.card_picture}
+        />
         <div className= "news-picture-overlay">
         </div>
-      </Link>
+      </span>
     )
   },
 
@@ -149,14 +152,8 @@ export const ArticleBasicForm = React.createClass({
               See comment above
               style=     { styleForInnerWrapperDiv }
             */}
-
-              {/*
-                // //////////////////////
-                // No linked images in new articles at this stage of the creation process of a new article.
-                // {this.imageLinkedToArticle()}
-              */}
+              {this.imageLinkedToArticle()}
               {this.renderNewsTeaserWrapper()}
-
               <ReadMoreBtn
                 routeParams=             {this.props.routeParams}
               />

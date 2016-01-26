@@ -25,7 +25,8 @@ export default {
   'newArticle.edit.newsForm.titleMeta': 'the title',
   'newArticle.edit.newsForm.teaserMeta': 'the teaser',
   'newArticle.edit.newsForm.postedAtOnMeta': 'Posted at {time} on {date}',
+  'newArticle.edit.newsForm.dropZone.infoText': 'Drop the image that will be used on the index page for this article here, or click to select a file to upload.',
   'article.edit.field.exitEditMenuItem': 'Exit edit',
   'article.edit.field.deleteTextMenuItem': 'Delete text',
-  'article.edit.field.restoreTextMenuItem': 'Restore initial text'
+  'article.edit.field.restoreTextMenuItem': 'Restore initial text',
 }

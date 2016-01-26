@@ -29,7 +29,7 @@ export function newArticleFields(state = initialStateForNewArticle, action) {
 
     case CHANGE_FIELD_OF_NEW_ARTICLE:
       let new_state = Object.assign({}, state);
-      new_state[action.fieldName] = action.text;
+      new_state[action.fieldName] = action.value;
       new_state.hasReceivedUserInput = true;
       return new_state
 
