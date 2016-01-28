@@ -73,7 +73,6 @@ export const NewsCardsComponent = React.createClass({
   },
 
   render() {
-    console.log("From NEWS CARD COMPONENT", this.props)
     return (
       <div className="row">
         <div className="col-xs-12">

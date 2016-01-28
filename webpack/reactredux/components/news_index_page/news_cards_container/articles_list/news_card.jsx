@@ -4,7 +4,7 @@ import { InternationalizedLink } from 'dumb_components/internationalized_link';
 import NewsToolbarSwitch from './news_card/news_toolbar_switch';
 import { NewsContentZoneSwitch } from './news_card/news_content_zone_switch';
 import NewsPostedAtOnZone from 'news_shared_components/news_posted_at_on_zone';
-import { NewsImage } from './news_card/image';
+import Image from 'dumb_components/image';
 import ReadMoreBtn from '../dumb_components/read_more_button';
 
 // ########################################
@@ -45,8 +45,6 @@ export const NewsCard = React.createClass({
 
   // # Card equalization
   componentDidMount() {
-    console.log("-*-*-*-*-*-*- IN NEWSCARD", this.props.card.id);
-    console.log("-*-*-*-*-*-*- IN NEWSCARD", this.refs["main_article_div_"+parseInt(this.props.card.id)])
     const callback = () =>
       this.props.articlesSizingPositionningActions.assignRealDomValuesToDOMPropsOfArticle(
         this.props.card.id,
@@ -147,7 +145,7 @@ export const NewsCard = React.createClass({
   imageLinkedToArticle() {
     const newsImage =
       <span>
-        <NewsImage
+        <Image
           cardImageSource= {this.props.cardMediaContainer.media}
           newsTitle=       {this.props.cardMediaContainer.title}
           />

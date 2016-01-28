@@ -7,7 +7,6 @@ import NewsFormContentEditableController from './article_basic_form/news_form_co
 import NewsFormDropZoneController from './article_basic_form/news_form_drop_zone_controller';
 
 import NewsPostedAtOnZone from 'news_shared_components/news_posted_at_on_zone';
-import {NewsImage} from './articles_list/news_card/image';
 import ReadMoreBtn from './dumb_components/read_more_button';
 
 import { inlineBlockStyleForReadOnly } from '../component_helpers/news_forms_helpers';

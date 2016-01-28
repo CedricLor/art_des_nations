@@ -114,7 +114,6 @@ const Root = React.createClass({
   },
 
   render () {
-
     if (this.props.isFetching.initialData === true ) {
       return <div>Currently fetching initial data</div>
     }

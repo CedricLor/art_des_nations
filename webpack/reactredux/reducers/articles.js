@@ -10,7 +10,11 @@ import {
   CHANGE_FIELD_OF_ARTICLE,
   CHANGE_WIP_STATE_OF_FIELD_OF_ARTICLE,
   RESET_ALL_WIP_STATES_FOR_ARTICLE,
-  CHANGE_EDIT_STATE_OF_FIELD_OF_ARTICLE,
+
+  CHANGE_EDIT_STATE_OF_ARTICLE,
+  TURN_ON_EDIT_STATE_OF_A_FIELD,
+  TURN_OFF_EDIT_STATE_OF_A_FIELD,
+
   TOGGLE_EDIT_STATE_OF_FIELD_OF_ARTICLE,
   RESET_ALL_EDIT_STATES_FOR_ARTICLE,
   CHANGE_FIELD_OF_NEW_ARTICLE,
@@ -158,30 +162,19 @@ export function articlesEditStates(state = {}, action) {
       })
       return new_state
 
-    case CHANGE_EDIT_STATE_OF_FIELD_OF_ARTICLE:
+    /* ***************** */
+    case TURN_ON_EDIT_STATE_OF_A_FIELD:
+      new_state[action.locale][action.id]["article"] = true;
+      new_state[action.locale][action.id][action.fieldName] = true;
+      return new_state
 
-      // if changing the edit state of the article, change the edit state of all the fields
-      if ( action.fieldName === "article" ) {
-        _.forOwn(new_state[action.locale][action.id], (value, fieldName) => { new_state[action.locale][action.id][fieldName] = action.editStateValue });
-      // else change only the edit state of the relevant field
-      } else {
-        new_state[action.locale][action.id][action.fieldName] = action.editStateValue;
-      }
-
-      // if any of the edit state of the field is true, set the article edit state to true
-      // 1. Create a copy of the current article's edit states
-      const statesOfFieldsExceptArticleState = Object.assign({}, new_state[action.locale][action.id]);
-      // 2. Delete the edit state of the article to keep only the fields edit states
-      delete statesOfFieldsExceptArticleState.article;
-      // 3. Loop around the values of the states of the fields, and if any edit state is on
-      // turn the article's edit state to true
-      if ( _.includes( _.values( statesOfFieldsExceptArticleState ), true ) ) {
-        new_state[action.locale][action.id].article = true;
-      // 4. Else, turn it to false (it means nothing is currently in edit mode in this article)
-      } else {
-        new_state[action.locale][action.id].article = false;
+    case TURN_OFF_EDIT_STATE_OF_A_FIELD:
+      new_state[action.locale][action.id][action.fieldName] = false;
+      if ( !( _.includes( _.values( _.omit(new_state[action.locale][action.id], ['article']) ), true ) ) ) {
+        new_state[action.locale][action.id]["article"] = false;
       }
       return new_state
+    /* ***************** */
 
     case TOGGLE_EDIT_STATE_OF_FIELD_OF_ARTICLE:
       new_state[action.id][action.fieldName] = !new_state[action.id][action.fieldName];

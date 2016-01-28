@@ -2,7 +2,11 @@ import {
   CHANGE_FIELD_OF_ARTICLE,
   CHANGE_WIP_STATE_OF_FIELD_OF_ARTICLE,
   RESET_ALL_WIP_STATES_FOR_ARTICLE,
-  CHANGE_EDIT_STATE_OF_FIELD_OF_ARTICLE,
+
+  CHANGE_EDIT_STATE_OF_ARTICLE,
+  TURN_ON_EDIT_STATE_OF_A_FIELD,
+  TURN_OFF_EDIT_STATE_OF_A_FIELD,
+
   TOGGLE_EDIT_STATE_OF_FIELD_OF_ARTICLE,
   RESET_ALL_EDIT_STATES_FOR_ARTICLE
 } from '../constants/ActionTypes'
@@ -52,16 +56,38 @@ function resetAllWIPStatesForArticle(id, locale) {
   }
 }
 
-
-export function changeArticleEditStateOfField(id, fieldName, editStateValue, locale) {
+/* ************************** */
+function turnOnEditStateOfAField(id, fieldName, locale) {
   return {
-    type: CHANGE_EDIT_STATE_OF_FIELD_OF_ARTICLE,
+    type: TURN_ON_EDIT_STATE_OF_A_FIELD,
     id,
     fieldName,
-    editStateValue,
     locale
   }
 }
+
+function turnOffEditStateOfAField(id, fieldName, locale) {
+  return {
+    type: TURN_OFF_EDIT_STATE_OF_A_FIELD,
+    id,
+    fieldName,
+    locale
+  }
+}
+
+
+export function changeArticleEditStateOfField(id, fieldName, editStateValue, locale) {
+  return function (dispatch) {
+    if ( fieldName === "article" ) {
+        dispatch(resetAllEditStatesForArticle(id, editStateValue, locale))
+    } else {
+      const fnToDispatch = ( editStateValue === true ) ? turnOnEditStateOfAField : turnOffEditStateOfAField
+      dispatch(fnToDispatch(id, fieldName, locale))
+    }
+  }
+}
+/* ************************** */
+
 
 function resetAllEditStatesForArticle(id, resetValue, locale) {
   return {

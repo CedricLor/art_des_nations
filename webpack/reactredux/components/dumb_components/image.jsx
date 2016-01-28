@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 // ## Image Component
 // ########################################
 
-export class NewsImage extends React.Component {
+export default class Image extends React.Component {
   render() {
     return (
       <img src={this.props.cardImageSource} alt={this.props.newsTitle} />
@@ -11,7 +11,7 @@ export class NewsImage extends React.Component {
   }
 }
 
-NewsImage.propTypes = {
+Image.propTypes = {
   cardImageSource: PropTypes.string,
   newsTitle:       PropTypes.string
 };

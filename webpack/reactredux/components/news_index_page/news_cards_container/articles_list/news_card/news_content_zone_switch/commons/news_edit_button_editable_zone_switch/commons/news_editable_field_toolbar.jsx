@@ -65,7 +65,6 @@ const NewsEditableFieldToolbar = React.createClass({
   },
 
   render() {
-    console.log(this.props)
     const {formatMessage} = this.props.intl;
 
     let firstButton;

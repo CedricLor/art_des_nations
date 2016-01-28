@@ -33,9 +33,9 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    articlesActions:                   bindActionCreators(ownProps.articlesActions, dispatch),
-    articlesFieldsActions:             bindActionCreators(ownProps.articlesFieldsActions, dispatch),
-    articlesSizingPositionningActions: bindActionCreators(ownProps.articlesSizingPositionningActions, dispatch),
+    articlesActions:                   ownProps.articlesActions,
+    articlesFieldsActions:             ownProps.articlesFieldsActions,
+    articlesSizingPositionningActions: ownProps.articlesSizingPositionningActions,
 
     newArticleActions:                 bindActionCreators(NewArticleActions, dispatch),
   }

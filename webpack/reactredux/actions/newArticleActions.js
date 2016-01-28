@@ -67,9 +67,9 @@ export function handleSubmitNewArticle(locale) {
       .then((articleWithPicturesAndMediaContainers) => {
         dispatch(addNewArticle(articleWithPicturesAndMediaContainers));
         dispatch(pushPath(`/${locale}/article/${articleWithPicturesAndMediaContainers.article.id}`))
-        // dispatch(setArticlesVisibilityFilter('SHOW_DRAFT'));
-        // dispatch(refreshArticlesSizingPositionning());
         dispatch(resetNewArticleFields());
+        dispatch(setArticlesVisibilityFilter('SHOW_DRAFT'));
+        dispatch(refreshArticlesSizingPositionning());
       })
   }
 }

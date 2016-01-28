@@ -3,7 +3,8 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Link } from 'react-router';
 import NewsToolbarSwitch from './news_cards_container/articles_list/news_card/news_toolbar_switch';
 
-import GenericContentEditable from '../dumb_components/generic_content_editable';
+import GenericContentEditable from 'dumb_components/generic_content_editable';
+import Image from 'dumb_components/image';
 import NewsPostedAtOnZone from 'news_shared_components/news_posted_at_on_zone';
 import { NewsContentZoneSwitch } from './news_cards_container/articles_list/news_card/news_content_zone_switch';
 
@@ -19,14 +20,20 @@ export const IndividualNewsComponent = React.createClass({
     articlesEditStates:         PropTypes.object.isRequired,
     articlesDOMProps:           PropTypes.object.isRequired,
 
-    articlePictures:            PropTypes.object.isRequired,
-    mediaContainers:            PropTypes.object.isRequired,
+    articlePictures:            PropTypes.array.isRequired,
+    mediaContainers:            PropTypes.array.isRequired,
 
   // currentArticleTags
   // article.author.full_name
 
     articlesActions:            PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
     articlesFieldsActions:      PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+  },
+
+  getDefaultProps() {
+    mediaContainers: [
+      {media: "", title: ""}
+    ]
   },
 
   handleDelete(e) {
@@ -50,6 +57,24 @@ export const IndividualNewsComponent = React.createClass({
 
   handleChange(fieldName, fieldValue) {
     this.props.articlesFieldsActions.changeFieldOfArticle(this.props.currentArticle.id, fieldName, fieldValue, this.props.siteCurrentLocale);
+  },
+
+
+  renderImage() {
+    // QUICK FIX ON IMAGES -
+    // SHOULD TURN INTO A CAROUSEL WITH DEFAULT PICTURE BEING THE PICTURE PROVIDED AS FEATURE PICTURE -
+    // FIX ALSO CREATION PROCESS OF NEW IMAGES: SHOULD BE STORED AS BOTH CARD PICTURE AND CAROUSEL PICTURE, WITH AN OPTION
+    // TO REMOVE THEM AS CAROUSEL PICTURES
+    return (
+      <span>
+        <Image
+          cardImageSource= {this.props.mediaContainers[0].media}
+          newsTitle=       {this.props.mediaContainers[0].title}
+          />
+        <div className= "news-picture-overlay">
+        </div>
+      </span>
+    )
   },
 
   renderTitle() {
@@ -90,10 +115,12 @@ export const IndividualNewsComponent = React.createClass({
         currArtWIPStateCurrField=    {this.props.articlesWIPStatesOfFields[fieldName]}
         currArtEditStateCurrField=   {this.props.articlesEditStates[fieldName]}
 
-        cardImageSource=             {this.props.cardImageSource}
-
+        articlesFieldsActions=       {this.props.articlesFieldsActions}
         handleUpdate=                {this.handleUpdate.bind(this, fieldName)}
         handleChange=                {this.handleChange.bind(this, fieldName)}
+
+        routeParams=                 {this.props.routeParams}
+        siteCurrentLocale=           {this.props.siteCurrentLocale}
         />
     )
   },
@@ -156,7 +183,6 @@ export const IndividualNewsComponent = React.createClass({
   },
 
   render() {
-    console.log(this.props)
 
     return (
       <ReactCSSTransitionGroup
@@ -172,6 +198,8 @@ export const IndividualNewsComponent = React.createClass({
             <div className="col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
 
               {this.newsToolbarSwitch()}
+
+              {this.renderImage()}
 
               {this.renderTitle()}
 
