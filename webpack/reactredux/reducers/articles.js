@@ -124,11 +124,13 @@ export function articles(state = {}, action) {
       return newState
 
     case REORDER_ARTICLES_ARRAY:
+      // Reorder only the articles' array for the current locale
       const localizedReorderedState = {};
       localizedReorderedState[action.locale] = _.sortByOrder(state[action.locale], 'posted_at', 'desc');
       return Object.assign({}, state, localizedReorderedState)
 
     case REORDER_ALL_THE_ARTICLES_ARRAYS:
+    // Reorder all the articles' arrays, in all the locales
       const reOrderedState = {};
       _.forOwn(state, (localeArticlesArray, locale) => {
         reOrderedState[locale] = _.sortByOrder(localeArticlesArray, 'posted_at', 'desc')

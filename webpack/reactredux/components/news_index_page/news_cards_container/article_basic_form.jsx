@@ -169,24 +169,3 @@ const ArticleBasicForm = React.createClass({
 })
 
 export default injectIntl(ArticleBasicForm);
-
-  // # Card equalization
-  // NO NEED FOR THAT IN THE FORM
-  // componentDidMount() {
-  //   const callback = () =>
-  //     this.props.articlesSizingPositionningActions.assignRealDomValuesToDOMPropsOfArticle(
-  //       this.props.card.id,
-  //       this.refs["new_article_main_div"+parseInt(this.props.card.id)].getBoundingClientRect().top,
-  //       this.refs[parseInt(this.props.cardNumber)].clientHeight,
-  //       this.props.cardNumber)
-  //   setTimeout(callback, 0)
-  // },
-
-  // componentDidUpdate: (nextProps) ->
-  //   # callback = ( ->
-  //   #   @props.articlesSizingPositionningActions.assignRealDomValuesToDOMPropsOfArticle @props.card.id,
-  //   #     @refs["new_article_main_div#{@props.card.id}"].getBoundingClientRect().top,
-  //   #     @refs["#{@props.cardNumber}"].clientHeight,
-  //   #     @props.cardNumber
-  //   # ).bind(@)
-  //   # setTimeout callback, 0 if nextProps.passedInStates.needs_resizing == true

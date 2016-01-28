@@ -11,7 +11,6 @@ export const NewsEditButtonEditableZoneSwitch = React.createClass({
     sourceId:                  PropTypes.string.isRequired,
     value:                     PropTypes.string.isRequired,
 
-    articlesPassedInUiProps:   PropTypes.object.isRequired,
     currArtWIPStateCurrField:  PropTypes.string.isRequired,
     currArtEditStateCurrField: PropTypes.string.isRequired,
 
@@ -33,7 +32,6 @@ export const NewsEditButtonEditableZoneSwitch = React.createClass({
           sourceId:                    this.props.sourceId,
           value:                       this.props.value,
 
-          articlesPassedInUiProps:     this.props.articlesPassedInUiProps,
           currArtWIPStateCurrField:    this.props.currArtWIPStateCurrField,
 
           handleChange:                this.props.handleChange,

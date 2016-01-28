@@ -6,11 +6,6 @@ export function selectArticlesOnLanguage(articles, locale) {
   return articles[locale]
 }
 
-// Selector of the article pictures depending on the requested visibility status
-export function selectArticlePicturesOnLanguage(articlePictures, locale) {
-  return articlePictures[locale]
-}
-
 // Selector of the articles depending on the requested visibility status
 export function selectArticlesOnVisibilityStatus(articles, filter) {
   switch (filter) {

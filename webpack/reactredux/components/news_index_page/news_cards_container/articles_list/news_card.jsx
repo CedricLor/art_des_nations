@@ -45,11 +45,13 @@ export const NewsCard = React.createClass({
 
   // # Card equalization
   componentDidMount() {
+    console.log("-*-*-*-*-*-*- IN NEWSCARD", this.props.card.id);
+    console.log("-*-*-*-*-*-*- IN NEWSCARD", this.refs["main_article_div_"+parseInt(this.props.card.id)])
     const callback = () =>
       this.props.articlesSizingPositionningActions.assignRealDomValuesToDOMPropsOfArticle(
         this.props.card.id,
         this.refs["main_article_div_"+parseInt(this.props.card.id)].getBoundingClientRect().top,
-        this.refs[parseInt(this.props.cardNumber)].clientHeight,
+        this.refs[parseInt(this.props.card.id)].clientHeight,
         this.props.cardNumber,
         this.props.siteCurrentLocale)
     setTimeout(callback, 0)
@@ -92,7 +94,6 @@ export const NewsCard = React.createClass({
       return (
         <NewsToolbarSwitch
           status=                  {this.props.card.status}
-          articlesPassedInUiProps= {this.props.articlesPassedInUiProps}
           articlesEditStates=      {this.props.articlesEditStates}
 
           handleUpdate=            {this.handleUpdate.bind(this, "article")}
@@ -114,7 +115,6 @@ export const NewsCard = React.createClass({
         sourceId=                    {this.props.card.id}
 
         siteEditMode=                {this.props.siteEditMode}
-        articlesPassedInUiProps=     {this.props.articlesPassedInUiProps}
         currArtWIPStateCurrField=    {this.props.articlesWIPStatesOfFields[fieldName]}
         currArtEditStateCurrField=   {this.props.articlesEditStates[fieldName]}
 
@@ -180,8 +180,8 @@ export const NewsCard = React.createClass({
           {this.newsToolbarSwitch()}
           <div
             className= "inner-wrapper-news-div"
-            ref=       { this.props.cardNumber }
-            style=     { styleForInnerWrapperDiv }>
+            ref=       {this.props.card.id}
+            style=     {styleForInnerWrapperDiv}>
             {this.imageLinkedToArticle()}
             {this.createNewsTeaserWrapper()}
             <ReadMoreBtn

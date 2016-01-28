@@ -16,7 +16,6 @@ export const NewsContentZoneSwitch = React.createClass ({
     siteEditMode:              PropTypes.object.isRequired,
     viewType:                  PropTypes.string.isRequired,
 
-    articlesPassedInUiProps:   PropTypes.object.isRequired,
     currArtWIPStateCurrField:  PropTypes.string.isRequired,
     currArtEditStateCurrField: PropTypes.string.isRequired,
 
@@ -56,7 +55,6 @@ export const NewsContentZoneSwitch = React.createClass ({
           value=                       {this.props.value}
           sourceId=                    {this.props.sourceId}
 
-          articlesPassedInUiProps=     {this.props.articlesPassedInUiProps}
           currArtWIPStateCurrField=    {this.props.currArtWIPStateCurrField}
           currArtEditStateCurrField=   {this.props.currArtEditStateCurrField}
 

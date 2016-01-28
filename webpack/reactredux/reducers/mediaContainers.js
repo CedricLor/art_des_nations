@@ -22,7 +22,7 @@ export function mediaContainers(state = {}, action) {
 
     case ADD_NEW_ARTICLE:
       const new_state = Object.assign({}, state)
-      new_state[action.locale][action.mediaContainer.id] = action.mediaContainer
+      _.forOwn(new_state, (localeMediaContainersObjects, locale) => {new_state[locale][action.mediaContainer.id] = action.mediaContainer})
       return new_state
 
     default:

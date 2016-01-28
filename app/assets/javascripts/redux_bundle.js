@@ -44559,9 +44559,13 @@
 	
 	var _NewsIndexPage = __webpack_require__(494);
 	
-	var _news_cards_container = __webpack_require__(523);
+	var _NewsCardsContainer = __webpack_require__(711);
 	
-	var _individual_news_container = __webpack_require__(702);
+	var _NewsCardsContainer2 = _interopRequireDefault(_NewsCardsContainer);
+	
+	var _IndividualNewsContainer = __webpack_require__(709);
+	
+	var _IndividualNewsContainer2 = _interopRequireDefault(_IndividualNewsContainer);
 	
 	var _i18n = __webpack_require__(703);
 	
@@ -44606,9 +44610,9 @@
 	var routeConfig = [_react2.default.createElement(
 	  _reactRouter.Route,
 	  { path: '/(:locale/)', component: _App2.default },
-	  _react2.default.createElement(_reactRouter.IndexRoute, { component: _news_cards_container.NewsCardsContainer }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/(:locale/)articles', component: _news_cards_container.NewsCardsContainer }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/(:locale/)article/:id', component: _individual_news_container.IndividualNewsContainer })
+	  _react2.default.createElement(_reactRouter.IndexRoute, { component: _NewsCardsContainer2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: '/(:locale/)articles', component: _NewsCardsContainer2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: '/(:locale/)article/:id', component: _IndividualNewsContainer2.default })
 	)];
 	
 	function renderRoutes() {
@@ -44631,6 +44635,7 @@
 	    };
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    // If the current locale has changed and the next locale is not in the articles tree, then timeout and dispatch fetch actions
 	    if (this.props.siteCurrentLocale !== nextProps.siteCurrentLocale && !(nextProps.siteCurrentLocale in nextProps.articles)) {
 	      this.setState({ timeOut: true });
 	      store.dispatch((0, _articlesActions.fetchAdditionalLocaleArticles)(nextProps.siteCurrentLocale));
@@ -44676,39 +44681,6 @@
 	  var articles = _ref.articles;
 	  return { siteCurrentLocale: siteCurrentLocale, isFetching: isFetching, articles: articles };
 	})(Root);
-	
-	// ***********************************************
-	// +**********************************************
-	// ***********************************************
-	// import { createConnector } from 'redux-rx/react';
-	// import { bindActionCreators } from 'redux-rx';
-
-	// const AppSuperContainer = createConnector((props$, state$, dispatch$) => {
-	//   const actionCreators$ = bindActionCreators(actionCreators, dispatch$);
-	//   const pushState$ = actionCreators$.map(ac => ac.pushState);
-
-	//   // Detect locale change
-	//   const didChangeLocale$ = state$
-	//     .distinctUntilChanged(state => state.siteCurrentLocale)
-	//     .filter(state => state.siteCurrentLocale);
-
-	//   // Redirect on change locale!
-	//   const redirect$ = didChangeLocale$
-	//     .withLatestFrom(
-	//       pushState$,
-	//       // Use query parameter as redirect path
-	//       (state, pushState) => () => pushState(null, state.router.query.redirect || '/')
-	//     )
-	//     .do(go => go());
-
-	//   return combineLatest(
-	//     props$, actionCreators$, redirect$,
-	//     (props, actionCreators) => ({
-	//       ...props,
-	//       ...actionCreators
-	//     })
-	//   );
-	// }, Root);
 
 /***/ },
 /* 424 */
@@ -50088,7 +50060,7 @@
 	var CHANGE_FIELD_OF_NEW_ARTICLE = exports.CHANGE_FIELD_OF_NEW_ARTICLE = 'CHANGE_FIELD_OF_NEW_ARTICLE';
 	var RESET_FIELDS_OF_NEW_ARTICLE = exports.RESET_FIELDS_OF_NEW_ARTICLE = 'RESET_FIELDS_OF_NEW_ARTICLE';
 	
-	var CHANGE_NEED_RESIZING_STATE_OF_ARTICLE = exports.CHANGE_NEED_RESIZING_STATE_OF_ARTICLE = 'CHANGE_NEED_RESIZING_STATE_OF_ARTICLE';
+	var CHANGE_NEED_RESIZING_STATE_OF_ARTICLES = exports.CHANGE_NEED_RESIZING_STATE_OF_ARTICLES = 'CHANGE_NEED_RESIZING_STATE_OF_ARTICLES';
 	var ASSIGN_REAL_DOM_VALUES_TO_DOM_PROPS_OF_ARTICLE = exports.ASSIGN_REAL_DOM_VALUES_TO_DOM_PROPS_OF_ARTICLE = 'ASSIGN_REAL_DOM_VALUES_TO_DOM_PROPS_OF_ARTICLE';
 	var RESET_DOM_PROPS_OF_ALL_THE_ARTICLES = exports.RESET_DOM_PROPS_OF_ALL_THE_ARTICLES = 'RESET_DOM_PROPS_OF_ALL_THE_ARTICLES';
 
@@ -50278,11 +50250,13 @@
 	      return newState;
 	
 	    case _ActionTypes.REORDER_ARTICLES_ARRAY:
+	      // Reorder only the articles' array for the current locale
 	      var localizedReorderedState = {};
 	      localizedReorderedState[action.locale] = _.sortByOrder(state[action.locale], 'posted_at', 'desc');
 	      return Object.assign({}, state, localizedReorderedState);
 	
 	    case _ActionTypes.REORDER_ALL_THE_ARTICLES_ARRAYS:
+	      // Reorder all the articles' arrays, in all the locales
 	      var reOrderedState = {};
 	      _.forOwn(state, function (localeArticlesArray, locale) {
 	        reOrderedState[locale] = _.sortByOrder(localeArticlesArray, 'posted_at', 'desc');
@@ -50431,8 +50405,6 @@
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
 	
-	  var new_state = Object.assign({}, state);
-	
 	  switch (action.type) {
 	
 	    case _ActionTypes.LOADED_INITIAL_ARTICLES:
@@ -50441,19 +50413,35 @@
 	    case _ActionTypes.LOADED_ADDITIONNAL_LOCALE_ARTICLES:
 	      return Object.assign({}, state, action.additionalStates.articlesNeedResizingStates);
 	
+	    // In case we add a new article, we need to create a new entry for the article in all the existing langugages
 	    case _ActionTypes.ADD_NEW_ARTICLE:
-	      new_state[action.locale][action.article.id] = true;
-	      return new_state;
-	
-	    case _ActionTypes.CHANGE_NEED_RESIZING_STATE_OF_ARTICLE:
-	      new_state[action.locale][action.id] = action.stateValue;
-	      return new_state;
+	      var newState = Object.assign({}, state);
+	      _.forOwn(newState, function (localeNeedResizingStatesObjects, locale) {
+	        newState[locale][action.article.id] = true;
+	      });
+	      return newState;
 	
 	    case _ActionTypes.DELETE_ARTICLE:
-	      _.forOwn(new_state, function (localeNeedResizingStatesObjects, locale) {
-	        delete new_state[locale][action.id];
+	      var newStateWithDeletedArticle = Object.assign({}, state);
+	      _.forOwn(newStateWithDeletedArticle, function (localeNeedResizingStatesObjects, locale) {
+	        delete newStateWithDeletedArticle[locale][action.id];
 	      });
-	      return new_state;
+	      return newStateWithDeletedArticle;
+	
+	    // Sets all the needResizingStates values of all the articles in all the languages to true
+	    case _ActionTypes.CHANGE_NEED_RESIZING_STATE_OF_ARTICLES:
+	      var newStateWithNeedResizing = Object.assign({}, state);
+	      _.forOwn(newStateWithNeedResizing, function (localeNeedResizingStatesObjects, locale) {
+	        _.forOwn(newStateWithNeedResizing[locale], function (needResizingStatesByArticlesById, keyId) {
+	          newStateWithNeedResizing[locale][keyId] = true;
+	        });
+	      });
+	      return newStateWithNeedResizing;
+	
+	    case _ActionTypes.ASSIGN_REAL_DOM_VALUES_TO_DOM_PROPS_OF_ARTICLE:
+	      var newStateWithRealDomValue = Object.assign({}, state);
+	      newStateWithRealDomValue[action.locale][action.id] = false;
+	      return newStateWithRealDomValue;
 	
 	    default:
 	      return state;
@@ -50474,17 +50462,10 @@
 	    case _ActionTypes.LOADED_ADDITIONNAL_LOCALE_ARTICLES:
 	      return Object.assign({}, state, action.additionalStates.articlesDOMProps);
 	
+	    // Create the record for the new article in all the localized versions of articlesDOMProps state
 	    case _ActionTypes.ADD_NEW_ARTICLE:
 	      _.forOwn(new_state, function (localeArticleDOMPropsObjects, locale) {
-	        // Create the record for the new article in all the localized versions of articlesDOMProps state
 	        new_state[locale][action.article.id] = _reducersConstants.initialArticlesDOMPropsState;
-	        // increment cardnumbers of all the articles in all the localized versions of articlesDOMProps state
-	        var i = 1;
-	        new_state = _.forOwn(new_state, function (domPropsObjects) {
-	          domPropsObjects.cardNumber = i;
-	          i++;
-	        });
-	        // end increment
 	      });
 	      return new_state;
 	
@@ -50502,13 +50483,6 @@
 	      };
 	      new_state = (0, _helpersForArticlesSizingPositionning.equalizePreviousRowIfFirstCardOfNextRow)(new_state, action);
 	      return new_state;
-	
-	    case _ActionTypes.RESET_DOM_PROPS_OF_ALL_THE_ARTICLES:
-	      var localizedDOMPropsAfterChanges = {};
-	      localizedDOMPropsAfterChanges[action.locale] = _.forOwn(state[action.locale], function (domPropsObjects, id) {
-	        id: _reducersConstants.initialArticlesDOMPropsState;
-	      });
-	      return Object.assign({}, state, localizedDOMPropsAfterChanges);
 	
 	    default:
 	      return state;
@@ -50653,7 +50627,9 @@
 	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
 	      var new_state = Object.assign({}, state);
-	      new_state[action.locale][action.mediaContainer.id] = action.mediaContainer;
+	      _.forOwn(new_state, function (localeMediaContainersObjects, locale) {
+	        new_state[locale][action.mediaContainer.id] = action.mediaContainer;
+	      });
 	      return new_state;
 	
 	    default:
@@ -50698,7 +50674,9 @@
 	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
 	      var new_state = Object.assign({}, state);
-	      new_state[action.locale][action.articlePicture.id] = action.articlePicture;
+	      _.forOwn(new_state, function (localeMediaContainersObjects, locale) {
+	        new_state[locale][action.articlePicture.id] = action.articlePicture;
+	      });
 	      return new_state;
 	
 	    default:
@@ -50738,10 +50716,6 @@
 	
 	var ArticlesVisibilityFilterActions = _interopRequireWildcard(_articlesVisibilityFilterActions);
 	
-	var _newArticleActions = __webpack_require__(517);
-	
-	var NewArticleActions = _interopRequireWildcard(_newArticleActions);
-	
 	var _siteActions = __webpack_require__(518);
 	
 	var SiteActions = _interopRequireWildcard(_siteActions);
@@ -50751,8 +50725,6 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function mapStateToProps(state) {
-	  var memoizedFilteredArticles = (0, _index.visibleArticlesAndStatesSelector)(state);
-	
 	  return {
 	    routing: state.routing,
 	    isFetching: state.isFetching,
@@ -50761,18 +50733,9 @@
 	    siteLanguageSwitcherText: state.siteLanguageSwitcherText,
 	    siteCurrentLocale: state.siteCurrentLocale,
 	
-	    newArticleFields: state.newArticleFields,
-	
-	    articlesVisibilityFilter: memoizedFilteredArticles.articlesVisibilityFilter,
-	    visibleArticles: memoizedFilteredArticles.visibleArticles,
-	
-	    articlesWIPStatesOfFields: memoizedFilteredArticles.visibleArticlesWIPStatesOfFields,
-	    articlesEditStates: memoizedFilteredArticles.visibleArticlesEditStates,
-	    articlesNeedResizingStates: memoizedFilteredArticles.visibleArticlesNeedResizingStates,
-	    articlesDOMProps: memoizedFilteredArticles.visibleArticlesDOMProps,
+	    articlesVisibilityFilter: state.articlesVisibilityFilter,
 	
 	    articlePictures: (0, _index.localeArticlePicturesSelector)(state),
-	    // FIXME: the select and memoization for mediaContainers will probably need to be detached from the articles' selection and memoization
 	    mediaContainers: (0, _index.localeMediaContainersSelector)(state)
 	  };
 	}
@@ -50783,7 +50746,6 @@
 	    articlesFieldsActions: (0, _redux.bindActionCreators)(ArticlesFieldsActions, dispatch),
 	    articlesSizingPositionningActions: (0, _redux.bindActionCreators)(ArticlesSizingPositionningActions, dispatch),
 	    articlesVisibilityFilterActions: (0, _redux.bindActionCreators)(ArticlesVisibilityFilterActions, dispatch),
-	    newArticleActions: (0, _redux.bindActionCreators)(NewArticleActions, dispatch),
 	    siteActions: (0, _redux.bindActionCreators)(SiteActions, dispatch)
 	  };
 	}
@@ -50816,40 +50778,37 @@
 	  displayName: 'NewsIndexPage',
 	
 	  propTypes: {
-	    newArticleActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
-	    newArticleFields: _react.PropTypes.object.isRequired,
-	
-	    visibleArticles: _react.PropTypes.arrayOf(_react.PropTypes.object.isRequired).isRequired,
-	    articlesActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
-	    articlesFieldsActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
-	    articlesSizingPositionningActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
-	
-	    articlesDOMProps: _react.PropTypes.objectOf(_react.PropTypes.object.isRequired).isRequired,
-	    articlesEditStates: _react.PropTypes.objectOf(_react.PropTypes.object.isRequired).isRequired,
-	    articlesWIPStatesOfFields: _react.PropTypes.objectOf(_react.PropTypes.object.isRequired).isRequired,
-	    articlesNeedResizingStates: _react.PropTypes.objectOf(_react.PropTypes.bool.isRequired).isRequired,
-	
-	    siteActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
-	    siteAvailableLocales: _react.PropTypes.arrayOf(_react.PropTypes.string.isRequired).isRequired,
-	    siteCurrentLocale: _react.PropTypes.string.isRequired,
+	    // Props (from App)
+	    isFetching: _react.PropTypes.objectOf(_react.PropTypes.bool),
 	    siteEditMode: _react.PropTypes.objectOf(_react.PropTypes.bool.isRequired).isRequired,
+	    siteAvailableLocales: _react.PropTypes.arrayOf(_react.PropTypes.string.isRequired).isRequired,
 	    siteLanguageSwitcherText: _react.PropTypes.objectOf(_react.PropTypes.string.isRequired).isRequired,
+	    siteCurrentLocale: _react.PropTypes.string.isRequired,
 	
 	    articlesVisibilityFilter: _react.PropTypes.string.isRequired,
-	    articlesVisibilityFilterActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
 	
 	    mediaContainers: _react.PropTypes.objectOf(_react.PropTypes.object.isRequired).isRequired,
 	    articlePictures: _react.PropTypes.objectOf(_react.PropTypes.object.isRequired).isRequired,
 	
+	    // Actions (from App)
+	    articlesActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
+	    articlesFieldsActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
+	    articlesSizingPositionningActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
+	
+	    articlesVisibilityFilterActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
+	
+	    siteActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
+	
+	    // Passed-in by router
 	    children: _react.PropTypes.element.isRequired,
 	
 	    history: _react.PropTypes.object,
-	    isFetching: _react.PropTypes.objectOf(_react.PropTypes.bool),
 	    location: _react.PropTypes.object,
 	    params: _react.PropTypes.object,
 	    route: _react.PropTypes.object,
 	    routeParams: _react.PropTypes.object,
 	    routes: _react.PropTypes.array,
+	    // From routing reducer (redux-router history)
 	    routing: _react.PropTypes.object
 	  },
 	
@@ -50861,58 +50820,28 @@
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
-	    return window.addEventListener('resize', this.props.articlesSizingPositionningActions.refreshArticlesSizingPositionning(this.props.siteCurrentLocale));
+	    return window.addEventListener('resize', this.props.articlesSizingPositionningActions.refreshArticlesSizingPositionning());
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    return window.removeEventListener('resize');
 	  },
 	  renderChildren: function renderChildren() {
-	    if (this.props.children && this.props.children.props.location) {
-	      // if the children requested via the router is a single article (individualNewsContainer) (i.e. for the articleView)
-	      if (this.props.children.props.location.pathname.match(/\/article\//) != null) {
-	        var currentArticle = _.find(this.props.visibleArticles, { 'id': parseInt(this.props.children.props.params.id) });
-	        return this.props.children && _react2.default.cloneElement(this.props.children, {
-	          articlesActions: this.props.articlesActions,
-	          articlesFieldsActions: this.props.articlesFieldsActions,
-	          siteEditMode: this.props.siteEditMode,
-	          currentArticle: currentArticle,
-	          // # redux passed in Edit and Wip States
-	          articlesWIPStatesOfFields: this.props.articlesWIPStatesOfFields[this.props.children.props.params.id],
-	          articlesEditStates: this.props.articlesEditStates[this.props.children.props.params.id],
-	          // # redux passedInDomProps
-	          articlesDOMProps: this.props.articlesDOMProps[this.props.children.props.params.id],
-	          articlesPassedInUiProps: this.props.articlesPassedInUiProps,
-	          routeParams: this.props.routeParams,
-	          siteCurrentLocale: this.props.siteCurrentLocale,
+	    return this.props.children && _react2.default.cloneElement(this.props.children, {
+	      articlesPassedInUiProps: this.props.articlesPassedInUiProps,
 	
-	          articlePictures: this.props.articlePictures,
-	          mediaContainers: this.props.mediaContainers
-	        });
-	        // else what is requested is the articles index (newsCardContainer) (i.e. for the indexView)
-	      } else {
-	          return this.props.children && _react2.default.cloneElement(this.props.children, {
-	            articlesActions: this.props.articlesActions,
-	            articlesFieldsActions: this.props.articlesFieldsActions,
-	            articlesSizingPositionningActions: this.props.articlesSizingPositionningActions,
-	            siteEditMode: this.props.siteEditMode,
-	            articles: this.props.visibleArticles,
-	            articlesWIPStatesOfFields: this.props.articlesWIPStatesOfFields,
-	            articlesEditStates: this.props.articlesEditStates,
-	            articlesDOMProps: this.props.articlesDOMProps,
-	            articlesPassedInUiProps: this.props.articlesPassedInUiProps,
-	            newArticleActions: this.props.newArticleActions,
-	            newArticleFields: this.props.newArticleFields,
-	            routeParams: this.props.routeParams,
-	            siteCurrentLocale: this.props.siteCurrentLocale,
+	      siteEditMode: this.props.siteEditMode,
+	      // routeParams:                       this.props.routeParams,
+	      siteCurrentLocale: this.props.siteCurrentLocale,
 	
-	            articlePictures: this.props.articlePictures,
-	            mediaContainers: this.props.mediaContainers
-	          });
-	        }
-	    }
+	      articlePictures: this.props.articlePictures,
+	      mediaContainers: this.props.mediaContainers,
+	
+	      articlesActions: this.props.articlesActions,
+	      articlesFieldsActions: this.props.articlesFieldsActions,
+	      articlesSizingPositionningActions: this.props.articlesSizingPositionningActions
+	    });
 	  },
 	  render: function render() {
-	    console.log("-----------", this.props);
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'news-index-page-body' },
@@ -51920,10 +51849,12 @@
 	function updateArticleAndRefresh(data, locale, fieldName) {
 	  return function (dispatch) {
 	    dispatch(updateArticle(data, locale));
+	    // If the field posted_at has changed, reorder the articles' array
+	    // FIXME -- Why does it also have to run if the article has changed???
 	    if (fieldName === "posted_at" || fieldName === "article") {
 	      dispatch(reOrderArticlesArray(locale));
 	    };
-	    dispatch((0, _articlesSizingPositionningActions.refreshArticlesSizingPositionning)(locale));
+	    dispatch((0, _articlesSizingPositionningActions.refreshArticlesSizingPositionning)());
 	  };
 	}
 	
@@ -51988,7 +51919,6 @@
 	}
 	
 	// Methods for delete article
-	// DESIGN CHOICE - Deleting an article mean deleting in all the languages
 	function deleteArticle(id) {
 	  return {
 	    type: _ActionTypes.DELETE_ARTICLE,
@@ -52011,6 +51941,7 @@
 	      success: function success() {
 	        dispatch(deleteArticle(id));
 	        dispatch(reOrderAllTheArticlesArray());
+	        dispatch((0, _articlesSizingPositionningActions.refreshArticlesSizingPositionning)());
 	      }
 	    });
 	  };
@@ -52030,12 +51961,10 @@
 	
 	var _ActionTypes = __webpack_require__(485);
 	
-	function changeArticleNeedResizingState(id, stateValue, locale) {
+	function changeArticlesNeedResizingStates(stateValue) {
 	  return {
-	    type: _ActionTypes.CHANGE_NEED_RESIZING_STATE_OF_ARTICLE,
-	    id: id,
-	    stateValue: stateValue,
-	    locale: locale
+	    type: _ActionTypes.CHANGE_NEED_RESIZING_STATE_OF_ARTICLES,
+	    stateValue: stateValue
 	  };
 	}
 	
@@ -52050,25 +51979,16 @@
 	  };
 	}
 	
-	function resetDOMPropsOfAllTheArticles(locale) {
-	  return {
-	    type: _ActionTypes.RESET_DOM_PROPS_OF_ALL_THE_ARTICLES,
-	    locale: locale
-	  };
-	}
-	
-	function refreshArticlesSizingPositionning(locale) {
-	  return function (dispatch, getState) {
-	    var localizedArticlesNeedResizingStates = getState().articlesNeedResizingStates[locale];
-	    // sets the need resizing state of all the articles in the current locale to true
-	    // sending signal to all the React components to provide their DOM values
-	    _.forOwn(localizedArticlesNeedResizingStates, [function (value, id) {
-	      dispatch(changeArticleNeedResizingState(id, true, locale));
-	    }], [this]);
-	    // then resets all the DOM props of all the articles
-	    // In my opinion, this should go before the other
-	    // FIXME -- Reorder calls to the sub-actions
-	    dispatch(resetDOMPropsOfAllTheArticles(locale));
+	// This function is called in three cases:
+	// (i) upon adding a new article;
+	// (ii) upon updating a given article;
+	// (iii) upon resizing the window (see component did mount in NewsIndexPage);
+	// (iv) it should probably also be called upon deleting an article.
+	// What it should do:
+	function refreshArticlesSizingPositionning() {
+	  return function (dispatch) {
+	    // 1. reset the need resizing property of all the articles to true
+	    dispatch(changeArticlesNeedResizingStates(true));
 	  };
 	}
 
@@ -53707,16 +53627,25 @@
 	
 	var _articlesSizingPositionningActions = __webpack_require__(507);
 	
+	var _articlesVisibilityFilterActions = __webpack_require__(516);
+	
+	var _reduxSimpleRouter = __webpack_require__(479);
+	
 	__webpack_require__(510).polyfill();
 	__webpack_require__(514);
 	
-	function addNewArticle(articleWithPicturesAndMediaContainers, locale) {
+	// FIXME - When updating from redux-simple-router 1.0.2 to react-router-redux (v. 2)
+	// this import should change to
+	// import {routeActions} from 'react-router-redux'
+	// The whole redux-router integration stack will then need to be reworked on
+	// pushPath will then be available from routeActions
+	
+	function addNewArticle(articleWithPicturesAndMediaContainers) {
 	  return {
 	    type: _ActionTypes.ADD_NEW_ARTICLE,
 	    article: articleWithPicturesAndMediaContainers.article,
 	    articlePicture: articleWithPicturesAndMediaContainers.article_pictures[0],
-	    mediaContainer: articleWithPicturesAndMediaContainers.media_containers[0],
-	    locale: locale
+	    mediaContainer: articleWithPicturesAndMediaContainers.media_containers[0]
 	  };
 	}
 	
@@ -53761,9 +53690,11 @@
 	        throw new Error("Bad response from server");
 	      }
 	      return response.json();
-	    }).then(function (article) {
-	      dispatch(addNewArticle(article, locale));
-	      dispatch((0, _articlesSizingPositionningActions.refreshArticlesSizingPositionning)(locale));
+	    }).then(function (articleWithPicturesAndMediaContainers) {
+	      dispatch(addNewArticle(articleWithPicturesAndMediaContainers));
+	      dispatch((0, _reduxSimpleRouter.pushPath)('/' + locale + '/article/' + articleWithPicturesAndMediaContainers.article.id));
+	      // dispatch(setArticlesVisibilityFilter('SHOW_DRAFT'));
+	      // dispatch(refreshArticlesSizingPositionning());
 	      dispatch(resetNewArticleFields());
 	    });
 	  };
@@ -53799,99 +53730,23 @@
 	});
 	exports.localeMediaContainersSelector = exports.localeArticlePicturesSelector = exports.visibleArticlesAndStatesSelector = undefined;
 	
-	var _reselect = __webpack_require__(520);
+	var _articlesSelector = __webpack_require__(741);
 	
-	var _articlesSelects = __webpack_require__(521);
+	var _articlesSelector2 = _interopRequireDefault(_articlesSelector);
 	
-	var _mediaContainersSelects = __webpack_require__(522);
+	var _articlePicturesSelector = __webpack_require__(740);
 	
-	/*
-	 * Definition of input-selectors.
-	 * Input-selectors should be used to abstract away the structure
-	 * of the store in cases where no calculations are needed
-	 * and memoization wouldn't provide any benefits.
-	 */
-	var siteCurrentLocaleSelector = function siteCurrentLocaleSelector(state) {
-	  return state.siteCurrentLocale;
-	};
+	var _articlePicturesSelector2 = _interopRequireDefault(_articlePicturesSelector);
 	
-	var articlesVisibilityFilterSelector = function articlesVisibilityFilterSelector(state) {
-	  return state.articlesVisibilityFilter;
-	};
-	var articlesSelector = function articlesSelector(state) {
-	  return state.articles;
-	};
+	var _mediaContainersSelector = __webpack_require__(739);
 	
-	var articlesWIPStatesOfFieldsSelector = function articlesWIPStatesOfFieldsSelector(state) {
-	  return state.articlesWIPStatesOfFields;
-	};
-	var articlesEditStatesSelector = function articlesEditStatesSelector(state) {
-	  return state.articlesEditStates;
-	};
-	var articlesNeedResizingStatesSelector = function articlesNeedResizingStatesSelector(state) {
-	  return state.articlesNeedResizingStates;
-	};
-	var articlesDOMPropsSelector = function articlesDOMPropsSelector(state) {
-	  return state.articlesDOMProps;
-	};
+	var _mediaContainersSelector2 = _interopRequireDefault(_mediaContainersSelector);
 	
-	var articlePicturesSelector = function articlePicturesSelector(state) {
-	  return state.articlePictures;
-	};
-	var mediaContainersSelector = function mediaContainersSelector(state) {
-	  return state.mediaContainers;
-	};
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	/*
-	 * Definition of combined-selector.
-	 * In combined-selector, input-selectors are combined to derive new
-	 * information. To prevent expensive recalculation of the input-selectors
-	 * memoization is applied. Hence, these selectors are only recomputed when the
-	 * value of their input-selectors change. If none of the input-selectors return
-	 * a new value, the previously computed value is returned.
-	 *********************************************************
-	 ********* README ****************************************
-	 *********************************************************
-	 * IMPORTANT: In combined selectors, the parameters passed to the callback correspond to the values
-	 * returned by the input-selectors (or parent-selectors) tested previously, in the same order.
-	 * So: below, the articles
-	 */
-	
-	var localeArticlesSelector = (0, _reselect.createSelector)(siteCurrentLocaleSelector, articlesSelector, function (siteCurrentLocale, articles) {
-	  return {
-	    siteCurrentLocale: siteCurrentLocale,
-	    localeArticles: (0, _articlesSelects.selectArticlesOnLanguage)(articles, siteCurrentLocale)
-	  };
-	});
-	
-	var visibleArticlesLocaleAndVisibilityFilterSelector = (0, _reselect.createSelector)(articlesVisibilityFilterSelector, localeArticlesSelector, function (articlesVisibilityFilter, localeArticlesAndSiteCurrentLocale) {
-	  return {
-	    siteCurrentLocale: localeArticlesAndSiteCurrentLocale.siteCurrentLocale,
-	    articlesVisibilityFilter: articlesVisibilityFilter,
-	    visibleArticles: (0, _articlesSelects.selectArticlesOnVisibilityStatus)(localeArticlesAndSiteCurrentLocale.localeArticles, articlesVisibilityFilter)
-	  };
-	});
-	
-	var visibleArticlesAndStatesSelector = exports.visibleArticlesAndStatesSelector = (0, _reselect.createSelector)(visibleArticlesLocaleAndVisibilityFilterSelector, articlesWIPStatesOfFieldsSelector, articlesEditStatesSelector, articlesNeedResizingStatesSelector, articlesDOMPropsSelector, function (visibleArticlesLocaleAndVisibilityFilter, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps) {
-	
-	  var visibleArticleStates = (0, _articlesSelects.selectVisibleArticlesStates)(visibleArticlesLocaleAndVisibilityFilter.visibleArticles, visibleArticlesLocaleAndVisibilityFilter.siteCurrentLocale, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps);
-	  return {
-	    articlesVisibilityFilter: visibleArticlesLocaleAndVisibilityFilter.articlesVisibilityFilter,
-	    visibleArticles: visibleArticlesLocaleAndVisibilityFilter.visibleArticles,
-	    visibleArticlesWIPStatesOfFields: visibleArticleStates.articlesWIPStatesOfFields,
-	    visibleArticlesEditStates: visibleArticleStates.articlesEditStates,
-	    visibleArticlesNeedResizingStates: visibleArticleStates.articlesNeedResizingStates,
-	    visibleArticlesDOMProps: visibleArticleStates.articlesDOMProps
-	  };
-	});
-	
-	var localeArticlePicturesSelector = exports.localeArticlePicturesSelector = (0, _reselect.createSelector)(siteCurrentLocaleSelector, articlePicturesSelector, function (siteCurrentLocale, articlePictures) {
-	  return articlePictures[siteCurrentLocale];
-	});
-	
-	var localeMediaContainersSelector = exports.localeMediaContainersSelector = (0, _reselect.createSelector)(siteCurrentLocaleSelector, mediaContainersSelector, function (siteCurrentLocale, mediaContainersStates) {
-	  return (0, _mediaContainersSelects.selectMediaContainersOnLanguage)(mediaContainersStates, siteCurrentLocale);
-	});
+	exports.visibleArticlesAndStatesSelector = _articlesSelector2.default;
+	exports.localeArticlePicturesSelector = _articlePicturesSelector2.default;
+	exports.localeMediaContainersSelector = _mediaContainersSelector2.default;
 
 /***/ },
 /* 520 */
@@ -54021,7 +53876,6 @@
 	  value: true
 	});
 	exports.selectArticlesOnLanguage = selectArticlesOnLanguage;
-	exports.selectArticlePicturesOnLanguage = selectArticlePicturesOnLanguage;
 	exports.selectArticlesOnVisibilityStatus = selectArticlesOnVisibilityStatus;
 	exports.selectVisibleArticlesStates = selectVisibleArticlesStates;
 	
@@ -54030,11 +53884,6 @@
 	// Selector of the articles depending on the requested visibility status
 	function selectArticlesOnLanguage(articles, locale) {
 	  return articles[locale];
-	}
-	
-	// Selector of the article pictures depending on the requested visibility status
-	function selectArticlePicturesOnLanguage(articlePictures, locale) {
-	  return articlePictures[locale];
 	}
 	
 	// Selector of the articles depending on the requested visibility status
@@ -54095,87 +53944,7 @@
 	}
 
 /***/ },
-/* 523 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.NewsCardsContainer = undefined;
-	
-	var _react = __webpack_require__(196);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _articles_list = __webpack_require__(524);
-	
-	var _article_basic_form = __webpack_require__(695);
-	
-	var _article_basic_form2 = _interopRequireDefault(_article_basic_form);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var NewsCardsContainer = exports.NewsCardsContainer = _react2.default.createClass({
-	  displayName: 'NewsCardsContainer',
-	
-	  // propTypes: {
-	  //   articlePictures:  React.PropTypes.object.isRequired
-	  // },
-	
-	  renderNewArticleBasicForm: function renderNewArticleBasicForm() {
-	    if (this.props.siteEditMode.mode === true) {
-	      return _react2.default.createElement(_article_basic_form2.default, {
-	        siteEditMode: this.props.siteEditMode,
-	        newArticleActions: this.props.newArticleActions,
-	        newArticleFields: this.props.newArticleFields,
-	        articlesPassedInUiProps: this.props.articlesPassedInUiProps,
-	
-	        routeParams: this.props.routeParams,
-	        siteCurrentLocale: this.props.siteCurrentLocale
-	      });
-	    }
-	  },
-	  renderArticlesList: function renderArticlesList() {
-	    return _react2.default.createElement(_articles_list.ArticlesList, {
-	      articlesPassedInUiProps: this.props.articlesPassedInUiProps
-	      // # redux articles list
-	      , articles: this.props.articles
-	      // # redux passed in Edit and Wip States
-	      , articlesWIPStatesOfFields: this.props.articlesWIPStatesOfFields,
-	      articlesEditStates: this.props.articlesEditStates
-	      // # redux passedInDomProps
-	      , articlesDOMProps: this.props.articlesDOMProps
-	      // # redux global site edit mode
-	      , siteEditMode: this.props.siteEditMode
-	      // # redux actions
-	      , articlesActions: this.props.articlesActions,
-	      articlesFieldsActions: this.props.articlesFieldsActions,
-	      articlesSizingPositionningActions: this.props.articlesSizingPositionningActions,
-	
-	      routeParams: this.props.routeParams,
-	      siteCurrentLocale: this.props.siteCurrentLocale,
-	
-	      mediaContainers: this.props.mediaContainers,
-	      articlePictures: this.props.articlePictures
-	    });
-	  },
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'div',
-	      { className: 'row' },
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'col-xs-12' },
-	        this.renderNewArticleBasicForm(),
-	        this.renderArticlesList()
-	      )
-	    );
-	  }
-	});
-
-/***/ },
+/* 523 */,
 /* 524 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -55153,8 +54922,10 @@
 	  componentDidMount: function componentDidMount() {
 	    var _this = this;
 	
+	    console.log("-*-*-*-*-*-*- IN NEWSCARD", this.props.card.id);
+	    console.log("-*-*-*-*-*-*- IN NEWSCARD", this.refs["main_article_div_" + parseInt(this.props.card.id)]);
 	    var callback = function callback() {
-	      return _this.props.articlesSizingPositionningActions.assignRealDomValuesToDOMPropsOfArticle(_this.props.card.id, _this.refs["main_article_div_" + parseInt(_this.props.card.id)].getBoundingClientRect().top, _this.refs[parseInt(_this.props.cardNumber)].clientHeight, _this.props.cardNumber, _this.props.siteCurrentLocale);
+	      return _this.props.articlesSizingPositionningActions.assignRealDomValuesToDOMPropsOfArticle(_this.props.card.id, _this.refs["main_article_div_" + parseInt(_this.props.card.id)].getBoundingClientRect().top, _this.refs[parseInt(_this.props.card.id)].clientHeight, _this.props.cardNumber, _this.props.siteCurrentLocale);
 	    };
 	    setTimeout(callback, 0);
 	  },
@@ -55190,7 +54961,6 @@
 	    if (this.props.siteEditMode.mode) {
 	      return _react2.default.createElement(_news_toolbar_switch2.default, {
 	        status: this.props.card.status,
-	        articlesPassedInUiProps: this.props.articlesPassedInUiProps,
 	        articlesEditStates: this.props.articlesEditStates,
 	
 	        handleUpdate: this.handleUpdate.bind(this, "article"),
@@ -55209,7 +54979,6 @@
 	      sourceId: this.props.card.id,
 	
 	      siteEditMode: this.props.siteEditMode,
-	      articlesPassedInUiProps: this.props.articlesPassedInUiProps,
 	      currArtWIPStateCurrField: this.props.articlesWIPStatesOfFields[fieldName],
 	      currArtEditStateCurrField: this.props.articlesEditStates[fieldName],
 	
@@ -55274,7 +55043,7 @@
 	          'div',
 	          {
 	            className: 'inner-wrapper-news-div',
-	            ref: this.props.cardNumber,
+	            ref: this.props.card.id,
 	            style: styleForInnerWrapperDiv },
 	          this.imageLinkedToArticle(),
 	          this.createNewsTeaserWrapper(),
@@ -55344,7 +55113,6 @@
 	  propTypes: {
 	    status: _react.PropTypes.string,
 	    articlesEditStates: _react.PropTypes.object,
-	    articlesPassedInUiProps: _react.PropTypes.object,
 	    handleDelete: _react.PropTypes.func,
 	    handleEdit: _react.PropTypes.func,
 	    handleCancel: _react.PropTypes.func,
@@ -55580,7 +55348,6 @@
 	    siteEditMode: _react.PropTypes.object.isRequired,
 	    viewType: _react.PropTypes.string.isRequired,
 	
-	    articlesPassedInUiProps: _react.PropTypes.object.isRequired,
 	    currArtWIPStateCurrField: _react.PropTypes.string.isRequired,
 	    currArtEditStateCurrField: _react.PropTypes.string.isRequired,
 	
@@ -55615,7 +55382,6 @@
 	        value: this.props.value,
 	        sourceId: this.props.sourceId,
 	
-	        articlesPassedInUiProps: this.props.articlesPassedInUiProps,
 	        currArtWIPStateCurrField: this.props.currArtWIPStateCurrField,
 	        currArtEditStateCurrField: this.props.currArtEditStateCurrField,
 	
@@ -55815,7 +55581,6 @@
 	    sourceId: _react.PropTypes.string.isRequired,
 	    value: _react.PropTypes.string.isRequired,
 	
-	    articlesPassedInUiProps: _react.PropTypes.object.isRequired,
 	    currArtWIPStateCurrField: _react.PropTypes.string.isRequired,
 	    currArtEditStateCurrField: _react.PropTypes.string.isRequired,
 	
@@ -55834,7 +55599,6 @@
 	      sourceId: this.props.sourceId,
 	      value: this.props.value,
 	
-	      articlesPassedInUiProps: this.props.articlesPassedInUiProps,
 	      currArtWIPStateCurrField: this.props.currArtWIPStateCurrField,
 	
 	      handleChange: this.props.handleChange,
@@ -55909,7 +55673,6 @@
 	    value: _react.PropTypes.string.isRequired,
 	    handleChange: _react.PropTypes.func.isRequired,
 	
-	    articlesPassedInUiProps: _react.PropTypes.object.isRequired,
 	    currArtWIPStateCurrField: _react.PropTypes.string.isRequired,
 	    handleUpdate: _react.PropTypes.func.isRequired,
 	    handleExitEditField: _react.PropTypes.func.isRequired,
@@ -55922,7 +55685,6 @@
 	  },
 	  renderNewsEditableFieldToolbar: function renderNewsEditableFieldToolbar() {
 	    return _react2.default.createElement(_news_editable_field_toolbar2.default, {
-	      articlesPassedInUiProps: this.props.articlesPassedInUiProps,
 	      currArtWIPStateCurrField: this.props.currArtWIPStateCurrField,
 	      handleUpdate: this.props.handleUpdate,
 	      handleExitEditField: this.props.handleExitEditField,
@@ -56005,7 +55767,6 @@
 	  displayName: 'NewsEditableFieldToolbar',
 	
 	  PropTypes: {
-	    articlesPassedInUiProps: _react.PropTypes.object.isRequired,
 	    handleExitEditField: _react.PropTypes.func.isRequired,
 	    handleDeleteText: _react.PropTypes.func.isRequired,
 	    handleRestoreText: _react.PropTypes.func.isRequired,
@@ -56081,7 +55842,6 @@
 	    name: _react.PropTypes.string.isRequired,
 	    sourceId: _react.PropTypes.string,
 	    value: _react.PropTypes.string.isRequired,
-	    articlesPassedInUiProps: _react.PropTypes.object.isRequired,
 	    currArtWIPStateCurrField: _react.PropTypes.string.isRequired,
 	    handleChange: _react.PropTypes.func.isRequired,
 	    handleUpdate: _react.PropTypes.func.isRequired,
@@ -56109,7 +55869,6 @@
 	        name: this.props.name,
 	        id: this.props.name + '_' + this.props.sourceId }),
 	      _react2.default.createElement(_news_editable_field_toolbar2.default, {
-	        articlesPassedInUiProps: this.props.articlesPassedInUiProps,
 	        currArtWIPStateCurrField: this.props.currArtWIPStateCurrField,
 	        handleUpdate: this.props.handleUpdate,
 	        handleExitEditField: this.props.handleExitEditField,
@@ -56147,7 +55906,6 @@
 	    name: _react.PropTypes.string.isRequired,
 	    sourceId: _react.PropTypes.string,
 	    value: _react.PropTypes.string.isRequired,
-	    articlesPassedInUiProps: _react.PropTypes.object.isRequired,
 	    currArtWIPStateCurrField: _react.PropTypes.string.isRequired,
 	    handleChange: _react.PropTypes.func.isRequired,
 	    handleUpdate: _react.PropTypes.func.isRequired,
@@ -56195,7 +55953,6 @@
 	        ref: this.props.name,
 	        id: this.props.name + '_' + this.props.sourceId }),
 	      _react2.default.createElement(_news_editable_field_toolbar2.default, {
-	        articlesPassedInUiProps: this.props.articlesPassedInUiProps,
 	        currArtWIPStateCurrField: this.props.currArtWIPStateCurrField,
 	        handleUpdate: this.props.handleUpdate,
 	        handleExitEditField: this.props.handleExitEditField,
@@ -73521,27 +73278,6 @@
 	});
 	
 	exports.default = (0, _reactIntl.injectIntl)(ArticleBasicForm);
-	
-	// # Card equalization
-	// NO NEED FOR THAT IN THE FORM
-	// componentDidMount() {
-	//   const callback = () =>
-	//     this.props.articlesSizingPositionningActions.assignRealDomValuesToDOMPropsOfArticle(
-	//       this.props.card.id,
-	//       this.refs["new_article_main_div"+parseInt(this.props.card.id)].getBoundingClientRect().top,
-	//       this.refs[parseInt(this.props.cardNumber)].clientHeight,
-	//       this.props.cardNumber)
-	//   setTimeout(callback, 0)
-	// },
-
-	// componentDidUpdate: (nextProps) ->
-	//   # callback = ( ->
-	//   #   @props.articlesSizingPositionningActions.assignRealDomValuesToDOMPropsOfArticle @props.card.id,
-	//   #     @refs["new_article_main_div#{@props.card.id}"].getBoundingClientRect().top,
-	//   #     @refs["#{@props.cardNumber}"].clientHeight,
-	//   #     @props.cardNumber
-	//   # ).bind(@)
-	//   # setTimeout callback, 0 if nextProps.passedInStates.needs_resizing == true
 
 /***/ },
 /* 696 */
@@ -74143,223 +73879,7 @@
 	module.exports=function(t){function n(e){if(r[e])return r[e].exports;var o=r[e]={exports:{},id:e,loaded:!1};return t[e].call(o.exports,o,o.exports,n),o.loaded=!0,o.exports}var r={};return n.m=t,n.c=r,n.p="",n(0)}([function(t,n,r){"use strict";n.__esModule=!0,r(8),r(9),n["default"]=function(t,n){if(t&&n){var r=function(){var r=n.split(","),e=t.name||"",o=t.type||"",i=o.replace(/\/.*$/,"");return{v:r.some(function(t){var n=t.trim();return"."===n.charAt(0)?e.toLowerCase().endsWith(n.toLowerCase()):/\/\*$/.test(n)?i===n.replace(/\/.*$/,""):o===n})}}();if("object"==typeof r)return r.v}return!0},t.exports=n["default"]},function(t,n){var r=t.exports={version:"1.2.2"};"number"==typeof __e&&(__e=r)},function(t,n){var r=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=r)},function(t,n,r){var e=r(2),o=r(1),i=r(4),u=r(19),c="prototype",f=function(t,n){return function(){return t.apply(n,arguments)}},s=function(t,n,r){var a,p,l,d,y=t&s.G,h=t&s.P,v=y?e:t&s.S?e[n]||(e[n]={}):(e[n]||{})[c],x=y?o:o[n]||(o[n]={});y&&(r=n);for(a in r)p=!(t&s.F)&&v&&a in v,l=(p?v:r)[a],d=t&s.B&&p?f(l,e):h&&"function"==typeof l?f(Function.call,l):l,v&&!p&&u(v,a,l),x[a]!=l&&i(x,a,d),h&&((x[c]||(x[c]={}))[a]=l)};e.core=o,s.F=1,s.G=2,s.S=4,s.P=8,s.B=16,s.W=32,t.exports=s},function(t,n,r){var e=r(5),o=r(18);t.exports=r(22)?function(t,n,r){return e.setDesc(t,n,o(1,r))}:function(t,n,r){return t[n]=r,t}},function(t,n){var r=Object;t.exports={create:r.create,getProto:r.getPrototypeOf,isEnum:{}.propertyIsEnumerable,getDesc:r.getOwnPropertyDescriptor,setDesc:r.defineProperty,setDescs:r.defineProperties,getKeys:r.keys,getNames:r.getOwnPropertyNames,getSymbols:r.getOwnPropertySymbols,each:[].forEach}},function(t,n){var r=0,e=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++r+e).toString(36))}},function(t,n,r){var e=r(20)("wks"),o=r(2).Symbol;t.exports=function(t){return e[t]||(e[t]=o&&o[t]||(o||r(6))("Symbol."+t))}},function(t,n,r){r(26),t.exports=r(1).Array.some},function(t,n,r){r(25),t.exports=r(1).String.endsWith},function(t,n){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}},function(t,n){var r={}.toString;t.exports=function(t){return r.call(t).slice(8,-1)}},function(t,n,r){var e=r(10);t.exports=function(t,n,r){if(e(t),void 0===n)return t;switch(r){case 1:return function(r){return t.call(n,r)};case 2:return function(r,e){return t.call(n,r,e)};case 3:return function(r,e,o){return t.call(n,r,e,o)}}return function(){return t.apply(n,arguments)}}},function(t,n){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}},function(t,n,r){t.exports=function(t){var n=/./;try{"/./"[t](n)}catch(e){try{return n[r(7)("match")]=!1,!"/./"[t](n)}catch(o){}}return!0}},function(t,n){t.exports=function(t){try{return!!t()}catch(n){return!0}}},function(t,n){t.exports=function(t){return"object"==typeof t?null!==t:"function"==typeof t}},function(t,n,r){var e=r(16),o=r(11),i=r(7)("match");t.exports=function(t){var n;return e(t)&&(void 0!==(n=t[i])?!!n:"RegExp"==o(t))}},function(t,n){t.exports=function(t,n){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:n}}},function(t,n,r){var e=r(2),o=r(4),i=r(6)("src"),u="toString",c=Function[u],f=(""+c).split(u);r(1).inspectSource=function(t){return c.call(t)},(t.exports=function(t,n,r,u){"function"==typeof r&&(o(r,i,t[n]?""+t[n]:f.join(String(n))),"name"in r||(r.name=n)),t===e?t[n]=r:(u||delete t[n],o(t,n,r))})(Function.prototype,u,function(){return"function"==typeof this&&this[i]||c.call(this)})},function(t,n,r){var e=r(2),o="__core-js_shared__",i=e[o]||(e[o]={});t.exports=function(t){return i[t]||(i[t]={})}},function(t,n,r){var e=r(17),o=r(13);t.exports=function(t,n,r){if(e(n))throw TypeError("String#"+r+" doesn't accept regex!");return String(o(t))}},function(t,n,r){t.exports=!r(15)(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})},function(t,n){var r=Math.ceil,e=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?e:r)(t)}},function(t,n,r){var e=r(23),o=Math.min;t.exports=function(t){return t>0?o(e(t),9007199254740991):0}},function(t,n,r){"use strict";var e=r(3),o=r(24),i=r(21),u="endsWith",c=""[u];e(e.P+e.F*r(14)(u),"String",{endsWith:function(t){var n=i(this,t,u),r=arguments,e=r.length>1?r[1]:void 0,f=o(n.length),s=void 0===e?f:Math.min(o(e),f),a=String(t);return c?c.call(n,a,s):n.slice(s-a.length,s)===a}})},function(t,n,r){var e=r(5),o=r(3),i=r(1).Array||Array,u={},c=function(t,n){e.each.call(t.split(","),function(t){void 0==n&&t in i?u[t]=i[t]:t in[]&&(u[t]=r(12)(Function.call,[][t],n))})};c("pop,reverse,shift,keys,values,entries",1),c("indexOf,every,some,forEach,map,filter,find,findIndex,includes",3),c("join,slice,concat,push,splice,unshift,sort,lastIndexOf,reduce,reduceRight,copyWithin,fill"),o(o.S,"Array",u)}]);
 
 /***/ },
-/* 702 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.IndividualNewsContainer = undefined;
-	
-	var _react = __webpack_require__(196);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactAddonsCssTransitionGroup = __webpack_require__(525);
-	
-	var _reactAddonsCssTransitionGroup2 = _interopRequireDefault(_reactAddonsCssTransitionGroup);
-	
-	var _reactRouter = __webpack_require__(424);
-	
-	var _news_toolbar_switch = __webpack_require__(533);
-	
-	var _news_toolbar_switch2 = _interopRequireDefault(_news_toolbar_switch);
-	
-	var _generic_content_editable = __webpack_require__(698);
-	
-	var _generic_content_editable2 = _interopRequireDefault(_generic_content_editable);
-	
-	var _news_posted_at_on_zone = __webpack_require__(547);
-	
-	var _news_posted_at_on_zone2 = _interopRequireDefault(_news_posted_at_on_zone);
-	
-	var _news_content_zone_switch = __webpack_require__(536);
-	
-	var _news_forms_helpers = __webpack_require__(544);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var IndividualNewsContainer = exports.IndividualNewsContainer = _react2.default.createClass({
-	  displayName: 'IndividualNewsContainer',
-	
-	  // propTypes: {
-	  //   articlesActions:            PropTypes.object,
-	  //   articlesFieldsActions:      PropTypes.object,
-	
-	  //   siteEditMode:               PropTypes.object,
-	  //   currentArticle:             PropTypes.object.isRequired,
-	  //   // # redux passed in Edit and Wip States
-	  //   articlesWIPStatesOfFields:  PropTypes.object.isRequired,
-	  //   articlesEditStates:         PropTypes.object.isRequired,
-	  //   // # redux passedInDomProps
-	  //   articlesDOMProps:           PropTypes.object.isRequired,
-	  //   articlesPassedInUiProps:    PropTypes.object.isRequired
-	  // },
-	
-	  handleDelete: function handleDelete(e) {
-	    e.preventDefault();
-	    this.props.articlesActions.handleDeleteArticle(this.props.currentArticle.id);
-	  },
-	  handleEdit: function handleEdit(e) {
-	    e.preventDefault();
-	    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.currentArticle.id, 'article', true, this.props.siteCurrentLocale);
-	  },
-	  handleCancel: function handleCancel(e) {
-	    e.preventDefault();
-	    this.props.articlesActions.handleCancelEditArticle(this.props.currentArticle.id, this.props.siteCurrentLocale);
-	  },
-	  handleUpdate: function handleUpdate(fieldName) {
-	    this.props.articlesActions.handleUpdateArticle(this.props.currentArticle.id, fieldName, this.props.siteCurrentLocale);
-	  },
-	  handleChange: function handleChange(fieldName, fieldValue) {
-	    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.currentArticle.id, fieldName, fieldValue, this.props.siteCurrentLocale);
-	  },
-	  renderTitle: function renderTitle() {
-	    var styleForH1 = {};
-	    styleForH1 = (0, _news_forms_helpers.inlineBlockStyleForReadOnly)(styleForH1, this.props.siteEditMode.mode);
-	    // Two conditions for the content editable to be on: (i) the site must be in site edit mode == on
-	    // (ii) the article must be in edit mode (otherwise, there is no way to save the changes made by the user)
-	    if (this.props.siteEditMode.mode && this.props.articlesEditStates.article) {
-	      return _react2.default.createElement(_generic_content_editable2.default, {
-	        eltType: 'h1',
-	        style: styleForH1,
-	        html: this.props.currentArticle["title"],
-	        disabled: false,
-	        onChange: this.handleChange.bind(this, "title")
-	      });
-	    } else {
-	      return _react2.default.createElement(
-	        'h1',
-	        {
-	          style: styleForH1 },
-	        this.props.currentArticle["title"]
-	      );
-	    }
-	  },
-	  createFieldZone: function createFieldZone(fieldName) {
-	    return _react2.default.createElement(_news_content_zone_switch.NewsContentZoneSwitch, {
-	      key: this.props.currentArticle.id + '_' + fieldName,
-	      viewType: 'articleView',
-	      name: fieldName,
-	      value: this.props.currentArticle[fieldName],
-	      sourceId: this.props.currentArticle.id,
-	
-	      siteEditMode: this.props.siteEditMode,
-	      articlesPassedInUiProps: this.props.articlesPassedInUiProps,
-	      currArtWIPStateCurrField: this.props.articlesWIPStatesOfFields[fieldName],
-	      currArtEditStateCurrField: this.props.articlesEditStates[fieldName],
-	
-	      cardImageSource: this.props.cardImageSource,
-	
-	      handleUpdate: this.handleUpdate.bind(this, fieldName),
-	      handleChange: this.handleChange.bind(this, fieldName)
-	    });
-	  },
-	  newsToolbarSwitch: function newsToolbarSwitch() {
-	    if (this.props.siteEditMode.mode) {
-	      return _react2.default.createElement(_news_toolbar_switch2.default, {
-	        status: this.props.currentArticle.status,
-	        articlesPassedInUiProps: this.props.articlesPassedInUiProps,
-	        parentIdentification: this.props.cardNumber,
-	        articlesEditStates: this.props.articlesEditStates,
-	
-	        handleUpdate: this.handleUpdate.bind(this, "article"),
-	        handleEdit: this.handleEdit,
-	        handleCancel: this.handleCancel,
-	        handleDelete: this.handleDelete,
-	        handleStatusChange: this.handleChange.bind(this, "status") });
-	    }
-	  },
-	  renderCreatedAtZone: function renderCreatedAtZone() {
-	
-	    return _react2.default.createElement(
-	      'h3',
-	      null,
-	      _react2.default.createElement(_news_posted_at_on_zone2.default, {
-	        siteEditMode: this.props.siteEditMode.mode,
-	        onChange: this.handleChange.bind(this, "posted_at"),
-	        value: this.props.currentArticle["posted_at"]
-	      })
-	    );
-	  },
-	  renderTags: function renderTags() {
-	    if (this.props.currentArticleTags) {
-	      tagElementsArray = this.props.articleTags.map(function (tag) {
-	        return _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '#' },
-	          _react2.default.createElement(
-	            'span',
-	            { className: 'label label-primary' },
-	            tag + " "
-	          )
-	        );
-	      });
-	      return _react2.default.createElement(
-	        'p',
-	        { 'class': 'tags' },
-	        _react2.default.createElement('i', { 'class': 'glyphicon glyphicon-tags' }),
-	        tagElementsArray
-	      );
-	    }
-	  },
-	  renderAuthor: function renderAuthor() {
-	    return _react2.default.createElement(
-	      'div',
-	      { className: 'news-author' },
-	      _react2.default.createElement(
-	        _reactRouter.Link,
-	        { to: '#' },
-	        "by",
-	        ' ',
-	        this.props.article.author.full_name
-	      )
-	    );
-	  },
-	  render: function render() {
-	    console.log(this.props);
-	
-	    return _react2.default.createElement(
-	      _reactAddonsCssTransitionGroup2.default,
-	      {
-	        transitionName: 'react-news-container',
-	        transitionEnterTimeout: 300,
-	        transitionLeaveTimeout: 300,
-	        transitionAppear: true,
-	        transitionAppearTimeout: 2000 },
-	      _react2.default.createElement(
-	        'article',
-	        { className: 'news' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'row' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6' },
-	            this.newsToolbarSwitch(),
-	            this.renderTitle(),
-	            this.renderCreatedAtZone(),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'news-teaser' },
-	              this.createFieldZone("teaser")
-	            ),
-	            _react2.default.createElement('hr', null),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'news-body' },
-	              this.createFieldZone("body")
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-
-/***/ },
+/* 702 */,
 /* 703 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -86872,6 +86392,623 @@
 	}.call(this));
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(511)(module), (function() { return this; }())))
+
+/***/ },
+/* 709 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _redux = __webpack_require__(413);
+	
+	var _reactRedux = __webpack_require__(406);
+	
+	var _individual_news_component = __webpack_require__(710);
+	
+	function mapStateToProps(state, ownProps) {
+	  return {
+	    // Site global props: passed in down from App/PageIndexView
+	    siteCurrentLocale: ownProps.siteCurrentLocale,
+	    siteEditMode: ownProps.siteEditMode,
+	    // Article specific props: selected from the store
+	    currentArticle: _.find(state.articles['' + state.siteCurrentLocale], { 'id': parseInt(ownProps.params.id) }),
+	    articlesWIPStatesOfFields: state.articlesWIPStatesOfFields['' + state.siteCurrentLocale]['' + ownProps.params.id],
+	    articlesEditStates: state.articlesEditStates['' + state.siteCurrentLocale]['' + ownProps.params.id],
+	    articlesDOMProps: state.articlesDOMProps['' + state.siteCurrentLocale]['' + ownProps.params.id],
+	    // Ancillary items: from own props (because filtered by language in App/reselect)
+	    articlePictures: ownProps.articlePictures,
+	    mediaContainers: ownProps.mediaContainers
+	  };
+	}
+	
+	function mapDispatchToProps(dispatch, ownProps) {
+	  return {
+	    articlesActions: (0, _redux.bindActionCreators)(ownProps.articlesActions, dispatch),
+	    articlesFieldsActions: (0, _redux.bindActionCreators)(ownProps.articlesFieldsActions, dispatch)
+	  };
+	}
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_individual_news_component.IndividualNewsComponent);
+
+/***/ },
+/* 710 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.IndividualNewsComponent = undefined;
+	
+	var _react = __webpack_require__(196);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactAddonsCssTransitionGroup = __webpack_require__(525);
+	
+	var _reactAddonsCssTransitionGroup2 = _interopRequireDefault(_reactAddonsCssTransitionGroup);
+	
+	var _reactRouter = __webpack_require__(424);
+	
+	var _news_toolbar_switch = __webpack_require__(533);
+	
+	var _news_toolbar_switch2 = _interopRequireDefault(_news_toolbar_switch);
+	
+	var _generic_content_editable = __webpack_require__(698);
+	
+	var _generic_content_editable2 = _interopRequireDefault(_generic_content_editable);
+	
+	var _news_posted_at_on_zone = __webpack_require__(547);
+	
+	var _news_posted_at_on_zone2 = _interopRequireDefault(_news_posted_at_on_zone);
+	
+	var _news_content_zone_switch = __webpack_require__(536);
+	
+	var _news_forms_helpers = __webpack_require__(544);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var IndividualNewsComponent = exports.IndividualNewsComponent = _react2.default.createClass({
+	  displayName: 'IndividualNewsComponent',
+	
+	  propTypes: {
+	    siteCurrentLocale: _react.PropTypes.string,
+	    siteEditMode: _react.PropTypes.object,
+	
+	    currentArticle: _react.PropTypes.object.isRequired,
+	    articlesWIPStatesOfFields: _react.PropTypes.object.isRequired,
+	    articlesEditStates: _react.PropTypes.object.isRequired,
+	    articlesDOMProps: _react.PropTypes.object.isRequired,
+	
+	    articlePictures: _react.PropTypes.object.isRequired,
+	    mediaContainers: _react.PropTypes.object.isRequired,
+	
+	    // currentArticleTags
+	    // article.author.full_name
+	
+	    articlesActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
+	    articlesFieldsActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired
+	  },
+	
+	  handleDelete: function handleDelete(e) {
+	    e.preventDefault();
+	    this.props.articlesActions.handleDeleteArticle(this.props.currentArticle.id);
+	  },
+	  handleEdit: function handleEdit(e) {
+	    e.preventDefault();
+	    this.props.articlesFieldsActions.changeArticleEditStateOfField(this.props.currentArticle.id, 'article', true, this.props.siteCurrentLocale);
+	  },
+	  handleCancel: function handleCancel(e) {
+	    e.preventDefault();
+	    this.props.articlesActions.handleCancelEditArticle(this.props.currentArticle.id, this.props.siteCurrentLocale);
+	  },
+	  handleUpdate: function handleUpdate(fieldName) {
+	    this.props.articlesActions.handleUpdateArticle(this.props.currentArticle.id, fieldName, this.props.siteCurrentLocale);
+	  },
+	  handleChange: function handleChange(fieldName, fieldValue) {
+	    this.props.articlesFieldsActions.changeFieldOfArticle(this.props.currentArticle.id, fieldName, fieldValue, this.props.siteCurrentLocale);
+	  },
+	  renderTitle: function renderTitle() {
+	    var styleForH1 = {};
+	    styleForH1 = (0, _news_forms_helpers.inlineBlockStyleForReadOnly)(styleForH1, this.props.siteEditMode.mode);
+	    // Two conditions for the content editable to be on: (i) the site must be in site edit mode == on
+	    // (ii) the article must be in edit mode (otherwise, there is no way to save the changes made by the user)
+	    if (this.props.siteEditMode.mode && this.props.articlesEditStates.article) {
+	      return _react2.default.createElement(_generic_content_editable2.default, {
+	        eltType: 'h1',
+	        style: styleForH1,
+	        html: this.props.currentArticle["title"],
+	        disabled: false,
+	        onChange: this.handleChange.bind(this, "title")
+	      });
+	    } else {
+	      return _react2.default.createElement(
+	        'h1',
+	        {
+	          style: styleForH1 },
+	        this.props.currentArticle["title"]
+	      );
+	    }
+	  },
+	  createFieldZone: function createFieldZone(fieldName) {
+	    return _react2.default.createElement(_news_content_zone_switch.NewsContentZoneSwitch, {
+	      key: this.props.currentArticle.id + '_' + fieldName,
+	      viewType: 'articleView',
+	      name: fieldName,
+	      value: this.props.currentArticle[fieldName],
+	      sourceId: this.props.currentArticle.id,
+	
+	      siteEditMode: this.props.siteEditMode,
+	      currArtWIPStateCurrField: this.props.articlesWIPStatesOfFields[fieldName],
+	      currArtEditStateCurrField: this.props.articlesEditStates[fieldName],
+	
+	      cardImageSource: this.props.cardImageSource,
+	
+	      handleUpdate: this.handleUpdate.bind(this, fieldName),
+	      handleChange: this.handleChange.bind(this, fieldName)
+	    });
+	  },
+	  newsToolbarSwitch: function newsToolbarSwitch() {
+	    if (this.props.siteEditMode.mode) {
+	      return _react2.default.createElement(_news_toolbar_switch2.default, {
+	        status: this.props.currentArticle.status,
+	        articlesEditStates: this.props.articlesEditStates,
+	
+	        handleUpdate: this.handleUpdate.bind(this, "article"),
+	        handleEdit: this.handleEdit,
+	        handleCancel: this.handleCancel,
+	        handleDelete: this.handleDelete,
+	        handleStatusChange: this.handleChange.bind(this, "status") });
+	    }
+	  },
+	  renderCreatedAtZone: function renderCreatedAtZone() {
+	
+	    return _react2.default.createElement(
+	      'h3',
+	      null,
+	      _react2.default.createElement(_news_posted_at_on_zone2.default, {
+	        siteEditMode: this.props.siteEditMode.mode,
+	        onChange: this.handleChange.bind(this, "posted_at"),
+	        value: this.props.currentArticle["posted_at"]
+	      })
+	    );
+	  },
+	  renderTags: function renderTags() {
+	    if (this.props.currentArticleTags) {
+	      tagElementsArray = this.props.currentArticleTags.map(function (tag) {
+	        return _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '#' },
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'label label-primary' },
+	            tag + " "
+	          )
+	        );
+	      });
+	      return _react2.default.createElement(
+	        'p',
+	        { 'class': 'tags' },
+	        _react2.default.createElement('i', { 'class': 'glyphicon glyphicon-tags' }),
+	        tagElementsArray
+	      );
+	    }
+	  },
+	  renderAuthor: function renderAuthor() {
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'news-author' },
+	      _react2.default.createElement(
+	        _reactRouter.Link,
+	        { to: '#' },
+	        "by",
+	        ' ',
+	        this.props.article.author.full_name
+	      )
+	    );
+	  },
+	  render: function render() {
+	    console.log(this.props);
+	
+	    return _react2.default.createElement(
+	      _reactAddonsCssTransitionGroup2.default,
+	      {
+	        transitionName: 'react-news-container',
+	        transitionEnterTimeout: 300,
+	        transitionLeaveTimeout: 300,
+	        transitionAppear: true,
+	        transitionAppearTimeout: 2000 },
+	      _react2.default.createElement(
+	        'article',
+	        { className: 'news' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'row' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6' },
+	            this.newsToolbarSwitch(),
+	            this.renderTitle(),
+	            this.renderCreatedAtZone(),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'news-teaser' },
+	              this.createFieldZone("teaser")
+	            ),
+	            _react2.default.createElement('hr', null),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'news-body' },
+	              this.createFieldZone("body")
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 711 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _redux = __webpack_require__(413);
+	
+	var _reactRedux = __webpack_require__(406);
+	
+	var _news_cards_component = __webpack_require__(712);
+	
+	var _newArticleActions = __webpack_require__(517);
+	
+	var NewArticleActions = _interopRequireWildcard(_newArticleActions);
+	
+	var _index = __webpack_require__(519);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function mapStateToProps(state, ownProps) {
+	  var memoizedFilteredArticles = (0, _index.visibleArticlesAndStatesSelector)(state);
+	
+	  return {
+	    // Site global props: passed in down from App/PageIndexView
+	    siteCurrentLocale: ownProps.siteCurrentLocale,
+	    siteEditMode: ownProps.siteEditMode,
+	    // Articles list specific props: passed in down from App/PageIndexView
+	    // Check whether it wouldn't be smarter to apply the reselect from here
+	    articles: memoizedFilteredArticles.visibleArticles,
+	
+	    articlesWIPStatesOfFields: memoizedFilteredArticles.visibleArticlesWIPStatesOfFields,
+	    articlesEditStates: memoizedFilteredArticles.visibleArticlesEditStates,
+	    articlesNeedResizingStates: memoizedFilteredArticles.visibleArticlesNeedResizingStates,
+	    articlesDOMProps: memoizedFilteredArticles.visibleArticlesDOMProps,
+	    // Somehow specific (bootstrap CSS classes)
+	    articlesPassedInUiProps: ownProps.articlesPassedInUiProps,
+	    // Ancillary items: from own props (because filtered by language in App/reselect)
+	    articlePictures: ownProps.articlePictures,
+	    mediaContainers: ownProps.mediaContainers,
+	    // For the new article form
+	    newArticleFields: state.newArticleFields
+	  };
+	}
+	
+	function mapDispatchToProps(dispatch, ownProps) {
+	  return {
+	    articlesActions: (0, _redux.bindActionCreators)(ownProps.articlesActions, dispatch),
+	    articlesFieldsActions: (0, _redux.bindActionCreators)(ownProps.articlesFieldsActions, dispatch),
+	    articlesSizingPositionningActions: (0, _redux.bindActionCreators)(ownProps.articlesSizingPositionningActions, dispatch),
+	
+	    newArticleActions: (0, _redux.bindActionCreators)(NewArticleActions, dispatch)
+	  };
+	}
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_news_cards_component.NewsCardsComponent);
+
+/***/ },
+/* 712 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.NewsCardsComponent = undefined;
+	
+	var _react = __webpack_require__(196);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _articles_list = __webpack_require__(524);
+	
+	var _article_basic_form = __webpack_require__(695);
+	
+	var _article_basic_form2 = _interopRequireDefault(_article_basic_form);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var NewsCardsComponent = exports.NewsCardsComponent = _react2.default.createClass({
+	  displayName: 'NewsCardsComponent',
+	
+	  propTypes: {
+	    siteCurrentLocale: _react.PropTypes.string,
+	    siteEditMode: _react.PropTypes.object,
+	
+	    articles: _react.PropTypes.arrayOf(_react.PropTypes.object.isRequired).isRequired,
+	    articlesWIPStatesOfFields: _react.PropTypes.objectOf(_react.PropTypes.object.isRequired).isRequired,
+	    articlesEditStates: _react.PropTypes.objectOf(_react.PropTypes.object.isRequired).isRequired,
+	    articlesNeedResizingStates: _react.PropTypes.objectOf(_react.PropTypes.bool.isRequired).isRequired,
+	    articlesDOMProps: _react.PropTypes.objectOf(_react.PropTypes.object.isRequired).isRequired,
+	
+	    articlesPassedInUiProps: _react.PropTypes.object.isRequired,
+	
+	    articlePictures: _react.PropTypes.object.isRequired,
+	    mediaContainers: _react.PropTypes.object.isRequired,
+	
+	    newArticleFields: _react.PropTypes.object.isRequired,
+	
+	    // currentArticleTags
+	    // article.author.full_name
+	
+	    articlesActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
+	    articlesFieldsActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
+	    articlesSizingPositionningActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
+	    newArticleActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired
+	  },
+	
+	  renderNewArticleBasicForm: function renderNewArticleBasicForm() {
+	    if (this.props.siteEditMode.mode === true) {
+	      return _react2.default.createElement(_article_basic_form2.default, {
+	        siteEditMode: this.props.siteEditMode,
+	        newArticleActions: this.props.newArticleActions,
+	        newArticleFields: this.props.newArticleFields,
+	        articlesPassedInUiProps: this.props.articlesPassedInUiProps,
+	
+	        siteCurrentLocale: this.props.siteCurrentLocale,
+	        routeParams: this.props.routeParams
+	      });
+	    }
+	  },
+	  renderArticlesList: function renderArticlesList() {
+	    return _react2.default.createElement(_articles_list.ArticlesList, {
+	      articlesPassedInUiProps: this.props.articlesPassedInUiProps
+	      // # redux articles list
+	      , articles: this.props.articles
+	      // # redux passed in Edit and Wip States
+	      , articlesWIPStatesOfFields: this.props.articlesWIPStatesOfFields,
+	      articlesEditStates: this.props.articlesEditStates
+	      // # redux passedInDomProps
+	      , articlesDOMProps: this.props.articlesDOMProps
+	      // # redux global site edit mode
+	      , siteEditMode: this.props.siteEditMode
+	      // # redux actions
+	      , articlesActions: this.props.articlesActions,
+	      articlesFieldsActions: this.props.articlesFieldsActions,
+	      articlesSizingPositionningActions: this.props.articlesSizingPositionningActions,
+	
+	      routeParams: this.props.routeParams,
+	      siteCurrentLocale: this.props.siteCurrentLocale,
+	
+	      mediaContainers: this.props.mediaContainers,
+	      articlePictures: this.props.articlePictures
+	    });
+	  },
+	  render: function render() {
+	    console.log("From NEWS CARD COMPONENT", this.props);
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'row' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'col-xs-12' },
+	        this.renderNewArticleBasicForm(),
+	        this.renderArticlesList()
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 713 */,
+/* 714 */,
+/* 715 */,
+/* 716 */,
+/* 717 */,
+/* 718 */,
+/* 719 */,
+/* 720 */,
+/* 721 */,
+/* 722 */,
+/* 723 */,
+/* 724 */,
+/* 725 */,
+/* 726 */,
+/* 727 */,
+/* 728 */,
+/* 729 */,
+/* 730 */,
+/* 731 */,
+/* 732 */,
+/* 733 */,
+/* 734 */,
+/* 735 */,
+/* 736 */,
+/* 737 */,
+/* 738 */,
+/* 739 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reselect = __webpack_require__(520);
+	
+	var _mediaContainersSelects = __webpack_require__(522);
+	
+	var _inputSelectors = __webpack_require__(742);
+	
+	var localeMediaContainersSelector = (0, _reselect.createSelector)(_inputSelectors.siteCurrentLocaleSelector, _inputSelectors.mediaContainersSelector, function (siteCurrentLocale, mediaContainersStates) {
+	  return (0, _mediaContainersSelects.selectMediaContainersOnLanguage)(mediaContainersStates, siteCurrentLocale);
+	});
+	
+	exports.default = localeMediaContainersSelector;
+
+/***/ },
+/* 740 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reselect = __webpack_require__(520);
+	
+	var _articlePicturesSelects = __webpack_require__(743);
+	
+	var _inputSelectors = __webpack_require__(742);
+	
+	var localeArticlePicturesSelector = (0, _reselect.createSelector)(_inputSelectors.siteCurrentLocaleSelector, _inputSelectors.articlePicturesSelector, function (siteCurrentLocale, articlePictures) {
+	  return (0, _articlePicturesSelects.selectArticlePicturesOnLanguage)(articlePictures, siteCurrentLocale);
+	});
+	
+	exports.default = localeArticlePicturesSelector;
+
+/***/ },
+/* 741 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reselect = __webpack_require__(520);
+	
+	var _articlesSelects = __webpack_require__(521);
+	
+	var _inputSelectors = __webpack_require__(742);
+	
+	/*
+	 * Definition of combined-selector.
+	 * In combined-selector, input-selectors are combined to derive new
+	 * information. To prevent expensive recalculation of the input-selectors
+	 * memoization is applied. Hence, these selectors are only recomputed when the
+	 * value of their input-selectors change. If none of the input-selectors return
+	 * a new value, the previously computed value is returned.
+	 *********************************************************
+	 ********* README ****************************************
+	 *********************************************************
+	 * IMPORTANT: In combined selectors, the parameters passed to the callback correspond to the values
+	 * returned by the input-selectors (or parent-selectors) tested previously, in the same order.
+	 * So: below, the articles
+	 */
+	
+	var localeArticlesSelector = (0, _reselect.createSelector)(_inputSelectors.siteCurrentLocaleSelector, _inputSelectors.articlesSelector, function (siteCurrentLocale, articles) {
+	  return {
+	    siteCurrentLocale: siteCurrentLocale,
+	    localeArticles: (0, _articlesSelects.selectArticlesOnLanguage)(articles, siteCurrentLocale)
+	  };
+	});
+	
+	var visibleArticlesLocaleAndVisibilityFilterSelector = (0, _reselect.createSelector)(_inputSelectors.articlesVisibilityFilterSelector, localeArticlesSelector, function (articlesVisibilityFilter, localeArticlesAndSiteCurrentLocale) {
+	  return {
+	    siteCurrentLocale: localeArticlesAndSiteCurrentLocale.siteCurrentLocale,
+	    articlesVisibilityFilter: articlesVisibilityFilter,
+	    visibleArticles: (0, _articlesSelects.selectArticlesOnVisibilityStatus)(localeArticlesAndSiteCurrentLocale.localeArticles, articlesVisibilityFilter)
+	  };
+	});
+	
+	var visibleArticlesAndStatesSelector = (0, _reselect.createSelector)(visibleArticlesLocaleAndVisibilityFilterSelector, _inputSelectors.articlesWIPStatesOfFieldsSelector, _inputSelectors.articlesEditStatesSelector, _inputSelectors.articlesNeedResizingStatesSelector, _inputSelectors.articlesDOMPropsSelector, function (visibleArticlesLocaleAndVisibilityFilter, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps) {
+	
+	  var visibleArticleStates = (0, _articlesSelects.selectVisibleArticlesStates)(visibleArticlesLocaleAndVisibilityFilter.visibleArticles, visibleArticlesLocaleAndVisibilityFilter.siteCurrentLocale, articlesWIPStatesOfFields, articlesEditStates, articlesNeedResizingStates, articlesDOMProps);
+	  return {
+	    articlesVisibilityFilter: visibleArticlesLocaleAndVisibilityFilter.articlesVisibilityFilter,
+	    visibleArticles: visibleArticlesLocaleAndVisibilityFilter.visibleArticles,
+	    visibleArticlesWIPStatesOfFields: visibleArticleStates.articlesWIPStatesOfFields,
+	    visibleArticlesEditStates: visibleArticleStates.articlesEditStates,
+	    visibleArticlesNeedResizingStates: visibleArticleStates.articlesNeedResizingStates,
+	    visibleArticlesDOMProps: visibleArticleStates.articlesDOMProps
+	  };
+	});
+	
+	exports.default = visibleArticlesAndStatesSelector;
+
+/***/ },
+/* 742 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	/*
+	 * Definition of input-selectors.
+	 * Input-selectors should be used to abstract away the structure
+	 * of the store in cases where no calculations are needed
+	 * and memoization wouldn't provide any benefits.
+	 */
+	var siteCurrentLocaleSelector = exports.siteCurrentLocaleSelector = function siteCurrentLocaleSelector(state) {
+	  return state.siteCurrentLocale;
+	};
+	
+	var articlesVisibilityFilterSelector = exports.articlesVisibilityFilterSelector = function articlesVisibilityFilterSelector(state) {
+	  return state.articlesVisibilityFilter;
+	};
+	var articlesSelector = exports.articlesSelector = function articlesSelector(state) {
+	  return state.articles;
+	};
+	
+	var articlesWIPStatesOfFieldsSelector = exports.articlesWIPStatesOfFieldsSelector = function articlesWIPStatesOfFieldsSelector(state) {
+	  return state.articlesWIPStatesOfFields;
+	};
+	var articlesEditStatesSelector = exports.articlesEditStatesSelector = function articlesEditStatesSelector(state) {
+	  return state.articlesEditStates;
+	};
+	var articlesNeedResizingStatesSelector = exports.articlesNeedResizingStatesSelector = function articlesNeedResizingStatesSelector(state) {
+	  return state.articlesNeedResizingStates;
+	};
+	var articlesDOMPropsSelector = exports.articlesDOMPropsSelector = function articlesDOMPropsSelector(state) {
+	  return state.articlesDOMProps;
+	};
+	
+	var articlePicturesSelector = exports.articlePicturesSelector = function articlePicturesSelector(state) {
+	  return state.articlePictures;
+	};
+	var mediaContainersSelector = exports.mediaContainersSelector = function mediaContainersSelector(state) {
+	  return state.mediaContainers;
+	};
+
+/***/ },
+/* 743 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.selectArticlePicturesOnLanguage = selectArticlePicturesOnLanguage;
+	// Selector of the article pictures depending on the locale
+	function selectArticlePicturesOnLanguage(articlePictures, locale) {
+	  return articlePictures[locale];
+	}
 
 /***/ }
 /******/ ]);

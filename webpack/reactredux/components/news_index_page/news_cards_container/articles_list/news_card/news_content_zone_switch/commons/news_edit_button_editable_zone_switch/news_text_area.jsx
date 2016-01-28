@@ -6,7 +6,6 @@ export const NewsTextArea = React.createClass({
     name:                      PropTypes.string.isRequired,
     sourceId:                  PropTypes.string,
     value:                     PropTypes.string.isRequired,
-    articlesPassedInUiProps:   PropTypes.object.isRequired,
     currArtWIPStateCurrField:  PropTypes.string.isRequired,
     handleChange:              PropTypes.func.isRequired,
     handleUpdate:              PropTypes.func.isRequired,
@@ -35,7 +34,6 @@ export const NewsTextArea = React.createClass({
           id=           {`${this.props.name}_${this.props.sourceId}`}>
         </textarea>
         <NewsEditableFieldToolbar
-          articlesPassedInUiProps=     {this.props.articlesPassedInUiProps}
           currArtWIPStateCurrField=    {this.props.currArtWIPStateCurrField}
           handleUpdate=                {this.props.handleUpdate}
           handleExitEditField=         {this.props.handleExitEditField}

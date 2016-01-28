@@ -1,11 +1,33 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { ArticlesList } from './news_cards_container/articles_list';
 import ArticleBasicForm from './news_cards_container/article_basic_form';
 
-export const NewsCardsContainer = React.createClass({
-  // propTypes: {
-  //   articlePictures:  React.PropTypes.object.isRequired
-  // },
+export const NewsCardsComponent = React.createClass({
+  propTypes: {
+    siteCurrentLocale:          PropTypes.string,
+    siteEditMode:               PropTypes.object,
+
+    articles:                   PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+    articlesWIPStatesOfFields:  PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
+    articlesEditStates:         PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
+    articlesNeedResizingStates: PropTypes.objectOf(PropTypes.bool.isRequired).isRequired,
+    articlesDOMProps:           PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
+
+    articlesPassedInUiProps:    PropTypes.object.isRequired,
+
+    articlePictures:            PropTypes.object.isRequired,
+    mediaContainers:            PropTypes.object.isRequired,
+
+    newArticleFields:           PropTypes.object.isRequired,
+
+  // currentArticleTags
+  // article.author.full_name
+
+    articlesActions:                   PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+    articlesFieldsActions:             PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+    articlesSizingPositionningActions: PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+    newArticleActions:                 PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+  },
 
   renderNewArticleBasicForm() {
     if ( this.props.siteEditMode.mode === true) {
@@ -16,8 +38,8 @@ export const NewsCardsContainer = React.createClass({
           newArticleFields=        {this.props.newArticleFields}
           articlesPassedInUiProps= {this.props.articlesPassedInUiProps}
 
-          routeParams=             {this.props.routeParams}
           siteCurrentLocale=       {this.props.siteCurrentLocale}
+          routeParams=             {this.props.routeParams}
         />
       )
     }
@@ -51,6 +73,7 @@ export const NewsCardsContainer = React.createClass({
   },
 
   render() {
+    console.log("From NEWS CARD COMPONENT", this.props)
     return (
       <div className="row">
         <div className="col-xs-12">

@@ -22,7 +22,7 @@ export function articlePictures(state = {}, action) {
 
     case ADD_NEW_ARTICLE:
       const new_state = Object.assign({}, state)
-      new_state[action.locale][action.articlePicture.id] = action.articlePicture
+      _.forOwn(new_state, (localeMediaContainersObjects, locale) => {new_state[locale][action.articlePicture.id] = action.articlePicture})
       return new_state
 
     default:

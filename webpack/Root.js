@@ -34,8 +34,8 @@ import configureStore from './reactredux/stores/configureStore'
 // import * as components from './components'
 import App from './reactredux/containers/App'
 import { NewsIndexPage } from './reactredux/components/NewsIndexPage'
-import { NewsCardsContainer } from './reactredux/components/news_index_page/news_cards_container'
-import { IndividualNewsContainer } from './reactredux/components/news_index_page/individual_news_container'
+import NewsCardsContainer from './reactredux/containers/NewsCardsContainer'
+import IndividualNewsContainer from './reactredux/containers/IndividualNewsContainer'
 // ********************************************
 
 
@@ -104,6 +104,7 @@ const Root = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
+    // If the current locale has changed and the next locale is not in the articles tree, then timeout and dispatch fetch actions
     if ( (this.props.siteCurrentLocale !== nextProps.siteCurrentLocale) &&  !(nextProps.siteCurrentLocale in nextProps.articles) ) {
       this.setState({ timeOut: true })
       store.dispatch(fetchAdditionalLocaleArticles(nextProps.siteCurrentLocale))
@@ -130,35 +131,3 @@ const Root = React.createClass({
 
 export default connect(({ siteCurrentLocale, isFetching, articles }) => ({ siteCurrentLocale, isFetching, articles }))(Root)
 
-// ***********************************************
-// +**********************************************
-// ***********************************************
-// import { createConnector } from 'redux-rx/react';
-// import { bindActionCreators } from 'redux-rx';
-
-// const AppSuperContainer = createConnector((props$, state$, dispatch$) => {
-//   const actionCreators$ = bindActionCreators(actionCreators, dispatch$);
-//   const pushState$ = actionCreators$.map(ac => ac.pushState);
-
-//   // Detect locale change
-//   const didChangeLocale$ = state$
-//     .distinctUntilChanged(state => state.siteCurrentLocale)
-//     .filter(state => state.siteCurrentLocale);
-
-//   // Redirect on change locale!
-//   const redirect$ = didChangeLocale$
-//     .withLatestFrom(
-//       pushState$,
-//       // Use query parameter as redirect path
-//       (state, pushState) => () => pushState(null, state.router.query.redirect || '/')
-//     )
-//     .do(go => go());
-
-//   return combineLatest(
-//     props$, actionCreators$, redirect$,
-//     (props, actionCreators) => ({
-//       ...props,
-//       ...actionCreators
-//     })
-//   );
-// }, Root);

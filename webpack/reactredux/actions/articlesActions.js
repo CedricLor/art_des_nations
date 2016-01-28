@@ -84,8 +84,10 @@ function updateArticle({id, title, body, teaser, status, posted_at, created_at, 
 function updateArticleAndRefresh(data, locale, fieldName) {
   return function (dispatch) {
     dispatch(updateArticle(data, locale));
+    // If the field posted_at has changed, reorder the articles' array
+    // FIXME -- Why does it also have to run if the article has changed???
     if (fieldName === "posted_at" || fieldName === "article") { dispatch(reOrderArticlesArray(locale)) };
-    dispatch(refreshArticlesSizingPositionning(locale));
+    dispatch(refreshArticlesSizingPositionning());
   }
 }
 
@@ -150,7 +152,6 @@ export function handleCancelEditArticle(id, locale) {
 }
 
 // Methods for delete article
-// DESIGN CHOICE - Deleting an article mean deleting in all the languages
 function deleteArticle(id) {
   return {
     type: DELETE_ARTICLE,
@@ -173,6 +174,7 @@ export function handleDeleteArticle(id) {
       success: (function() {
         dispatch(deleteArticle(id));
         dispatch(reOrderAllTheArticlesArray());
+        dispatch(refreshArticlesSizingPositionning());
       })
     });
   }

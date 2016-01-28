@@ -9,20 +9,25 @@ import { NewsContentZoneSwitch } from './news_cards_container/articles_list/news
 
 import { inlineBlockStyleForReadOnly } from './component_helpers/news_forms_helpers';
 
-export const IndividualNewsContainer = React.createClass({
-  // propTypes: {
-  //   articlesActions:            PropTypes.object,
-  //   articlesFieldsActions:      PropTypes.object,
+export const IndividualNewsComponent = React.createClass({
+  propTypes: {
+    siteCurrentLocale:          PropTypes.string,
+    siteEditMode:               PropTypes.object,
 
-  //   siteEditMode:               PropTypes.object,
-  //   currentArticle:             PropTypes.object.isRequired,
-  //   // # redux passed in Edit and Wip States
-  //   articlesWIPStatesOfFields:  PropTypes.object.isRequired,
-  //   articlesEditStates:         PropTypes.object.isRequired,
-  //   // # redux passedInDomProps
-  //   articlesDOMProps:           PropTypes.object.isRequired,
-  //   articlesPassedInUiProps:    PropTypes.object.isRequired
-  // },
+    currentArticle:             PropTypes.object.isRequired,
+    articlesWIPStatesOfFields:  PropTypes.object.isRequired,
+    articlesEditStates:         PropTypes.object.isRequired,
+    articlesDOMProps:           PropTypes.object.isRequired,
+
+    articlePictures:            PropTypes.object.isRequired,
+    mediaContainers:            PropTypes.object.isRequired,
+
+  // currentArticleTags
+  // article.author.full_name
+
+    articlesActions:            PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+    articlesFieldsActions:      PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+  },
 
   handleDelete(e) {
     e.preventDefault();
@@ -82,7 +87,6 @@ export const IndividualNewsContainer = React.createClass({
         sourceId=                    {this.props.currentArticle.id}
 
         siteEditMode=                {this.props.siteEditMode}
-        articlesPassedInUiProps=     {this.props.articlesPassedInUiProps}
         currArtWIPStateCurrField=    {this.props.articlesWIPStatesOfFields[fieldName]}
         currArtEditStateCurrField=   {this.props.articlesEditStates[fieldName]}
 
@@ -99,8 +103,6 @@ export const IndividualNewsContainer = React.createClass({
       return (
         <NewsToolbarSwitch
           status=                  {this.props.currentArticle.status}
-          articlesPassedInUiProps= {this.props.articlesPassedInUiProps}
-          parentIdentification=    {this.props.cardNumber}
           articlesEditStates=      {this.props.articlesEditStates}
 
           handleUpdate=            {this.handleUpdate.bind(this, "article")}
@@ -127,7 +129,7 @@ export const IndividualNewsContainer = React.createClass({
 
   renderTags() {
     if ( this.props.currentArticleTags ) {
-          tagElementsArray = this.props.articleTags.map( (tag) => {
+          tagElementsArray = this.props.currentArticleTags.map( (tag) => {
             return (
               <Link to="#">
                 <span className="label label-primary">{ tag + " " }</span>

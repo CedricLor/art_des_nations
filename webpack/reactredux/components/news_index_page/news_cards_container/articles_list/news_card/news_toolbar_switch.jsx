@@ -36,7 +36,6 @@ const NewsToolbarSwitch = React.createClass({
   propTypes: {
     status:                  PropTypes.string,
     articlesEditStates:      PropTypes.object,
-    articlesPassedInUiProps: PropTypes.object,
     handleDelete:            PropTypes.func,
     handleEdit:              PropTypes.func,
     handleCancel:            PropTypes.func,

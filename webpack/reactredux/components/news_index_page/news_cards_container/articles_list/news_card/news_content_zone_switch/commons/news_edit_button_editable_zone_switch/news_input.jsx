@@ -9,7 +9,6 @@ export const NewsInput = React.createClass({
     value:                     PropTypes.string.isRequired,
     handleChange:              PropTypes.func.isRequired,
 
-    articlesPassedInUiProps:   PropTypes.object.isRequired,
     currArtWIPStateCurrField:  PropTypes.string.isRequired,
     handleUpdate:              PropTypes.func.isRequired,
     handleExitEditField:       PropTypes.func.isRequired,
@@ -24,7 +23,6 @@ export const NewsInput = React.createClass({
   renderNewsEditableFieldToolbar() {
     return (
       <NewsEditableFieldToolbar
-        articlesPassedInUiProps=     {this.props.articlesPassedInUiProps}
         currArtWIPStateCurrField=    {this.props.currArtWIPStateCurrField}
         handleUpdate=                {this.props.handleUpdate}
         handleExitEditField=         {this.props.handleExitEditField}

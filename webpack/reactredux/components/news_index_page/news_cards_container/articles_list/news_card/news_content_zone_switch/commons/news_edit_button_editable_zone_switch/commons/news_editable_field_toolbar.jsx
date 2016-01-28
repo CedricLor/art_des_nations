@@ -29,7 +29,6 @@ const messages = defineMessages({
 // ########################################
 const NewsEditableFieldToolbar = React.createClass({
   PropTypes: {
-    articlesPassedInUiProps:   PropTypes.object.isRequired,
     handleExitEditField:       PropTypes.func.isRequired,
     handleDeleteText:          PropTypes.func.isRequired,
     handleRestoreText:         PropTypes.func.isRequired,

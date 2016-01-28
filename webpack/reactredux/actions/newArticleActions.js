@@ -1,16 +1,23 @@
 import { ADD_NEW_ARTICLE, CHANGE_FIELD_OF_NEW_ARTICLE, RESET_FIELDS_OF_NEW_ARTICLE } from '../constants/ActionTypes'
 import { refreshArticlesSizingPositionning } from './articlesSizingPositionningActions';
+import { setArticlesVisibilityFilter } from './articlesVisibilityFilterActions';
 
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
-function addNewArticle(articleWithPicturesAndMediaContainers, locale) {
+// FIXME - When updating from redux-simple-router 1.0.2 to react-router-redux (v. 2)
+// this import should change to
+// import {routeActions} from 'react-router-redux'
+// The whole redux-router integration stack will then need to be reworked on
+// pushPath will then be available from routeActions
+import { pushPath } from 'redux-simple-router'
+
+function addNewArticle(articleWithPicturesAndMediaContainers) {
   return {
     type: ADD_NEW_ARTICLE,
     article: articleWithPicturesAndMediaContainers.article,
     articlePicture: articleWithPicturesAndMediaContainers.article_pictures[0],
-    mediaContainer: articleWithPicturesAndMediaContainers.media_containers[0],
-    locale
+    mediaContainer: articleWithPicturesAndMediaContainers.media_containers[0]
   }
 }
 
@@ -57,11 +64,12 @@ export function handleSubmitNewArticle(locale) {
           }
           return response.json();
       })
-      .then((article) => {
-        dispatch(addNewArticle(article, locale));
-        dispatch(refreshArticlesSizingPositionning(locale));
+      .then((articleWithPicturesAndMediaContainers) => {
+        dispatch(addNewArticle(articleWithPicturesAndMediaContainers));
+        dispatch(pushPath(`/${locale}/article/${articleWithPicturesAndMediaContainers.article.id}`))
+        // dispatch(setArticlesVisibilityFilter('SHOW_DRAFT'));
+        // dispatch(refreshArticlesSizingPositionning());
         dispatch(resetNewArticleFields());
       })
-
   }
 }
