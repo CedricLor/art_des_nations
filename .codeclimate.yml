@@ -33,18 +33,19 @@ ratings:
   paths:
   - Gemfile.lock
   - app/**
-  - lib/**
   - "**.erb"
   - "**.rb"
   - "**.js"
-  - "**.js"
+  - "**.jsx"
 exclude_paths:
-- config/**/*
 - bin/**/*
+- config/**/*
 - db/**/*
+- lib/**/*
+- node_modules/**/*
+- public/**/*
 - test/**/*
 - vendor/**/*
-- node_modules/**/*
 - app/assets/javascripts/1.redux_bundle.js
 - app/assets/javascripts/1.redux_bundle.js.map
 - app/assets/javascripts/redux_bundle.js
