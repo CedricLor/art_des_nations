@@ -56,8 +56,9 @@ group :development do
   # Debugging tools
   gem 'better_errors', '~> 2.1', '>= 2.1.1'
   gem "binding_of_caller"
-  gem 'faker', '~> 1.6', '>= 1.6.1'
 end
+
+gem 'faker', '~> 1.6', '>= 1.6.1'
 
 # Adding ckeditor
 gem 'ckeditor'
