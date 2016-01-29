@@ -4,7 +4,8 @@ import { Link } from 'react-router';
 import NewsToolbarSwitch from './news_cards_container/articles_list/news_card/news_toolbar_switch';
 
 import GenericContentEditable from 'dumb_components/generic_content_editable';
-import Image from 'dumb_components/image';
+
+import {NewsSliderController} from 'news_shared_components/news_slider_controller'
 import NewsPostedAtOnZone from 'news_shared_components/news_posted_at_on_zone';
 import { NewsContentZoneSwitch } from './news_cards_container/articles_list/news_card/news_content_zone_switch';
 
@@ -20,8 +21,8 @@ export const IndividualNewsComponent = React.createClass({
     articlesEditStates:         PropTypes.object.isRequired,
     articlesDOMProps:           PropTypes.object.isRequired,
 
-    articlePictures:            PropTypes.array.isRequired,
-    mediaContainers:            PropTypes.array.isRequired,
+    articlePictures:            PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+    mediaContainers:            PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
 
   // currentArticleTags
   // article.author.full_name
@@ -67,12 +68,12 @@ export const IndividualNewsComponent = React.createClass({
     // TO REMOVE THEM AS CAROUSEL PICTURES
     return (
       <span>
-        <Image
-          cardImageSource= {this.props.mediaContainers[0].media}
-          newsTitle=       {this.props.mediaContainers[0].title}
-          />
-        <div className= "news-picture-overlay">
-        </div>
+        <NewsSliderController
+          siteEditMode=     {this.props.siteEditMode}
+          articlePictures=  {this.props.articlePictures}
+          mediaContainers=  {this.props.mediaContainers}
+          sourceId=         {this.props.currentArticle.id}
+        />
       </span>
     )
   },

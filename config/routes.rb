@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
   scope '(:locale)', locale: /fr|en|ru|zh/ do
+    get 'article/:id' => "pages#show"
+
     resources :articles
     resources :media_containers
 

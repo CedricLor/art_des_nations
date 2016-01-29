@@ -148,6 +148,7 @@ export const NewsCard = React.createClass({
         <Image
           cardImageSource= {this.props.cardMediaContainer.media}
           newsTitle=       {this.props.cardMediaContainer.title}
+          className=       {`img-for-news-card-${this.props.card.id} my-news-card-img my-card-img`}
           />
         <div className= "news-picture-overlay">
         </div>

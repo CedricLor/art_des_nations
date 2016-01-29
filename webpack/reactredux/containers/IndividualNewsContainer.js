@@ -5,13 +5,11 @@ import { IndividualNewsComponent } from '../components/news_index_page/individua
 function mapStateToProps(state, ownProps) {
   const currentArticle = _.find(state.articles[`${state.siteCurrentLocale}`], { 'id': parseInt(ownProps.params.id)});
   // QUICK FIX - AT A LATER STAGE, DISPATCH MEDIA_CONTAINER BETWEEN CAROUSEL MEDIA CONTAINERS AND OTHERS
-  const [articlePictures, mediaContainers] = [[], []];
+  const [articlePictures, mediaContainers] = [[], {}];
   _.forEach(currentArticle.article_picture_ids, (picture_id) => {
-    console.log("----------------------------------")
-    console.log(ownProps.articlePictures[picture_id])
-    console.log(ownProps.mediaContainers[ownProps.articlePictures[picture_id]["media_container_id"]])
     articlePictures.push(ownProps.articlePictures[picture_id]);
-    mediaContainers.push(ownProps.mediaContainers[ownProps.articlePictures[picture_id]["media_container_id"]]);
+    mediaContainers[ownProps.articlePictures[picture_id]["media_container_id"]] = ownProps.mediaContainers[ownProps.articlePictures[picture_id]["media_container_id"]];
+    // mediaContainers.push(ownProps.mediaContainers[ownProps.articlePictures[picture_id]["media_container_id"]]);
   });
 
   return {

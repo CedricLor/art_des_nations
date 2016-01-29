@@ -24,7 +24,7 @@ class ArticleCreationForm
       media_container = MediaContainer.create!(title: title, media: media_file)
 
       # article_picture = ArticlePicture.create!(article_id: article.id, media_container_id: media_container.id, for_card: picture_for_card, for_carousel: picture_for_carousel)
-      article_picture = ArticlePicture.create!(article_id: article.id, media_container_id: media_container.id, for_card: "true")
+      article_picture = ArticlePicture.create!(article_id: article.id, media_container_id: media_container.id, for_card: "true", for_carousel: "true")
     end
   end
 end
