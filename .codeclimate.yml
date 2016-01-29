@@ -1,0 +1,51 @@
+engines:
+  brakeman:
+    enabled: true
+  bundle-audit:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - ruby
+      - javascript
+  fixme:
+    enabled: true
+  rubocop:
+    enabled: true
+    checks:
+      Rubocop/Style/EmptyLinesAroundBlockBody:
+        enabled: false
+      Rubocop/Style/TrailingBlankLines:
+        enabled: false
+      Rubocop/Style/Documentation:
+        enabled: false
+      Rubocop/Style/SpaceAroundBlockParameters:
+        enabled: false
+  eslint:
+    enabled: true
+    checks:
+      quotes:
+        enabled: false
+ scss-lint:
+    enabled: true
+ratings:
+  paths:
+  - Gemfile.lock
+  - app/**
+  - lib/**
+  - "**.erb"
+  - "**.rb"
+  - "**.js"
+  - "**.js"
+exclude_paths:
+- config/**/*
+- bin/**/*
+- db/**/*
+- test/**/*
+- vendor/**/*
+- node_modules/**/*
+- app/assets/javascripts/1.redux_bundle.js
+- app/assets/javascripts/1.redux_bundle.js.map
+- app/assets/javascripts/redux_bundle.js
+- app/assets/javascripts/redux_bundle.js.map
