@@ -32,8 +32,7 @@ export function successCallBackForRestoreText(data, locale, fieldName) {
 import { getInitialDataByAjax } from './articlesActions'
 export function handleRestoreText(id, fieldName, locale) {
   return function(dispatch) {
-    const successCallBack = successCallBackForRestoreText;
-    dispatch(getInitialDataByAjax(id, successCallBack, fieldName, locale));
+    dispatch(getInitialDataByAjax(id, successCallBackForRestoreText, locale, fieldName));
   }
 }
 
@@ -105,7 +104,7 @@ function resetEditAndWIPStatesForField(id, fieldName, resetValue, locale) {
   }
 }
 
-export function resetAllEditAndWIPStatesForField(id, resetValue, locale) {
+export function resetAllEditAndWIPStatesForArticle(id, resetValue, locale) {
   return function (dispatch) {
     dispatch(resetAllEditStatesForArticle(id, resetValue, locale));
     dispatch(resetAllWIPStatesForArticle(id, locale));
@@ -115,7 +114,7 @@ export function resetAllEditAndWIPStatesForField(id, resetValue, locale) {
 export function updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle(articleId, fieldName, locale) {
   return function (dispatch) {
     if (fieldName == 'article') {
-      dispatch(resetAllEditAndWIPStatesForField(articleId, false, locale))
+      dispatch(resetAllEditAndWIPStatesForArticle(articleId, false, locale))
     } else {
       dispatch(resetEditAndWIPStatesForField(articleId, fieldName, false, locale))
     }

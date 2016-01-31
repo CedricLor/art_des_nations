@@ -98,7 +98,8 @@ export const NewsCard = React.createClass({
           handleEdit=              {this.handleEdit}
           handleCancel=            {this.handleCancel}
           handleDelete=            {this.handleDelete}
-          handleStatusChange=      {this.handleChange.bind(this, "status")}/>
+          handleStatusChange=      {this.handleChange.bind(this, "status")}
+        />
       )
     }
   },

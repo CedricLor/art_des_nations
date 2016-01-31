@@ -57,7 +57,7 @@ export const Input = React.createClass({
           value=        {this.props.value}
           onChange=     {this.handleChange}
         />
-        { this.props.newsEditableFieldToolbar }
+        { this.props.editableFieldToolbar }
       </div>
     )
   },
@@ -95,7 +95,7 @@ export const TextArea = React.createClass({
           name=         {this.props.name}
           id=           {`${this.props.name}_${this.props.sourceId}`}>
         </textarea>
-        { this.props.newsEditableFieldToolbar }
+        { this.props.editableFieldToolbar }
       </div>
     )
   }
@@ -105,7 +105,7 @@ export const TextArea = React.createClass({
 
 
 
-export const NewsCkEditor = React.createClass({
+export const CkEditor = React.createClass({
   PropTypes: {
     name:                  PropTypes.string.isRequired,
     sourceId:              PropTypes.string,
@@ -155,7 +155,7 @@ export const NewsCkEditor = React.createClass({
           ref=          {this.props.name}
           id=           {`${this.props.name}_${this.props.sourceId}`}>
         </textarea>
-        { this.props.newsEditableFieldToolbar }
+        { this.props.editableFieldToolbar }
       </div>
     )
   }

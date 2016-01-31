@@ -14,8 +14,8 @@ class ArticleDestroy
       # FIXME -- If MediaContainer becomes polymorphic, will need to check on other tables
       # than only article_pictures (media_container.article_pictures.length == 1)
       # before destroying the picture
-      return if media_container.article_pictures.length != 1
-      media_containers_ids << md.id
+      return if md.article_pictures.length != 1
+      media_container_ids << md.id
       md.destroy
     end
     @article_with_pictures.destroy

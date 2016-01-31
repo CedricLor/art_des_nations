@@ -65,6 +65,7 @@ const SpecificInternationalizedEditableFieldToolbar = React.createClass({
   },
 
   render() {
+
     const {formatMessage} = this.props.intl;
 
     let firstButton;

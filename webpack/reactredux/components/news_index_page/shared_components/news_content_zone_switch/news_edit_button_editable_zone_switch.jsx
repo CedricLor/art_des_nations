@@ -24,11 +24,12 @@ export const NewsEditButtonEditableZoneSwitch = React.createClass({
   createEditableFieldToolbar() {
     return (
       <SpecificInternationalizedEditableFieldToolbar
-        currArtWIPStateCurrField=    {this.props.currArtWIPStateCurrField}
         handleUpdate=                {this.props.handleUpdate}
         handleExitEditField=         {this.props.handleExitEditField}
         handleDeleteText=            {this.props.handleDeleteText}
-        handleRestoreText=           {this.props.handleRestoreText}/>
+        handleRestoreText=           {this.props.handleRestoreText}
+        currArtWIPStateCurrField=    {this.props.currArtWIPStateCurrField}
+      />
     )
   },
 
@@ -62,8 +63,6 @@ export const NewsEditButtonEditableZoneSwitch = React.createClass({
       // # if field edit mode is on, show inputs, textarea or ckeditor and field toolbar
       switch (this.props.type) {
         case "text":
-        // FIXME: I think I should get rid of this date thing
-        case "date":
           return this.renderFormControl(Input);
         case "textarea":
           return this.renderFormControl(TextArea);
