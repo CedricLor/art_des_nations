@@ -25,8 +25,13 @@ const NewsFormDropZoneController = React.createClass({
   render: function () {
 
     return (
-      <Dropzone onDrop={this.onDrop} multiple={false} accept='image/*' style={ {width: "100%", height: "100%"} }>
-        { (Object.keys(this.props.newArticleCardPictureField).length === 0) ?
+      <Dropzone
+        onDrop=   {this.onDrop}
+        multiple= {false}
+        accept=   'image/*'
+        style=    { {width: "100%", height: "100%"} }>
+        {
+          (Object.keys(this.props.newArticleCardPictureField).length === 0) ?
           <div
             style={
               { borderStyle: "dotted", textAlign: "center", paddingLeft: "50px", paddingRight: "50px" }

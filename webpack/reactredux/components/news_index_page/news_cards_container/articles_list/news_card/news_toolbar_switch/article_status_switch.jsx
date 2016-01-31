@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {intlShape, injectIntl, defineMessages} from 'react-intl';
 
-import { GenericStatusSwitcherToolbar } from '../../../../../dumb_components/generic_toolbars';
+import { GenericStatusSwitcherToolbar } from 'dumb_components/generic_toolbars';
 
 const messages = defineMessages({
   mainBtnTxt: {

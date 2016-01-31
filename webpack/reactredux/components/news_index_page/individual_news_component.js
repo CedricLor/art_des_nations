@@ -7,9 +7,9 @@ import GenericContentEditable from 'dumb_components/generic_content_editable';
 
 import {NewsSliderController} from 'news_shared_components/news_slider_controller'
 import NewsPostedAtOnZone from 'news_shared_components/news_posted_at_on_zone';
-import { NewsContentZoneSwitch } from './news_cards_container/articles_list/news_card/news_content_zone_switch';
+import { NewsContentZoneSwitch } from 'news_shared_components/news_content_zone_switch';
 
-import { inlineBlockStyleForReadOnly } from './component_helpers/news_forms_helpers';
+import { inlineBlockStyleForReadOnly } from 'news_shared_components/news_forms_helpers';
 
 export const IndividualNewsComponent = React.createClass({
   propTypes: {

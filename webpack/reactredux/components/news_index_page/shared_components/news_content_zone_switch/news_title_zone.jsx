@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react';
-import {NewsEditButtonEditableZoneSwitch} from './commons/news_edit_button_editable_zone_switch';
 // import GenericContentEditable from 'dumb_components/generic_content_editable';
-import { inlineBlockStyleForReadOnly } from '../../../../component_helpers/news_forms_helpers';
+import { inlineBlockStyleForReadOnly } from '../news_forms_helpers';
 
 import {InternationalizedLink} from 'dumb_components/internationalized_link';
 

@@ -4,7 +4,7 @@ import { NewsTitleZone } from './news_content_zone_switch/news_title_zone';
 import { NewsTeaserZone } from './news_content_zone_switch/news_teaser_zone';
 import { NewsBodyZone } from './news_content_zone_switch/news_body_zone';
 
-import { NewsEditButtonEditableZoneSwitch } from './news_content_zone_switch/commons/news_edit_button_editable_zone_switch';
+import { NewsEditButtonEditableZoneSwitch } from './news_content_zone_switch/news_edit_button_editable_zone_switch';
 
 export const NewsContentZoneSwitch = React.createClass ({
   PropTypes: {

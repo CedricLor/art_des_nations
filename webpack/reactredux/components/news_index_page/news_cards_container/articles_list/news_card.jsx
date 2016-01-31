@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { InternationalizedLink } from 'dumb_components/internationalized_link';
 
 import NewsToolbarSwitch from './news_card/news_toolbar_switch';
-import { NewsContentZoneSwitch } from './news_card/news_content_zone_switch';
+import { NewsContentZoneSwitch } from 'news_shared_components/news_content_zone_switch';
 import NewsPostedAtOnZone from 'news_shared_components/news_posted_at_on_zone';
 import Image from 'dumb_components/image';
 import ReadMoreBtn from '../dumb_components/read_more_button';

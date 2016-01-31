@@ -24,8 +24,8 @@ export function changeFieldOfArticle(id, fieldName, fieldValue, locale) {
 
 export function successCallBackForRestoreText(data, locale, fieldName) {
   return function (dispatch) {
-    dispatch(changeFieldOfArticle(data.id, fieldName, data[fieldName], locale));
-    dispatch(resetEditAndWIPStatesForField(data.id, fieldName, false, locale));
+    dispatch(changeFieldOfArticle(data.article.id, fieldName, data.article[fieldName], locale));
+    dispatch(resetEditAndWIPStatesForField(data.article.id, fieldName, false, locale));
   }
 }
 

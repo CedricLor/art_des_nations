@@ -9,7 +9,7 @@ import NewsFormDropZoneController from './article_basic_form/news_form_drop_zone
 import NewsPostedAtOnZone from 'news_shared_components/news_posted_at_on_zone';
 import ReadMoreBtn from './dumb_components/read_more_button';
 
-import { inlineBlockStyleForReadOnly } from '../component_helpers/news_forms_helpers';
+import { inlineBlockStyleForReadOnly } from 'news_shared_components/news_forms_helpers';
 
 import {intlShape, injectIntl, defineMessages} from 'react-intl';
 

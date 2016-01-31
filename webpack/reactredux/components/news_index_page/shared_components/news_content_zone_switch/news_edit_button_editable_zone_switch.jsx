@@ -1,8 +1,7 @@
 import React, {PropTypes} from 'react';
-import {NewsInput} from './news_edit_button_editable_zone_switch/news_input'
-import {NewsTextArea} from './news_edit_button_editable_zone_switch/news_text_area'
-import {NewsCkEditor} from './news_edit_button_editable_zone_switch/news_ck_editor'
-import {NewsEditButton} from './news_edit_button_editable_zone_switch/news_edit_button'
+import {Input, TextArea, CkEditor, EditButton} from 'dumb_components/generic_form_field_elements'
+
+import SpecificInternationalizedEditableFieldToolbar from 'dumb_components/specific_internationalized_editable_field_toolbar';
 
 export const NewsEditButtonEditableZoneSwitch = React.createClass({
   PropTypes: {
@@ -22,23 +21,29 @@ export const NewsEditButtonEditableZoneSwitch = React.createClass({
     handleRestoreText:         PropTypes.func.isRequired
   },
 
+  createEditableFieldToolbar() {
+    return (
+      <SpecificInternationalizedEditableFieldToolbar
+        currArtWIPStateCurrField=    {this.props.currArtWIPStateCurrField}
+        handleUpdate=                {this.props.handleUpdate}
+        handleExitEditField=         {this.props.handleExitEditField}
+        handleDeleteText=            {this.props.handleDeleteText}
+        handleRestoreText=           {this.props.handleRestoreText}/>
+    )
+  },
+
   renderFormControl(formControlName) {
     return (
       React.createElement(
         formControlName,
         {
-          name:                        this.props.name,
-          type:                        this.props.type,
-          sourceId:                    this.props.sourceId,
-          value:                       this.props.value,
+          name:                    this.props.name,
+          type:                    this.props.type,
+          sourceId:                this.props.sourceId,
+          value:                   this.props.value,
+          handleChange:            this.props.handleChange,
 
-          currArtWIPStateCurrField:    this.props.currArtWIPStateCurrField,
-
-          handleChange:                this.props.handleChange,
-          handleUpdate:                this.props.handleUpdate,
-          handleExitEditField:         this.props.handleExitEditField,
-          handleDeleteText:            this.props.handleDeleteText,
-          handleRestoreText:           this.props.handleRestoreText
+          editableFieldToolbar:    this.createEditableFieldToolbar(),
         }
       )
     )
@@ -46,25 +51,26 @@ export const NewsEditButtonEditableZoneSwitch = React.createClass({
 
   editButton() {
     return (
-      <NewsEditButton
+      <EditButton
         name=            {this.props.name}
         handleEditField= {this.props.handleEditField}/>
     )
   },
 
-  editButtonEditableZoneSwitch() {
+  render() {
     if (this.props.currArtEditStateCurrField) {
       // # if field edit mode is on, show inputs, textarea or ckeditor and field toolbar
       switch (this.props.type) {
         case "text":
+        // FIXME: I think I should get rid of this date thing
         case "date":
-          return this.renderFormControl(NewsInput);
+          return this.renderFormControl(Input);
         case "textarea":
-          return this.renderFormControl(NewsTextArea);
+          return this.renderFormControl(TextArea);
         case "ckeditor":
-          return this.renderFormControl(NewsCkEditor);
+          return this.renderFormControl(CkEditor);
         default:
-          return this.renderFormControl(NewsInput);
+          return this.renderFormControl(Input);
       }
       // # else show pencil button
     }
@@ -72,14 +78,4 @@ export const NewsEditButtonEditableZoneSwitch = React.createClass({
       return this.editButton()
     }
   },
-
-  render() {
-    const editButtonOrEditableZoneSwitch = this.editButtonEditableZoneSwitch();
-
-    return (
-      <span>
-        { editButtonOrEditableZoneSwitch }
-      </span>
-    )
-  }
 })
