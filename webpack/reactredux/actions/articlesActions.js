@@ -152,10 +152,12 @@ export function handleCancelEditArticle(id, locale) {
 }
 
 // Methods for delete article
-function deleteArticle(id) {
+function deleteArticle(id, articlePictureIds, mediaContainerIds) {
   return {
     type: DELETE_ARTICLE,
-    id
+    id,
+    articlePictureIds,
+    mediaContainerIds
   }
 }
 
@@ -167,12 +169,40 @@ function reOrderAllTheArticlesArray() {
 
 export function handleDeleteArticle(id) {
   return function (dispatch, getState) {
+    // fetch(`/articles/${id}`, {
+    //   method: 'delete',
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json',
+    //     credentials: 'same-origin',
+    //     headers: {
+    //       'X-Requested-With': 'XMLHttpRequest',
+    //       'X_CSRF_TOKEN': `${$('meta[name="csrf-token"]').attr('content')}`
+    //     },
+    //   }
+    // })
+    //   .then(function(response) {
+    //       if (response.status >= 400) {
+    //           throw new Error("Bad response from server");
+    //       }
+    //       return response.json();
+    //   })
+    //   .then(function(mediaContainers) {
+    //     dispatch(deleteArticle(id));
+    //     dispatch(deleteArticlePictures);
+    //     dispatch(deleteMediaContainers);
+    //     dispatch(reOrderAllTheArticlesArray());
+    //     dispatch(refreshArticlesSizingPositionning());
+    //     dispatch(dispatchLoadInitialArticles(articles, locale));
+    //   })
+
     $.ajax({
       method: 'DELETE',
       url: "/articles/" + id,
       dataType: 'JSON',
-      success: (function() {
-        dispatch(deleteArticle(id));
+      success: (function(ancillaryItemsToDestroy) {
+        console.log(ancillaryItemsToDestroy)
+        dispatch(deleteArticle(id, ancillaryItemsToDestroy.article_picture_ids, ancillaryItemsToDestroy.media_container_ids));
         dispatch(reOrderAllTheArticlesArray());
         dispatch(refreshArticlesSizingPositionning());
       })

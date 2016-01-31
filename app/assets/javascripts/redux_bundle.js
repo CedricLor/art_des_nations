@@ -50615,11 +50615,20 @@
 	      return Object.assign({}, state, action.additionalStates.mediaContainers);
 	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
-	      var new_state = Object.assign({}, state);
-	      _.forOwn(new_state, function (localeMediaContainersObjects, locale) {
-	        new_state[locale][action.mediaContainer.id] = action.mediaContainer;
+	      var newStateForNewArticle = Object.assign({}, state);
+	      _.forOwn(newStateForNewArticle, function (localeMediaContainersObjects, locale) {
+	        newStateForNewArticle[locale][action.mediaContainer.id] = action.mediaContainer;
 	      });
-	      return new_state;
+	      return newStateForNewArticle;
+	
+	    case _ActionTypes.DELETE_ARTICLE:
+	      var newStateForDeleteArticle = Object.assign({}, state);
+	      _.forEach(action.mediaContainerIds, function (mediaContainerId) {
+	        _.forOwn(newStateForDeleteArticle, function (localeMediaContainersObjects, locale) {
+	          delete newStateForDeleteArticle[locale][action.mediaContainerId];
+	        });
+	      });
+	      return newStateForDeleteArticle;
 	
 	    default:
 	      return state;
@@ -50662,11 +50671,20 @@
 	      return Object.assign({}, state, action.additionalStates.articlePictures);
 	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
-	      var new_state = Object.assign({}, state);
-	      _.forOwn(new_state, function (localeMediaContainersObjects, locale) {
-	        new_state[locale][action.articlePicture.id] = action.articlePicture;
+	      var newStateForNewArticle = Object.assign({}, state);
+	      _.forOwn(newStateForNewArticle, function (localeArticlePicturesObjects, locale) {
+	        newStateForNewArticle[locale][action.articlePicture.id] = action.articlePicture;
 	      });
-	      return new_state;
+	      return newStateForNewArticle;
+	
+	    case _ActionTypes.DELETE_ARTICLE:
+	      var newStateForDeleteArticle = Object.assign({}, state);
+	      _.forEach(action.articlePictureIds, function (articlePictureId) {
+	        _.forOwn(newStateForDeleteArticle, function (localeArticlePicturesObjects, locale) {
+	          delete newStateForDeleteArticle[locale][action.articlePictureId];
+	        });
+	      });
+	      return newStateForDeleteArticle;
 	
 	    default:
 	      return state;
@@ -51908,10 +51926,12 @@
 	}
 	
 	// Methods for delete article
-	function deleteArticle(id) {
+	function deleteArticle(id, articlePictureIds, mediaContainerIds) {
 	  return {
 	    type: _ActionTypes.DELETE_ARTICLE,
-	    id: id
+	    id: id,
+	    articlePictureIds: articlePictureIds,
+	    mediaContainerIds: mediaContainerIds
 	  };
 	}
 	
@@ -51923,12 +51943,40 @@
 	
 	function handleDeleteArticle(id) {
 	  return function (dispatch, getState) {
+	    // fetch(`/articles/${id}`, {
+	    //   method: 'delete',
+	    //   headers: {
+	    //     'Accept': 'application/json',
+	    //     'Content-Type': 'application/json',
+	    //     credentials: 'same-origin',
+	    //     headers: {
+	    //       'X-Requested-With': 'XMLHttpRequest',
+	    //       'X_CSRF_TOKEN': `${$('meta[name="csrf-token"]').attr('content')}`
+	    //     },
+	    //   }
+	    // })
+	    //   .then(function(response) {
+	    //       if (response.status >= 400) {
+	    //           throw new Error("Bad response from server");
+	    //       }
+	    //       return response.json();
+	    //   })
+	    //   .then(function(mediaContainers) {
+	    //     dispatch(deleteArticle(id));
+	    //     dispatch(deleteArticlePictures);
+	    //     dispatch(deleteMediaContainers);
+	    //     dispatch(reOrderAllTheArticlesArray());
+	    //     dispatch(refreshArticlesSizingPositionning());
+	    //     dispatch(dispatchLoadInitialArticles(articles, locale));
+	    //   })
+	
 	    $.ajax({
 	      method: 'DELETE',
 	      url: "/articles/" + id,
 	      dataType: 'JSON',
-	      success: function success() {
-	        dispatch(deleteArticle(id));
+	      success: function success(ancillaryItemsToDestroy) {
+	        console.log(ancillaryItemsToDestroy);
+	        dispatch(deleteArticle(id, ancillaryItemsToDestroy.article_picture_ids, ancillaryItemsToDestroy.media_container_ids));
 	        dispatch(reOrderAllTheArticlesArray());
 	        dispatch((0, _articlesSizingPositionningActions.refreshArticlesSizingPositionning)());
 	      }
@@ -73704,7 +73752,11 @@
 	
 	    return _react2.default.createElement(
 	      _reactDropzone2.default,
-	      { onDrop: this.onDrop, multiple: false, accept: 'image/*', style: { width: "100%", height: "100%" } },
+	      {
+	        onDrop: this.onDrop,
+	        multiple: false,
+	        accept: 'image/*',
+	        style: { width: "100%", height: "100%" } },
 	      Object.keys(this.props.newArticleCardPictureField).length === 0 ? _react2.default.createElement(
 	        'div',
 	        {

@@ -57,8 +57,9 @@ class ArticlesController < ApplicationController
   end
 
   def destroy
-    ArticleDestroy.new(article_id: params[:id])
-    head :no_content
+    @ancillaryItemsToDestroy = ArticleDestroy.new(article_id: params[:id]).destroy
+    render json: {'ancillaryItemsToDestroy': @ancillaryItemsToDestroy}
+    # head :no_content
   end
 
   private
