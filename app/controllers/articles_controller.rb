@@ -57,8 +57,7 @@ class ArticlesController < ApplicationController
   end
 
   def destroy
-    @article = Article.find(params[:id])
-    @article.destroy
+    ArticleDestroy.new(article_id: params[:id])
     head :no_content
   end
 
