@@ -3,7 +3,7 @@ import {
   DELETE_ARTICLE,
   LOADED_INITIAL_ARTICLES,
   LOADING_ADDITIONAL_LOCALE_ARTICLES,
-  LOADED_ADDITIONNAL_LOCALE_ARTICLES,
+  LOADED_ADDITIONAL_LOCALE_ARTICLES,
   REORDER_ARTICLES_ARRAY,
   REORDER_ALL_THE_ARTICLES_ARRAYS
    } from '../constants/ActionTypes'
@@ -46,7 +46,7 @@ export function fetchInitialArticles(locale) {
 function dispatchLoadAdditionalLocaleArticles(jsonFetchedArticles, locale) {
   const additionalStates = createArticleStates(jsonFetchedArticles, locale);
   return {
-    type: LOADED_ADDITIONNAL_LOCALE_ARTICLES,
+    type: LOADED_ADDITIONAL_LOCALE_ARTICLES,
     additionalStates
   }
 }

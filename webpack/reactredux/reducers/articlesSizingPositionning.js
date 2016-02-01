@@ -1,6 +1,6 @@
 import {
   LOADED_INITIAL_ARTICLES,
-  LOADED_ADDITIONNAL_LOCALE_ARTICLES,
+  LOADED_ADDITIONAL_LOCALE_ARTICLES,
   CHANGE_NEED_RESIZING_STATE_OF_ARTICLES,
   ADD_NEW_ARTICLE,
   DELETE_ARTICLE,
@@ -17,7 +17,7 @@ export function articlesNeedResizingStates(state = {}, action) {
     case LOADED_INITIAL_ARTICLES:
       return action.initialState.articlesNeedResizingStates
 
-    case LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+    case LOADED_ADDITIONAL_LOCALE_ARTICLES:
       return Object.assign({}, state, action.additionalStates.articlesNeedResizingStates)
 
     // In case we add a new article, we need to create a new entry for the article in all the existing langugages
@@ -59,7 +59,7 @@ export function articlesDOMProps(state = {}, action) {
     case LOADED_INITIAL_ARTICLES:
       return action.initialState.articlesDOMProps
 
-    case LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+    case LOADED_ADDITIONAL_LOCALE_ARTICLES:
       return Object.assign({}, state, action.additionalStates.articlesDOMProps)
 
     // Create the record for the new article in all the localized versions of articlesDOMProps state

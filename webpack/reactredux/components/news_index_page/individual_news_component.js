@@ -5,7 +5,7 @@ import NewsToolbarSwitch from './news_cards_container/articles_list/news_card/ne
 
 import GenericContentEditable from 'dumb_components/generic_content_editable';
 
-import {NewsSliderController} from 'news_shared_components/news_slider_controller'
+import {ImageImageSliderSwitch} from 'news_shared_components/image_image_slider_switch'
 import NewsPostedAtOnZone from 'news_shared_components/news_posted_at_on_zone';
 import { NewsContentZoneSwitch } from 'news_shared_components/news_content_zone_switch';
 
@@ -68,7 +68,7 @@ export const IndividualNewsComponent = React.createClass({
     // TO REMOVE THEM AS CAROUSEL PICTURES
     return (
       <span>
-        <NewsSliderController
+        <ImageImageSliderSwitch
           siteEditMode=     {this.props.siteEditMode}
           articlePictures=  {this.props.articlePictures}
           mediaContainers=  {this.props.mediaContainers}

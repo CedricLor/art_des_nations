@@ -1,6 +1,6 @@
 import {
   LOADED_INITIAL_ARTICLES,
-  LOADED_ADDITIONNAL_LOCALE_ARTICLES,
+  LOADED_ADDITIONAL_LOCALE_ARTICLES,
   ADD_NEW_ARTICLE,
   DELETE_ARTICLE,
 } from '../constants/ActionTypes'
@@ -18,7 +18,7 @@ export function articlePictures(state = {}, action) {
     case LOADED_INITIAL_ARTICLES:
       return action.initialState.articlePictures
 
-    case LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+    case LOADED_ADDITIONAL_LOCALE_ARTICLES:
       return Object.assign({}, state, action.additionalStates.articlePictures)
 
     case ADD_NEW_ARTICLE:

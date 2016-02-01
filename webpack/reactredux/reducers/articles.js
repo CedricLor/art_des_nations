@@ -1,6 +1,6 @@
 import {
   LOADED_INITIAL_ARTICLES,
-  LOADED_ADDITIONNAL_LOCALE_ARTICLES,
+  LOADED_ADDITIONAL_LOCALE_ARTICLES,
   TOGGLE_SITE_EDIT_MODE,
   ADD_NEW_ARTICLE,
   UPDATE_ARTICLE,
@@ -96,7 +96,7 @@ export function articles(state = {}, action) {
     case LOADED_INITIAL_ARTICLES:
       return action.initialState.articles
 
-    case LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+    case LOADED_ADDITIONAL_LOCALE_ARTICLES:
       return Object.assign({}, state, action.additionalStates.articles)
 
     case ADD_NEW_ARTICLE:
@@ -153,7 +153,7 @@ export function articlesEditStates(state = {}, action) {
     case LOADED_INITIAL_ARTICLES:
       return action.initialState.articlesEditStates
 
-    case LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+    case LOADED_ADDITIONAL_LOCALE_ARTICLES:
       return Object.assign({}, state, action.additionalStates.articlesEditStates)
 
     case ADD_NEW_ARTICLE:
@@ -206,7 +206,7 @@ export function articlesWIPStatesOfFields(state = {}, action) {
     case LOADED_INITIAL_ARTICLES:
       return action.initialState.articlesWIPStatesOfFields
 
-    case LOADED_ADDITIONNAL_LOCALE_ARTICLES:
+    case LOADED_ADDITIONAL_LOCALE_ARTICLES:
       return Object.assign({}, state, action.additionalStates.articlesWIPStatesOfFields)
 
     case ADD_NEW_ARTICLE:
