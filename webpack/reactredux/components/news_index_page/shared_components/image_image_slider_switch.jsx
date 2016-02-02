@@ -1,7 +1,10 @@
 import React, { PropTypes } from 'react';
 
-import Image from 'dumb_components/image';
+import {ImageWrapper} from './image_wrapper';
+import {SliderDropZoneController} from './slider_drop_zone_controller'
 import {NewsSliderController} from './news_slider_controller'
+import NewImageDropZoneContent from './new_image_drop_zone_content'
+import {ImageDestroyButton} from './image_destroy_button'
 
 export const ImageImageSliderSwitch = React.createClass({
   propTypes: {
@@ -12,30 +15,62 @@ export const ImageImageSliderSwitch = React.createClass({
     sourceId:                       PropTypes.number.isRequired,
     createAdditionalArticlePicture: PropTypes.func.isRequired,
     changeArticlePicture:           PropTypes.func.isRequired,
+    deleteArticlePicture:           PropTypes.func.isRequired,
+  },
+
+  createArrayOfDropZones() {
+    const newPictureDropZone =  <div key="onEditPlaceholder">
+                                  <SliderDropZoneController onDrop={this.props.createAdditionalArticlePicture.bind(null, "false", "true")}>
+                                    <NewImageDropZoneContent/>
+                                  </SliderDropZoneController>
+                                </div>
+
+    let arrayOfDropZones = this.props.articlePictures.map((articlePicture, i) => {
+      const imageDestroyButton = <ImageDestroyButton deleteArticlePicture={this.props.deleteArticlePicture.bind(null, articlePicture.id, articlePicture.stored_file_id, articlePicture.media_container_id)}/>
+      return(
+        <div key= {i}>
+          <SliderDropZoneController
+            destroyButton=  {imageDestroyButton}
+            children=       {this.createImageWrapper(articlePicture, i)}
+            onDrop=         {this.props.changeArticlePicture.bind(null, articlePicture.id, articlePicture.for_card, articlePicture.for_carousel)}
+          />
+        </div>
+      )
+    })
+
+    return arrayOfDropZones.concat(newPictureDropZone)
+  },
+
+  createImageWrapper(articlePicture, i) {
+    return(
+      <ImageWrapper
+        key=            {i}
+        articlePicture= {articlePicture}
+        sourceId=       {this.props.sourceId}
+        cardImageSource={(this.props.storedFiles[articlePicture.stored_file_id]) ? this.props.storedFiles[articlePicture.stored_file_id].preview : this.props.mediaContainers[articlePicture.media_container_id].media}
+        imageTitle=     {(this.props.storedFiles[articlePicture.stored_file_id]) ? this.props.storedFiles[articlePicture.stored_file_id].name : this.props.mediaContainers[articlePicture.media_container_id].title}
+      />
+    )
+  },
+
+  createArrayOfImages() {
+    return this.props.articlePictures.map((articlePicture, i) => {
+      return this.createImageWrapper(articlePicture, i)
+    })
   },
 
   render() {
+    const childrenImages =  (this.props.siteEditMode.mode === false) ?
+                            this.createArrayOfImages() :
+                            this.createArrayOfDropZones()
     return(
-      ((this.props.siteEditMode.mode === false) && (this.props.articlePictures.length < 2)) ?
-      <div className="single-image-container">
-        <Image
-          cardImageSource=  {this.props.mediaContainers[this.props.articlePictures[0].media_container_id].media}
-          newsTitle=        {this.props.mediaContainers[this.props.articlePictures[0].media_container_id].title}
-          className=        {`img-for-news-card-${this.props.sourceId} my-news-card-img my-card-img`}
-        />
-        <div className= "news-picture-overlay">
-        </div>
-      </div>
-      :
+      (childrenImages.length === 1) ?
+      childrenImages[0] :
       <NewsSliderController
-        siteEditMode=                   {this.props.siteEditMode}
-        articlePictures=                {this.props.articlePictures}
-        mediaContainers=                {this.props.mediaContainers}
-        storedFiles=                    {this.props.storedFiles}
-        sourceId=                       {this.props.sourceId}
-        createAdditionalArticlePicture= {this.props.createAdditionalArticlePicture}
-        changeArticlePicture=           {this.props.changeArticlePicture}
+        siteEditMode= {this.props.siteEditMode}
+        children=     {childrenImages}
       />
     )
   }
+
 })

@@ -22,6 +22,9 @@ import {
   REORDER_ARTICLES_ARRAY,
   REORDER_ALL_THE_ARTICLES_ARRAYS,
   ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE,
+
+  MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION,
+  DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE,
    } from '../constants/ActionTypes'
 
 import {
@@ -160,12 +163,28 @@ export function articles(state = {}, action) {
 
     case ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
       const newStateForNewStoredPicture = Object.assign({}, state)
+      // We do not add the new stored picture to all the locale versions of the articles
+      // We loop through the articles of the current locale, not through the articles of all the locales,
+      // because we have not normalized properly the articles from the start...
       _.forEach(newStateForNewStoredPicture[action.locale], (article, index) => {
-        if (article['id'] === action.articleId) {
+        if (article.id === action.articleId) {
           newStateForNewStoredPicture[action.locale][index]['article_picture_ids'].push(action.articlePictureId)
         }
       })
       return newStateForNewStoredPicture
+
+    case DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+    case MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION:
+      const newStateUponDeletionOfArticlePicture = Object.assign({}, state)
+      // We do not add the new stored picture to all the locale versions of the articles
+      // We loop through the articles of the current locale, not through the articles of all the locales,
+      // because we have not normalized properly the articles from the start...
+      _.forEach(newStateUponDeletionOfArticlePicture[action.locale], (article, index) => {
+        if (article.id === action.articleId) {
+          _.pull(newStateUponDeletionOfArticlePicture[action.locale][index].article_picture_ids, action.articlePictureId)
+        }
+      })
+      return newStateUponDeletionOfArticlePicture
 
     default:
       return state

@@ -64,19 +64,24 @@ export const IndividualNewsComponent = React.createClass({
     this.props.articlePicturesActions.changeArticlePicture(this.props.siteCurrentLocale, this.props.currentArticle.id, articlePictureId, forCard, forCarousel, file)
   },
 
+  deleteArticlePicture(articlePictureId, storedFileId, mediaContainerId) {
+    this.props.articlePicturesActions.deleteArticlePicture(this.props.siteCurrentLocale, this.props.currentArticle.id, articlePictureId, storedFileId, mediaContainerId)
+  },
+
   renderImage() {
     return (
-      <span>
-        <ImageImageSliderSwitch
-          siteEditMode=                   {this.props.siteEditMode}
-          articlePictures=                {this.props.articlePictures}
-          mediaContainers=                {this.props.mediaContainers}
-          storedFiles=                    {this.props.storedFiles}
-          sourceId=                       {this.props.currentArticle.id}
-          createAdditionalArticlePicture= {this.createAdditionalArticlePicture}
-          changeArticlePicture=           {this.changeArticlePicture}
-        />
-      </span>
+      (this.props.siteEditMode.mode === false && this.props.currentArticle.article_picture_ids.length === 0) ?
+      null :
+      <ImageImageSliderSwitch
+        siteEditMode=                   {this.props.siteEditMode}
+        articlePictures=                {this.props.articlePictures}
+        mediaContainers=                {this.props.mediaContainers}
+        storedFiles=                    {this.props.storedFiles}
+        sourceId=                       {this.props.currentArticle.id}
+        createAdditionalArticlePicture= {this.createAdditionalArticlePicture}
+        changeArticlePicture=           {this.changeArticlePicture}
+        deleteArticlePicture=           {this.deleteArticlePicture}
+      />
     )
   },
 
@@ -186,7 +191,6 @@ export const IndividualNewsComponent = React.createClass({
   },
 
   render() {
-
     return (
       <ReactCSSTransitionGroup
         transitionName="react-news-container"
@@ -202,7 +206,7 @@ export const IndividualNewsComponent = React.createClass({
 
               {this.newsToolbarSwitch()}
 
-              {(this.props.currentArticle.article_picture_ids.length > 0) ? this.renderImage() : null}
+              {this.renderImage()}
 
               {this.renderTitle()}
 

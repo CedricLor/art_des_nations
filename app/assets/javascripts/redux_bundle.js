@@ -49944,6 +49944,17 @@
 	
 	var _storedFiles = __webpack_require__(493);
 	
+	var _markedForDeletion = __webpack_require__(740);
+	
+	var markedForDeletion = _interopRequireWildcard(_markedForDeletion);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	var itemsMarkedForDeletion = (0, _redux.combineReducers)({
+	  mediaContainers: markedForDeletion.mediaContainers,
+	  articlePictures: markedForDeletion.articlePictures
+	});
+	
 	var rootReducer = (0, _redux.combineReducers)({
 	  routing: _reduxSimpleRouter.routeReducer,
 	  isFetching: _isFetching.isFetching,
@@ -49963,7 +49974,8 @@
 	
 	  mediaContainers: _mediaContainers.mediaContainers,
 	  articlePictures: _articlePictures.articlePictures,
-	  storedFiles: _storedFiles.storedFiles
+	  storedFiles: _storedFiles.storedFiles,
+	  itemsMarkedForDeletion: itemsMarkedForDeletion
 	});
 	
 	exports.default = rootReducer;
@@ -50071,6 +50083,9 @@
 	
 	var ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE = exports.ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE = 'ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE';
 	var ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE = exports.ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE = 'ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE';
+	var DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE = exports.DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE = 'DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE';
+	var DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE = exports.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE = 'DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE';
+	var MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION = exports.MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION = 'MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION';
 
 /***/ },
 /* 486 */
@@ -50277,12 +50292,28 @@
 	
 	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
 	      var newStateForNewStoredPicture = Object.assign({}, state);
+	      // We do not add the new stored picture to all the locale versions of the articles
+	      // We loop through the articles of the current locale, not through the articles of all the locales,
+	      // because we have not normalized properly the articles from the start...
 	      _.forEach(newStateForNewStoredPicture[action.locale], function (article, index) {
-	        if (article['id'] === action.articleId) {
+	        if (article.id === action.articleId) {
 	          newStateForNewStoredPicture[action.locale][index]['article_picture_ids'].push(action.articlePictureId);
 	        }
 	      });
 	      return newStateForNewStoredPicture;
+	
+	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+	    case _ActionTypes.MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION:
+	      var newStateUponDeletionOfArticlePicture = Object.assign({}, state);
+	      // We do not add the new stored picture to all the locale versions of the articles
+	      // We loop through the articles of the current locale, not through the articles of all the locales,
+	      // because we have not normalized properly the articles from the start...
+	      _.forEach(newStateUponDeletionOfArticlePicture[action.locale], function (article, index) {
+	        if (article.id === action.articleId) {
+	          _.pull(newStateUponDeletionOfArticlePicture[action.locale][index].article_picture_ids, action.articlePictureId);
+	        }
+	      });
+	      return newStateUponDeletionOfArticlePicture;
 	
 	    default:
 	      return state;
@@ -50649,6 +50680,11 @@
 	      });
 	      return newStateForDeleteArticle;
 	
+	    case _ActionTypes.MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION:
+	      var newStateAfterMarkingForDeletion = Object.assign({}, state);
+	      delete newStateAfterMarkingForDeletion[action.locale][action.articlePictureId].stored_file_id;
+	      return newStateAfterMarkingForDeletion;
+	
 	    default:
 	      return state;
 	  }
@@ -50723,6 +50759,17 @@
 	      newStateForNewStoredPictureInExistingArticlePicture[action.locale][action.articlePictureId]['stored_file_id'] = action.storedFileId;
 	      return newStateForNewStoredPictureInExistingArticlePicture;
 	
+	    case _ActionTypes.DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
+	      var newStateAfterDeletionOfStoredFile = Object.assign({}, state);
+	      delete newStateAfterDeletionOfStoredFile[action.locale][action.articlePictureId].stored_file_id;
+	      return newStateAfterDeletionOfStoredFile;
+	
+	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+	    case _ActionTypes.MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION:
+	      var newStateAfterMarkingForDeletion = Object.assign({}, state);
+	      delete newStateAfterMarkingForDeletion[action.locale][action.articlePictureId];
+	      return newStateAfterMarkingForDeletion;
+	
 	    default:
 	      return state;
 	  }
@@ -50751,6 +50798,12 @@
 	      var newStoredFile = {};
 	      newStoredFile[action.storedFileId] = action.file;
 	      return Object.assign({}, state, newStoredFile);
+	
+	    case _ActionTypes.DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
+	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+	      var newStateAfterDeletionOfStoredFile = Object.assign({}, state);
+	      delete newStateAfterDeletionOfStoredFile[action.storedFileId];
+	      return newStateAfterDeletionOfStoredFile;
 	
 	    default:
 	      return state;
@@ -53750,6 +53803,7 @@
 	});
 	exports.createAdditionalArticlePicture = createAdditionalArticlePicture;
 	exports.changeArticlePicture = changeArticlePicture;
+	exports.deleteArticlePicture = deleteArticlePicture;
 	
 	var _ActionTypes = __webpack_require__(485);
 	
@@ -53760,15 +53814,16 @@
 	  var storedFiles = getState().storedFiles;
 	  if (storedFiles) {
 	    _.forOwn(storedFiles, function (value, key) {
-	      if (key > storedFileId) {
-	        storedFileID = parseInt(key) + 1;
+	      var keyNum = parseInt(key);
+	      if (keyNum >= storedFileId) {
+	        storedFileId = keyNum + 1;
 	      }
 	    });
 	  }
 	  return storedFileId;
 	}
 	
-	function createAdditionalArticlePicture(locale, articleId, file, forCard, forCarousel) {
+	function createAdditionalArticlePicture(locale, articleId, forCard, forCarousel, file) {
 	  /* Meta-programming
 	  Actions -> store
 	  1. change WIP state of field of article on the article_picture_ids field
@@ -53793,7 +53848,8 @@
 	    var storedFileId = storedFileIdCreator(getState);
 	    var articlePictureId = 0;
 	    _.forOwn(getState().articlePictures[locale], function (value, key) {
-	      if (key > articlePictureId) {
+	      var keyNum = parseInt(key);
+	      if (keyNum >= articlePictureId) {
 	        articlePictureId = parseInt(key) + 100;
 	      }
 	    });
@@ -53904,6 +53960,49 @@
 	    forCarousel: forCarousel,
 	    locale: locale
 	  };
+	}
+	
+	function deleteArticlePicture(locale, articleId, articlePictureId, storedFileId, mediaContainerId) {
+	  if (storedFileId >= 0) {
+	    if (mediaContainerId) {
+	      return {
+	        /* This is the case where the user has first replaced an existing mediaContainer by a new file
+	        In this case, we delete only the storedFile and reset the existing articlePicture to point to its
+	        old mediaContainer */
+	        type: _ActionTypes.DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE,
+	        locale: locale,
+	        articlePictureId: articlePictureId,
+	        storedFileId: storedFileId
+	      };
+	    } else {
+	      return {
+	        /* This is the case where the user has appended a new picture.
+	        In this case, we delete the storedFile and the newly created articlePicture
+	        and we also delete the newly created entry in the article_picture_ids array in the corresponding article */
+	        type: _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE,
+	        locale: locale,
+	        articleId: articleId,
+	        articlePictureId: articlePictureId,
+	        storedFileId: storedFileId
+	      };
+	    }
+	  } else {
+	    return {
+	      /* This is the case where the user wishes to delete a mediaContainer (i.e. a picture already stored in the database
+	      In this case, we
+	      (i) update the article_picture_ids array in the articles,
+	      (ii) delete the corresponding articlePicture,
+	      (iii) delete the corresponding mediaContainer and
+	      (iv) store the articlePicture id and the mediaContainer id to mark them for deletion when the user will save.
+	      Various options to consider here: (i) maybe, it might be easier to only remove the article picture id from the array in the article and let
+	      Rails handle the dirty job by making the comparison between the old array and the new array */
+	      type: _ActionTypes.MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION,
+	      locale: locale,
+	      articleId: articleId,
+	      articlePictureId: articlePictureId,
+	      mediaContainerId: mediaContainerId
+	    };
+	  }
 	}
 
 /***/ },
@@ -73435,7 +73534,7 @@
 	  _createClass(Image, [{
 	    key: 'render',
 	    value: function render() {
-	      return _react2.default.createElement('img', { src: this.props.cardImageSource, alt: this.props.newsTitle, className: this.props.className });
+	      return _react2.default.createElement('img', { src: this.props.cardImageSource, alt: this.props.title, className: this.props.className });
 	    }
 	  }]);
 	
@@ -73446,7 +73545,7 @@
 	
 	Image.propTypes = {
 	  cardImageSource: _react.PropTypes.string,
-	  newsTitle: _react.PropTypes.string,
+	  title: _react.PropTypes.string,
 	  className: _react.PropTypes.string
 	};
 
@@ -74415,15 +74514,21 @@
 	  var articlePictures = [];
 	  var mediaContainers = {};
 	
-	  if (currentArticle.article_picture_ids.length > 0 && _.size(ownProps.articlePictures) > 0 && _.size(ownProps.mediaContainers) > 0) {
+	  if (currentArticle.article_picture_ids.length > 0) {
 	
 	    _.forEach(currentArticle.article_picture_ids, function (picture_id) {
-	      // QUICK FIX - HERE, I AM PUSHING ALL THE PICTURES, whether they are for_carousel or for_card
-	      // AT A LATER STAGE, need to filter out pictures which would not be for carousel (for_card if for index view)
-	      articlePictures.push(ownProps.articlePictures[picture_id]);
-	
-	      if (!(ownProps.articlePictures[picture_id]["media_container_id"] === undefined)) {
-	        mediaContainers[ownProps.articlePictures[picture_id]["media_container_id"]] = ownProps.mediaContainers[ownProps.articlePictures[picture_id]["media_container_id"]];
+	      var currentPicture = ownProps.articlePictures[picture_id];
+	      // If the selected articlePicture is for the carousel (i.e. for the single article view)
+	      if (currentPicture.for_carousel === "true") {
+	        // push it into the array of articlePictures that will be passed to the individual news component
+	        articlePictures.push(currentPicture);
+	        /* if the selected articlePicture does not have a stored_file_id (i.e. undefined) or a stored_file_id marked as null
+	        then we should retrieve the mediaContainer associated with the articlePicture.
+	        Priority is given to the storedFiles as they are work in progress */
+	        if (currentPicture.stored_file_id === undefined || null) {
+	          var mediaContainerId = currentPicture.media_container_id;
+	          mediaContainers[mediaContainerId] = ownProps.mediaContainers[mediaContainerId];
+	        }
 	      }
 	    });
 	  }
@@ -74452,6 +74557,25 @@
 	}
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_individual_news_component.IndividualNewsComponent);
+	
+	// siteEditMode.mode === true
+	//   no ArticlePictures -> render a dropZone with infotext
+	//   1 articlePicture:
+	//     - coming from the DB: -> render a dropZone with the picture from the mediaContainers and an option to add another picture
+	//     - coming from a file: -> render a dropZone with the picture from the storedFiles and an option to add another picture
+	//   several articlePictures:
+	//     - all coming from the DB: -> render a slider with all the pictures from the mediaContainers in DropZones and a slide with a dropZone infotext
+	//     - all coming from the files: -> render a slider with all the pictures from the storedFiles and a slide with a dropZone infotext
+	//     - partly coming from the files and partly coming from the DB: -> render a slider with all the pictures from the mediaContainers or the storeFiles, and a slide with a dropZone infotext
+	// siteEditMode.mode === false
+	//   no articlePictures -> render nothing
+	//   1 articlePicture
+	//     - coming from the DB: -> render an image
+	//     - coming from a file: -> render an image
+	//   several articlePictures
+	//     - coming from the DB: -> render a slider with images
+	//     - coming from the files: -> render a slider with images
+	//     - coming partly from the DB and partly from the files: -> render a slider with images
 
 /***/ },
 /* 708 */
@@ -74542,20 +74666,20 @@
 	  changeArticlePicture: function changeArticlePicture(articlePictureId, forCard, forCarousel, file) {
 	    this.props.articlePicturesActions.changeArticlePicture(this.props.siteCurrentLocale, this.props.currentArticle.id, articlePictureId, forCard, forCarousel, file);
 	  },
+	  deleteArticlePicture: function deleteArticlePicture(articlePictureId, storedFileId, mediaContainerId) {
+	    this.props.articlePicturesActions.deleteArticlePicture(this.props.siteCurrentLocale, this.props.currentArticle.id, articlePictureId, storedFileId, mediaContainerId);
+	  },
 	  renderImage: function renderImage() {
-	    return _react2.default.createElement(
-	      'span',
-	      null,
-	      _react2.default.createElement(_image_image_slider_switch.ImageImageSliderSwitch, {
-	        siteEditMode: this.props.siteEditMode,
-	        articlePictures: this.props.articlePictures,
-	        mediaContainers: this.props.mediaContainers,
-	        storedFiles: this.props.storedFiles,
-	        sourceId: this.props.currentArticle.id,
-	        createAdditionalArticlePicture: this.createAdditionalArticlePicture,
-	        changeArticlePicture: this.changeArticlePicture
-	      })
-	    );
+	    return this.props.siteEditMode.mode === false && this.props.currentArticle.article_picture_ids.length === 0 ? null : _react2.default.createElement(_image_image_slider_switch.ImageImageSliderSwitch, {
+	      siteEditMode: this.props.siteEditMode,
+	      articlePictures: this.props.articlePictures,
+	      mediaContainers: this.props.mediaContainers,
+	      storedFiles: this.props.storedFiles,
+	      sourceId: this.props.currentArticle.id,
+	      createAdditionalArticlePicture: this.createAdditionalArticlePicture,
+	      changeArticlePicture: this.changeArticlePicture,
+	      deleteArticlePicture: this.deleteArticlePicture
+	    });
 	  },
 	  renderTitle: function renderTitle() {
 	    var styleForH1 = {};
@@ -74659,7 +74783,6 @@
 	    );
 	  },
 	  render: function render() {
-	
 	    return _react2.default.createElement(
 	      _reactAddonsCssTransitionGroup2.default,
 	      {
@@ -74678,7 +74801,7 @@
 	            'div',
 	            { className: 'col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6' },
 	            this.newsToolbarSwitch(),
-	            this.props.currentArticle.article_picture_ids.length > 0 ? this.renderImage() : null,
+	            this.renderImage(),
 	            this.renderTitle(),
 	            this.renderCreatedAtZone(),
 	            _react2.default.createElement(
@@ -74714,11 +74837,17 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _image = __webpack_require__(697);
+	var _image_wrapper = __webpack_require__(738);
 	
-	var _image2 = _interopRequireDefault(_image);
+	var _slider_drop_zone_controller = __webpack_require__(730);
 	
 	var _news_slider_controller = __webpack_require__(710);
+	
+	var _new_image_drop_zone_content = __webpack_require__(737);
+	
+	var _new_image_drop_zone_content2 = _interopRequireDefault(_new_image_drop_zone_content);
+	
+	var _image_destroy_button = __webpack_require__(739);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -74732,27 +74861,59 @@
 	    storedFiles: _react.PropTypes.object,
 	    sourceId: _react.PropTypes.number.isRequired,
 	    createAdditionalArticlePicture: _react.PropTypes.func.isRequired,
-	    changeArticlePicture: _react.PropTypes.func.isRequired
+	    changeArticlePicture: _react.PropTypes.func.isRequired,
+	    deleteArticlePicture: _react.PropTypes.func.isRequired
 	  },
 	
-	  render: function render() {
-	    return this.props.siteEditMode.mode === false && this.props.articlePictures.length < 2 ? _react2.default.createElement(
+	  createArrayOfDropZones: function createArrayOfDropZones() {
+	    var _this = this;
+	
+	    var newPictureDropZone = _react2.default.createElement(
 	      'div',
-	      { className: 'single-image-container' },
-	      _react2.default.createElement(_image2.default, {
-	        cardImageSource: this.props.mediaContainers[this.props.articlePictures[0].media_container_id].media,
-	        newsTitle: this.props.mediaContainers[this.props.articlePictures[0].media_container_id].title,
-	        className: 'img-for-news-card-' + this.props.sourceId + ' my-news-card-img my-card-img'
-	      }),
-	      _react2.default.createElement('div', { className: 'news-picture-overlay' })
-	    ) : _react2.default.createElement(_news_slider_controller.NewsSliderController, {
-	      siteEditMode: this.props.siteEditMode,
-	      articlePictures: this.props.articlePictures,
-	      mediaContainers: this.props.mediaContainers,
-	      storedFiles: this.props.storedFiles,
+	      { key: 'onEditPlaceholder' },
+	      _react2.default.createElement(
+	        _slider_drop_zone_controller.SliderDropZoneController,
+	        { onDrop: this.props.createAdditionalArticlePicture.bind(null, "false", "true") },
+	        _react2.default.createElement(_new_image_drop_zone_content2.default, null)
+	      )
+	    );
+	
+	    var arrayOfDropZones = this.props.articlePictures.map(function (articlePicture, i) {
+	      var imageDestroyButton = _react2.default.createElement(_image_destroy_button.ImageDestroyButton, { deleteArticlePicture: _this.props.deleteArticlePicture.bind(null, articlePicture.id, articlePicture.stored_file_id, articlePicture.media_container_id) });
+	      return _react2.default.createElement(
+	        'div',
+	        { key: i },
+	        _react2.default.createElement(_slider_drop_zone_controller.SliderDropZoneController, {
+	          destroyButton: imageDestroyButton,
+	          children: _this.createImageWrapper(articlePicture, i),
+	          onDrop: _this.props.changeArticlePicture.bind(null, articlePicture.id, articlePicture.for_card, articlePicture.for_carousel)
+	        })
+	      );
+	    });
+	
+	    return arrayOfDropZones.concat(newPictureDropZone);
+	  },
+	  createImageWrapper: function createImageWrapper(articlePicture, i) {
+	    return _react2.default.createElement(_image_wrapper.ImageWrapper, {
+	      key: i,
+	      articlePicture: articlePicture,
 	      sourceId: this.props.sourceId,
-	      createAdditionalArticlePicture: this.props.createAdditionalArticlePicture,
-	      changeArticlePicture: this.props.changeArticlePicture
+	      cardImageSource: this.props.storedFiles[articlePicture.stored_file_id] ? this.props.storedFiles[articlePicture.stored_file_id].preview : this.props.mediaContainers[articlePicture.media_container_id].media,
+	      imageTitle: this.props.storedFiles[articlePicture.stored_file_id] ? this.props.storedFiles[articlePicture.stored_file_id].name : this.props.mediaContainers[articlePicture.media_container_id].title
+	    });
+	  },
+	  createArrayOfImages: function createArrayOfImages() {
+	    var _this2 = this;
+	
+	    return this.props.articlePictures.map(function (articlePicture, i) {
+	      return _this2.createImageWrapper(articlePicture, i);
+	    });
+	  },
+	  render: function render() {
+	    var childrenImages = this.props.siteEditMode.mode === false ? this.createArrayOfImages() : this.createArrayOfDropZones();
+	    return childrenImages.length === 1 ? childrenImages[0] : _react2.default.createElement(_news_slider_controller.NewsSliderController, {
+	      siteEditMode: this.props.siteEditMode,
+	      children: childrenImages
 	    });
 	  }
 	});
@@ -74778,113 +74939,34 @@
 	
 	var _reactSlick2 = _interopRequireDefault(_reactSlick);
 	
-	var _image = __webpack_require__(697);
-	
-	var _image2 = _interopRequireDefault(_image);
-	
-	var _slider_drop_zone_controller = __webpack_require__(730);
-	
-	var _slider_drop_zone_controller2 = _interopRequireDefault(_slider_drop_zone_controller);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// import Image from 'dumb_components/image';
+	// import SliderDropZoneController from './slider_drop_zone_controller'
 	
 	var NewsSliderController = exports.NewsSliderController = _react2.default.createClass({
 	  displayName: 'NewsSliderController',
 	
 	  propTypes: {
 	    siteEditMode: _react.PropTypes.object.isRequired,
-	    articlePictures: _react.PropTypes.arrayOf(_react.PropTypes.object.isRequired).isRequired,
-	    mediaContainers: _react.PropTypes.objectOf(_react.PropTypes.object.isRequired).isRequired,
-	    storedFiles: _react.PropTypes.object,
-	    sourceId: _react.PropTypes.number.isRequired,
-	    createAdditionalArticlePicture: _react.PropTypes.func.isRequired,
-	    changeArticlePicture: _react.PropTypes.func.isRequired
+	    children: _react.PropTypes.array.isRequired
 	  },
 	
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      siteEditMode: {
-	        mode: false
-	      }
-	    };
-	  },
 	  variableSettings: function variableSettings() {
 	    var settingsHash = {
-	      false: /* on siteEdtMode === false*/{
+	      false: /* on siteEdtMode.mode === false*/{
 	        autoplay: true,
 	        autoplaySpeed: 2000,
 	        draggable: true,
 	        lazyLoad: true
 	      },
-	      true: /* on siteEditMode === true */{
+	      true: /* on siteEditMode.mode === true */{
 	        autoplay: false,
 	        draggable: false,
 	        lazyLoad: false
 	      }
 	    };
 	    return settingsHash[this.props.siteEditMode.mode];
-	  },
-	  createDropZonesForSlider: function createDropZonesForSlider() {
-	    var _this = this;
-	
-	    var dropZonesForSlider = this.props.articlePictures.map(function (articlePicture, i) {
-	      if (articlePicture.for_carousel === "true") {
-	        return _react2.default.createElement(
-	          'div',
-	          { key: i },
-	          _react2.default.createElement(
-	            'div',
-	            null,
-	            _react2.default.createElement(_slider_drop_zone_controller2.default, {
-	              articlePictureForDropZone: articlePicture.media_container_id ? _this.props.mediaContainers[articlePicture.media_container_id] : _this.props.storedFiles[articlePicture.stored_file_id],
-	              createAdditionalArticlePicture: _this.props.createAdditionalArticlePicture,
-	              changeArticlePicture: _this.props.changeArticlePicture.bind(null, articlePicture.id, articlePicture.for_card, articlePicture.for_carousel)
-	            })
-	          )
-	        );
-	      }
-	    });
-	
-	    var newPictureDropZone = _react2.default.createElement(
-	      'div',
-	      { key: 'onEditPlaceholder' },
-	      _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(_slider_drop_zone_controller2.default, {
-	          articlePictureForDropZone: {},
-	          createAdditionalArticlePicture: this.props.createAdditionalArticlePicture
-	        })
-	      )
-	    );
-	    dropZonesForSlider = dropZonesForSlider.concat(newPictureDropZone);
-	    return dropZonesForSlider;
-	  },
-	  createImagesForSlider: function createImagesForSlider() {
-	    var _this2 = this;
-	
-	    return this.props.articlePictures.map(function (articlePicture, i) {
-	      if (articlePicture.for_carousel === "true") {
-	        return _react2.default.createElement(
-	          'div',
-	          { key: i },
-	          _react2.default.createElement(_image2.default, {
-	            cardImageSource: _this2.props.mediaContainers[articlePicture.media_container_id].media,
-	            newsTitle: _this2.props.mediaContainers[articlePicture.media_container_id].title,
-	            className: 'img-for-news-card-' + _this2.props.sourceId + ' my-news-card-img my-card-img'
-	          }),
-	          _react2.default.createElement('div', { className: 'news-picture-overlay' })
-	        );
-	      }
-	    });
-	  },
-	  createContentForSlider: function createContentForSlider() {
-	    if (this.props.siteEditMode.mode === false) {
-	      return this.createImagesForSlider();
-	      console.log("after creation !!!!!!!!!!!!!!!!!!!!!!!");
-	    } else {
-	      return this.createDropZonesForSlider();
-	    }
 	  },
 	  render: function render() {
 	    var commonSettings = {
@@ -74896,12 +74978,11 @@
 	      pauseOnHover: true
 	    };
 	    var settings = Object.assign({}, commonSettings, this.variableSettings());
-	    var children = this.createContentForSlider();
 	
 	    return _react2.default.createElement(
 	      _reactSlick2.default,
 	      _extends({ className: 'my-slick-slider-top-level-component' }, settings),
-	      children
+	      this.props.children
 	    );
 	  }
 	});
@@ -76769,6 +76850,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.SliderDropZoneController = undefined;
 	
 	var _react = __webpack_require__(196);
 	
@@ -76778,96 +76860,73 @@
 	
 	var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
 	
-	var _reactIntl = __webpack_require__(365);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var messages = (0, _reactIntl.defineMessages)({
-	  sliderDropZoneInfoText: {
-	    id: 'slider.edit.singleArticleViewSlider.dropZone.infoText',
-	    description: 'Information text to be displayed on the image dropzones (edit mode) before the user has dropped in any image',
-	    defaultMessage: 'Click here or drop an image here to add another picture to your article and get slider on top of it!!! Cool stuffs!!!'
-	  }
-	});
-	
-	var SliderDropZoneController = _react2.default.createClass({
+	var SliderDropZoneController = exports.SliderDropZoneController = _react2.default.createClass({
 	  displayName: 'SliderDropZoneController',
 	
 	  propTypes: {
-	    articlePictureForDropZone: _react.PropTypes.object.isRequired, /* This is a mediaContainer or a storedFile object type */
-	    createAdditionalArticlePicture: _react.PropTypes.func.isRequired,
-	    changeArticlePicture: _react.PropTypes.func,
-	    intl: _reactIntl.intlShape.isRequired
+	    children: _react.PropTypes.element.isRequired, /* This is an element generated in image_image_slider_switch */
+	    onDrop: _react.PropTypes.func.isRequired,
+	    destroyButton: _react.PropTypes.element
 	  },
-	
-	  // // lastModified: 1453903478000
-	  // // lastModifiedDate: Wed Jan 27 2016 15:04:38 GMT+0100 (CET)
-	  // // name: "china_5_reduced.jpg"
-	  // // preview: "blob:http%3A//localhost%3A3000/5bcdbc43-38a5-4dc4-9fa7-c1c986be72bc"
-	  // // size: 23970
-	  // // type: "image/jpeg"
-	  // // webkitRelativePath: ""
-	
-	  // // lastModified: PropTypes.num
-	  // // lastModifiedDate: PropTypes.object
-	  // // name: PropTypes.string
-	  // // preview: PropTypes.string
-	  // // size: PropTypes.num
-	  // // type: PropTypes.string
-	  // // webkitRelativePath: PropTypes.string
-	
-	  // // articlePicture
-	  // // for_card: "true"
-	  // // for_carousel: "true"
-	  // // id: 29
-	  // // media_container_id: 29
-	
-	  // // mediaContainer
-	  // // id: 29
-	  // // media: "http://locomotive-test-cedric.s3.amazonaws.com/development/media_containers/media/000/000/029/original/china_5_reduced.jpg?1454268900"
-	  // // media_content_type: "image/jpeg"
-	  // // media_file_name: "china_5_reduced.jpg"
-	  // // media_file_size: 23970
-	  // // title: "Test"
-	
-	  // In Rails/PGSql
-	  //     t.string   "media_file_name" --> name
-	  //     t.string   "media_content_type" --> type
-	  //     t.integer  "media_file_size" --> size
-	  //     t.datetime "media_updated_at" --> lastModifiedDate
 	
 	  onDrop: function onDrop(files) {
-	    Object.keys(this.props.articlePictureForDropZone).length === 0 ?
-	    // this.props.createAdditionalArticlePicture(locale, articleId, file, forCard, forCarousel) : locale and articleId are bound
-	    this.props.createAdditionalArticlePicture(files[0], "false", "true") :
-	    // this.props.articlePictureAddNew(files[0]) :
-	    this.props.changeArticlePicture(files[0]);
+	    this.props.onDrop(files[0]);
 	  },
 	  render: function render() {
-	    console.log("--------------------", this.props);
 	    return _react2.default.createElement(
-	      _reactDropzone2.default,
-	      {
-	        onDrop: this.onDrop,
-	        multiple: false,
-	        accept: 'image/*',
-	        style: { width: "100%", height: "100%" } },
-	      Object.keys(this.props.articlePictureForDropZone).length === 0 ? _react2.default.createElement(
-	        'div',
+	      'div',
+	      { style: { position: "relative" } },
+	      this.props.destroyButton ? this.props.destroyButton : null,
+	      _react2.default.createElement(
+	        _reactDropzone2.default,
 	        {
-	          style: { borderStyle: "dotted", textAlign: "center", paddingLeft: "50px", paddingRight: "50px" }
-	        },
-	        _react2.default.createElement(_reactIntl.FormattedMessage, messages.sliderDropZoneInfoText)
-	      ) : _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement('img', { src: this.props.articlePictureForDropZone.media || this.props.articlePictureForDropZone.preview })
+	          onDrop: this.onDrop,
+	          multiple: false,
+	          accept: 'image/*',
+	          style: { width: "100%", height: "100%" } },
+	        this.props.children
 	      )
 	    );
 	  }
 	});
 	
-	exports.default = (0, _reactIntl.injectIntl)(SliderDropZoneController);
+	// // lastModified: 1453903478000
+	// // lastModifiedDate: Wed Jan 27 2016 15:04:38 GMT+0100 (CET)
+	// // name: "china_5_reduced.jpg"
+	// // preview: "blob:http%3A//localhost%3A3000/5bcdbc43-38a5-4dc4-9fa7-c1c986be72bc"
+	// // size: 23970
+	// // type: "image/jpeg"
+	// // webkitRelativePath: ""
+	
+	// // lastModified: PropTypes.num
+	// // lastModifiedDate: PropTypes.object
+	// // name: PropTypes.string
+	// // preview: PropTypes.string
+	// // size: PropTypes.num
+	// // type: PropTypes.string
+	// // webkitRelativePath: PropTypes.string
+	
+	// // articlePicture
+	// // for_card: "true"
+	// // for_carousel: "true"
+	// // id: 29
+	// // media_container_id: 29
+	
+	// // mediaContainer
+	// // id: 29
+	// // media: "http://locomotive-test-cedric.s3.amazonaws.com/development/media_containers/media/000/000/029/original/china_5_reduced.jpg?1454268900"
+	// // media_content_type: "image/jpeg"
+	// // media_file_name: "china_5_reduced.jpg"
+	// // media_file_size: 23970
+	// // title: "Test"
+	
+	// In Rails/PGSql
+	//     t.string   "media_file_name" --> name
+	//     t.string   "media_content_type" --> type
+	//     t.integer  "media_file_size" --> size
+	//     t.datetime "media_updated_at" --> lastModifiedDate
 
 /***/ },
 /* 731 */
@@ -89382,6 +89441,188 @@
 	}.call(this));
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(512)(module), (function() { return this; }())))
+
+/***/ },
+/* 737 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.NewImageDropZoneContent = undefined;
+	
+	var _react = __webpack_require__(196);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactIntl = __webpack_require__(365);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var messages = (0, _reactIntl.defineMessages)({
+	  sliderDropZoneInfoText: {
+	    id: 'slider.edit.singleArticleViewSlider.dropZone.infoText',
+	    description: 'Information text to be displayed on the image dropzones (edit mode) before the user has dropped in any image',
+	    defaultMessage: 'Click or drop an image here'
+	  }
+	});
+	
+	var NewImageDropZoneContent = exports.NewImageDropZoneContent = _react2.default.createClass({
+	  displayName: 'NewImageDropZoneContent',
+	
+	  propTypes: {
+	    intl: _reactIntl.intlShape.isRequired
+	  },
+	
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      {
+	        style: {
+	          borderStyle: "dotted",
+	          textAlign: "center",
+	          paddingLeft: "50px",
+	          paddingRight: "50px"
+	        }
+	      },
+	      _react2.default.createElement(_reactIntl.FormattedMessage, messages.sliderDropZoneInfoText)
+	    );
+	  }
+	});
+	
+	exports.default = (0, _reactIntl.injectIntl)(NewImageDropZoneContent);
+
+/***/ },
+/* 738 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.ImageWrapper = undefined;
+	
+	var _react = __webpack_require__(196);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _image = __webpack_require__(697);
+	
+	var _image2 = _interopRequireDefault(_image);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ImageWrapper = exports.ImageWrapper = _react2.default.createClass({
+	  displayName: 'ImageWrapper',
+	
+	  propTypes: {
+	    articlePicture: _react.PropTypes.object.isRequired,
+	    sourceId: _react.PropTypes.number.isRequired,
+	    cardImageSource: _react.PropTypes.string.isRequired,
+	    imageTitle: _react.PropTypes.string.isRequired
+	  },
+	
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(_image2.default, {
+	        cardImageSource: this.props.cardImageSource,
+	        title: this.props.imageTitle,
+	        className: 'img-for-news-card-' + this.props.sourceId + ' my-news-card-img my-card-img'
+	      }),
+	      _react2.default.createElement('div', { className: 'news-picture-overlay' })
+	    );
+	  }
+	});
+
+/***/ },
+/* 739 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.ImageDestroyButton = undefined;
+	
+	var _react = __webpack_require__(196);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ImageDestroyButton = exports.ImageDestroyButton = _react2.default.createClass({
+	  displayName: "ImageDestroyButton",
+	
+	  propTypes: {
+	    deleteArticlePicture: _react.PropTypes.func.isRequired
+	  },
+	
+	  onClick: function onClick(e) {
+	    e.preventDefault();
+	    this.props.deleteArticlePicture();
+	  },
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "button",
+	      {
+	        type: "button",
+	        style: { position: "absolute", right: "5px", top: "5px", zIndex: "5000" },
+	        onClick: this.onClick,
+	        className: "btn btn-danger",
+	        "aria-label": "Trash Can Button for Image"
+	      },
+	      _react2.default.createElement("span", { className: "glyphicon glyphicon-trash", "aria-hidden": "true" })
+	    );
+	  }
+	});
+
+/***/ },
+/* 740 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.articlePictures = articlePictures;
+	exports.mediaContainers = mediaContainers;
+	
+	var _ActionTypes = __webpack_require__(485);
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	function articlePictures() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _ActionTypes.MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION:
+	      return [].concat(_toConsumableArray(state), [action.articlePictureId]);
+	
+	    default:
+	      return state;
+	  }
+	}
+	
+	function mediaContainers() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _ActionTypes.MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION:
+	      return [].concat(_toConsumableArray(state), [action.mediaContainerId]);
+	
+	    default:
+	      return state;
+	  }
+	}
 
 /***/ }
 /******/ ]);

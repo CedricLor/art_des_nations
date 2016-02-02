@@ -5,6 +5,9 @@ import {
   DELETE_ARTICLE,
   ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE,
   ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE,
+  DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE,
+  DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE,
+  MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION,
 } from '../constants/ActionTypes'
 
 function articlePicture(state = {}, action) {
@@ -52,6 +55,17 @@ export function articlePictures(state = {}, action) {
       newStateForNewStoredPictureInExistingArticlePicture[action.locale][action.articlePictureId]['for_card'] = action.forCard;
       newStateForNewStoredPictureInExistingArticlePicture[action.locale][action.articlePictureId]['stored_file_id'] = action.storedFileId;
       return newStateForNewStoredPictureInExistingArticlePicture
+
+    case DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
+      const newStateAfterDeletionOfStoredFile = Object.assign({}, state)
+      delete newStateAfterDeletionOfStoredFile[action.locale][action.articlePictureId].stored_file_id
+      return newStateAfterDeletionOfStoredFile
+
+    case DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+    case MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION:
+      const newStateAfterMarkingForDeletion = Object.assign({}, state)
+      delete newStateAfterMarkingForDeletion[action.locale][action.articlePictureId]
+      return newStateAfterMarkingForDeletion
 
     default:
       return state

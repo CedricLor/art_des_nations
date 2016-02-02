@@ -3,6 +3,7 @@ import {
   LOADED_ADDITIONAL_LOCALE_ARTICLES,
   ADD_NEW_ARTICLE,
   DELETE_ARTICLE,
+  MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION,
 } from '../constants/ActionTypes'
 
 function mediaContainer(state = {}, action) {
@@ -32,6 +33,11 @@ export function mediaContainers(state = {}, action) {
         _.forOwn(newStateForDeleteArticle, (localeMediaContainersObjects, locale) => {delete newStateForDeleteArticle[locale][action.mediaContainerId]})
       })
       return newStateForDeleteArticle
+
+    case MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION:
+      const newStateAfterMarkingForDeletion = Object.assign({}, state)
+      delete newStateAfterMarkingForDeletion[action.locale][action.articlePictureId].stored_file_id
+      return newStateAfterMarkingForDeletion
 
     default:
       return state
