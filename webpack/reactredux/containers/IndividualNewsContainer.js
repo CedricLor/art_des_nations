@@ -4,13 +4,23 @@ import { IndividualNewsComponent } from '../components/news_index_page/individua
 
 function mapStateToProps(state, ownProps) {
   const currentArticle = _.find(state.articles[`${state.siteCurrentLocale}`], { 'id': parseInt(ownProps.params.id)});
-  // QUICK FIX - AT A LATER STAGE, DISPATCH MEDIA_CONTAINER BETWEEN CAROUSEL MEDIA CONTAINERS AND OTHERS
   const [articlePictures, mediaContainers] = [[], {}];
-  _.forEach(currentArticle.article_picture_ids, (picture_id) => {
-    articlePictures.push(ownProps.articlePictures[picture_id]);
-    mediaContainers[ownProps.articlePictures[picture_id]["media_container_id"]] = ownProps.mediaContainers[ownProps.articlePictures[picture_id]["media_container_id"]];
-    // mediaContainers.push(ownProps.mediaContainers[ownProps.articlePictures[picture_id]["media_container_id"]]);
-  });
+  if (currentArticle.article_picture_ids.length > 0 &&
+      _.size(ownProps.articlePictures) > 0 &&
+      _.size(ownProps.mediaContainers) > 0) {
+
+    _.forEach(currentArticle.article_picture_ids, (picture_id) => {
+      // QUICK FIX - HERE, I AM PUSHING ALL THE PICTURES, whether they are for_carousel or for_card
+      // AT A LATER STAGE, need to filter out pictures which would not be for carousel (for_card if for index view)
+      articlePictures.push(ownProps.articlePictures[picture_id]);
+
+      if (!(ownProps.articlePictures[picture_id]["media_container_id"] === undefined)) {
+        mediaContainers[ownProps.articlePictures[picture_id]["media_container_id"]] =
+          ownProps.mediaContainers[ownProps.articlePictures[picture_id]["media_container_id"]];
+      }
+    });
+
+  }
 
   return {
     // Site global props: passed in down from App/PageIndexView
@@ -24,6 +34,7 @@ function mapStateToProps(state, ownProps) {
     // Ancillary items: from own props (because filtered by language in App/reselect)
     articlePictures:            articlePictures,
     mediaContainers:            mediaContainers,
+    storedFiles:                state.storedFiles,
   }
 }
 

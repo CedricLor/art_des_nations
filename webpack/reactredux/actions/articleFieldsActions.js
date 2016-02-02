@@ -37,7 +37,7 @@ export function handleRestoreText(id, fieldName, locale) {
 }
 
 
-function changeWIPStateOfFieldOfArticle(id, fieldName, WIPStateValue, locale) {
+export function changeWIPStateOfFieldOfArticle(id, fieldName, WIPStateValue, locale) {
   return {
     type: CHANGE_WIP_STATE_OF_FIELD_OF_ARTICLE,
     id,

@@ -10,6 +10,7 @@ import { articlesVisibilityFilter } from './articlesVisibilityFilters'
 
 import { mediaContainers } from './mediaContainers'
 import { articlePictures } from './articlePictures'
+import { storedFiles } from './storedFiles'
 
 const rootReducer = combineReducers(
   {
@@ -30,7 +31,8 @@ const rootReducer = combineReducers(
     articlesDOMProps,
 
     mediaContainers,
-    articlePictures
+    articlePictures,
+    storedFiles,
   }
 )
 

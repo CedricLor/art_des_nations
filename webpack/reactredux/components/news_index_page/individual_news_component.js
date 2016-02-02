@@ -23,18 +23,14 @@ export const IndividualNewsComponent = React.createClass({
 
     articlePictures:            PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
     mediaContainers:            PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
+    storedFiles:                PropTypes.object,
 
   // currentArticleTags
   // article.author.full_name
 
     articlesActions:            PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
     articlesFieldsActions:      PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
-  },
-
-  getDefaultProps() {
-    mediaContainers: [
-      {media: "", title: ""}
-    ]
+    articlePicturesActions:     PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
   },
 
   handleDelete(e) {
@@ -60,19 +56,25 @@ export const IndividualNewsComponent = React.createClass({
     this.props.articlesFieldsActions.changeFieldOfArticle(this.props.currentArticle.id, fieldName, fieldValue, this.props.siteCurrentLocale);
   },
 
+  createAdditionalArticlePicture(file, forCard, forCarousel) {
+    this.props.articlePicturesActions.createAdditionalArticlePicture(this.props.siteCurrentLocale, this.props.currentArticle.id, file, forCard, forCarousel)
+  },
+
+  changeArticlePicture(articlePictureId, forCard, forCarousel, file) {
+    this.props.articlePicturesActions.changeArticlePicture(this.props.siteCurrentLocale, this.props.currentArticle.id, articlePictureId, forCard, forCarousel, file)
+  },
 
   renderImage() {
-    // QUICK FIX ON IMAGES -
-    // SHOULD TURN INTO A CAROUSEL WITH DEFAULT PICTURE BEING THE PICTURE PROVIDED AS FEATURE PICTURE -
-    // FIX ALSO CREATION PROCESS OF NEW IMAGES: SHOULD BE STORED AS BOTH CARD PICTURE AND CAROUSEL PICTURE, WITH AN OPTION
-    // TO REMOVE THEM AS CAROUSEL PICTURES
     return (
       <span>
         <ImageImageSliderSwitch
-          siteEditMode=     {this.props.siteEditMode}
-          articlePictures=  {this.props.articlePictures}
-          mediaContainers=  {this.props.mediaContainers}
-          sourceId=         {this.props.currentArticle.id}
+          siteEditMode=                   {this.props.siteEditMode}
+          articlePictures=                {this.props.articlePictures}
+          mediaContainers=                {this.props.mediaContainers}
+          storedFiles=                    {this.props.storedFiles}
+          sourceId=                       {this.props.currentArticle.id}
+          createAdditionalArticlePicture= {this.createAdditionalArticlePicture}
+          changeArticlePicture=           {this.changeArticlePicture}
         />
       </span>
     )
@@ -200,7 +202,7 @@ export const IndividualNewsComponent = React.createClass({
 
               {this.newsToolbarSwitch()}
 
-              {this.renderImage()}
+              {(this.props.currentArticle.article_picture_ids.length > 0) ? this.renderImage() : null}
 
               {this.renderTitle()}
 

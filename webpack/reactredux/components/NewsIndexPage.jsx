@@ -23,6 +23,8 @@ export const NewsIndexPage = React.createClass({
 
     articlesVisibilityFilterActions:    PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
 
+    articlePicturesActions:             PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+
     siteActions:                        PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
 
     // Passed-in by router
@@ -69,6 +71,7 @@ export const NewsIndexPage = React.createClass({
         articlesActions:                   this.props.articlesActions,
         articlesFieldsActions:             this.props.articlesFieldsActions,
         articlesSizingPositionningActions: this.props.articlesSizingPositionningActions,
+        articlePicturesActions:            this.props.articlePicturesActions,
       })
     )
   },

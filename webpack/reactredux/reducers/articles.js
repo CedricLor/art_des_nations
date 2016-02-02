@@ -20,7 +20,9 @@ import {
   CHANGE_FIELD_OF_NEW_ARTICLE,
   RESET_FIELDS_OF_NEW_ARTICLE,
   REORDER_ARTICLES_ARRAY,
-  REORDER_ALL_THE_ARTICLES_ARRAYS } from '../constants/ActionTypes'
+  REORDER_ALL_THE_ARTICLES_ARRAYS,
+  ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE,
+   } from '../constants/ActionTypes'
 
 import {
   initialStateForNewArticle,
@@ -90,16 +92,23 @@ function article(state, action) {
   }
 }
 
+
+
+
 export function articles(state = {}, action) {
   switch (action.type) {
+
 
     case LOADED_INITIAL_ARTICLES:
       return action.initialState.articles
 
+
     case LOADED_ADDITIONAL_LOCALE_ARTICLES:
       return Object.assign({}, state, action.additionalStates.articles)
 
+
     case ADD_NEW_ARTICLE:
+      // FIXME - TESTME - The method applied here is likely to delete the entire state for the non-current locale
       const newStateWithNewArticle = {};
       _.forOwn(state, (localeArticlesArray, locale) => {
         newStateWithNewArticle[locale] = [
@@ -109,12 +118,15 @@ export function articles(state = {}, action) {
       })
       return newStateWithNewArticle
 
+
     case UPDATE_ARTICLE:
     case CHANGE_FIELD_OF_ARTICLE:
+      // FIXME - TESTME - The method applied here is likely to delete the entire state for the non-current locale
       const localizedArticleStateAfterChanges = {};
       localizedArticleStateAfterChanges[action.locale] = state[action.locale].map(art =>
         article(art, action));
       return Object.assign({}, state, localizedArticleStateAfterChanges)
+
 
     case DELETE_ARTICLE:
       const newState = {};
@@ -127,24 +139,41 @@ export function articles(state = {}, action) {
       })
       return newState
 
+
     case REORDER_ARTICLES_ARRAY:
       // Reorder only the articles' array for the current locale
+      // FIXME - TESTME - The method applied here is likely to delete the entire state for the non-current locale
       const localizedReorderedState = {};
       localizedReorderedState[action.locale] = _.sortByOrder(state[action.locale], 'posted_at', 'desc');
       return Object.assign({}, state, localizedReorderedState)
 
+
     case REORDER_ALL_THE_ARTICLES_ARRAYS:
-    // Reorder all the articles' arrays, in all the locales
+      // Reorder all the articles' arrays, in all the locales
+      // FIXME - TESTME - The method applied here is likely to delete the entire state for the non-current locale
       const reOrderedState = {};
       _.forOwn(state, (localeArticlesArray, locale) => {
         reOrderedState[locale] = _.sortByOrder(localeArticlesArray, 'posted_at', 'desc')
       })
       return reOrderedState
 
+
+    case ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
+      const newStateForNewStoredPicture = Object.assign({}, state)
+      _.forEach(newStateForNewStoredPicture[action.locale], (article, index) => {
+        if (article['id'] === action.articleId) {
+          newStateForNewStoredPicture[action.locale][index]['article_picture_ids'].push(action.articlePictureId)
+        }
+      })
+      return newStateForNewStoredPicture
+
     default:
       return state
   }
 }
+
+
+
 
 export function articlesEditStates(state = {}, action) {
   const new_state = Object.assign({}, state);
@@ -198,6 +227,8 @@ export function articlesEditStates(state = {}, action) {
       return state
   }
 }
+
+
 
 export function articlesWIPStatesOfFields(state = {}, action) {
   const new_state = Object.assign({}, state);

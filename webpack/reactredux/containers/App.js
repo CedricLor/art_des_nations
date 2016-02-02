@@ -6,6 +6,7 @@ import * as ArticlesActions from '../actions/articlesActions'
 import * as ArticlesFieldsActions from '../actions/articleFieldsActions'
 import * as ArticlesSizingPositionningActions from '../actions/articlesSizingPositionningActions'
 import * as ArticlesVisibilityFilterActions from '../actions/articlesVisibilityFilterActions'
+import * as ArticlePicturesActions from '../actions/articlePicturesActions'
 import * as SiteActions from '../actions/siteActions'
 
 import { localeArticlePicturesSelector, localeMediaContainersSelector } from '../selectors/index'
@@ -33,6 +34,7 @@ function mapDispatchToProps(dispatch) {
     articlesFieldsActions:             bindActionCreators(ArticlesFieldsActions, dispatch),
     articlesSizingPositionningActions: bindActionCreators(ArticlesSizingPositionningActions, dispatch),
     articlesVisibilityFilterActions:   bindActionCreators(ArticlesVisibilityFilterActions, dispatch),
+    articlePicturesActions:            bindActionCreators(ArticlePicturesActions, dispatch),
     siteActions:                       bindActionCreators(SiteActions, dispatch)
   }
 }

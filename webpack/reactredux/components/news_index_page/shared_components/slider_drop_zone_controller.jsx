@@ -13,17 +13,66 @@ const messages = defineMessages({
 
 const SliderDropZoneController = React.createClass({
   propTypes: {
-    pictureForDropZone: PropTypes.array.isRequired,
-    onPictureChange:    PropTypes.func.isRequired,
-    intl:               intlShape.isRequired
+    articlePictureForDropZone:      PropTypes.object.isRequired, /* This is a mediaContainer or a storedFile object type */
+    createAdditionalArticlePicture: PropTypes.func.isRequired,
+    changeArticlePicture:           PropTypes.func,
+    intl:                           intlShape.isRequired
   },
 
+// // lastModified: 1453903478000
+// // lastModifiedDate: Wed Jan 27 2016 15:04:38 GMT+0100 (CET)
+// // name: "china_5_reduced.jpg"
+// // preview: "blob:http%3A//localhost%3A3000/5bcdbc43-38a5-4dc4-9fa7-c1c986be72bc"
+// // size: 23970
+// // type: "image/jpeg"
+// // webkitRelativePath: ""
+
+// // lastModified: PropTypes.num
+// // lastModifiedDate: PropTypes.object
+// // name: PropTypes.string
+// // preview: PropTypes.string
+// // size: PropTypes.num
+// // type: PropTypes.string
+// // webkitRelativePath: PropTypes.string
+
+// // articlePicture
+// // for_card: "true"
+// // for_carousel: "true"
+// // id: 29
+// // media_container_id: 29
+
+// // mediaContainer
+// // id: 29
+// // media: "http://locomotive-test-cedric.s3.amazonaws.com/development/media_containers/media/000/000/029/original/china_5_reduced.jpg?1454268900"
+// // media_content_type: "image/jpeg"
+// // media_file_name: "china_5_reduced.jpg"
+// // media_file_size: 23970
+// // title: "Test"
+
+// In Rails/PGSql
+//     t.string   "media_file_name" --> name
+//     t.string   "media_content_type" --> type
+//     t.integer  "media_file_size" --> size
+//     t.datetime "media_updated_at" --> lastModifiedDate
+
   onDrop(files) {
-    this.props.onPictureChange(files[0]);
+    (Object.keys(this.props.articlePictureForDropZone).length === 0) ?
+    // this.props.createAdditionalArticlePicture(locale, articleId, file, forCard, forCarousel) : locale and articleId are bound
+    this.props.createAdditionalArticlePicture(files[0], "false", "true") :
+    // this.props.articlePictureAddNew(files[0]) :
+    this.props.changeArticlePicture(files[0])
   },
 
   render() {
-    const content = (this.props.pictureForDropZone.length === 0) ?
+    console.log("--------------------", this.props)
+    return (
+      <Dropzone
+        onDrop=   {this.onDrop}
+        multiple= {false}
+        accept=   'image/*'
+        style=    { {width: "100%", height: "100%"} }>
+        {
+          (Object.keys(this.props.articlePictureForDropZone).length === 0) ?
           <div
             style={
               { borderStyle: "dotted", textAlign: "center", paddingLeft: "50px", paddingRight: "50px" }
@@ -34,16 +83,9 @@ const SliderDropZoneController = React.createClass({
             />
           </div> :
           <div>
-            <img src={this.props.pictureForDropZone.preview} />
+            <img src={this.props.articlePictureForDropZone.media || this.props.articlePictureForDropZone.preview} />
           </div>
-
-    return (
-      <Dropzone
-        onDrop=   {this.onDrop}
-        multiple= {false}
-        accept=   'image/*'
-        style=    { {width: "100%", height: "100%"} }>
-        {content}
+        }
       </Dropzone>
     )
   }

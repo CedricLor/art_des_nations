@@ -27,6 +27,7 @@ export const NewsCardsComponent = React.createClass({
     articlesFieldsActions:             PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
     articlesSizingPositionningActions: PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
     newArticleActions:                 PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
+    articlePicturesActions:            PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
   },
 
   renderNewArticleBasicForm() {

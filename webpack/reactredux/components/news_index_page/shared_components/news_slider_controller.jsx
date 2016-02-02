@@ -5,10 +5,13 @@ import SliderDropZoneController from './slider_drop_zone_controller'
 
 export const NewsSliderController = React.createClass({
   propTypes: {
-    siteEditMode:     PropTypes.object.isRequired,
-    articlePictures:  PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
-    mediaContainers:  PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
-    sourceId:         PropTypes.number.isRequired,
+    siteEditMode:                   PropTypes.object.isRequired,
+    articlePictures:                PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+    mediaContainers:                PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
+    storedFiles:                    PropTypes.object,
+    sourceId:                       PropTypes.number.isRequired,
+    createAdditionalArticlePicture: PropTypes.func.isRequired,
+    changeArticlePicture:           PropTypes.func.isRequired,
   },
 
   getDefaultProps() {
@@ -36,42 +39,32 @@ export const NewsSliderController = React.createClass({
     return settingsHash[this.props.siteEditMode.mode];
   },
 
-            // <div>
-            //   <SliderDropZoneController
-            //     pictureForDropZone= {this.props.mediaContainers[articlePicture.media_container_id].media}
-            //     onPictureChange=    {this.handleChange.bind(this, "card_picture")}
-            //   />
-            // </div>
-
-
   createDropZonesForSlider() {
-    console.log("------------------")
     let dropZonesForSlider = this.props.articlePictures.map((articlePicture, i) => {
       if (articlePicture.for_carousel === "true") {
         return(
           <div key= {i}>
-            <Image
-              cardImageSource=  {this.props.mediaContainers[articlePicture.media_container_id].media}
-              newsTitle=        {this.props.mediaContainers[articlePicture.media_container_id].title}
-              className=        {`img-for-news-card-${this.props.sourceId} my-news-card-img my-card-img`}
-            />
-            <div className= "news-picture-overlay">
+            <div>
+              <SliderDropZoneController
+                articlePictureForDropZone=      {(articlePicture.media_container_id) ? this.props.mediaContainers[articlePicture.media_container_id] : this.props.storedFiles[articlePicture.stored_file_id]}
+                createAdditionalArticlePicture= {this.props.createAdditionalArticlePicture}
+                changeArticlePicture=           {this.props.changeArticlePicture.bind(null, articlePicture.id, articlePicture.for_card, articlePicture.for_carousel)}
+              />
             </div>
           </div>
         )
       }
     })
-    console.log(dropZonesForSlider)
-    // FIXME !!!!!!!!!!!!!!!! Complicated stuff
-    // Need to keep a state of all the pictures currently being added
-    // and in any case, to add a drop zone at the end of the array
-    // plus a function to handle what's happening when you add a picture
-    // This function should add it to (i) the array of current pictures associated with the
-    // current article, (ii) add a record to the article_pictures array with a reference to (iii) a media_container
-    // (iv) keep a WIP state of the articles pictures being added, and (v) probably keep a WIP state of the
-    // corresponding media_containers...
-    // dropZonesForSlider = dropZonesForSlider.concat(<div key="onEditPlaceholder"><div><SliderDropZoneController pictureForDropZone= {[]}/></div></div>)
-    dropZonesForSlider = dropZonesForSlider.concat(<div key="onEditPlaceholder"><div>Toto</div></div>)
+
+    const newPictureDropZone =  <div key="onEditPlaceholder">
+                                  <div>
+                                    <SliderDropZoneController
+                                      articlePictureForDropZone=      {{}}
+                                      createAdditionalArticlePicture= {this.props.createAdditionalArticlePicture}
+                                    />
+                                  </div>
+                                </div>
+    dropZonesForSlider = dropZonesForSlider.concat(newPictureDropZone)
     return dropZonesForSlider
   },
 
@@ -95,14 +88,14 @@ export const NewsSliderController = React.createClass({
 
   createContentForSlider() {
     if (this.props.siteEditMode.mode === false) {
-      this.createImagesForSlider()
+      return this.createImagesForSlider()
+      console.log("after creation !!!!!!!!!!!!!!!!!!!!!!!")
     } else {
-      this.createDropZonesForSlider()
+      return this.createDropZonesForSlider()
     }
   },
 
   render() {
-    console.log("************************")
     const commonSettings = {
       dots: true,
       infinite: true,

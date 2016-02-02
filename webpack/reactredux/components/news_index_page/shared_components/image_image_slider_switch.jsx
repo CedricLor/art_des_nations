@@ -5,10 +5,13 @@ import {NewsSliderController} from './news_slider_controller'
 
 export const ImageImageSliderSwitch = React.createClass({
   propTypes: {
-    siteEditMode:     PropTypes.object.isRequired,
-    articlePictures:  PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
-    mediaContainers:  PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
-    sourceId:         PropTypes.number.isRequired,
+    siteEditMode:                   PropTypes.object.isRequired,
+    articlePictures:                PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+    mediaContainers:                PropTypes.objectOf(PropTypes.object.isRequired).isRequired,
+    storedFiles:                    PropTypes.object,
+    sourceId:                       PropTypes.number.isRequired,
+    createAdditionalArticlePicture: PropTypes.func.isRequired,
+    changeArticlePicture:           PropTypes.func.isRequired,
   },
 
   render() {
@@ -25,10 +28,13 @@ export const ImageImageSliderSwitch = React.createClass({
       </div>
       :
       <NewsSliderController
-        siteEditMode=     {this.props.siteEditMode}
-        articlePictures=  {this.props.articlePictures}
-        mediaContainers=  {this.props.mediaContainers}
-        sourceId=         {this.props.sourceId}
+        siteEditMode=                   {this.props.siteEditMode}
+        articlePictures=                {this.props.articlePictures}
+        mediaContainers=                {this.props.mediaContainers}
+        storedFiles=                    {this.props.storedFiles}
+        sourceId=                       {this.props.sourceId}
+        createAdditionalArticlePicture= {this.props.createAdditionalArticlePicture}
+        changeArticlePicture=           {this.props.changeArticlePicture}
       />
     )
   }
