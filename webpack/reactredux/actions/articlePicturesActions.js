@@ -1,6 +1,9 @@
 import {
   ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE,
   ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE,
+  DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE,
+  DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE,
+  MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION,
 } from '../constants/ActionTypes'
 
 import {changeWIPStateOfFieldOfArticle} from './articleFieldsActions'
@@ -10,13 +13,16 @@ function storedFileIdCreator(getState) {
   const storedFiles = getState().storedFiles;
   if (storedFiles) {
     _.forOwn(storedFiles, (value, key) => {
-      if (key > storedFileId) {storedFileID = parseInt(key) + 1}
+      const keyNum = parseInt(key)
+      if (keyNum >= storedFileId) {
+        storedFileId = keyNum + 1
+      }
     })
   }
   return storedFileId
 }
 
-export function createAdditionalArticlePicture(locale, articleId, file, forCard, forCarousel) {
+export function createAdditionalArticlePicture(locale, articleId, forCard, forCarousel, file) {
   /* Meta-programming
   Actions -> store
   1. change WIP state of field of article on the article_picture_ids field
@@ -41,7 +47,8 @@ export function createAdditionalArticlePicture(locale, articleId, file, forCard,
     const storedFileId = storedFileIdCreator(getState);
     let articlePictureId = 0;
     _.forOwn(getState().articlePictures[locale], (value, key) => {
-      if (key > articlePictureId) { articlePictureId = parseInt(key) + 100 }
+      const keyNum = parseInt(key);
+      if (keyNum >= articlePictureId) { articlePictureId = parseInt(key) + 100 }
     })
 
     dispatch(changeWIPStateOfFieldOfArticle(articleId, 'article_pictures_ids', true, locale));
@@ -150,5 +157,48 @@ function createNewFileObjectInStoreAndAddFileIdToArticlePicture(articlePictureId
     forCard,
     forCarousel,
     locale
+  }
+}
+
+export function deleteArticlePicture(locale, articleId, articlePictureId, storedFileId, mediaContainerId) {
+  if (storedFileId >= 0) {
+    if (mediaContainerId) {
+      return {
+        /* This is the case where the user has first replaced an existing mediaContainer by a new file
+        In this case, we delete only the storedFile and reset the existing articlePicture to point to its
+        old mediaContainer */
+        type: DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE,
+        locale,
+        articlePictureId,
+        storedFileId
+      }
+    } else {
+      return {
+        /* This is the case where the user has appended a new picture.
+        In this case, we delete the storedFile and the newly created articlePicture
+        and we also delete the newly created entry in the article_picture_ids array in the corresponding article */
+        type: DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE,
+        locale,
+        articleId,
+        articlePictureId,
+        storedFileId
+      }
+    }
+  } else {
+    return {
+      /* This is the case where the user wishes to delete a mediaContainer (i.e. a picture already stored in the database
+      In this case, we
+      (i) update the article_picture_ids array in the articles,
+      (ii) delete the corresponding articlePicture,
+      (iii) delete the corresponding mediaContainer and
+      (iv) store the articlePicture id and the mediaContainer id to mark them for deletion when the user will save.
+      Various options to consider here: (i) maybe, it might be easier to only remove the article picture id from the array in the article and let
+      Rails handle the dirty job by making the comparison between the old array and the new array */
+      type: MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION,
+      locale,
+      articleId,
+      articlePictureId,
+      mediaContainerId
+    }
   }
 }

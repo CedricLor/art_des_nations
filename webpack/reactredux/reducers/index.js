@@ -12,6 +12,13 @@ import { mediaContainers } from './mediaContainers'
 import { articlePictures } from './articlePictures'
 import { storedFiles } from './storedFiles'
 
+import * as markedForDeletion from './markedForDeletion'
+
+const itemsMarkedForDeletion = combineReducers({
+  mediaContainers: markedForDeletion.mediaContainers,
+  articlePictures: markedForDeletion.articlePictures
+})
+
 const rootReducer = combineReducers(
   {
     routing: routeReducer,
@@ -33,6 +40,7 @@ const rootReducer = combineReducers(
     mediaContainers,
     articlePictures,
     storedFiles,
+    itemsMarkedForDeletion
   }
 )
 
