@@ -1,35 +1,32 @@
 window._ = require('lodash');
 
-import "babel-polyfill"
+import 'babel-polyfill';
 
 // ********************************************
 // React basics
-import React from 'react'
-import ReactDOM, { render } from 'react-dom'
+import React from 'react';
+import ReactDOM, {render} from 'react-dom';
 // ********************************************
-
 
 // ********************************************
 // Internationalization features
-import { loadI18nPolyfills } from './i18n_init'
+import {loadI18nPolyfills} from './i18n_init';
 
-import { addLocaleData } from 'react-intl'
-import en from 'react-intl/lib/locale-data/en'
-import fr from 'react-intl/lib/locale-data/fr'
-import ru from 'react-intl/lib/locale-data/ru'
-import zh from 'react-intl/lib/locale-data/zh'
+import {addLocaleData} from 'react-intl';
+import en from 'react-intl/lib/locale-data/en';
+import fr from 'react-intl/lib/locale-data/fr';
+import ru from 'react-intl/lib/locale-data/ru';
+import zh from 'react-intl/lib/locale-data/zh';
 // ********************************************
-
 
 // ********************************************
 // Redux configuration
 // import configureStore from './reactredux/stores/configureStore'
-import { Provider } from 'react-redux'
+import {Provider} from 'react-redux';
 
 // ********************************************
 // Import the Root element and the store to pass it to the ReactDOM render function
-import Root, { store } from './Root'
-
+import Root, {store} from './Root';
 
 // ********************************************
 // add the i18n polyfills for Safari and older browsers
@@ -42,14 +39,13 @@ addLocaleData(zh);
 
 // ********************************************
 // Render the redux provider (with the store) and the Root component (which now manages almost everything)
-$( document ).ready(function() {
-
+$(document).ready(function () {
   render(
-    <Provider store={ store } >
+    <Provider store={store} >
       <Root />
     </Provider>,
     document.getElementById('react-target')
-  )
+  );
 });
 
   // render(
