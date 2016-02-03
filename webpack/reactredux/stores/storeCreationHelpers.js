@@ -24,8 +24,18 @@ function normalize(jsonFetchedAncillaryData) {
   return _.keyBy(jsonFetchedAncillaryData, 'id');
 }
 
+function normalizeRoot(dataToNormalize) {
+  const [dataByKey, dataIdArray] = [{}, []]
+  _.forEach(dataToNormalize, (value, key) => {
+    dataByKey[value.id] = value;
+    dataIdArray.push(value.id)
+  })
+  return [dataByKey, dataIdArray]
+}
+
 export function createArticleStates(jsonFetchedArticlesAndEmbeddedData, locale) {
   const articles = jsonFetchedArticlesAndEmbeddedData.articles;
+  const [articlesByKey, articlesIdArray] = normalizeRoot(articles);
   const [
     articlesWIPStatesOfFields,
     articlesEditStates,
