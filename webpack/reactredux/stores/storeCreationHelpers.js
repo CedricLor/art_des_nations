@@ -21,9 +21,7 @@ function createAncillaryStatesForArticles(articles, locale) {
 }
 
 function normalize(jsonFetchedAncillaryData) {
-  // FIXME indexBy will be renamed keyBy in the latest version of lodash
-  // FIXME ancillary tables will need to be localized
-  return _.indexBy(jsonFetchedAncillaryData, 'id');
+  return _.keyBy(jsonFetchedAncillaryData, 'id');
 }
 
 export function createArticleStates(jsonFetchedArticlesAndEmbeddedData, locale) {

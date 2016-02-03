@@ -12,8 +12,8 @@ module.exports = {
   devtool: 'source-map',
 
   output: {
-    path: path.resolve("./app/assets/javascripts/"),
-    filename: "redux_bundle.js"
+    path: path.resolve('./app/assets/javascripts/'),
+    filename: 'redux_bundle.js'
   },
 
   module: {
@@ -31,16 +31,16 @@ module.exports = {
 
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader"
+        loader: 'style-loader!css-loader'
       },
     ]
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
-      dumb_components: path.resolve("./webpack/reactredux/components/dumb_components"),
-      news_shared_components: path.resolve("./webpack/reactredux/components/news_index_page/shared_components"),
-      plugins: path.resolve("./webpack/plugins")
+      dumb_components: path.resolve('./webpack/reactredux/components/dumb_components'),
+      news_shared_components: path.resolve('./webpack/reactredux/components/news_index_page/shared_components'),
+      plugins: path.resolve('./webpack/plugins')
     }
   }
 }

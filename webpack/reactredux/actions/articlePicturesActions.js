@@ -51,7 +51,7 @@ export function createAdditionalArticlePicture(locale, articleId, forCard, forCa
       if (keyNum >= articlePictureId) { articlePictureId = parseInt(key) + 100 }
     })
 
-    dispatch(changeWIPStateOfFieldOfArticle(articleId, 'article_pictures_ids', true, locale));
+    dispatch(changeWIPStateOfFieldOfArticle(articleId, 'article_picture_ids', true, locale));
     dispatch(createNewFileObjectInStoreAndNewArticlePicture(articleId, articlePictureId, storedFileId, file, forCard, forCarousel, locale))
   }
 }
@@ -143,7 +143,7 @@ export function changeArticlePicture(locale, articleId, articlePictureId, forCar
   return function (dispatch, getState) {
     const storedFileId = storedFileIdCreator(getState);
 
-    dispatch(changeWIPStateOfFieldOfArticle(articleId, 'article_pictures_ids', true, locale));
+    dispatch(changeWIPStateOfFieldOfArticle(articleId, 'article_picture_ids', true, locale));
     dispatch(createNewFileObjectInStoreAndAddFileIdToArticlePicture(articlePictureId, storedFileId, forCard, forCarousel, file, locale))
   }
 }
