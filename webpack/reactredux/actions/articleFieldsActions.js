@@ -11,6 +11,12 @@ import {
   RESET_ALL_EDIT_STATES_FOR_ARTICLE
 } from '../constants/ActionTypes'
 
+// Import API calls
+import {
+  fetchInitialArticle,
+  } from '../api/articles.js'
+
+
 export function changeFieldOfArticle(id, fieldName, fieldValue, locale) {
   return {
     type: CHANGE_FIELD_OF_ARTICLE,
@@ -29,10 +35,10 @@ export function successCallBackForRestoreText(data, locale, fieldName) {
   }
 }
 
-import { getInitialDataByAjax } from './articlesActions'
+// import { getInitialDataByAjax } from './articlesActions'
 export function handleRestoreText(id, fieldName, locale) {
   return function(dispatch) {
-    dispatch(getInitialDataByAjax(id, successCallBackForRestoreText, locale, fieldName));
+    fetchInitialArticle(dispatch, id, successCallBackForRestoreText, locale, fieldName)
   }
 }
 

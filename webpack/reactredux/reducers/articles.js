@@ -23,7 +23,7 @@ import {
   REORDER_ALL_THE_ARTICLES_ARRAYS,
   ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE,
 
-  MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION,
+  MARK_ARTICLE_PICTURE_FOR_DELETION,
   DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE,
    } from '../constants/ActionTypes'
 
@@ -147,7 +147,7 @@ export function articles(state = {}, action) {
       // Reorder only the articles' array for the current locale
       // FIXME - TESTME - The method applied here is likely to delete the entire state for the non-current locale
       const localizedReorderedState = {};
-      localizedReorderedState[action.locale] = _.sortByOrder(state[action.locale], 'posted_at', 'desc');
+      localizedReorderedState[action.locale] = _.orderBy(state[action.locale], 'posted_at', 'desc');
       return Object.assign({}, state, localizedReorderedState)
 
 
@@ -156,13 +156,13 @@ export function articles(state = {}, action) {
       // FIXME - TESTME - The method applied here is likely to delete the entire state for the non-current locale
       const reOrderedState = {};
       _.forOwn(state, (localeArticlesArray, locale) => {
-        reOrderedState[locale] = _.sortByOrder(localeArticlesArray, 'posted_at', 'desc')
+        reOrderedState[locale] = _.orderBy(localeArticlesArray, 'posted_at', 'desc')
       })
       return reOrderedState
 
 
     case ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
-      const newStateForNewStoredPicture = Object.assign({}, state)
+      const newStateForNewStoredPicture = Object.assign({}, state);
       // We do not add the new stored picture to all the locale versions of the articles
       // We loop through the articles of the current locale, not through the articles of all the locales,
       // because we have not normalized properly the articles from the start...
@@ -174,8 +174,8 @@ export function articles(state = {}, action) {
       return newStateForNewStoredPicture
 
     case DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
-    case MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION:
-      const newStateUponDeletionOfArticlePicture = Object.assign({}, state)
+    case MARK_ARTICLE_PICTURE_FOR_DELETION:
+      const newStateUponDeletionOfArticlePicture = Object.assign({}, state);
       // We do not add the new stored picture to all the locale versions of the articles
       // We loop through the articles of the current locale, not through the articles of all the locales,
       // because we have not normalized properly the articles from the start...

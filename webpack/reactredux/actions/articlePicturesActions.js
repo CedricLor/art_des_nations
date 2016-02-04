@@ -3,7 +3,7 @@ import {
   ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE,
   DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE,
   DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE,
-  MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION,
+  MARK_ARTICLE_PICTURE_FOR_DELETION,
 } from '../constants/ActionTypes'
 
 import {changeWIPStateOfFieldOfArticle} from './articleFieldsActions'
@@ -144,7 +144,7 @@ export function changeArticlePicture(locale, articleId, articlePictureId, forCar
     const storedFileId = storedFileIdCreator(getState);
 
     dispatch(changeWIPStateOfFieldOfArticle(articleId, 'article_picture_ids', true, locale));
-    dispatch(createNewFileObjectInStoreAndAddFileIdToArticlePicture(articlePictureId, storedFileId, forCard, forCarousel, file, locale))
+    dispatch(createNewFileObjectInStoreAndAddFileIdToArticlePicture(articlePictureId, storedFileId, forCard, forCarousel, file, locale));
   }
 }
 
@@ -194,7 +194,7 @@ export function deleteArticlePicture(locale, articleId, articlePictureId, stored
       (iv) store the articlePicture id and the mediaContainer id to mark them for deletion when the user will save.
       Various options to consider here: (i) maybe, it might be easier to only remove the article picture id from the array in the article and let
       Rails handle the dirty job by making the comparison between the old array and the new array */
-      type: MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION,
+      type: MARK_ARTICLE_PICTURE_FOR_DELETION,
       locale,
       articleId,
       articlePictureId,

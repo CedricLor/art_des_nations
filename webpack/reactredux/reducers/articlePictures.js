@@ -7,7 +7,7 @@ import {
   ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE,
   DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE,
   DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE,
-  MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION,
+  MARK_ARTICLE_PICTURE_FOR_DELETION,
 } from '../constants/ActionTypes'
 
 function articlePicture(state = {}, action) {
@@ -27,19 +27,19 @@ export function articlePictures(state = {}, action) {
       return Object.assign({}, state, action.additionalStates.articlePictures)
 
     case ADD_NEW_ARTICLE:
-      const newStateForNewArticle = Object.assign({}, state)
+      const newStateForNewArticle = Object.assign({}, state);
       _.forOwn(newStateForNewArticle, (localeArticlePicturesObjects, locale) => {newStateForNewArticle[locale][action.articlePicture.id] = action.articlePicture})
       return newStateForNewArticle
 
     case DELETE_ARTICLE:
-      const newStateForDeleteArticle = Object.assign({}, state)
+      const newStateForDeleteArticle = Object.assign({}, state);
       _.forEach(action.articlePictureIds, (articlePictureId) => {
         _.forOwn(newStateForDeleteArticle, (localeArticlePicturesObjects, locale) => {delete newStateForDeleteArticle[locale][action.articlePictureId]})
       })
       return newStateForDeleteArticle
 
     case ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
-      const newStateForNewStoredPicture = Object.assign({}, state)
+      const newStateForNewStoredPicture = Object.assign({}, state);
       newStateForNewStoredPicture[action.locale][action.articlePictureId] = {
         for_card: action.forCard,
         for_carousel: action.forCarousel,
@@ -57,14 +57,14 @@ export function articlePictures(state = {}, action) {
       return newStateForNewStoredPictureInExistingArticlePicture
 
     case DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
-      const newStateAfterDeletionOfStoredFile = Object.assign({}, state)
-      delete newStateAfterDeletionOfStoredFile[action.locale][action.articlePictureId].stored_file_id
+      const newStateAfterDeletionOfStoredFile = Object.assign({}, state);
+      delete newStateAfterDeletionOfStoredFile[action.locale][action.articlePictureId].stored_file_id;
       return newStateAfterDeletionOfStoredFile
 
     case DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
-    case MARK_MEDIA_CONTAINER_AND_ARTICLE_PICTURE_FOR_DELETION:
-      const newStateAfterMarkingForDeletion = Object.assign({}, state)
-      delete newStateAfterMarkingForDeletion[action.locale][action.articlePictureId]
+    case MARK_ARTICLE_PICTURE_FOR_DELETION:
+      const newStateAfterMarkingForDeletion = Object.assign({}, state);
+      delete newStateAfterMarkingForDeletion[action.locale][action.articlePictureId];
       return newStateAfterMarkingForDeletion
 
     default:

@@ -6,7 +6,7 @@ module.exports = {
   context: __dirname,
   // context: './webpack/',
   entry: {
-    index: ['jquery', 'jquery-ujs', './index.js']
+    index: ['jquery', 'jquery-ujs', 'babel-polyfill', './index.js']
   },
 
   devtool: 'source-map',

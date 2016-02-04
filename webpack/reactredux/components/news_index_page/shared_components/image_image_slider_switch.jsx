@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 
-import {ImageWrapper} from './image_wrapper';
-import {SliderDropZoneController} from './slider_drop_zone_controller'
-import {NewsSliderController} from './news_slider_controller'
-import NewImageDropZoneContent from './new_image_drop_zone_content'
-import {ImageDestroyButton} from './image_destroy_button'
+import {ImageWrapper} from './image_image_slider_switch/image_wrapper';
+import {SliderDropZoneController} from './image_image_slider_switch/slider_drop_zone_controller'
+import {NewsSliderController} from './image_image_slider_switch/news_slider_controller'
+import NewImageDropZoneContent from './image_image_slider_switch/new_image_drop_zone_content'
+import {ImageDestroyButton} from './image_image_slider_switch/image_destroy_button'
 
 export const ImageImageSliderSwitch = React.createClass({
   propTypes: {
@@ -30,8 +30,9 @@ export const ImageImageSliderSwitch = React.createClass({
       return(
         <div key= {i}>
           <SliderDropZoneController
+            key=            {i}
             destroyButton=  {imageDestroyButton}
-            children=       {this.createImageWrapper(articlePicture, i)}
+            children=       {this.createImageWrapper(articlePicture)}
             onDrop=         {this.props.changeArticlePicture.bind(null, articlePicture.id, articlePicture.for_card, articlePicture.for_carousel)}
           />
         </div>
@@ -41,10 +42,9 @@ export const ImageImageSliderSwitch = React.createClass({
     return arrayOfDropZones.concat(newPictureDropZone)
   },
 
-  createImageWrapper(articlePicture, i) {
+  createImageWrapper(articlePicture) {
     return(
       <ImageWrapper
-        key=            {i}
         articlePicture= {articlePicture}
         sourceId=       {this.props.sourceId}
         cardImageSource={(this.props.storedFiles[articlePicture.stored_file_id]) ? this.props.storedFiles[articlePicture.stored_file_id].preview : this.props.mediaContainers[articlePicture.media_container_id].media}
@@ -55,7 +55,11 @@ export const ImageImageSliderSwitch = React.createClass({
 
   createArrayOfImages() {
     return this.props.articlePictures.map((articlePicture, i) => {
-      return this.createImageWrapper(articlePicture, i)
+      return(
+        <div key={i}>
+          {this.createImageWrapper(articlePicture)}
+        </div>
+      )
     })
   },
 

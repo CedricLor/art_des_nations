@@ -48,12 +48,16 @@ class ArticlesController < ApplicationController
   end
 
   def update
-    @article = Article.find(params[:id])
-    if @article.update(article_params)
-      render json: @article, root: false
-    else
-      render json: @article.errors, status: :unprocessable_entity
-    end
+    prepare_params_for_update
+
+    @article_update_form = ArticleUpdateForm.new(params[:article])
+    @article_update_form.update
+    # @article = Article.find(params[:id])
+    # if @article.update(article_params)
+    #   render json: @article, root: false
+    # else
+    #   render json: @article.errors, status: :unprocessable_entity
+    # end
   end
 
   def destroy
@@ -75,7 +79,13 @@ class ArticlesController < ApplicationController
   end
 
   def article_params
-    params.require(:article).permit(:title, :body, :teaser, :posted_at, :status)
+    params.require(:article).permit(
+      :title,
+      :body,
+      :teaser,
+      :posted_at,
+      :status
+    )
   end
 
   def create_from_react
@@ -85,4 +95,16 @@ class ArticlesController < ApplicationController
       article_creation_params(:article_form)
     )
   end
+
+  def prepare_params_for_update
+    params[:article] = JSON.parse(params[:article])
+    params[:article]['media_files'] = []
+    params.each do |key, value|
+      if key.include?('media_file_')
+        params[:article][:media_files] << {"#{key.match(/\d/)[0]}" => value}
+        params.delete(key)
+      end
+    end
+  end
 end
+

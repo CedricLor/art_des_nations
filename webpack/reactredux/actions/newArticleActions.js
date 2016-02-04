@@ -1,9 +1,12 @@
+// Import action constants
 import { ADD_NEW_ARTICLE, CHANGE_FIELD_OF_NEW_ARTICLE, RESET_FIELDS_OF_NEW_ARTICLE } from '../constants/ActionTypes'
+
+// Import action creators from other action modules
 import { refreshArticlesSizingPositionning } from './articlesSizingPositionningActions';
 import { setArticlesVisibilityFilter } from './articlesVisibilityFilterActions';
 
-require('es6-promise').polyfill();
-require('isomorphic-fetch');
+// Import api calls
+import {fetchSubmitNewArticle} from '../api/articles'
 
 // FIXME - When updating from redux-simple-router 1.0.2 to react-router-redux (v. 2)
 // this import should change to
@@ -35,41 +38,15 @@ export function resetNewArticleFields() {
   }
 }
 
-function preProcessorForHandleSubmitNewArticle(getState) {
-  const data = new FormData();
-  data.append('authenticity_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-  data.append('media_file', getState().newArticleFields.card_picture);
-  const articleFields = getState().newArticleFields;
-  articleFields["card_picture"] = {};
-  data.append('article_form', JSON.stringify(articleFields));
-  return data
-}
-
 export function handleSubmitNewArticle(locale) {
   return function (dispatch, getState) {
-    const data = preProcessorForHandleSubmitNewArticle(getState);
-
-    fetch(`/${locale}/articles`, {
-      method: 'post',
-      credentials: 'same-origin',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        'X_CSRF_TOKEN': `${$('meta[name="csrf-token"]').attr('content')}`
-      },
-      body: data
-    })
-      .then((response) => {
-          if (response.status >= 400) {
-              throw new Error("Bad response from server");
-          }
-          return response.json();
-      })
-      .then((articleWithPicturesAndMediaContainers) => {
-        dispatch(addNewArticle(articleWithPicturesAndMediaContainers));
-        dispatch(pushPath(`/${locale}/article/${articleWithPicturesAndMediaContainers.article.id}`))
-        dispatch(resetNewArticleFields());
-        dispatch(setArticlesVisibilityFilter('SHOW_DRAFT'));
-        dispatch(refreshArticlesSizingPositionning());
-      })
+    const callbacks = [
+      addNewArticle,
+      pushPath,
+      resetNewArticleFields,
+      setArticlesVisibilityFilter,
+      refreshArticlesSizingPositionning
+    ];
+    fetchSubmitNewArticle(dispatch, getState, locale, callbacks);
   }
 }
