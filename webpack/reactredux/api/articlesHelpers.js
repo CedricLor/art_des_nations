@@ -8,6 +8,7 @@ function getAncillaryItems(getState, locale, id, ancillaryItemIdsArray, ancillar
 }
 
 function getArticlePicturesForFetchUpdateArticle(getState, locale, id, articlePictureIdsArray) {
+  // Get all the data relating to the articlePictures associated with the current article
   const selectedArticlePictures = getAncillaryItems(
     getState,
     locale,
@@ -15,12 +16,19 @@ function getArticlePicturesForFetchUpdateArticle(getState, locale, id, articlePi
     articlePictureIdsArray,
     "articlePictures"
   )
-
+  /* Create two arrays of ids:
+  1. one with the ids of the mediaContainers associated with the articlePictures;
+  2. one with the ids of the storedFiles associated with the articlePictures. */
   const [selectedMediaContainersIds, selectedStoredFileIds] = [[], []]
   _.forEach(selectedArticlePictures, (selectedArticlePicture) => {
+    // If the current articlePicture has a stored_file_id field which is equal to or greater than 0
+    // then store the id of the corresponding storedFile in the selectedStoredFileIds array
     if (selectedArticlePicture.stored_file_id >= 0) {
       selectedStoredFileIds.push(selectedArticlePicture.stored_file_id);
-    } else if (selectedArticlePicture.media_container_id >= 0) {
+    }
+    // If the current articlePicture has a media_container_id which is equal to or greater than 0
+    // then store the id of the corresponding mediaContainer in the mediaContainers array
+    else if (selectedArticlePicture.media_container_id >= 0) {
       selectedMediaContainersIds.push(selectedArticlePicture.media_container_id);
     }
   });
@@ -29,22 +37,37 @@ function getArticlePicturesForFetchUpdateArticle(getState, locale, id, articlePi
 }
 
 function getNewPictures(getState, data, newPicIdsArr) {
+  // Get all the storedFiles from the store
   const newPictures = getState().storedFiles;
-  _.forOwn(newPictures, (newPic, newPicId) => {
-    data.append(`media_file_${newPicId}`, newPic);
+  // Loop around the newPicsIdsArr (gathered from the articlePictures)
+  // to fetch the sotreFiles which correspond to the current article
+  _.forEach(newPicIdsArr, (newPicId)=> {
+    // Append each selected storedFile to the formData object
+    data.append(`media_file_${newPicId}`, newPictures[newPicId]);
   });
+
   return data;
 }
 
 export function preProcessorForFetchUpdateArticle(getState, locale, id) {
   // Create the formData object and add the pictures to it
   let data = new FormData();
-  data = getNewPictures(getState, data, selectedStoredFileIds);
 
-  // Create an object and stringify it, then add it to the formData object
+  // Get all the data that can be stringified to append it as a JSON string to the formData object
+  // Get the fields of the current article
   let objectToStringify = _.find(getState().articles[locale], {'id': id});
+  /* Get
+  1. the articlePictures relating to the article (objectToStringify.article_picture_ids is the array of articlePictures);
+  2. the corresponding mediaContainers' ids (from the articlePictures)
+  3. the corresponding storedFileIds' ids (from the articlePictures)
+  */
   const [selectedArticlePictures, selectedMediaContainersIds, selectedStoredFileIds] =
     getArticlePicturesForFetchUpdateArticle(getState, locale, id, objectToStringify.article_picture_ids);
+  /* Add to the objectToStringify:
+  1. the articlePictures' data;
+  2. the mediaContainers' data;
+  3. the array of pictures_marked_for_deletion
+  */
   objectToStringify = {
     ...objectToStringify,
     ...{
@@ -59,13 +82,15 @@ export function preProcessorForFetchUpdateArticle(getState, locale, id) {
       pictures_marked_for_deletion: getState().articlePicturesMarkedForDeletionByArticleId[id]
     }
   };
+  // Stringify the objectToStringify and add it to the formData object
   data.append('article', JSON.stringify(objectToStringify));
+
+  // Get the new pictures from the store and append them to the formData object
+  data = getNewPictures(getState, data, selectedStoredFileIds);
 
   // Debugging: with firefox 44 only
   // for(var pair of data.entries()) {
-  //   if (pair[0] === "media_file_0") {
-  //     console.log(pair[0]+ ', '+ pair[1].preview);
-  //   }
+  //   console.log(pair[0]+ ', '+ pair[1]);
   // }
 
   return data;

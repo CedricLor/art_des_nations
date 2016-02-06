@@ -28,6 +28,7 @@ export const NewsSliderController = React.createClass({
 
   render() {
     const commonSettings = {
+      className: "my-slick-slider-top-level-component",
       dots: true,
       infinite: true,
       speed: 500,
@@ -38,7 +39,7 @@ export const NewsSliderController = React.createClass({
     const settings = Object.assign({}, commonSettings, this.variableSettings())
 
     return (
-      <Slider className="my-slick-slider-top-level-component" {...settings}>
+      <Slider {...settings}>
         {this.props.children}
       </Slider>
     );

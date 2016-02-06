@@ -28,7 +28,7 @@ export const ImageImageSliderSwitch = React.createClass({
     let arrayOfDropZones = this.props.articlePictures.map((articlePicture, i) => {
       const imageDestroyButton = <ImageDestroyButton deleteArticlePicture={this.props.deleteArticlePicture.bind(null, articlePicture.id, articlePicture.stored_file_id, articlePicture.media_container_id)}/>
       return(
-        <div key= {i}>
+        <div key= {i} className='my-slick-slide-dropzone-wrapper'>
           <SliderDropZoneController
             key=            {i}
             destroyButton=  {imageDestroyButton}

@@ -53,6 +53,7 @@ export function fetchUpdateArticle(dispatch, getState, data, id, fieldName, loca
         return response.json();
     })
     .then(function(respData) {
+      // The callbacks are updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle and updateArticleAndRefresh
       dispatch(callbacks[0](id, fieldName, locale));
       dispatch(callbacks[1](respData, locale, fieldName));
     })

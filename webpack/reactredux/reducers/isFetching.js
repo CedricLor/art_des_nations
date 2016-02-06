@@ -24,10 +24,10 @@ export function isFetching(state = {}, action) {
       return Object.assign({}, state, {additionalLocaleArticle: false})
 
     case FETCHING_INFINITE_SCROLL_DATA:
-      return state[infiniteScrollData] = true
+      return Object.assign({}, state, {fetchingInfiniteScrollData: true})
 
     case RECEIVED_INFINITE_SCROLL_DATA:
-      return state[infiniteScrollData] = false
+      return Object.assign({}, state, {fetchingInfiniteScrollData: false})
 
     default:
       return state

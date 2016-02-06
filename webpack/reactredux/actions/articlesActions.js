@@ -72,39 +72,43 @@ function reOrderArticlesArray(locale) {
   }
 }
 
-function updateArticle({id, title, body, teaser, status, posted_at, created_at, updated_at}, locale) {
+function updateArticle(articleWithPicturesAndMediaContainers, locale) {
+  // data received from the API: {article: Object, media_containers: Array[4], article_pictures: Array[4]}
+  // FIXME - The API should also return information on deleted mediaContainers, deleted articlePictures and storedFiles to delete
   return {
     type: UPDATE_ARTICLE,
-    id,
-    title,
-    body,
-    teaser,
-    status,
-    posted_at,
-    created_at,
-    updated_at,
+    article: articleWithPicturesAndMediaContainers.article, /* article_picture_ids: Array[4], body: null, id: 74, posted_at: "2016-02-05T19:49:46.439Z", status: "draft", teaser: "Test", title: "Testing" */
+    articlePictures: articleWithPicturesAndMediaContainers.article_pictures, /* Array[4]: [{for_card: "true", for_carousel: "true", id: 73, media_container_id: 85}, ...] */
+    mediaContainers: articleWithPicturesAndMediaContainers.media_containers, /* Array[4]: [{id: 85, media: "http://locomotive-test-cedric.s3.amazonaws.com/development/media_containers/media/000/000/085/original/china_5_reduced.jpg?1454701835", media_content_type: "image/jpeg", media_file_name: "china_5_reduced.jpg", media_file_size: 23970, title: "Testing"}, ...] */
     locale
   }
 }
 
+
 function updateArticleAndRefresh(data, locale, fieldName) {
   return function (dispatch) {
     dispatch(updateArticle(data, locale));
-    // If the field posted_at has changed, reorder the articles' array
-    // It also has to run if the article fieldName has changed because if the user clicked on Save (the article)
-    // the fieldName will be article and the posted_at field may have changed
-    if (fieldName === "posted_at" || fieldName === "article") { dispatch(reOrderArticlesArray(locale)) };
     dispatch(refreshArticlesSizingPositionning());
   }
 }
 
 export function handleUpdateArticle(id, fieldName, locale) {
+  /* Use cases:
+  (i) the user has clicked on the big save button above the article on the article index view or the single article view
+  (ii) the user has clicked on the small save button aside an editable form field
+  */
   return function (dispatch, getState) {
+    // select the localized part of the articles state
     const articles = getState().articles[locale]
-    let data = _.omit( _.find( articles, { 'id': id } ), ['created_at', 'updated_at'] );
-    if (fieldName != 'article') {
+    // select the article to update by its id
+    let data = _.find( articles, { 'id': id } );
+    // if the fieldname calling update is not article,
+    // select only the data from this specific field to make a partial update
+    // (see use case (ii) above)
+    if (fieldName !== 'article') {
       data = _.pick(data, fieldName);
     }
+    // call the API
     fetchUpdateArticle(
       dispatch,
       getState,
@@ -155,5 +159,6 @@ function reOrderAllTheArticlesArray() {
 export function handleDeleteArticle(id) {
   return function (dispatch) {
     fetchDeleteArticle(dispatch, id, deleteArticle, reOrderAllTheArticlesArray, refreshArticlesSizingPositionning)
+    // fetchDeleteArticle(dispatch, id, deleteArticle, refreshArticlesSizingPositionning)
   }
 }

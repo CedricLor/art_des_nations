@@ -29,4 +29,5 @@ export default {
   'article.edit.field.exitEditMenuItem': 'Exit edit',
   'article.edit.field.deleteTextMenuItem': 'Delete text',
   'article.edit.field.restoreTextMenuItem': 'Restore initial text',
+  'slider.edit.singleArticleViewSlider.dropZone.infoText': 'Click or drop an image here',
 }

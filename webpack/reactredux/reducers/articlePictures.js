@@ -12,9 +12,59 @@ import {
 
 function articlePicture(state = {}, action) {
   switch (action.type) {
+    case ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE:
+      return Object.assign({}, state, {
+        for_carousel:   action.forCarousel,
+        for_card:       action.forCard,
+        stored_file_id: action.storedFileId
+      })
+
+    case ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
+      return Object.assign({}, state, {
+        for_card: action.forCard,
+        for_carousel: action.forCarousel,
+        id: action.articlePictureId,
+        media_container_id: undefined,
+        stored_file_id: action.storedFileId,
+      })
+
+    case DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
+      return Object.assign({}, state, {
+        for_card: state.for_card,
+        for_carousel: state.for_carousel,
+        id: state.id,
+        media_container_id: state.media_container_id
+      })
 
     default:
       return state
+  }
+}
+
+function localizedArticlePictures(state = {}, action) {
+  switch (action.type) {
+
+    case ADD_NEW_ARTICLE:
+      return Object.assign({}, state, {
+        [action.articlePicture.id]: action.articlePicture
+      });
+
+    case DELETE_ARTICLE:
+      return Object.assign({}, _.omit(state, action.articlePictureIds))
+
+    case ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
+    case ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE:
+    case DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
+      return Object.assign({}, state, {
+        [action.articlePictureId]: articlePicture(state[action.articlePictureId], action)
+      });
+
+    case DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+    case MARK_ARTICLE_PICTURE_FOR_DELETION:
+      return Object.assign({}, _.omit(state, [action.articlePictureId]));
+
+    default:
+      return state;
   }
 }
 
@@ -27,47 +77,21 @@ export function articlePictures(state = {}, action) {
       return Object.assign({}, state, action.additionalStates.articlePictures)
 
     case ADD_NEW_ARTICLE:
-      const newStateForNewArticle = Object.assign({}, state);
-      _.forOwn(newStateForNewArticle, (localeArticlePicturesObjects, locale) => {newStateForNewArticle[locale][action.articlePicture.id] = action.articlePicture})
-      return newStateForNewArticle
-
     case DELETE_ARTICLE:
-      const newStateForDeleteArticle = Object.assign({}, state);
-      _.forEach(action.articlePictureIds, (articlePictureId) => {
-        _.forOwn(newStateForDeleteArticle, (localeArticlePicturesObjects, locale) => {delete newStateForDeleteArticle[locale][action.articlePictureId]})
-      })
-      return newStateForDeleteArticle
+      const newState = {};
+      _.forOwn(state, (localeArticlePicturesObjects, locale) => newState[locale] = localizedArticlePictures(state[locale], action));
+      return Object.assign({}, state, newState);
 
     case ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
-      const newStateForNewStoredPicture = Object.assign({}, state);
-      newStateForNewStoredPicture[action.locale][action.articlePictureId] = {
-        for_card: action.forCard,
-        for_carousel: action.forCarousel,
-        id: action.articlePictureId,
-        media_container_id: undefined,
-        stored_file_id: action.storedFileId,
-      }
-      return newStateForNewStoredPicture
-
     case ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE:
-      const newStateForNewStoredPictureInExistingArticlePicture = Object.assign({}, state)
-      newStateForNewStoredPictureInExistingArticlePicture[action.locale][action.articlePictureId]['for_carousel'] = action.forCarousel;
-      newStateForNewStoredPictureInExistingArticlePicture[action.locale][action.articlePictureId]['for_card'] = action.forCard;
-      newStateForNewStoredPictureInExistingArticlePicture[action.locale][action.articlePictureId]['stored_file_id'] = action.storedFileId;
-      return newStateForNewStoredPictureInExistingArticlePicture
-
     case DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
-      const newStateAfterDeletionOfStoredFile = Object.assign({}, state);
-      delete newStateAfterDeletionOfStoredFile[action.locale][action.articlePictureId].stored_file_id;
-      return newStateAfterDeletionOfStoredFile
-
     case DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
     case MARK_ARTICLE_PICTURE_FOR_DELETION:
-      const newStateAfterMarkingForDeletion = Object.assign({}, state);
-      delete newStateAfterMarkingForDeletion[action.locale][action.articlePictureId];
-      return newStateAfterMarkingForDeletion
+      return Object.assign({}, state, {
+        [action.locale]: localizedArticlePictures(state[action.locale], action)
+      });
 
     default:
-      return state
+      return state;
   }
 }

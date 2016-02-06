@@ -125,6 +125,12 @@ function createNewFileObjectInStoreAndNewArticlePicture(articleId, articlePictur
 
 
 export function changeArticlePicture(locale, articleId, articlePictureId, forCard, forCarousel, file) {
+  /* Use-case: in the slider of the single article view, the user wishes to change one of the existing pictures
+  -> A temporary articlePicture object has already been created. It is associated either with a storedFile or with
+  mediaContainer. The ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE will then (i) save the new uploaded file
+  in a storedFile object and (ii) amend the existing articlePicture by simply adding a new (or replacing the existing)
+  stored_file_id field with a pointer to the articlePicture.
+  */
   /* Meta-programming
   Actions -> store
   1. change WIP state of field of article on the article_picture_ids field -> common with createAdditionalPicture

@@ -38,6 +38,7 @@ class ArticlesController < ApplicationController
     if @article_form.save
       render json: @article_form.article, serializer: ArticleSerializer
     else
+      # FIXME -- @article is not defined
       render json: @article.errors, status: :unprocessable_entity
     end
   end
@@ -51,18 +52,19 @@ class ArticlesController < ApplicationController
     prepare_params_for_update
 
     @article_update_form = ArticleUpdateForm.new(params[:article])
-    @article_update_form.update
+
     # @article = Article.find(params[:id])
-    # if @article.update(article_params)
-    #   render json: @article, root: false
-    # else
-    #   render json: @article.errors, status: :unprocessable_entity
-    # end
+    if @article_update_form.update
+      render json: @article_update_form.article, serializer: ArticleSerializer
+    else
+      # FIXME -- @article is not defined
+      render json: @article.errors, status: :unprocessable_entity
+    end
   end
 
   def destroy
     @ancillaryItemsToDestroy = ArticleDestroy.new(article_id: params[:id]).destroy
-    render json: {'ancillaryItemsToDestroy': @ancillaryItemsToDestroy}
+    render json: @ancillaryItemsToDestroy
     # head :no_content
   end
 

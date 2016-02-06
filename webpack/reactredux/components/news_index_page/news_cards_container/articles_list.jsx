@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { NewsCard } from './articles_list/news_card';
 
+import moment from 'moment';
+
 export const ArticlesList = React.createClass({
   propTypes: {
     articles:                          PropTypes.array.isRequired,
@@ -37,6 +39,11 @@ export const ArticlesList = React.createClass({
   },
 
   createCards() {
+    // const articlesSortedByDate = this.props.articles.sort((a,b) => {
+    //   const aDate = moment(a.posted_at);
+    //   const bDate = moment(b.posted_at);
+    //   return bDate - aDate;
+    // });
     return (
       this.props.articles.map(
         (card, i) => {

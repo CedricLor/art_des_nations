@@ -4,8 +4,6 @@ import {
   TOGGLE_SITE_EDIT_MODE,
   ADD_NEW_ARTICLE,
   UPDATE_ARTICLE,
-  REQUEST_UPDATE_ARTICLE,
-  RECEIVE_UPDATED_ARTICLE,
   DELETE_ARTICLE,
   CHANGE_FIELD_OF_ARTICLE,
   CHANGE_WIP_STATE_OF_FIELD_OF_ARTICLE,
@@ -25,27 +23,45 @@ import {
 
   MARK_ARTICLE_PICTURE_FOR_DELETION,
   DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE,
-   } from '../constants/ActionTypes'
+   } from '../constants/ActionTypes';
 
 import {
   initialStateForNewArticle,
   initialEditState,
   initialWIPState
-   } from './reducersConstants'
+   } from './reducersConstants';
 
 export function newArticleFields(state = initialStateForNewArticle, action) {
   switch (action.type) {
 
     case CHANGE_FIELD_OF_NEW_ARTICLE:
-      let new_state = Object.assign({}, state);
-      new_state[action.fieldName] = action.value;
-      new_state.hasReceivedUserInput = true;
-      return new_state
+      return Object.assign({}, state, {
+        [action.fieldName]: action.value,
+        hasReceivedUserInput: true
+      });
 
     case RESET_FIELDS_OF_NEW_ARTICLE:
-      return initialStateForNewArticle
+      return initialStateForNewArticle;
+
     default:
-      return state
+      return state;
+  }
+}
+
+function articlePictureIds(state = [], action) {
+  switch (action.type) {
+    case ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
+      return [
+        ...state,
+        action.articlePictureId
+      ]
+
+    case DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+    case MARK_ARTICLE_PICTURE_FOR_DELETION:
+      return _.without(state, action.articlePictureId);
+
+    default:
+      return state;
   }
 }
 
@@ -64,84 +80,93 @@ function article(state, action) {
       }
 
     case UPDATE_ARTICLE:
-      if (state.id !== action.id) {
+      if (state.id !== action.article.id) {
         return state
       }
       return Object.assign({}, state, {
-        title: action.title,
-        teaser: action.teaser,
-        body: action.body,
-        status: action.status,
-        posted_at: action.posted_at,
-        created_at: action.created_at,
-        updated_at: action.updated_at
+        title: action.article.title,
+        teaser: action.article.teaser,
+        body: action.article.body,
+        status: action.article.status,
+        posted_at: action.article.posted_at,
+        article_picture_ids: action.article.article_picture_ids
       })
 
     case CHANGE_FIELD_OF_ARTICLE:
       if (state.id !== action.id) {
-        return state
+        return state;
       }
-      let new_state = Object.assign({}, state);
-      new_state[action.fieldName] = action.fieldValue;
-      return new_state
+      return Object.assign({}, state, {
+        [action.fieldName]: action.fieldValue
+      });
 
-    case DELETE_ARTICLE:
-      if (state.id !== action.id) {
-        return state
+    case ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
+    case DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+    case MARK_ARTICLE_PICTURE_FOR_DELETION:
+      if (state.id !== action.articleId) {
+        return state;
       }
+      return Object.assign({}, state, {
+        article_picture_ids: articlePictureIds(state.article_picture_ids, action)
+      });
 
     default:
-      return state
+      return state;
   }
 }
 
+function localizedArticles(state = [], action) {
+  switch (action.type) {
 
+    case ADD_NEW_ARTICLE:
+      return [
+        article({}, action),
+        ...state
+      ];
 
+    case DELETE_ARTICLE:
+      const index = _.findIndex(state, {id: action.id});
+      return [
+        ...state.slice(0, index),
+        ...state.slice(index+1)
+      ];
+
+    case UPDATE_ARTICLE:
+    case CHANGE_FIELD_OF_ARTICLE:
+    case ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
+    case DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+    case MARK_ARTICLE_PICTURE_FOR_DELETION:
+      return state.map(art => article(art, action));
+
+    default:
+      return state;
+  }
+}
 
 export function articles(state = {}, action) {
   switch (action.type) {
 
 
     case LOADED_INITIAL_ARTICLES:
-      return action.initialState.articles
-
+      return action.initialState.articles;
 
     case LOADED_ADDITIONAL_LOCALE_ARTICLES:
-      return Object.assign({}, state, action.additionalStates.articles)
-
+      return Object.assign({}, state, action.additionalStates.articles);
 
     case ADD_NEW_ARTICLE:
-      // FIXME - TESTME - The method applied here is likely to delete the entire state for the non-current locale
-      const newStateWithNewArticle = {};
-      _.forOwn(state, (localeArticlesArray, locale) => {
-        newStateWithNewArticle[locale] = [
-          article({}, action),
-          ...state[locale]
-        ];
-      })
-      return newStateWithNewArticle
-
+    case DELETE_ARTICLE:
+      const newStateIterated = {};
+      _.forOwn(state, (localeArticlesArray, locale) => newStateIterated[locale] = localizedArticles(state[locale], action) );
+      return Object.assign({}, state, newStateIterated);
 
     case UPDATE_ARTICLE:
     case CHANGE_FIELD_OF_ARTICLE:
-      // FIXME - TESTME - The method applied here is likely to delete the entire state for the non-current locale
-      const localizedArticleStateAfterChanges = {};
-      localizedArticleStateAfterChanges[action.locale] = state[action.locale].map(art =>
-        article(art, action));
-      return Object.assign({}, state, localizedArticleStateAfterChanges)
-
-
-    case DELETE_ARTICLE:
-      const newState = {};
-      _.forOwn(state, (localeArticlesArray, locale) => {
-        let index = _.findIndex(state[locale], {id: action.id});
-        newState[locale] = [
-          ...state[locale].slice(0, index),
-          ...state[locale].slice(index+1)
-        ]
-      })
-      return newState
-
+    case ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
+    case DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+    case MARK_ARTICLE_PICTURE_FOR_DELETION:
+      return Object.assign({}, state, {
+        [action.locale]: localizedArticles(state[action.locale], action)
+      });
 
     case REORDER_ARTICLES_ARRAY:
       // Reorder only the articles' array for the current locale
@@ -159,32 +184,6 @@ export function articles(state = {}, action) {
         reOrderedState[locale] = _.orderBy(localeArticlesArray, 'posted_at', 'desc')
       })
       return reOrderedState
-
-
-    case ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
-      const newStateForNewStoredPicture = Object.assign({}, state);
-      // We do not add the new stored picture to all the locale versions of the articles
-      // We loop through the articles of the current locale, not through the articles of all the locales,
-      // because we have not normalized properly the articles from the start...
-      _.forEach(newStateForNewStoredPicture[action.locale], (article, index) => {
-        if (article.id === action.articleId) {
-          newStateForNewStoredPicture[action.locale][index]['article_picture_ids'].push(action.articlePictureId)
-        }
-      })
-      return newStateForNewStoredPicture
-
-    case DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
-    case MARK_ARTICLE_PICTURE_FOR_DELETION:
-      const newStateUponDeletionOfArticlePicture = Object.assign({}, state);
-      // We do not add the new stored picture to all the locale versions of the articles
-      // We loop through the articles of the current locale, not through the articles of all the locales,
-      // because we have not normalized properly the articles from the start...
-      _.forEach(newStateUponDeletionOfArticlePicture[action.locale], (article, index) => {
-        if (article.id === action.articleId) {
-          _.pull(newStateUponDeletionOfArticlePicture[action.locale][index].article_picture_ids, action.articlePictureId)
-        }
-      })
-      return newStateUponDeletionOfArticlePicture
 
     default:
       return state

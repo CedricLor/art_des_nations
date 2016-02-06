@@ -2,6 +2,7 @@ class ArticleUpdateForm
   include ActiveModel::Model
 
   attr_accessor :id, :body, :title, :teaser, :posted_at, :status, :article_picture_ids, :article_pictures, :media_containers, :pictures_marked_for_deletion, :media_files
+  attr_reader :article
 
   def update
     if valid?
@@ -25,38 +26,25 @@ class ArticleUpdateForm
     )
 
     if media_containers
-      media_containers.each do |media_container|
-        md = MediaContainer.find(media_container.fetch('id'))
-        md.update(
-          title: media_container.fetch('title')
-        )
-      end
+      MediaContainersUpdateForm.new(media_containers_data: media_containers).
+         update
     end
 
-    if pictures_marked_for_deletion
-      pictures_marked_for_deletion.each do |picture_marked_for_deletion_id|
-        # FIXME -- Create a destroy object on the basis of the current article destroy object
-        ArticlePicture.find(picture_marked_for_deletion_id).destroy
-      end
+    if pictures_marked_for_deletion && pictures_marked_for_deletion.size >= 1
+      art_pics_destroy_obj = ArticlePicturesDestroy.new({ids: pictures_marked_for_deletion})
+      art_pics_destroy_obj.destroy
     end
 
     if media_files
-      media_files.each do |key, media_file|
-        media_container = MediaContainer.create!(title: title, media: media_file)
-        article_picture = article_pictures.map do |article_pict|
-          return article_pict if article_pict.stored_file_id && article_pict.stored_file_id == key.to_i
-        end
-        ArticlePicture.create!(
-          article_id: @id,
-          media_container_id: media_container.id,
-          for_card: article_picture.fetch('for_card'),
-          for_carousel: article_picture.fetch('for_carousel')
-        )
-      end
-    end
-  end
-
-end
+      MediaContainersCreationForm.new(
+        media_files: media_files,
+        article_pictures: article_pictures,
+        article_title: title,
+        article_id: id
+      ).save
+    end # End if media_files
+  end # End persist!
+end # End class
 
 # It should receive five type of data:
 # 1. direct article data

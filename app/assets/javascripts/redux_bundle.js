@@ -50006,10 +50006,10 @@
 	      return Object.assign({}, state, { additionalLocaleArticle: false });
 	
 	    case _ActionTypes.FETCHING_INFINITE_SCROLL_DATA:
-	      return state[infiniteScrollData] = true;
+	      return Object.assign({}, state, { fetchingInfiniteScrollData: true });
 	
 	    case _ActionTypes.RECEIVED_INFINITE_SCROLL_DATA:
-	      return state[infiniteScrollData] = false;
+	      return Object.assign({}, state, { fetchingInfiniteScrollData: false });
 	
 	    default:
 	      return state;
@@ -50164,20 +50164,39 @@
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
 	function newArticleFields() {
+	  var _Object$assign;
+	
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? _reducersConstants.initialStateForNewArticle : arguments[0];
 	  var action = arguments[1];
 	
 	  switch (action.type) {
 	
 	    case _ActionTypes.CHANGE_FIELD_OF_NEW_ARTICLE:
-	      var new_state = Object.assign({}, state);
-	      new_state[action.fieldName] = action.value;
-	      new_state.hasReceivedUserInput = true;
-	      return new_state;
+	      return Object.assign({}, state, (_Object$assign = {}, _defineProperty(_Object$assign, action.fieldName, action.value), _defineProperty(_Object$assign, 'hasReceivedUserInput', true), _Object$assign));
 	
 	    case _ActionTypes.RESET_FIELDS_OF_NEW_ARTICLE:
 	      return _reducersConstants.initialStateForNewArticle;
+	
+	    default:
+	      return state;
+	  }
+	}
+	
+	function articlePictureIds() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
+	      return [].concat(_toConsumableArray(state), [action.articlePictureId]);
+	
+	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+	    case _ActionTypes.MARK_ARTICLE_PICTURE_FOR_DELETION:
+	      return _.without(state, action.articlePictureId);
+	
 	    default:
 	      return state;
 	  }
@@ -50198,31 +50217,60 @@
 	      };
 	
 	    case _ActionTypes.UPDATE_ARTICLE:
-	      if (state.id !== action.id) {
+	      if (state.id !== action.article.id) {
 	        return state;
 	      }
 	      return Object.assign({}, state, {
-	        title: action.title,
-	        teaser: action.teaser,
-	        body: action.body,
-	        status: action.status,
-	        posted_at: action.posted_at,
-	        created_at: action.created_at,
-	        updated_at: action.updated_at
+	        title: action.article.title,
+	        teaser: action.article.teaser,
+	        body: action.article.body,
+	        status: action.article.status,
+	        posted_at: action.article.posted_at,
+	        article_picture_ids: action.article.article_picture_ids
 	      });
 	
 	    case _ActionTypes.CHANGE_FIELD_OF_ARTICLE:
 	      if (state.id !== action.id) {
 	        return state;
 	      }
-	      var new_state = Object.assign({}, state);
-	      new_state[action.fieldName] = action.fieldValue;
-	      return new_state;
+	      return Object.assign({}, state, _defineProperty({}, action.fieldName, action.fieldValue));
 	
-	    case _ActionTypes.DELETE_ARTICLE:
-	      if (state.id !== action.id) {
+	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
+	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+	    case _ActionTypes.MARK_ARTICLE_PICTURE_FOR_DELETION:
+	      if (state.id !== action.articleId) {
 	        return state;
 	      }
+	      return Object.assign({}, state, {
+	        article_picture_ids: articlePictureIds(state.article_picture_ids, action)
+	      });
+	
+	    default:
+	      return state;
+	  }
+	}
+	
+	function localizedArticles() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	
+	    case _ActionTypes.ADD_NEW_ARTICLE:
+	      return [article({}, action)].concat(_toConsumableArray(state));
+	
+	    case _ActionTypes.DELETE_ARTICLE:
+	      var index = _.findIndex(state, { id: action.id });
+	      return [].concat(_toConsumableArray(state.slice(0, index)), _toConsumableArray(state.slice(index + 1)));
+	
+	    case _ActionTypes.UPDATE_ARTICLE:
+	    case _ActionTypes.CHANGE_FIELD_OF_ARTICLE:
+	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
+	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+	    case _ActionTypes.MARK_ARTICLE_PICTURE_FOR_DELETION:
+	      return state.map(function (art) {
+	        return article(art, action);
+	      });
 	
 	    default:
 	      return state;
@@ -50242,29 +50290,19 @@
 	      return Object.assign({}, state, action.additionalStates.articles);
 	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
-	      // FIXME - TESTME - The method applied here is likely to delete the entire state for the non-current locale
-	      var newStateWithNewArticle = {};
+	    case _ActionTypes.DELETE_ARTICLE:
+	      var newStateIterated = {};
 	      _.forOwn(state, function (localeArticlesArray, locale) {
-	        newStateWithNewArticle[locale] = [article({}, action)].concat(_toConsumableArray(state[locale]));
+	        return newStateIterated[locale] = localizedArticles(state[locale], action);
 	      });
-	      return newStateWithNewArticle;
+	      return Object.assign({}, state, newStateIterated);
 	
 	    case _ActionTypes.UPDATE_ARTICLE:
 	    case _ActionTypes.CHANGE_FIELD_OF_ARTICLE:
-	      // FIXME - TESTME - The method applied here is likely to delete the entire state for the non-current locale
-	      var localizedArticleStateAfterChanges = {};
-	      localizedArticleStateAfterChanges[action.locale] = state[action.locale].map(function (art) {
-	        return article(art, action);
-	      });
-	      return Object.assign({}, state, localizedArticleStateAfterChanges);
-	
-	    case _ActionTypes.DELETE_ARTICLE:
-	      var newState = {};
-	      _.forOwn(state, function (localeArticlesArray, locale) {
-	        var index = _.findIndex(state[locale], { id: action.id });
-	        newState[locale] = [].concat(_toConsumableArray(state[locale].slice(0, index)), _toConsumableArray(state[locale].slice(index + 1)));
-	      });
-	      return newState;
+	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
+	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+	    case _ActionTypes.MARK_ARTICLE_PICTURE_FOR_DELETION:
+	      return Object.assign({}, state, _defineProperty({}, action.locale, localizedArticles(state[action.locale], action)));
 	
 	    case _ActionTypes.REORDER_ARTICLES_ARRAY:
 	      // Reorder only the articles' array for the current locale
@@ -50281,31 +50319,6 @@
 	        reOrderedState[locale] = _.orderBy(localeArticlesArray, 'posted_at', 'desc');
 	      });
 	      return reOrderedState;
-	
-	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
-	      var newStateForNewStoredPicture = Object.assign({}, state);
-	      // We do not add the new stored picture to all the locale versions of the articles
-	      // We loop through the articles of the current locale, not through the articles of all the locales,
-	      // because we have not normalized properly the articles from the start...
-	      _.forEach(newStateForNewStoredPicture[action.locale], function (article, index) {
-	        if (article.id === action.articleId) {
-	          newStateForNewStoredPicture[action.locale][index]['article_picture_ids'].push(action.articlePictureId);
-	        }
-	      });
-	      return newStateForNewStoredPicture;
-	
-	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
-	    case _ActionTypes.MARK_ARTICLE_PICTURE_FOR_DELETION:
-	      var newStateUponDeletionOfArticlePicture = Object.assign({}, state);
-	      // We do not add the new stored picture to all the locale versions of the articles
-	      // We loop through the articles of the current locale, not through the articles of all the locales,
-	      // because we have not normalized properly the articles from the start...
-	      _.forEach(newStateUponDeletionOfArticlePicture[action.locale], function (article, index) {
-	        if (article.id === action.articleId) {
-	          _.pull(newStateUponDeletionOfArticlePicture[action.locale][index].article_picture_ids, action.articlePictureId);
-	        }
-	      });
-	      return newStateUponDeletionOfArticlePicture;
 	
 	    default:
 	      return state;
@@ -50634,6 +50647,24 @@
 	
 	var _ActionTypes = __webpack_require__(485);
 	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function localizedMediaContainers() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _ActionTypes.ADD_NEW_ARTICLE:
+	      return Object.assign({}, state, _defineProperty({}, action.mediaContainer.id, action.mediaContainer));
+	
+	    case _ActionTypes.DELETE_ARTICLE:
+	      return Object.assign({}, _.omit(state, action.mediaContainerIds));
+	
+	    default:
+	      return state;
+	  }
+	}
+	
 	function mediaContainers() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
@@ -50646,25 +50677,12 @@
 	      return Object.assign({}, state, action.additionalStates.mediaContainers);
 	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
-	      var newStateForNewArticle = Object.assign({}, state);
-	      _.forOwn(newStateForNewArticle, function (localeMediaContainersObjects, locale) {
-	        newStateForNewArticle[locale][action.mediaContainer.id] = action.mediaContainer;
-	      });
-	      return newStateForNewArticle;
-	
 	    case _ActionTypes.DELETE_ARTICLE:
-	      var newStateForDeleteArticle = Object.assign({}, state);
-	      _.forEach(action.mediaContainerIds, function (mediaContainerId) {
-	        _.forOwn(newStateForDeleteArticle, function (localeMediaContainersObjects, locale) {
-	          delete newStateForDeleteArticle[locale][action.mediaContainerId];
-	        });
+	      var newState = {};
+	      _.forOwn(state, function (localeMediaContainersObjects, locale) {
+	        return newState[locale] = localizedMediaContainers(state[locale], action);
 	      });
-	      return newStateForDeleteArticle;
-	
-	    case _ActionTypes.MARK_ARTICLE_PICTURE_FOR_DELETION:
-	      var newStateAfterMarkingForDeletion = Object.assign({}, state);
-	      delete newStateAfterMarkingForDeletion[action.locale][action.articlePictureId].stored_file_id;
-	      return newStateAfterMarkingForDeletion;
+	      return Object.assign({}, state, newState);
 	
 	    default:
 	      return state;
@@ -50684,11 +50702,62 @@
 	
 	var _ActionTypes = __webpack_require__(485);
 	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
 	function articlePicture() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
 	
 	  switch (action.type) {
+	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE:
+	      return Object.assign({}, state, {
+	        for_carousel: action.forCarousel,
+	        for_card: action.forCard,
+	        stored_file_id: action.storedFileId
+	      });
+	
+	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
+	      return Object.assign({}, state, {
+	        for_card: action.forCard,
+	        for_carousel: action.forCarousel,
+	        id: action.articlePictureId,
+	        media_container_id: undefined,
+	        stored_file_id: action.storedFileId
+	      });
+	
+	    case _ActionTypes.DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
+	      return Object.assign({}, state, {
+	        for_card: state.for_card,
+	        for_carousel: state.for_carousel,
+	        id: state.id,
+	        media_container_id: state.media_container_id
+	      });
+	
+	    default:
+	      return state;
+	  }
+	}
+	
+	function localizedArticlePictures() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	
+	    case _ActionTypes.ADD_NEW_ARTICLE:
+	      return Object.assign({}, state, _defineProperty({}, action.articlePicture.id, action.articlePicture));
+	
+	    case _ActionTypes.DELETE_ARTICLE:
+	      return Object.assign({}, _.omit(state, action.articlePictureIds));
+	
+	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
+	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE:
+	    case _ActionTypes.DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
+	      return Object.assign({}, state, _defineProperty({}, action.articlePictureId, articlePicture(state[action.articlePictureId], action)));
+	
+	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+	    case _ActionTypes.MARK_ARTICLE_PICTURE_FOR_DELETION:
+	      return Object.assign({}, _.omit(state, [action.articlePictureId]));
 	
 	    default:
 	      return state;
@@ -50707,49 +50776,19 @@
 	      return Object.assign({}, state, action.additionalStates.articlePictures);
 	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
-	      var newStateForNewArticle = Object.assign({}, state);
-	      _.forOwn(newStateForNewArticle, function (localeArticlePicturesObjects, locale) {
-	        newStateForNewArticle[locale][action.articlePicture.id] = action.articlePicture;
-	      });
-	      return newStateForNewArticle;
-	
 	    case _ActionTypes.DELETE_ARTICLE:
-	      var newStateForDeleteArticle = Object.assign({}, state);
-	      _.forEach(action.articlePictureIds, function (articlePictureId) {
-	        _.forOwn(newStateForDeleteArticle, function (localeArticlePicturesObjects, locale) {
-	          delete newStateForDeleteArticle[locale][action.articlePictureId];
-	        });
+	      var newState = {};
+	      _.forOwn(state, function (localeArticlePicturesObjects, locale) {
+	        return newState[locale] = localizedArticlePictures(state[locale], action);
 	      });
-	      return newStateForDeleteArticle;
+	      return Object.assign({}, state, newState);
 	
 	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
-	      var newStateForNewStoredPicture = Object.assign({}, state);
-	      newStateForNewStoredPicture[action.locale][action.articlePictureId] = {
-	        for_card: action.forCard,
-	        for_carousel: action.forCarousel,
-	        id: action.articlePictureId,
-	        media_container_id: undefined,
-	        stored_file_id: action.storedFileId
-	      };
-	      return newStateForNewStoredPicture;
-	
 	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE:
-	      var newStateForNewStoredPictureInExistingArticlePicture = Object.assign({}, state);
-	      newStateForNewStoredPictureInExistingArticlePicture[action.locale][action.articlePictureId]['for_carousel'] = action.forCarousel;
-	      newStateForNewStoredPictureInExistingArticlePicture[action.locale][action.articlePictureId]['for_card'] = action.forCard;
-	      newStateForNewStoredPictureInExistingArticlePicture[action.locale][action.articlePictureId]['stored_file_id'] = action.storedFileId;
-	      return newStateForNewStoredPictureInExistingArticlePicture;
-	
 	    case _ActionTypes.DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
-	      var newStateAfterDeletionOfStoredFile = Object.assign({}, state);
-	      delete newStateAfterDeletionOfStoredFile[action.locale][action.articlePictureId].stored_file_id;
-	      return newStateAfterDeletionOfStoredFile;
-	
 	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
 	    case _ActionTypes.MARK_ARTICLE_PICTURE_FOR_DELETION:
-	      var newStateAfterMarkingForDeletion = Object.assign({}, state);
-	      delete newStateAfterMarkingForDeletion[action.locale][action.articlePictureId];
-	      return newStateAfterMarkingForDeletion;
+	      return Object.assign({}, state, _defineProperty({}, action.locale, localizedArticlePictures(state[action.locale], action)));
 	
 	    default:
 	      return state;
@@ -50769,6 +50808,8 @@
 	
 	var _ActionTypes = __webpack_require__(485);
 	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
 	function storedFiles() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
@@ -50776,15 +50817,11 @@
 	  switch (action.type) {
 	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
 	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE:
-	      var newStoredFile = {};
-	      newStoredFile[action.storedFileId] = action.file;
-	      return Object.assign({}, state, newStoredFile);
+	      return Object.assign({}, state, _defineProperty({}, action.storedFileId, action.file));
 	
 	    case _ActionTypes.DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
 	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
-	      var newStateAfterDeletionOfStoredFile = Object.assign({}, state);
-	      delete newStateAfterDeletionOfStoredFile[action.storedFileId];
-	      return newStateAfterDeletionOfStoredFile;
+	      return Object.assign({}, _.omit(state, [action.storedFileId]));
 	
 	    default:
 	      return state;
@@ -51964,26 +52001,14 @@
 	  };
 	}
 	
-	function updateArticle(_ref, locale) {
-	  var id = _ref.id;
-	  var title = _ref.title;
-	  var body = _ref.body;
-	  var teaser = _ref.teaser;
-	  var status = _ref.status;
-	  var posted_at = _ref.posted_at;
-	  var created_at = _ref.created_at;
-	  var updated_at = _ref.updated_at;
-	
+	function updateArticle(articleWithPicturesAndMediaContainers, locale) {
+	  // data received from the API: {article: Object, media_containers: Array[4], article_pictures: Array[4]}
+	  // FIXME - The API should also return information on deleted mediaContainers, deleted articlePictures and storedFiles to delete
 	  return {
 	    type: _ActionTypes.UPDATE_ARTICLE,
-	    id: id,
-	    title: title,
-	    body: body,
-	    teaser: teaser,
-	    status: status,
-	    posted_at: posted_at,
-	    created_at: created_at,
-	    updated_at: updated_at,
+	    article: articleWithPicturesAndMediaContainers.article, /* article_picture_ids: Array[4], body: null, id: 74, posted_at: "2016-02-05T19:49:46.439Z", status: "draft", teaser: "Test", title: "Testing" */
+	    articlePictures: articleWithPicturesAndMediaContainers.article_pictures, /* Array[4]: [{for_card: "true", for_carousel: "true", id: 73, media_container_id: 85}, ...] */
+	    mediaContainers: articleWithPicturesAndMediaContainers.media_containers, /* Array[4]: [{id: 85, media: "http://locomotive-test-cedric.s3.amazonaws.com/development/media_containers/media/000/000/085/original/china_5_reduced.jpg?1454701835", media_content_type: "image/jpeg", media_file_name: "china_5_reduced.jpg", media_file_size: 23970, title: "Testing"}, ...] */
 	    locale: locale
 	  };
 	}
@@ -51991,23 +52016,27 @@
 	function updateArticleAndRefresh(data, locale, fieldName) {
 	  return function (dispatch) {
 	    dispatch(updateArticle(data, locale));
-	    // If the field posted_at has changed, reorder the articles' array
-	    // It also has to run if the article fieldName has changed because if the user clicked on Save (the article)
-	    // the fieldName will be article and the posted_at field may have changed
-	    if (fieldName === "posted_at" || fieldName === "article") {
-	      dispatch(reOrderArticlesArray(locale));
-	    };
 	    dispatch((0, _articlesSizingPositionningActions.refreshArticlesSizingPositionning)());
 	  };
 	}
 	
 	function handleUpdateArticle(id, fieldName, locale) {
+	  /* Use cases:
+	  (i) the user has clicked on the big save button above the article on the article index view or the single article view
+	  (ii) the user has clicked on the small save button aside an editable form field
+	  */
 	  return function (dispatch, getState) {
+	    // select the localized part of the articles state
 	    var articles = getState().articles[locale];
-	    var data = _.omit(_.find(articles, { 'id': id }), ['created_at', 'updated_at']);
-	    if (fieldName != 'article') {
+	    // select the article to update by its id
+	    var data = _.find(articles, { 'id': id });
+	    // if the fieldname calling update is not article,
+	    // select only the data from this specific field to make a partial update
+	    // (see use case (ii) above)
+	    if (fieldName !== 'article') {
 	      data = _.pick(data, fieldName);
 	    }
+	    // call the API
 	    (0, _articles.fetchUpdateArticle)(dispatch, getState, data, id, fieldName, locale, [_articleFieldsActions.updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle, updateArticleAndRefresh]);
 	  };
 	}
@@ -52050,6 +52079,7 @@
 	function handleDeleteArticle(id) {
 	  return function (dispatch) {
 	    (0, _articles.fetchDeleteArticle)(dispatch, id, deleteArticle, reOrderAllTheArticlesArray, _articlesSizingPositionningActions.refreshArticlesSizingPositionning);
+	    // fetchDeleteArticle(dispatch, id, deleteArticle, refreshArticlesSizingPositionning)
 	  };
 	}
 
@@ -52285,6 +52315,7 @@
 	    }
 	    return response.json();
 	  }).then(function (respData) {
+	    // The callbacks are updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle and updateArticleAndRefresh
 	    dispatch(callbacks[0](id, fieldName, locale));
 	    dispatch(callbacks[1](respData, locale, fieldName));
 	  });
@@ -52390,37 +52421,55 @@
 	}
 	
 	function getArticlePicturesForFetchUpdateArticle(getState, locale, id, articlePictureIdsArray) {
+	  // Get all the data relating to the articlePictures associated with the current article
 	  var selectedArticlePictures = getAncillaryItems(getState, locale, id, articlePictureIdsArray, "articlePictures");
-	
+	  /* Create two arrays of ids:
+	  1. one with the ids of the mediaContainers associated with the articlePictures;
+	  2. one with the ids of the storedFiles associated with the articlePictures. */
 	  var selectedMediaContainersIds = [];
 	  var selectedStoredFileIds = [];
 	
 	  _.forEach(selectedArticlePictures, function (selectedArticlePicture) {
+	    // If the current articlePicture has a stored_file_id field which is equal to or greater than 0
+	    // then store the id of the corresponding storedFile in the selectedStoredFileIds array
 	    if (selectedArticlePicture.stored_file_id >= 0) {
 	      selectedStoredFileIds.push(selectedArticlePicture.stored_file_id);
-	    } else if (selectedArticlePicture.media_container_id >= 0) {
-	      selectedMediaContainersIds.push(selectedArticlePicture.media_container_id);
 	    }
+	    // If the current articlePicture has a media_container_id which is equal to or greater than 0
+	    // then store the id of the corresponding mediaContainer in the mediaContainers array
+	    else if (selectedArticlePicture.media_container_id >= 0) {
+	        selectedMediaContainersIds.push(selectedArticlePicture.media_container_id);
+	      }
 	  });
 	
 	  return [selectedArticlePictures, selectedMediaContainersIds, selectedStoredFileIds];
 	}
 	
 	function getNewPictures(getState, data, newPicIdsArr) {
+	  // Get all the storedFiles from the store
 	  var newPictures = getState().storedFiles;
-	  _.forOwn(newPictures, function (newPic, newPicId) {
-	    data.append("media_file_" + newPicId, newPic);
+	  // Loop around the newPicsIdsArr (gathered from the articlePictures)
+	  // to fetch the sotreFiles which correspond to the current article
+	  _.forEach(newPicIdsArr, function (newPicId) {
+	    // Append each selected storedFile to the formData object
+	    data.append("media_file_" + newPicId, newPictures[newPicId]);
 	  });
+	
 	  return data;
 	}
 	
 	function preProcessorForFetchUpdateArticle(getState, locale, id) {
 	  // Create the formData object and add the pictures to it
 	  var data = new FormData();
-	  data = getNewPictures(getState, data, selectedStoredFileIds);
 	
-	  // Create an object and stringify it, then add it to the formData object
+	  // Get all the data that can be stringified to append it as a JSON string to the formData object
+	  // Get the fields of the current article
 	  var objectToStringify = _.find(getState().articles[locale], { 'id': id });
+	  /* Get
+	  1. the articlePictures relating to the article (objectToStringify.article_picture_ids is the array of articlePictures);
+	  2. the corresponding mediaContainers' ids (from the articlePictures)
+	  3. the corresponding storedFileIds' ids (from the articlePictures)
+	  */
 	
 	  var _getArticlePicturesFo = getArticlePicturesForFetchUpdateArticle(getState, locale, id, objectToStringify.article_picture_ids);
 	
@@ -52429,19 +52478,26 @@
 	  var selectedArticlePictures = _getArticlePicturesFo2[0];
 	  var selectedMediaContainersIds = _getArticlePicturesFo2[1];
 	  var selectedStoredFileIds = _getArticlePicturesFo2[2];
+	  /* Add to the objectToStringify:
+	  1. the articlePictures' data;
+	  2. the mediaContainers' data;
+	  3. the array of pictures_marked_for_deletion
+	  */
 	
 	  objectToStringify = _extends({}, objectToStringify, {
 	    article_pictures: selectedArticlePictures,
 	    media_containers: getAncillaryItems(getState, locale, id, selectedMediaContainersIds, "mediaContainers"),
 	    pictures_marked_for_deletion: getState().articlePicturesMarkedForDeletionByArticleId[id]
 	  });
+	  // Stringify the objectToStringify and add it to the formData object
 	  data.append('article', JSON.stringify(objectToStringify));
+	
+	  // Get the new pictures from the store and append them to the formData object
+	  data = getNewPictures(getState, data, selectedStoredFileIds);
 	
 	  // Debugging: with firefox 44 only
 	  // for(var pair of data.entries()) {
-	  //   if (pair[0] === "media_file_0") {
-	  //     console.log(pair[0]+ ', '+ pair[1].preview);
-	  //   }
+	  //   console.log(pair[0]+ ', '+ pair[1]);
 	  // }
 	
 	  return data;
@@ -54123,6 +54179,12 @@
 	// }
 	
 	function changeArticlePicture(locale, articleId, articlePictureId, forCard, forCarousel, file) {
+	  /* Use-case: in the slider of the single article view, the user wishes to change one of the existing pictures
+	  -> A temporary articlePicture object has already been created. It is associated either with a storedFile or with
+	  mediaContainer. The ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE will then (i) save the new uploaded file
+	  in a storedFile object and (ii) amend the existing articlePicture by simply adding a new (or replacing the existing)
+	  stored_file_id field with a pointer to the articlePicture.
+	  */
 	  /* Meta-programming
 	  Actions -> store
 	  1. change WIP state of field of article on the article_picture_ids field -> common with createAdditionalPicture
@@ -54796,6 +54858,10 @@
 	
 	var _news_card = __webpack_require__(542);
 	
+	var _moment = __webpack_require__(555);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var ArticlesList = exports.ArticlesList = _react2.default.createClass({
@@ -54835,6 +54901,11 @@
 	  createCards: function createCards() {
 	    var _this2 = this;
 	
+	    // const articlesSortedByDate = this.props.articles.sort((a,b) => {
+	    //   const aDate = moment(a.posted_at);
+	    //   const bDate = moment(b.posted_at);
+	    //   return bDate - aDate;
+	    // });
 	    return this.props.articles.map(function (card, i) {
 	      // Iterate over the articles pictures and get the corresponding mediaContainer
 	      var cardMediaContainer = _this2.getMediaContainerForCard(card);
@@ -75052,7 +75123,7 @@
 	      var imageDestroyButton = _react2.default.createElement(_image_destroy_button.ImageDestroyButton, { deleteArticlePicture: _this.props.deleteArticlePicture.bind(null, articlePicture.id, articlePicture.stored_file_id, articlePicture.media_container_id) });
 	      return _react2.default.createElement(
 	        'div',
-	        { key: i },
+	        { key: i, className: 'my-slick-slide-dropzone-wrapper' },
 	        _react2.default.createElement(_slider_drop_zone_controller.SliderDropZoneController, {
 	          key: i,
 	          destroyButton: imageDestroyButton,
@@ -75230,8 +75301,6 @@
 
 	'use strict';
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
@@ -75276,6 +75345,7 @@
 	  },
 	  render: function render() {
 	    var commonSettings = {
+	      className: "my-slick-slider-top-level-component",
 	      dots: true,
 	      infinite: true,
 	      speed: 500,
@@ -75287,7 +75357,7 @@
 	
 	    return _react2.default.createElement(
 	      _reactSlick2.default,
-	      _extends({ className: 'my-slick-slider-top-level-component' }, settings),
+	      settings,
 	      this.props.children
 	    );
 	  }
@@ -77327,7 +77397,8 @@
 	  'newArticle.edit.newsForm.dropZone.infoText': 'Drop the image that will be used on the index page for this article here, or click to select a file to upload.',
 	  'article.edit.field.exitEditMenuItem': 'Exit edit',
 	  'article.edit.field.deleteTextMenuItem': 'Delete text',
-	  'article.edit.field.restoreTextMenuItem': 'Restore initial text'
+	  'article.edit.field.restoreTextMenuItem': 'Restore initial text',
+	  'slider.edit.singleArticleViewSlider.dropZone.infoText': 'Click or drop an image here'
 	};
 
 /***/ },
@@ -77367,9 +77438,10 @@
 	  'newArticle.edit.newsForm.teaserMeta': 'le chapeau',
 	  'newArticle.edit.newsForm.postedAtOnMeta': 'Publié à {time} le {date}',
 	  'newArticle.edit.newsForm.dropZone.infoText': "Glisser ici l'image qui sera utilisée sur la page d'index pour cet article ou cliquer pour sélectionner le fichier à télécharger.",
-	  'article.edit.field.exitEditMenuItem': 'Sortir du mode édition du champs',
+	  'article.edit.field.exitEditMenuItem': 'Sortir du mode édition du champ',
 	  'article.edit.field.deleteTextMenuItem': 'Effacer le texte',
-	  'article.edit.field.restoreTextMenuItem': 'Restaurer le texte initial'
+	  'article.edit.field.restoreTextMenuItem': 'Restaurer le texte initial',
+	  'slider.edit.singleArticleViewSlider.dropZone.infoText': 'Pour ajouter une image, cliquez ici pour sélectionner le fichier à télécharger ou glissez-le ici.'
 	};
 
 /***/ },

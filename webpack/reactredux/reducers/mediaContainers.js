@@ -3,33 +3,36 @@ import {
   LOADED_ADDITIONAL_LOCALE_ARTICLES,
   ADD_NEW_ARTICLE,
   DELETE_ARTICLE,
-  MARK_ARTICLE_PICTURE_FOR_DELETION,
-} from '../constants/ActionTypes'
+} from '../constants/ActionTypes';
+
+function localizedMediaContainers(state = {}, action) {
+  switch (action.type) {
+    case ADD_NEW_ARTICLE:
+      return Object.assign({}, state, {
+        [action.mediaContainer.id]: action.mediaContainer
+      })
+
+    case DELETE_ARTICLE:
+      return Object.assign({}, _.omit(state, action.mediaContainerIds))
+
+    default:
+      return state
+  }
+}
 
 export function mediaContainers(state = {}, action) {
   switch (action.type) {
     case LOADED_INITIAL_ARTICLES:
-      return action.initialState.mediaContainers
+      return action.initialState.mediaContainers;
 
     case LOADED_ADDITIONAL_LOCALE_ARTICLES:
-      return Object.assign({}, state, action.additionalStates.mediaContainers)
+      return Object.assign({}, state, action.additionalStates.mediaContainers);
 
     case ADD_NEW_ARTICLE:
-      const newStateForNewArticle = Object.assign({}, state)
-      _.forOwn(newStateForNewArticle, (localeMediaContainersObjects, locale) => {newStateForNewArticle[locale][action.mediaContainer.id] = action.mediaContainer})
-      return newStateForNewArticle
-
     case DELETE_ARTICLE:
-      const newStateForDeleteArticle = Object.assign({}, state)
-      _.forEach(action.mediaContainerIds, (mediaContainerId) => {
-        _.forOwn(newStateForDeleteArticle, (localeMediaContainersObjects, locale) => {delete newStateForDeleteArticle[locale][action.mediaContainerId]})
-      })
-      return newStateForDeleteArticle
-
-    case MARK_ARTICLE_PICTURE_FOR_DELETION:
-      const newStateAfterMarkingForDeletion = Object.assign({}, state)
-      delete newStateAfterMarkingForDeletion[action.locale][action.articlePictureId].stored_file_id
-      return newStateAfterMarkingForDeletion
+      const newState = {};
+      _.forOwn(state, (localeMediaContainersObjects, locale) => newState[locale] = localizedMediaContainers(state[locale], action));
+      return Object.assign({}, state, newState);
 
     default:
       return state
