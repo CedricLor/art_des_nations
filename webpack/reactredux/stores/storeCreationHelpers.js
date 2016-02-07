@@ -9,9 +9,7 @@ function createAncillaryStatesForArticles(articles, locale) {
     [articlesNeedResizingStates[articleId], articlesDOMProps[articleId]] = [false, initialArticlesDOMPropsState];
 
     for (let fieldName in article) {
-      // FIXME article_picture_ids should have an edit state and a WIP state
-      // but for the moment, let's keep them away from this logic
-      if (fieldName != 'id' && fieldName != 'article_picture_ids') {
+      if (fieldName !== 'id') {
         [initialWIPStates[articleId][fieldName], initialEditStates[articleId][fieldName]] = [false, false];
       }
     };
@@ -20,7 +18,7 @@ function createAncillaryStatesForArticles(articles, locale) {
   return [initialWIPStates, initialEditStates, articlesNeedResizingStates, articlesDOMProps]
 }
 
-function normalize(jsonFetchedAncillaryData) {
+export function normalize(jsonFetchedAncillaryData) {
   return _.keyBy(jsonFetchedAncillaryData, 'id');
 }
 

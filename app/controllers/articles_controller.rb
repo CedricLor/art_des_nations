@@ -55,7 +55,7 @@ class ArticlesController < ApplicationController
 
     # @article = Article.find(params[:id])
     if @article_update_form.update
-      render json: @article_update_form.article, serializer: ArticleSerializer
+      render json: Article.find(params[:id]), serializer: ArticleSerializer
     else
       # FIXME -- @article is not defined
       render json: @article.errors, status: :unprocessable_entity

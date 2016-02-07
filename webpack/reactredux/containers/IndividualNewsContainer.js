@@ -2,13 +2,19 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { IndividualNewsComponent } from '../components/news_index_page/individual_news_component'
 
+import {localeArticlePicturesSelector, localeMediaContainersSelector} from '../selectors/index'
+
 function mapStateToProps(state, ownProps) {
   const currentArticle = _.find(state.articles[`${state.siteCurrentLocale}`], { 'id': parseInt(ownProps.params.id)});
-  const [articlePictures, mediaContainers] = [[], {}];
-  if (currentArticle.article_picture_ids.length > 0) {
 
+  const localeArticlePictures = localeArticlePicturesSelector(state);
+  const localeMediaContainers = localeMediaContainersSelector(state);
+
+  const [articlePictures, mediaContainers] = [[], {}];
+
+  if (currentArticle.article_picture_ids.length > 0) {
     _.forEach(currentArticle.article_picture_ids, (picture_id) => {
-      const currentPicture = ownProps.articlePictures[picture_id];
+      const currentPicture = localeArticlePictures[picture_id];
       // If the selected articlePicture is for the carousel (i.e. for the single article view)
       if (currentPicture.for_carousel === "true") {
         // push it into the array of articlePictures that will be passed to the individual news component
@@ -18,12 +24,13 @@ function mapStateToProps(state, ownProps) {
         Priority is given to the storedFiles as they are work in progress */
         if (currentPicture.stored_file_id === undefined || null) {
           const mediaContainerId = currentPicture.media_container_id;
-          mediaContainers[mediaContainerId] = ownProps.mediaContainers[mediaContainerId];
+          mediaContainers[mediaContainerId] = localeMediaContainers[mediaContainerId];
         }
       }
     });
-
   }
+
+  const storedFiles = (state.storedFiles && state.storedFiles[currentArticle.id]) ? state.storedFiles[currentArticle.id] : state.storedFiles;
 
   return {
     // Site global props: passed in down from App/PageIndexView
@@ -37,7 +44,7 @@ function mapStateToProps(state, ownProps) {
     // Ancillary items: from own props (because filtered by language in App/reselect)
     articlePictures:            articlePictures,
     mediaContainers:            mediaContainers,
-    storedFiles:                state.storedFiles,
+    storedFiles:                storedFiles,
   }
 }
 

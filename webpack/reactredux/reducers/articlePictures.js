@@ -8,7 +8,10 @@ import {
   DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE,
   DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE,
   MARK_ARTICLE_PICTURE_FOR_DELETION,
-} from '../constants/ActionTypes'
+  UPDATE_ARTICLE,
+} from '../constants/ActionTypes';
+
+import {normalize} from '../stores/storeCreationHelpers'
 
 function articlePicture(state = {}, action) {
   switch (action.type) {
@@ -29,12 +32,12 @@ function articlePicture(state = {}, action) {
       })
 
     case DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
-      return Object.assign({}, state, {
+      return {
         for_card: state.for_card,
         for_carousel: state.for_carousel,
         id: state.id,
         media_container_id: state.media_container_id
-      })
+      }
 
     default:
       return state
@@ -50,7 +53,7 @@ function localizedArticlePictures(state = {}, action) {
       });
 
     case DELETE_ARTICLE:
-      return Object.assign({}, _.omit(state, action.articlePictureIds))
+      return Object.assign({}, _.omit(state, action.articlePictureIds));
 
     case ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
     case ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE:
@@ -62,6 +65,9 @@ function localizedArticlePictures(state = {}, action) {
     case DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
     case MARK_ARTICLE_PICTURE_FOR_DELETION:
       return Object.assign({}, _.omit(state, [action.articlePictureId]));
+
+    case UPDATE_ARTICLE:
+      return Object.assign({}, state, normalize(action.articlePictures));
 
     default:
       return state;
@@ -87,6 +93,7 @@ export function articlePictures(state = {}, action) {
     case DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
     case DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
     case MARK_ARTICLE_PICTURE_FOR_DELETION:
+    case UPDATE_ARTICLE:
       return Object.assign({}, state, {
         [action.locale]: localizedArticlePictures(state[action.locale], action)
       });

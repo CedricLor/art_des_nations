@@ -24,7 +24,7 @@ export function fetchArticles(dispatch, locale, callback) {
 
 
 
-export function fetchUpdateArticle(dispatch, getState, data, id, fieldName, locale, callbacks) {
+export function fetchUpdateArticle(dispatch, getState, id, fieldName, locale, callBacksForHandleUpdateArticle) {
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   const formData = preProcessorForFetchUpdateArticle(getState, locale, id);
 
@@ -38,12 +38,9 @@ export function fetchUpdateArticle(dispatch, getState, data, id, fieldName, loca
       method: 'put',
       credentials: 'same-origin',
       headers: {
-        // 'Accept': 'application/json', /* this line was required with a classical put (where the data sent is not a formData object) */
-        // 'Content-Type': 'application/json', /* this line was required with a classical put (where the data sent is not a formData object) */
         'X-Requested-With': 'XMLHttpRequest',
         'X_CSRF_TOKEN': `${csrfToken}`
       },
-      // body: JSON.stringify({article: data}) /* this line was required with a classical put (where the data sent is not a formData object) */
       body: formData
   })
     .then(function(response) {
@@ -53,9 +50,7 @@ export function fetchUpdateArticle(dispatch, getState, data, id, fieldName, loca
         return response.json();
     })
     .then(function(respData) {
-      // The callbacks are updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle and updateArticleAndRefresh
-      dispatch(callbacks[0](id, fieldName, locale));
-      dispatch(callbacks[1](respData, locale, fieldName));
+      dispatch(callBacksForHandleUpdateArticle(respData, id, fieldName, locale));
     })
 }
 

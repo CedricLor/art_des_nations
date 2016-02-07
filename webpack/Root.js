@@ -78,15 +78,15 @@ function getRootChildren (props) {
 
 
 const routeConfig = [
-  <Route path="/(:locale/)" component={ App }>
-    <IndexRoute component={ NewsCardsContainer }/>
-    <Route path="/(:locale/)articles" component={ NewsCardsContainer }/>
-    <Route path="/(:locale/)article/:id" component={ IndividualNewsContainer }/>
+  <Route path="/(:locale/)" component={App}>
+    <IndexRoute component={NewsCardsContainer}/>
+    <Route path="/(:locale/)articles" component={NewsCardsContainer}/>
+    <Route path="/(:locale/)article/:id" component={IndividualNewsContainer}/>
   </Route>
 ]
 
 function renderRoutes () {
-  return ( <Router history={ history } routes={routeConfig}/> )
+  return ( <Router history={history} routes={routeConfig}/> )
 }
 
 // ++++++++++++++++++++++++++++++++++++++++++++
@@ -105,7 +105,7 @@ const Root = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     // If the current locale has changed and the next locale is not in the articles tree, then timeout and dispatch fetch actions
-    if ( (this.props.siteCurrentLocale !== nextProps.siteCurrentLocale) &&  !(nextProps.siteCurrentLocale in nextProps.articles) ) {
+    if ((this.props.siteCurrentLocale !== nextProps.siteCurrentLocale) &&  !(nextProps.siteCurrentLocale in nextProps.articles)) {
       this.setState({ timeOut: true })
       store.dispatch(fetchAdditionalLocaleArticles(nextProps.siteCurrentLocale))
     } else {

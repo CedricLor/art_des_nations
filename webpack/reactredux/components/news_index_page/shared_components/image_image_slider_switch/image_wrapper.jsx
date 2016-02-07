@@ -11,12 +11,19 @@ export const ImageWrapper = React.createClass({
  },
 
   render() {
+    const style = {
+      marginLeft: "auto",
+      marginRight: "auto",
+      maxWidth: "100%"
+    }
+
     return(
       <div>
         <Image
           cardImageSource=  {this.props.cardImageSource}
           title=            {this.props.imageTitle}
-          className=        {`img-for-news-card-${this.props.sourceId} my-news-card-img my-card-img`}
+          className=        {`img-for-news-slider-${this.props.sourceId} my-news-slider-img my-card-img`}
+          style=            {style}
         />
         <div className= "news-picture-overlay">
         </div>
@@ -24,3 +31,4 @@ export const ImageWrapper = React.createClass({
     )
   }
 })
+

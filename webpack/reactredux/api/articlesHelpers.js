@@ -4,6 +4,7 @@ function getAncillaryItems(getState, locale, id, ancillaryItemIdsArray, ancillar
   const selectedAncillaryItems = ancillaryItemIdsArray.map((ancillaryItemId) => {
     return ancillaryItems[ancillaryItemId]
   });
+  console.log(selectedAncillaryItems)
   return selectedAncillaryItems;
 }
 
@@ -32,13 +33,13 @@ function getArticlePicturesForFetchUpdateArticle(getState, locale, id, articlePi
       selectedMediaContainersIds.push(selectedArticlePicture.media_container_id);
     }
   });
-
+  console.log([selectedArticlePictures, selectedMediaContainersIds, selectedStoredFileIds]);
   return [selectedArticlePictures, selectedMediaContainersIds, selectedStoredFileIds];
 }
 
-function getNewPictures(getState, data, newPicIdsArr) {
+function getNewPictures(getState, data, newPicIdsArr, articleId) {
   // Get all the storedFiles from the store
-  const newPictures = getState().storedFiles;
+  const newPictures = getState().storedFiles[articleId];
   // Loop around the newPicsIdsArr (gathered from the articlePictures)
   // to fetch the sotreFiles which correspond to the current article
   _.forEach(newPicIdsArr, (newPicId)=> {
@@ -53,20 +54,34 @@ export function preProcessorForFetchUpdateArticle(getState, locale, id) {
   // Create the formData object and add the pictures to it
   let data = new FormData();
 
+
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // FIXME -- This chunk of code comes from the legacy handleUpdateArticle action creator.
+  // It handled a specific use case: partial updates when the user clicks on the save icon on an editable field.
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // if the fieldname calling update is not article,
+  // select only the data from this specific field to make a partial update
+  // (see use case (ii) above)
+  // if (fieldName !== 'article') {
+  //   data = _.pick(data, fieldName);
+  // }
+
+
   // Get all the data that can be stringified to append it as a JSON string to the formData object
   // Get the fields of the current article
   let objectToStringify = _.find(getState().articles[locale], {'id': id});
+
   /* Get
   1. the articlePictures relating to the article (objectToStringify.article_picture_ids is the array of articlePictures);
   2. the corresponding mediaContainers' ids (from the articlePictures)
-  3. the corresponding storedFileIds' ids (from the articlePictures)
   */
   const [selectedArticlePictures, selectedMediaContainersIds, selectedStoredFileIds] =
     getArticlePicturesForFetchUpdateArticle(getState, locale, id, objectToStringify.article_picture_ids);
+
   /* Add to the objectToStringify:
   1. the articlePictures' data;
   2. the mediaContainers' data;
-  3. the array of pictures_marked_for_deletion
+  3. the list of article pictures marked for deletion
   */
   objectToStringify = {
     ...objectToStringify,
@@ -86,7 +101,7 @@ export function preProcessorForFetchUpdateArticle(getState, locale, id) {
   data.append('article', JSON.stringify(objectToStringify));
 
   // Get the new pictures from the store and append them to the formData object
-  data = getNewPictures(getState, data, selectedStoredFileIds);
+  data = getNewPictures(getState, data, selectedStoredFileIds, id);
 
   // Debugging: with firefox 44 only
   // for(var pair of data.entries()) {

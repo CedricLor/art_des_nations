@@ -39,11 +39,6 @@ export const ArticlesList = React.createClass({
   },
 
   createCards() {
-    // const articlesSortedByDate = this.props.articles.sort((a,b) => {
-    //   const aDate = moment(a.posted_at);
-    //   const bDate = moment(b.posted_at);
-    //   return bDate - aDate;
-    // });
     return (
       this.props.articles.map(
         (card, i) => {

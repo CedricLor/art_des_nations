@@ -1,6 +1,6 @@
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { NewsIndexPage } from '../components/NewsIndexPage'
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
+import {NewsIndexPage} from '../components/NewsIndexPage'
 
 import * as ArticlesActions from '../actions/articlesActions'
 import * as ArticlesFieldsActions from '../actions/articleFieldsActions'
@@ -9,9 +9,10 @@ import * as ArticlesVisibilityFilterActions from '../actions/articlesVisibilityF
 import * as ArticlePicturesActions from '../actions/articlePicturesActions'
 import * as SiteActions from '../actions/siteActions'
 
-import { localeArticlePicturesSelector, localeMediaContainersSelector } from '../selectors/index'
+import {localeArticlePicturesSelector, localeMediaContainersSelector} from '../selectors/index'
 
 function mapStateToProps(state) {
+  console.log("-----In App", state)
   return {
     routing:                         state.routing,
     isFetching:                      state.isFetching,

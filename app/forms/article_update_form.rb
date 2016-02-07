@@ -16,7 +16,7 @@ class ArticleUpdateForm
   private
 
   def persist!
-    @article = Article.find(@id)
+    @article = Article.includes(:article_pictures).find(@id)
     @article.update(
       title: title,
       teaser: teaser,
@@ -25,25 +25,26 @@ class ArticleUpdateForm
       status: status
     )
 
+    persist_ancillary_data
+  end # End persist!
+
+  def persist_ancillary_data
+    if article_pictures
+      ArticlePicturesForm.new(
+        article: @article,
+        article_pictures: article_pictures,
+        media_files: media_files).save_or_update
+    end
+
     if media_containers
       MediaContainersUpdateForm.new(media_containers_data: media_containers).
          update
     end
 
     if pictures_marked_for_deletion && pictures_marked_for_deletion.size >= 1
-      art_pics_destroy_obj = ArticlePicturesDestroy.new({ids: pictures_marked_for_deletion})
-      art_pics_destroy_obj.destroy
+      ArticlePicturesDestroy.new({ids: pictures_marked_for_deletion}).destroy
     end
-
-    if media_files
-      MediaContainersCreationForm.new(
-        media_files: media_files,
-        article_pictures: article_pictures,
-        article_title: title,
-        article_id: id
-      ).save
-    end # End if media_files
-  end # End persist!
+  end
 end # End class
 
 # It should receive five type of data:

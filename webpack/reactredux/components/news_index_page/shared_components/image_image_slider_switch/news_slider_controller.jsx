@@ -5,8 +5,8 @@ import Slider from 'react-slick'
 
 export const NewsSliderController = React.createClass({
   propTypes: {
-    siteEditMode: PropTypes.object.isRequired,
-    children:     PropTypes.array.isRequired,
+    siteEditMode:   PropTypes.object.isRequired,
+    children:       PropTypes.array.isRequired,
   },
 
   variableSettings() {
@@ -14,13 +14,11 @@ export const NewsSliderController = React.createClass({
       false: /* on siteEdtMode.mode === false*/ {
         autoplay: true,
         autoplaySpeed: 2000,
-        draggable: true,
-        lazyLoad: true
+        draggable: true
       },
       true: /* on siteEditMode.mode === true */ {
         autoplay: false,
-        draggable: false,
-        lazyLoad: false,
+        draggable: false
       }
     }
     return settingsHash[this.props.siteEditMode.mode];
@@ -28,7 +26,7 @@ export const NewsSliderController = React.createClass({
 
   render() {
     const commonSettings = {
-      className: "my-slick-slider-top-level-component",
+      className: `my-slick-slider-top-level-component`,
       dots: true,
       infinite: true,
       speed: 500,
@@ -36,6 +34,7 @@ export const NewsSliderController = React.createClass({
       fade: true,
       pauseOnHover: true,
     }
+
     const settings = Object.assign({}, commonSettings, this.variableSettings())
 
     return (

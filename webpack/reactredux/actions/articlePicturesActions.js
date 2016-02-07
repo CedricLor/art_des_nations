@@ -4,16 +4,17 @@ import {
   DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE,
   DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE,
   MARK_ARTICLE_PICTURE_FOR_DELETION,
+  DELETE_ART_PICTURES_MARKED_FOR_DELETION_AND_CORRESPONDING_STORED_FILES,
 } from '../constants/ActionTypes'
 
 import {changeWIPStateOfFieldOfArticle} from './articleFieldsActions'
 
-function storedFileIdCreator(getState) {
+function storedFileIdCreator(getState, articleId) {
   let storedFileId = 0
   const storedFiles = getState().storedFiles;
-  if (storedFiles) {
-    _.forOwn(storedFiles, (value, key) => {
-      const keyNum = parseInt(key)
+  if (storedFiles[articleId]) {
+    _.forOwn(storedFiles[articleId], (value, key) => {
+      const keyNum = parseInt(key);
       if (keyNum >= storedFileId) {
         storedFileId = keyNum + 1
       }
@@ -44,12 +45,16 @@ export function createAdditionalArticlePicture(locale, articleId, forCard, forCa
   */
   return function (dispatch, getState) {
 
-    const storedFileId = storedFileIdCreator(getState);
+    const storedFileId = storedFileIdCreator(getState, articleId);
+
     let articlePictureId = 0;
     _.forOwn(getState().articlePictures[locale], (value, key) => {
       const keyNum = parseInt(key);
-      if (keyNum >= articlePictureId) { articlePictureId = parseInt(key) + 100 }
+      if (keyNum >= articlePictureId) {
+        articlePictureId = parseInt(key) + 1
+      }
     })
+    articlePictureId = articlePictureId + 100;
 
     dispatch(changeWIPStateOfFieldOfArticle(articleId, 'article_picture_ids', true, locale));
     dispatch(createNewFileObjectInStoreAndNewArticlePicture(articleId, articlePictureId, storedFileId, file, forCard, forCarousel, locale))
@@ -147,16 +152,17 @@ export function changeArticlePicture(locale, articleId, articlePictureId, forCar
   3. switch off the WIP state of field of article on the article_picture_ids field
   */
   return function (dispatch, getState) {
-    const storedFileId = storedFileIdCreator(getState);
+    const storedFileId = storedFileIdCreator(getState, storedFileIdCreator);
 
     dispatch(changeWIPStateOfFieldOfArticle(articleId, 'article_picture_ids', true, locale));
-    dispatch(createNewFileObjectInStoreAndAddFileIdToArticlePicture(articlePictureId, storedFileId, forCard, forCarousel, file, locale));
+    dispatch(createNewFileObjectInStoreAndAddFileIdToArticlePicture(articleId, articlePictureId, storedFileId, forCard, forCarousel, file, locale));
   }
 }
 
-function createNewFileObjectInStoreAndAddFileIdToArticlePicture(articlePictureId, storedFileId, forCard, forCarousel, file, locale) {
+function createNewFileObjectInStoreAndAddFileIdToArticlePicture(articleId, articlePictureId, storedFileId, forCard, forCarousel, file, locale) {
   return {
     type: ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE,
+    articleId,
     articlePictureId,
     storedFileId,
     file,
@@ -174,6 +180,7 @@ export function deleteArticlePicture(locale, articleId, articlePictureId, stored
         In this case, we delete only the storedFile and reset the existing articlePicture to point to its
         old mediaContainer */
         type: DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE,
+        articleId,
         locale,
         articlePictureId,
         storedFileId
@@ -206,5 +213,12 @@ export function deleteArticlePicture(locale, articleId, articlePictureId, stored
       articlePictureId,
       mediaContainerId
     }
+  }
+}
+
+export function deleteArticlePicturesMarkedForDeletionAndCorrespondingStoredFilesForArticleWithId(articleId) {
+  return {
+    type: DELETE_ART_PICTURES_MARKED_FOR_DELETION_AND_CORRESPONDING_STORED_FILES,
+    articleId
   }
 }

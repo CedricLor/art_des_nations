@@ -13,8 +13,7 @@ function mapStateToProps(state, ownProps) {
     // Site global props: passed in down from App/PageIndexView
     siteCurrentLocale:          ownProps.siteCurrentLocale,
     siteEditMode:               ownProps.siteEditMode,
-    // Articles list specific props: passed in down from App/PageIndexView
-    // Check whether it wouldn't be smarter to apply the reselect from here
+
     articles:                   memoizedFilteredArticles.visibleArticles,
 
     articlesWIPStatesOfFields:  memoizedFilteredArticles.visibleArticlesWIPStatesOfFields,

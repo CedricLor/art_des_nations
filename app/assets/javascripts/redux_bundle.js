@@ -44553,11 +44553,11 @@
 	
 	var _configureStore2 = _interopRequireDefault(_configureStore);
 	
-	var _App = __webpack_require__(495);
+	var _App = __webpack_require__(496);
 	
 	var _App2 = _interopRequireDefault(_App);
 	
-	var _NewsIndexPage = __webpack_require__(496);
+	var _NewsIndexPage = __webpack_require__(497);
 	
 	var _NewsCardsContainer = __webpack_require__(532);
 	
@@ -44571,7 +44571,7 @@
 	
 	var i18n = _interopRequireWildcard(_i18n);
 	
-	var _articlesActions = __webpack_require__(508);
+	var _articlesActions = __webpack_require__(509);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -49940,11 +49940,11 @@
 	
 	var _mediaContainers = __webpack_require__(491);
 	
-	var _articlePictures = __webpack_require__(492);
+	var _articlePictures = __webpack_require__(493);
 	
-	var _storedFiles = __webpack_require__(493);
+	var _storedFiles = __webpack_require__(494);
 	
-	var _markedForDeletion = __webpack_require__(494);
+	var _markedForDeletion = __webpack_require__(495);
 	
 	var rootReducer = (0, _redux.combineReducers)({
 	  routing: _reduxSimpleRouter.routeReducer,
@@ -50078,6 +50078,7 @@
 	var DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE = exports.DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE = 'DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE';
 	var DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE = exports.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE = 'DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE';
 	var MARK_ARTICLE_PICTURE_FOR_DELETION = exports.MARK_ARTICLE_PICTURE_FOR_DELETION = 'MARK_ARTICLE_PICTURE_FOR_DELETION';
+	var DELETE_ART_PICTURES_MARKED_FOR_DELETION_AND_CORRESPONDING_STORED_FILES = exports.DELETE_ART_PICTURES_MARKED_FOR_DELETION_AND_CORRESPONDING_STORED_FILES = 'DELETE_ART_PICTURES_MARKED_FOR_DELETION_AND_CORRESPONDING_STORED_FILES';
 
 /***/ },
 /* 486 */
@@ -50204,7 +50205,6 @@
 	
 	function article(state, action) {
 	  switch (action.type) {
-	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
 	      return {
 	        id: action.article.id,
@@ -50220,6 +50220,7 @@
 	      if (state.id !== action.article.id) {
 	        return state;
 	      }
+	      console.log("------- In UPDATE_ARTICLE, in articles", action.article.article_picture_ids);
 	      return Object.assign({}, state, {
 	        title: action.article.title,
 	        teaser: action.article.teaser,
@@ -50255,7 +50256,6 @@
 	  var action = arguments[1];
 	
 	  switch (action.type) {
-	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
 	      return [article({}, action)].concat(_toConsumableArray(state));
 	
@@ -50272,6 +50272,10 @@
 	        return article(art, action);
 	      });
 	
+	    case _ActionTypes.REORDER_ARTICLES_ARRAY:
+	    case _ActionTypes.REORDER_ALL_THE_ARTICLES_ARRAYS:
+	      return _.orderBy(state, 'posted_at', 'desc');
+	
 	    default:
 	      return state;
 	  }
@@ -50282,7 +50286,6 @@
 	  var action = arguments[1];
 	
 	  switch (action.type) {
-	
 	    case _ActionTypes.LOADED_INITIAL_ARTICLES:
 	      return action.initialState.articles;
 	
@@ -50291,6 +50294,7 @@
 	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
 	    case _ActionTypes.DELETE_ARTICLE:
+	    case _ActionTypes.REORDER_ALL_THE_ARTICLES_ARRAYS:
 	      var newStateIterated = {};
 	      _.forOwn(state, function (localeArticlesArray, locale) {
 	        return newStateIterated[locale] = localizedArticles(state[locale], action);
@@ -50302,23 +50306,64 @@
 	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
 	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
 	    case _ActionTypes.MARK_ARTICLE_PICTURE_FOR_DELETION:
+	    case _ActionTypes.REORDER_ARTICLES_ARRAY:
 	      return Object.assign({}, state, _defineProperty({}, action.locale, localizedArticles(state[action.locale], action)));
 	
-	    case _ActionTypes.REORDER_ARTICLES_ARRAY:
-	      // Reorder only the articles' array for the current locale
-	      // FIXME - TESTME - The method applied here is likely to delete the entire state for the non-current locale
-	      var localizedReorderedState = {};
-	      localizedReorderedState[action.locale] = _.orderBy(state[action.locale], 'posted_at', 'desc');
-	      return Object.assign({}, state, localizedReorderedState);
+	    default:
+	      return state;
+	  }
+	}
 	
-	    case _ActionTypes.REORDER_ALL_THE_ARTICLES_ARRAYS:
-	      // Reorder all the articles' arrays, in all the locales
-	      // FIXME - TESTME - The method applied here is likely to delete the entire state for the non-current locale
-	      var reOrderedState = {};
-	      _.forOwn(state, function (localeArticlesArray, locale) {
-	        reOrderedState[locale] = _.orderBy(localeArticlesArray, 'posted_at', 'desc');
+	function fieldEditStates() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _ActionTypes.TURN_ON_EDIT_STATE_OF_A_FIELD:
+	      return Object.assign({}, state, _defineProperty({
+	        article: true
+	      }, action.fieldName, true));
+	
+	    case _ActionTypes.TURN_OFF_EDIT_STATE_OF_A_FIELD:
+	      var articleEditStatus = true;
+	      if (!_.includes(_.values(_.omit(state, ['article'])), true)) {
+	        articleEditStatus = false;
+	      }
+	      return Object.assign({}, state, _defineProperty({
+	        article: articleEditStatus
+	      }, action.fieldName, false));
+	
+	    case _ActionTypes.TOGGLE_EDIT_STATE_OF_FIELD_OF_ARTICLE:
+	      return Object.assign({}, state, _defineProperty({}, action.fieldName, !state[action.fieldName]));
+	
+	    case _ActionTypes.RESET_ALL_EDIT_STATES_FOR_ARTICLE:
+	      var newState = {};
+	      _.forOwn(state, function (value, fieldName) {
+	        newState[fieldName] = action.resetValue;
 	      });
-	      return reOrderedState;
+	      return Object.assign({}, state, newState);
+	
+	    default:
+	      return state;
+	  }
+	}
+	
+	function localizedArticlesEditStates() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _ActionTypes.ADD_NEW_ARTICLE:
+	      return Object.assign({}, state, _defineProperty({}, action.article.id, _reducersConstants.initialEditState));
+	
+	    case _ActionTypes.TURN_ON_EDIT_STATE_OF_A_FIELD:
+	    case _ActionTypes.TURN_OFF_EDIT_STATE_OF_A_FIELD:
+	    case _ActionTypes.TOGGLE_EDIT_STATE_OF_FIELD_OF_ARTICLE:
+	    case _ActionTypes.RESET_ALL_EDIT_STATES_FOR_ARTICLE:
+	      return Object.assign({}, state, _defineProperty({}, action.id, fieldEditStates(state[action.id], action)));
+	
+	    case _ActionTypes.DELETE_ARTICLE:
+	      return Object.assign({}, _.omit(state, action.id));
 	
 	    default:
 	      return state;
@@ -50329,7 +50374,7 @@
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
 	
-	  var new_state = Object.assign({}, state);
+	  // const new_state = Object.assign({}, state);
 	  switch (action.type) {
 	
 	    case _ActionTypes.LOADED_INITIAL_ARTICLES:
@@ -50339,42 +50384,64 @@
 	      return Object.assign({}, state, action.additionalStates.articlesEditStates);
 	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
-	      _.forOwn(new_state, function (localeEditStatesArray, locale) {
-	        new_state[locale][action.article.id] = _reducersConstants.initialEditState;
+	    case _ActionTypes.DELETE_ARTICLE:
+	      var newStateIterated = {};
+	      _.forOwn(state, function (localeEditStatesArray, locale) {
+	        return newStateIterated[locale] = localizedArticlesEditStates(state[locale], action);
 	      });
-	      return new_state;
+	      return Object.assign({}, state, newStateIterated);
 	
-	    /* ***************** */
 	    case _ActionTypes.TURN_ON_EDIT_STATE_OF_A_FIELD:
-	      new_state[action.locale][action.id]["article"] = true;
-	      new_state[action.locale][action.id][action.fieldName] = true;
-	      return new_state;
-	
 	    case _ActionTypes.TURN_OFF_EDIT_STATE_OF_A_FIELD:
-	      new_state[action.locale][action.id][action.fieldName] = false;
-	      if (!_.includes(_.values(_.omit(new_state[action.locale][action.id], ['article'])), true)) {
-	        new_state[action.locale][action.id]["article"] = false;
-	      }
-	      return new_state;
-	    /* ***************** */
-	
 	    case _ActionTypes.TOGGLE_EDIT_STATE_OF_FIELD_OF_ARTICLE:
-	      new_state[action.id][action.fieldName] = !new_state[action.id][action.fieldName];
-	      return new_state;
-	
 	    case _ActionTypes.RESET_ALL_EDIT_STATES_FOR_ARTICLE:
-	      _.forOwn(new_state[action.locale][action.id], function (value, fieldName) {
-	        // if (fieldName === 'article' || fieldName === 'title' || fieldName === 'teaser' || fieldName === 'body') {
-	        new_state[action.locale][action.id][fieldName] = action.resetValue;
+	      return Object.assign({}, state, _defineProperty({}, action.locale, localizedArticlesEditStates(state[action.locale], action)));
+	
+	    default:
+	      return state;
+	  }
+	}
+	
+	function fieldWIPStates() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _ActionTypes.CHANGE_FIELD_OF_ARTICLE:
+	      return Object.assign({}, state, _defineProperty({}, action.fieldName, true));
+	
+	    case _ActionTypes.CHANGE_WIP_STATE_OF_FIELD_OF_ARTICLE:
+	      return Object.assign({}, state, _defineProperty({}, action.fieldName, action.WIPStateValue));
+	
+	    case _ActionTypes.RESET_ALL_WIP_STATES_FOR_ARTICLE:
+	      var newState = {};
+	      _.forOwn(state[action.id], function (value, fieldName) {
+	        // if (fieldName === 'title' || fieldName === 'teaser' || fieldName === 'body') {
+	        newState[fieldName] = false;
 	        // }
 	      });
-	      return new_state;
+	      return newState;
+	
+	    default:
+	      return state;
+	  }
+	}
+	
+	function localizedArticlesWIPStates() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _ActionTypes.ADD_NEW_ARTICLE:
+	      return Object.assign({}, state, _defineProperty({}, action.article.id, _reducersConstants.initialWIPState));
+	
+	    case _ActionTypes.CHANGE_FIELD_OF_ARTICLE:
+	    case _ActionTypes.CHANGE_WIP_STATE_OF_FIELD_OF_ARTICLE:
+	    case _ActionTypes.RESET_ALL_WIP_STATES_FOR_ARTICLE:
+	      return Object.assign({}, state, _defineProperty({}, action.id, fieldWIPStates(state[action.id], action)));
 	
 	    case _ActionTypes.DELETE_ARTICLE:
-	      _.forOwn(new_state, function (localeEditStatesArray, locale) {
-	        delete new_state[locale][action.id];
-	      });
-	      return new_state;
+	      return Object.assign({}, _.omit(state, action.id));
 	
 	    default:
 	      return state;
@@ -50385,7 +50452,7 @@
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
 	
-	  var new_state = Object.assign({}, state);
+	  // const new_state = Object.assign({}, state);
 	  switch (action.type) {
 	
 	    case _ActionTypes.LOADED_INITIAL_ARTICLES:
@@ -50395,37 +50462,96 @@
 	      return Object.assign({}, state, action.additionalStates.articlesWIPStatesOfFields);
 	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
-	      _.forOwn(new_state, function (localeWIPStatesArray, locale) {
-	        new_state[locale][action.article.id] = _reducersConstants.initialWIPState;
+	    case _ActionTypes.DELETE_ARTICLE:
+	      var newStateIterated = {};
+	      _.forOwn(state, function (localeWIPStatesArray, locale) {
+	        return newStateIterated[locale] = localizedArticlesWIPStates(state[locale], action);
 	      });
-	      return new_state;
+	      return Object.assign({}, state, newStateIterated);
 	
 	    case _ActionTypes.CHANGE_FIELD_OF_ARTICLE:
-	      new_state[action.locale][action.id][action.fieldName] = true;
-	      return new_state;
-	
 	    case _ActionTypes.CHANGE_WIP_STATE_OF_FIELD_OF_ARTICLE:
-	      new_state[action.locale][action.id][action.fieldName] = action.WIPStateValue;
-	      return new_state;
-	
 	    case _ActionTypes.RESET_ALL_WIP_STATES_FOR_ARTICLE:
-	      _.forOwn(new_state[action.locale][action.id], function (value, fieldName) {
-	        // if (fieldName === 'title' || fieldName === 'teaser' || fieldName === 'body') {
-	        new_state[action.locale][action.id][fieldName] = false;
-	        // }
-	      });
-	      return new_state;
-	
-	    case _ActionTypes.DELETE_ARTICLE:
-	      _.forOwn(new_state, function (localeWIPStatesArray, locale) {
-	        delete new_state[locale][action.id];
-	      });
-	      return new_state;
+	      return Object.assign({}, state, _defineProperty({}, action.locale, localizedArticlesWIPStates(state[action.locale], action)));
 	
 	    default:
 	      return state;
 	  }
 	}
+	
+	// export function articlesWIPStatesOfFields(state = {}, action) {
+	//   const new_state = Object.assign({}, state);
+	//   switch (action.type) {
+	
+	//     // case LOADED_INITIAL_ARTICLES:
+	//     //   return action.initialState.articlesWIPStatesOfFields
+	
+	//     // case LOADED_ADDITIONAL_LOCALE_ARTICLES:
+	//     //   return Object.assign({}, state, action.additionalStates.articlesWIPStatesOfFields)
+	
+	//     // case ADD_NEW_ARTICLE:
+	//     //   _.forOwn(new_state, (localeWIPStatesArray, locale) => {
+	//     //     new_state[locale][action.article.id] = initialWIPState
+	//     //   })
+	//     //   return new_state
+	
+	//     // case CHANGE_FIELD_OF_ARTICLE:
+	//     //   new_state[action.locale][action.id][action.fieldName] = true
+	//     //   return new_state
+	
+	//     // case CHANGE_WIP_STATE_OF_FIELD_OF_ARTICLE:
+	//     //   new_state[action.locale][action.id][action.fieldName] = action.WIPStateValue;
+	//     //   return new_state
+	
+	//     // case RESET_ALL_WIP_STATES_FOR_ARTICLE:
+	//     //   _.forOwn(new_state[action.locale][action.id], (value, fieldName) => {
+	//     //     // if (fieldName === 'title' || fieldName === 'teaser' || fieldName === 'body') {
+	//     //       new_state[action.locale][action.id][fieldName] = false;
+	//     //     // }
+	//     //   })
+	//     //   return new_state
+	
+	//     // case DELETE_ARTICLE:
+	//     //   _.forOwn(new_state, (localeWIPStatesArray, locale) => {
+	//     //     delete new_state[locale][action.id];
+	//     //   })
+	//     //   return new_state
+	
+	//     default:
+	//       return state
+	//   }
+	// }
+	
+	// case TURN_ON_EDIT_STATE_OF_A_FIELD:
+	//   new_state[action.locale][action.id]["article"] = true;
+	//   new_state[action.locale][action.id][action.fieldName] = true;
+	//   return new_state
+	
+	// case TURN_OFF_EDIT_STATE_OF_A_FIELD:
+	//   new_state[action.locale][action.id][action.fieldName] = false;
+	//   if ( !( _.includes( _.values( _.omit(new_state[action.locale][action.id], ['article']) ), true ) ) ) {
+	//     new_state[action.locale][action.id]["article"] = false;
+	//   }
+	//   return new_state
+	/* ***************** */
+	
+	// case TOGGLE_EDIT_STATE_OF_FIELD_OF_ARTICLE:
+	//   new_state[action.id][action.fieldName] = !new_state[action.id][action.fieldName];
+	//   return new_state
+	
+	// case RESET_ALL_EDIT_STATES_FOR_ARTICLE:
+	//   _.forOwn(new_state[action.locale][action.id], (value, fieldName) => {
+	//     // if (fieldName === 'article' || fieldName === 'title' || fieldName === 'teaser' || fieldName === 'body') {
+	//     new_state[action.locale][action.id][fieldName] = action.resetValue;
+	//     // }
+	//   })
+	//   return new_state
+	
+	// case DELETE_ARTICLE:
+	//   _.forOwn(new_state, (localeEditStatesArray, locale) => {
+	//     delete new_state[locale][action.id];
+	//   })
+	//   return new_state
 
 /***/ },
 /* 488 */
@@ -50647,6 +50773,8 @@
 	
 	var _ActionTypes = __webpack_require__(485);
 	
+	var _storeCreationHelpers = __webpack_require__(492);
+	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	function localizedMediaContainers() {
@@ -50659,6 +50787,9 @@
 	
 	    case _ActionTypes.DELETE_ARTICLE:
 	      return Object.assign({}, _.omit(state, action.mediaContainerIds));
+	
+	    case _ActionTypes.UPDATE_ARTICLE:
+	      return Object.assign({}, state, (0, _storeCreationHelpers.normalize)(action.mediaContainers));
 	
 	    default:
 	      return state;
@@ -50675,6 +50806,9 @@
 	
 	    case _ActionTypes.LOADED_ADDITIONAL_LOCALE_ARTICLES:
 	      return Object.assign({}, state, action.additionalStates.mediaContainers);
+	
+	    case _ActionTypes.UPDATE_ARTICLE:
+	      return Object.assign({}, state, _defineProperty({}, action.locale, localizedMediaContainers(state[action.locale], action)));
 	
 	    case _ActionTypes.ADD_NEW_ARTICLE:
 	    case _ActionTypes.DELETE_ARTICLE:
@@ -50695,12 +50829,115 @@
 
 	'use strict';
 	
+	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.normalize = normalize;
+	exports.createArticleStates = createArticleStates;
+	
+	var _reducersConstants = __webpack_require__(354);
+	
+	function createAncillaryStatesForArticles(articles, locale) {
+	  var initialWIPStates = {};
+	  var initialEditStates = {};
+	  var articlesNeedResizingStates = {};
+	  var articlesDOMProps = {};
+	
+	  _.forEach(articles, function (article) {
+	    var articleId = article.id;
+	    var _ref = [{}, { 'article': false }];
+	    initialWIPStates[articleId] = _ref[0];
+	    initialEditStates[articleId] = _ref[1];
+	    var _ref2 = [false, _reducersConstants.initialArticlesDOMPropsState];
+	    articlesNeedResizingStates[articleId] = _ref2[0];
+	    articlesDOMProps[articleId] = _ref2[1];
+	
+	    for (var fieldName in article) {
+	      if (fieldName !== 'id') {
+	        var _ref3 = [false, false];
+	        initialWIPStates[articleId][fieldName] = _ref3[0];
+	        initialEditStates[articleId][fieldName] = _ref3[1];
+	      }
+	    };
+	  });
+	
+	  return [initialWIPStates, initialEditStates, articlesNeedResizingStates, articlesDOMProps];
+	}
+	
+	function normalize(jsonFetchedAncillaryData) {
+	  return _.keyBy(jsonFetchedAncillaryData, 'id');
+	}
+	
+	function normalizeRoot(dataToNormalize) {
+	  var dataByKey = {};
+	  var dataIdArray = [];
+	
+	  _.forEach(dataToNormalize, function (value, key) {
+	    dataByKey[value.id] = value;
+	    dataIdArray.push(value.id);
+	  });
+	  return [dataByKey, dataIdArray];
+	}
+	
+	function createArticleStates(jsonFetchedArticlesAndEmbeddedData, locale) {
+	  var articles = jsonFetchedArticlesAndEmbeddedData.articles;
+	
+	  var _normalizeRoot = normalizeRoot(articles);
+	
+	  var _normalizeRoot2 = _slicedToArray(_normalizeRoot, 2);
+	
+	  var articlesByKey = _normalizeRoot2[0];
+	  var articlesIdArray = _normalizeRoot2[1];
+	
+	  var _createAncillaryState = createAncillaryStatesForArticles(articles, locale);
+	
+	  var _createAncillaryState2 = _slicedToArray(_createAncillaryState, 4);
+	
+	  var articlesWIPStatesOfFields = _createAncillaryState2[0];
+	  var articlesEditStates = _createAncillaryState2[1];
+	  var articlesNeedResizingStates = _createAncillaryState2[2];
+	  var articlesDOMProps = _createAncillaryState2[3];
+	
+	  var mediaContainers = normalize(jsonFetchedArticlesAndEmbeddedData.media_containers);
+	  var articlePictures = normalize(jsonFetchedArticlesAndEmbeddedData.article_pictures);
+	
+	  var articlesState = Object.assign({
+	    articles: {},
+	    articlesWIPStatesOfFields: {},
+	    articlesEditStates: {},
+	    articlesNeedResizingStates: {},
+	    articlesDOMProps: {},
+	    articlePictures: {},
+	    mediaContainers: {}
+	  });
+	
+	  articlesState.articles[locale] = articles;
+	  articlesState.articlesWIPStatesOfFields[locale] = articlesWIPStatesOfFields;
+	  articlesState.articlesEditStates[locale] = articlesEditStates;
+	  articlesState.articlesNeedResizingStates[locale] = articlesNeedResizingStates;
+	  articlesState.articlesDOMProps[locale] = articlesDOMProps;
+	  articlesState.mediaContainers[locale] = mediaContainers;
+	  articlesState.articlePictures[locale] = articlePictures;
+	
+	  return articlesState;
+	}
+
+/***/ },
+/* 493 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	exports.articlePictures = articlePictures;
 	
 	var _ActionTypes = __webpack_require__(485);
+	
+	var _storeCreationHelpers = __webpack_require__(492);
 	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
@@ -50726,12 +50963,12 @@
 	      });
 	
 	    case _ActionTypes.DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
-	      return Object.assign({}, state, {
+	      return {
 	        for_card: state.for_card,
 	        for_carousel: state.for_carousel,
 	        id: state.id,
 	        media_container_id: state.media_container_id
-	      });
+	      };
 	
 	    default:
 	      return state;
@@ -50758,6 +50995,9 @@
 	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
 	    case _ActionTypes.MARK_ARTICLE_PICTURE_FOR_DELETION:
 	      return Object.assign({}, _.omit(state, [action.articlePictureId]));
+	
+	    case _ActionTypes.UPDATE_ARTICLE:
+	      return Object.assign({}, state, (0, _storeCreationHelpers.normalize)(action.articlePictures));
 	
 	    default:
 	      return state;
@@ -50788,6 +51028,7 @@
 	    case _ActionTypes.DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
 	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
 	    case _ActionTypes.MARK_ARTICLE_PICTURE_FOR_DELETION:
+	    case _ActionTypes.UPDATE_ARTICLE:
 	      return Object.assign({}, state, _defineProperty({}, action.locale, localizedArticlePictures(state[action.locale], action)));
 	
 	    default:
@@ -50796,7 +51037,7 @@
 	}
 
 /***/ },
-/* 493 */
+/* 494 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50810,7 +51051,7 @@
 	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
-	function storedFiles() {
+	function byArticleId() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
 	
@@ -50827,35 +51068,20 @@
 	      return state;
 	  }
 	}
-
-/***/ },
-/* 494 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.articlePicturesMarkedForDeletionByArticleId = articlePicturesMarkedForDeletionByArticleId;
-	
-	var _ActionTypes = __webpack_require__(485);
-	
-	function articlePicturesMarkedForDeletionByArticleId() {
+	function storedFiles() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
 	
 	  switch (action.type) {
-	    case _ActionTypes.MARK_ARTICLE_PICTURE_FOR_DELETION:
-	      var newState = _extends({}, state);
-	      // if there is already an entry for this articleId in the markedForDeletion array, use it,
-	      // else create it with an empty array as default value
-	      newState[action.articleId] = newState[action.articleId] || [];
-	      // Push the articlePictureId to the array of articlePictures marked for deletion
-	      newState[action.articleId].push(action.articlePictureId);
-	      return newState;
+	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_NEW_ARTICLE_PICTURE:
+	    case _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE:
+	    case _ActionTypes.DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE:
+	    case _ActionTypes.DELETE_STORED_FILE_AND_NEWLY_CREATED_ARTICLE_PICTURE:
+	      return Object.assign({}, state, _defineProperty({}, action.articleId, byArticleId(state[action.articleId], action)));
+	
+	    case _ActionTypes.DELETE_ART_PICTURES_MARKED_FOR_DELETION_AND_CORRESPONDING_STORED_FILES:
+	      return Object.assign({}, _.omit(state, [action.id]));
 	
 	    default:
 	      return state;
@@ -50871,30 +51097,76 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.articlePicturesMarkedForDeletionByArticleId = articlePicturesMarkedForDeletionByArticleId;
+	
+	var _ActionTypes = __webpack_require__(485);
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	function articlePicturesMarkedForDeletionForArticle() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _ActionTypes.MARK_ARTICLE_PICTURE_FOR_DELETION:
+	      return [action.articlePictureId].concat(_toConsumableArray(state));
+	
+	    default:
+	      return state;
+	  }
+	}
+	
+	function articlePicturesMarkedForDeletionByArticleId() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _ActionTypes.MARK_ARTICLE_PICTURE_FOR_DELETION:
+	      return Object.assign({}, state, _defineProperty({}, action.articleId, articlePicturesMarkedForDeletionForArticle(state[action.articleId], action)));
+	
+	    case _ActionTypes.DELETE_ART_PICTURES_MARKED_FOR_DELETION_AND_CORRESPONDING_STORED_FILES:
+	      return Object.assign({}, _.omit(state, [action.id]));
+	
+	    default:
+	      return state;
+	  }
+	}
+
+/***/ },
+/* 496 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
 	var _redux = __webpack_require__(413);
 	
 	var _reactRedux = __webpack_require__(406);
 	
-	var _NewsIndexPage = __webpack_require__(496);
+	var _NewsIndexPage = __webpack_require__(497);
 	
-	var _articlesActions = __webpack_require__(508);
+	var _articlesActions = __webpack_require__(509);
 	
 	var ArticlesActions = _interopRequireWildcard(_articlesActions);
 	
-	var _articleFieldsActions = __webpack_require__(510);
+	var _articleFieldsActions = __webpack_require__(511);
 	
 	var ArticlesFieldsActions = _interopRequireWildcard(_articleFieldsActions);
 	
-	var _articlesSizingPositionningActions = __webpack_require__(509);
+	var _articlesSizingPositionningActions = __webpack_require__(510);
 	
 	var ArticlesSizingPositionningActions = _interopRequireWildcard(_articlesSizingPositionningActions);
 	
-	var _articlesVisibilityFilterActions = __webpack_require__(520);
+	var _articlesVisibilityFilterActions = __webpack_require__(521);
 	
 	var ArticlesVisibilityFilterActions = _interopRequireWildcard(_articlesVisibilityFilterActions);
 	
-	var _articlePicturesActions = __webpack_require__(521);
+	var _articlePicturesActions = __webpack_require__(520);
 	
 	var ArticlePicturesActions = _interopRequireWildcard(_articlePicturesActions);
 	
@@ -50907,6 +51179,7 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function mapStateToProps(state) {
+	  console.log("-----In App", state);
 	  return {
 	    routing: state.routing,
 	    isFetching: state.isFetching,
@@ -50937,7 +51210,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_NewsIndexPage.NewsIndexPage);
 
 /***/ },
-/* 496 */
+/* 497 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50951,9 +51224,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _nav_bar = __webpack_require__(497);
+	var _nav_bar = __webpack_require__(498);
 	
-	var _footer = __webpack_require__(507);
+	var _footer = __webpack_require__(508);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51062,7 +51335,7 @@
 	});
 
 /***/ },
-/* 497 */
+/* 498 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51076,9 +51349,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _nav_bar_admin_block = __webpack_require__(498);
+	var _nav_bar_admin_block = __webpack_require__(499);
 	
-	var _nav_bar_user_block = __webpack_require__(504);
+	var _nav_bar_user_block = __webpack_require__(505);
 	
 	var _nav_bar_user_block2 = _interopRequireDefault(_nav_bar_user_block);
 	
@@ -51128,7 +51401,7 @@
 	});
 
 /***/ },
-/* 498 */
+/* 499 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51142,9 +51415,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _edit_switch_button = __webpack_require__(499);
+	var _edit_switch_button = __webpack_require__(500);
 	
-	var _articles_status_visiblity_filter_switch = __webpack_require__(500);
+	var _articles_status_visiblity_filter_switch = __webpack_require__(501);
 	
 	var _articles_status_visiblity_filter_switch2 = _interopRequireDefault(_articles_status_visiblity_filter_switch);
 	
@@ -51185,7 +51458,7 @@
 	});
 
 /***/ },
-/* 499 */
+/* 500 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51244,7 +51517,7 @@
 	});
 
 /***/ },
-/* 500 */
+/* 501 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51259,7 +51532,7 @@
 	
 	var _reactIntl = __webpack_require__(365);
 	
-	var _generic_toolbars = __webpack_require__(501);
+	var _generic_toolbars = __webpack_require__(502);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51338,7 +51611,7 @@
 	exports.default = (0, _reactIntl.injectIntl)(ArticlesStatusVisibilityFilterSwitch);
 
 /***/ },
-/* 501 */
+/* 502 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51352,9 +51625,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _generic_buttons = __webpack_require__(502);
+	var _generic_buttons = __webpack_require__(503);
 	
-	var _generic_dropdown_menu = __webpack_require__(503);
+	var _generic_dropdown_menu = __webpack_require__(504);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51451,7 +51724,7 @@
 	});
 
 /***/ },
-/* 502 */
+/* 503 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51570,7 +51843,7 @@
 	});
 
 /***/ },
-/* 503 */
+/* 504 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51683,7 +51956,7 @@
 	});
 
 /***/ },
-/* 504 */
+/* 505 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51698,9 +51971,9 @@
 	
 	var _reactIntl = __webpack_require__(365);
 	
-	var _internationalized_link = __webpack_require__(505);
+	var _internationalized_link = __webpack_require__(506);
 	
-	var _site_wide_language_switcher = __webpack_require__(506);
+	var _site_wide_language_switcher = __webpack_require__(507);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51756,7 +52029,7 @@
 	exports.default = (0, _reactIntl.injectIntl)(NavBarUserBlock);
 
 /***/ },
-/* 505 */
+/* 506 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51799,7 +52072,7 @@
 	});
 
 /***/ },
-/* 506 */
+/* 507 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51869,7 +52142,7 @@
 	});
 
 /***/ },
-/* 507 */
+/* 508 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51883,7 +52156,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _site_wide_language_switcher = __webpack_require__(506);
+	var _site_wide_language_switcher = __webpack_require__(507);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51925,7 +52198,7 @@
 	});
 
 /***/ },
-/* 508 */
+/* 509 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51941,24 +52214,20 @@
 	
 	var _ActionTypes = __webpack_require__(485);
 	
-	var _articlesSizingPositionningActions = __webpack_require__(509);
+	var _articlesSizingPositionningActions = __webpack_require__(510);
 	
-	var _articleFieldsActions = __webpack_require__(510);
+	var _articleFieldsActions = __webpack_require__(511);
 	
-	var _storeCreationHelpers = __webpack_require__(519);
+	var _articlePicturesActions = __webpack_require__(520);
 	
-	var _articles = __webpack_require__(511);
+	var _storeCreationHelpers = __webpack_require__(492);
 	
-	// Import action creators from other actions creators modules
+	var _articles = __webpack_require__(512);
 	
-	__webpack_require__(513).polyfill();
-	
-	// Import API calls
-	// Import action constant
-	
-	__webpack_require__(517);
+	/* note the singular form of article (diff with fetchInitialArticles (plural) which is here below */
 	
 	// Loading initial articles
+	// Import action constant
 	function dispatchLoadInitialArticles(jsonFetchedArticlesAndEmbeddedData, locale) {
 	  var initialState = (0, _storeCreationHelpers.createArticleStates)(jsonFetchedArticlesAndEmbeddedData, locale);
 	  return {
@@ -51966,6 +52235,10 @@
 	    initialState: initialState
 	  };
 	}
+	
+	// Import API calls
+	
+	// Import action creators from other actions creators modules
 	
 	function fetchInitialArticles(locale) {
 	  return function (dispatch) {
@@ -52003,7 +52276,7 @@
 	
 	function updateArticle(articleWithPicturesAndMediaContainers, locale) {
 	  // data received from the API: {article: Object, media_containers: Array[4], article_pictures: Array[4]}
-	  // FIXME - The API should also return information on deleted mediaContainers, deleted articlePictures and storedFiles to delete
+	  // FIXME - The API should also return information on deleted mediaContainers
 	  return {
 	    type: _ActionTypes.UPDATE_ARTICLE,
 	    article: articleWithPicturesAndMediaContainers.article, /* article_picture_ids: Array[4], body: null, id: 74, posted_at: "2016-02-05T19:49:46.439Z", status: "draft", teaser: "Test", title: "Testing" */
@@ -52016,7 +52289,21 @@
 	function updateArticleAndRefresh(data, locale, fieldName) {
 	  return function (dispatch) {
 	    dispatch(updateArticle(data, locale));
+	    // If the field posted_at has changed, reorder the articles' array
+	    // It also has to run if the article fieldName has changed because if the user clicked on Save (the article)
+	    // the fieldName will be article and the posted_at field may have changed
+	    if (fieldName === "article" || fieldName === "posted_at") {
+	      dispatch(reOrderArticlesArray(locale));
+	    };
 	    dispatch((0, _articlesSizingPositionningActions.refreshArticlesSizingPositionning)());
+	  };
+	}
+	
+	function callBacksForHandleUpdateArticle(respData, id, fieldName, locale) {
+	  return function (dispatch) {
+	    dispatch(updateArticleAndRefresh(respData, locale, fieldName));
+	    dispatch((0, _articleFieldsActions.updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle)(id, fieldName, locale));
+	    dispatch((0, _articlePicturesActions.deleteArticlePicturesMarkedForDeletionAndCorrespondingStoredFilesForArticleWithId)(id));
 	  };
 	}
 	
@@ -52026,18 +52313,8 @@
 	  (ii) the user has clicked on the small save button aside an editable form field
 	  */
 	  return function (dispatch, getState) {
-	    // select the localized part of the articles state
-	    var articles = getState().articles[locale];
-	    // select the article to update by its id
-	    var data = _.find(articles, { 'id': id });
-	    // if the fieldname calling update is not article,
-	    // select only the data from this specific field to make a partial update
-	    // (see use case (ii) above)
-	    if (fieldName !== 'article') {
-	      data = _.pick(data, fieldName);
-	    }
 	    // call the API
-	    (0, _articles.fetchUpdateArticle)(dispatch, getState, data, id, fieldName, locale, [_articleFieldsActions.updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle, updateArticleAndRefresh]);
+	    (0, _articles.fetchUpdateArticle)(dispatch, getState, id, fieldName, locale, callBacksForHandleUpdateArticle);
 	  };
 	}
 	
@@ -52084,7 +52361,7 @@
 	}
 
 /***/ },
-/* 509 */
+/* 510 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52129,7 +52406,7 @@
 	}
 
 /***/ },
-/* 510 */
+/* 511 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52147,7 +52424,7 @@
 	
 	var _ActionTypes = __webpack_require__(485);
 	
-	var _articles = __webpack_require__(511);
+	var _articles = __webpack_require__(512);
 	
 	function changeFieldOfArticle(id, fieldName, fieldValue, locale) {
 	  return {
@@ -52258,7 +52535,7 @@
 	}
 
 /***/ },
-/* 511 */
+/* 512 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52272,10 +52549,10 @@
 	exports.fetchDeleteArticle = fetchDeleteArticle;
 	exports.fetchSubmitNewArticle = fetchSubmitNewArticle;
 	
-	var _articlesHelpers = __webpack_require__(512);
+	var _articlesHelpers = __webpack_require__(513);
 	
-	__webpack_require__(513).polyfill();
-	__webpack_require__(517);
+	__webpack_require__(514).polyfill();
+	__webpack_require__(518);
 	
 	function fetchArticles(dispatch, locale, callback) {
 	  fetch('/' + locale + '/articles').then(function (response) {
@@ -52288,7 +52565,7 @@
 	  });
 	}
 	
-	function fetchUpdateArticle(dispatch, getState, data, id, fieldName, locale, callbacks) {
+	function fetchUpdateArticle(dispatch, getState, id, fieldName, locale, callBacksForHandleUpdateArticle) {
 	  var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 	  var formData = (0, _articlesHelpers.preProcessorForFetchUpdateArticle)(getState, locale, id);
 	
@@ -52302,12 +52579,9 @@
 	    method: 'put',
 	    credentials: 'same-origin',
 	    headers: {
-	      // 'Accept': 'application/json', /* this line was required with a classical put (where the data sent is not a formData object) */
-	      // 'Content-Type': 'application/json', /* this line was required with a classical put (where the data sent is not a formData object) */
 	      'X-Requested-With': 'XMLHttpRequest',
 	      'X_CSRF_TOKEN': '' + csrfToken
 	    },
-	    // body: JSON.stringify({article: data}) /* this line was required with a classical put (where the data sent is not a formData object) */
 	    body: formData
 	  }).then(function (response) {
 	    if (response.status >= 400) {
@@ -52315,9 +52589,7 @@
 	    }
 	    return response.json();
 	  }).then(function (respData) {
-	    // The callbacks are updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle and updateArticleAndRefresh
-	    dispatch(callbacks[0](id, fieldName, locale));
-	    dispatch(callbacks[1](respData, locale, fieldName));
+	    dispatch(callBacksForHandleUpdateArticle(respData, id, fieldName, locale));
 	  });
 	}
 	
@@ -52397,7 +52669,7 @@
 	}
 
 /***/ },
-/* 512 */
+/* 513 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -52417,6 +52689,7 @@
 	  var selectedAncillaryItems = ancillaryItemIdsArray.map(function (ancillaryItemId) {
 	    return ancillaryItems[ancillaryItemId];
 	  });
+	  console.log(selectedAncillaryItems);
 	  return selectedAncillaryItems;
 	}
 	
@@ -52441,13 +52714,13 @@
 	        selectedMediaContainersIds.push(selectedArticlePicture.media_container_id);
 	      }
 	  });
-	
+	  console.log([selectedArticlePictures, selectedMediaContainersIds, selectedStoredFileIds]);
 	  return [selectedArticlePictures, selectedMediaContainersIds, selectedStoredFileIds];
 	}
 	
-	function getNewPictures(getState, data, newPicIdsArr) {
+	function getNewPictures(getState, data, newPicIdsArr, articleId) {
 	  // Get all the storedFiles from the store
-	  var newPictures = getState().storedFiles;
+	  var newPictures = getState().storedFiles[articleId];
 	  // Loop around the newPicsIdsArr (gathered from the articlePictures)
 	  // to fetch the sotreFiles which correspond to the current article
 	  _.forEach(newPicIdsArr, function (newPicId) {
@@ -52462,13 +52735,24 @@
 	  // Create the formData object and add the pictures to it
 	  var data = new FormData();
 	
+	  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	  // FIXME -- This chunk of code comes from the legacy handleUpdateArticle action creator.
+	  // It handled a specific use case: partial updates when the user clicks on the save icon on an editable field.
+	  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	  // if the fieldname calling update is not article,
+	  // select only the data from this specific field to make a partial update
+	  // (see use case (ii) above)
+	  // if (fieldName !== 'article') {
+	  //   data = _.pick(data, fieldName);
+	  // }
+	
 	  // Get all the data that can be stringified to append it as a JSON string to the formData object
 	  // Get the fields of the current article
 	  var objectToStringify = _.find(getState().articles[locale], { 'id': id });
+	
 	  /* Get
 	  1. the articlePictures relating to the article (objectToStringify.article_picture_ids is the array of articlePictures);
 	  2. the corresponding mediaContainers' ids (from the articlePictures)
-	  3. the corresponding storedFileIds' ids (from the articlePictures)
 	  */
 	
 	  var _getArticlePicturesFo = getArticlePicturesForFetchUpdateArticle(getState, locale, id, objectToStringify.article_picture_ids);
@@ -52478,10 +52762,11 @@
 	  var selectedArticlePictures = _getArticlePicturesFo2[0];
 	  var selectedMediaContainersIds = _getArticlePicturesFo2[1];
 	  var selectedStoredFileIds = _getArticlePicturesFo2[2];
+	
 	  /* Add to the objectToStringify:
 	  1. the articlePictures' data;
 	  2. the mediaContainers' data;
-	  3. the array of pictures_marked_for_deletion
+	  3. the list of article pictures marked for deletion
 	  */
 	
 	  objectToStringify = _extends({}, objectToStringify, {
@@ -52493,7 +52778,7 @@
 	  data.append('article', JSON.stringify(objectToStringify));
 	
 	  // Get the new pictures from the store and append them to the formData object
-	  data = getNewPictures(getState, data, selectedStoredFileIds);
+	  data = getNewPictures(getState, data, selectedStoredFileIds, id);
 	
 	  // Debugging: with firefox 44 only
 	  // for(var pair of data.entries()) {
@@ -52516,10 +52801,10 @@
 	}
 
 /***/ },
-/* 513 */
+/* 514 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
+	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
 	 * @overview es6-promise - a tiny implementation of Promises/A+.
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license
@@ -52650,7 +52935,7 @@
 	    function lib$es6$promise$asap$$attemptVertx() {
 	      try {
 	        var r = require;
-	        var vertx = __webpack_require__(515);
+	        var vertx = __webpack_require__(516);
 	        lib$es6$promise$asap$$vertxNext = vertx.runOnLoop || vertx.runOnContext;
 	        return lib$es6$promise$asap$$useVertxTimer();
 	      } catch(e) {
@@ -53475,7 +53760,7 @@
 	    };
 	
 	    /* global define:true module:true window: true */
-	    if ("function" === 'function' && __webpack_require__(516)['amd']) {
+	    if ("function" === 'function' && __webpack_require__(517)['amd']) {
 	      !(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return lib$es6$promise$umd$$ES6Promise; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof module !== 'undefined' && module['exports']) {
 	      module['exports'] = lib$es6$promise$umd$$ES6Promise;
@@ -53487,10 +53772,10 @@
 	}).call(this);
 	
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(194), (function() { return this; }()), __webpack_require__(514)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(194), (function() { return this; }()), __webpack_require__(515)(module)))
 
 /***/ },
-/* 514 */
+/* 515 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -53506,32 +53791,32 @@
 
 
 /***/ },
-/* 515 */
+/* 516 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 516 */
+/* 517 */
 /***/ function(module, exports) {
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ },
-/* 517 */
+/* 518 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// the whatwg-fetch polyfill installs the fetch() function
 	// on the global object (window or self)
 	//
 	// Return that as the export for use in Webpack, Browserify etc.
-	__webpack_require__(518);
+	__webpack_require__(519);
 	module.exports = self.fetch.bind(self);
 
 
 /***/ },
-/* 518 */
+/* 519 */
 /***/ function(module, exports) {
 
 	(function(self) {
@@ -53926,126 +54211,7 @@
 
 
 /***/ },
-/* 519 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.createArticleStates = createArticleStates;
-	
-	var _reducersConstants = __webpack_require__(354);
-	
-	function createAncillaryStatesForArticles(articles, locale) {
-	  var initialWIPStates = {};
-	  var initialEditStates = {};
-	  var articlesNeedResizingStates = {};
-	  var articlesDOMProps = {};
-	
-	  _.forEach(articles, function (article) {
-	    var articleId = article.id;
-	    var _ref = [{}, { 'article': false }];
-	    initialWIPStates[articleId] = _ref[0];
-	    initialEditStates[articleId] = _ref[1];
-	    var _ref2 = [false, _reducersConstants.initialArticlesDOMPropsState];
-	    articlesNeedResizingStates[articleId] = _ref2[0];
-	    articlesDOMProps[articleId] = _ref2[1];
-	
-	    for (var fieldName in article) {
-	      // FIXME article_picture_ids should have an edit state and a WIP state
-	      // but for the moment, let's keep them away from this logic
-	      if (fieldName != 'id' && fieldName != 'article_picture_ids') {
-	        var _ref3 = [false, false];
-	        initialWIPStates[articleId][fieldName] = _ref3[0];
-	        initialEditStates[articleId][fieldName] = _ref3[1];
-	      }
-	    };
-	  });
-	
-	  return [initialWIPStates, initialEditStates, articlesNeedResizingStates, articlesDOMProps];
-	}
-	
-	function normalize(jsonFetchedAncillaryData) {
-	  return _.keyBy(jsonFetchedAncillaryData, 'id');
-	}
-	
-	function normalizeRoot(dataToNormalize) {
-	  var dataByKey = {};
-	  var dataIdArray = [];
-	
-	  _.forEach(dataToNormalize, function (value, key) {
-	    dataByKey[value.id] = value;
-	    dataIdArray.push(value.id);
-	  });
-	  return [dataByKey, dataIdArray];
-	}
-	
-	function createArticleStates(jsonFetchedArticlesAndEmbeddedData, locale) {
-	  var articles = jsonFetchedArticlesAndEmbeddedData.articles;
-	
-	  var _normalizeRoot = normalizeRoot(articles);
-	
-	  var _normalizeRoot2 = _slicedToArray(_normalizeRoot, 2);
-	
-	  var articlesByKey = _normalizeRoot2[0];
-	  var articlesIdArray = _normalizeRoot2[1];
-	
-	  var _createAncillaryState = createAncillaryStatesForArticles(articles, locale);
-	
-	  var _createAncillaryState2 = _slicedToArray(_createAncillaryState, 4);
-	
-	  var articlesWIPStatesOfFields = _createAncillaryState2[0];
-	  var articlesEditStates = _createAncillaryState2[1];
-	  var articlesNeedResizingStates = _createAncillaryState2[2];
-	  var articlesDOMProps = _createAncillaryState2[3];
-	
-	  var mediaContainers = normalize(jsonFetchedArticlesAndEmbeddedData.media_containers);
-	  var articlePictures = normalize(jsonFetchedArticlesAndEmbeddedData.article_pictures);
-	
-	  var articlesState = Object.assign({
-	    articles: {},
-	    articlesWIPStatesOfFields: {},
-	    articlesEditStates: {},
-	    articlesNeedResizingStates: {},
-	    articlesDOMProps: {},
-	    articlePictures: {},
-	    mediaContainers: {}
-	  });
-	
-	  articlesState.articles[locale] = articles;
-	  articlesState.articlesWIPStatesOfFields[locale] = articlesWIPStatesOfFields;
-	  articlesState.articlesEditStates[locale] = articlesEditStates;
-	  articlesState.articlesNeedResizingStates[locale] = articlesNeedResizingStates;
-	  articlesState.articlesDOMProps[locale] = articlesDOMProps;
-	  articlesState.mediaContainers[locale] = mediaContainers;
-	  articlesState.articlePictures[locale] = articlePictures;
-	
-	  return articlesState;
-	}
-
-/***/ },
 /* 520 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.setArticlesVisibilityFilter = setArticlesVisibilityFilter;
-	
-	var _ActionTypes = __webpack_require__(485);
-	
-	function setArticlesVisibilityFilter(filter) {
-	  return { type: _ActionTypes.SET_ARTICLES_VISIBILITY_FILTER, filter: filter };
-	}
-
-/***/ },
-/* 521 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54056,16 +54222,17 @@
 	exports.createAdditionalArticlePicture = createAdditionalArticlePicture;
 	exports.changeArticlePicture = changeArticlePicture;
 	exports.deleteArticlePicture = deleteArticlePicture;
+	exports.deleteArticlePicturesMarkedForDeletionAndCorrespondingStoredFilesForArticleWithId = deleteArticlePicturesMarkedForDeletionAndCorrespondingStoredFilesForArticleWithId;
 	
 	var _ActionTypes = __webpack_require__(485);
 	
-	var _articleFieldsActions = __webpack_require__(510);
+	var _articleFieldsActions = __webpack_require__(511);
 	
-	function storedFileIdCreator(getState) {
+	function storedFileIdCreator(getState, articleId) {
 	  var storedFileId = 0;
 	  var storedFiles = getState().storedFiles;
-	  if (storedFiles) {
-	    _.forOwn(storedFiles, function (value, key) {
+	  if (storedFiles[articleId]) {
+	    _.forOwn(storedFiles[articleId], function (value, key) {
 	      var keyNum = parseInt(key);
 	      if (keyNum >= storedFileId) {
 	        storedFileId = keyNum + 1;
@@ -54097,14 +54264,16 @@
 	  */
 	  return function (dispatch, getState) {
 	
-	    var storedFileId = storedFileIdCreator(getState);
+	    var storedFileId = storedFileIdCreator(getState, articleId);
+	
 	    var articlePictureId = 0;
 	    _.forOwn(getState().articlePictures[locale], function (value, key) {
 	      var keyNum = parseInt(key);
 	      if (keyNum >= articlePictureId) {
-	        articlePictureId = parseInt(key) + 100;
+	        articlePictureId = parseInt(key) + 1;
 	      }
 	    });
+	    articlePictureId = articlePictureId + 100;
 	
 	    dispatch((0, _articleFieldsActions.changeWIPStateOfFieldOfArticle)(articleId, 'article_picture_ids', true, locale));
 	    dispatch(createNewFileObjectInStoreAndNewArticlePicture(articleId, articlePictureId, storedFileId, file, forCard, forCarousel, locale));
@@ -54201,16 +54370,17 @@
 	  3. switch off the WIP state of field of article on the article_picture_ids field
 	  */
 	  return function (dispatch, getState) {
-	    var storedFileId = storedFileIdCreator(getState);
+	    var storedFileId = storedFileIdCreator(getState, storedFileIdCreator);
 	
 	    dispatch((0, _articleFieldsActions.changeWIPStateOfFieldOfArticle)(articleId, 'article_picture_ids', true, locale));
-	    dispatch(createNewFileObjectInStoreAndAddFileIdToArticlePicture(articlePictureId, storedFileId, forCard, forCarousel, file, locale));
+	    dispatch(createNewFileObjectInStoreAndAddFileIdToArticlePicture(articleId, articlePictureId, storedFileId, forCard, forCarousel, file, locale));
 	  };
 	}
 	
-	function createNewFileObjectInStoreAndAddFileIdToArticlePicture(articlePictureId, storedFileId, forCard, forCarousel, file, locale) {
+	function createNewFileObjectInStoreAndAddFileIdToArticlePicture(articleId, articlePictureId, storedFileId, forCard, forCarousel, file, locale) {
 	  return {
 	    type: _ActionTypes.ADD_NEW_STORED_PICTURE_FILE_AND_AMEND_ARTICLE_PICTURE,
+	    articleId: articleId,
 	    articlePictureId: articlePictureId,
 	    storedFileId: storedFileId,
 	    file: file,
@@ -54228,6 +54398,7 @@
 	        In this case, we delete only the storedFile and reset the existing articlePicture to point to its
 	        old mediaContainer */
 	        type: _ActionTypes.DELETE_STORED_FILE_AND_RESET_EXISTING_ARTICLE_PICTURE,
+	        articleId: articleId,
 	        locale: locale,
 	        articlePictureId: articlePictureId,
 	        storedFileId: storedFileId
@@ -54261,6 +54432,30 @@
 	      mediaContainerId: mediaContainerId
 	    };
 	  }
+	}
+	
+	function deleteArticlePicturesMarkedForDeletionAndCorrespondingStoredFilesForArticleWithId(articleId) {
+	  return {
+	    type: _ActionTypes.DELETE_ART_PICTURES_MARKED_FOR_DELETION_AND_CORRESPONDING_STORED_FILES,
+	    articleId: articleId
+	  };
+	}
+
+/***/ },
+/* 521 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.setArticlesVisibilityFilter = setArticlesVisibilityFilter;
+	
+	var _ActionTypes = __webpack_require__(485);
+	
+	function setArticlesVisibilityFilter(filter) {
+	  return { type: _ActionTypes.SET_ARTICLES_VISIBILITY_FILTER, filter: filter };
 	}
 
 /***/ },
@@ -54703,8 +54898,7 @@
 	    // Site global props: passed in down from App/PageIndexView
 	    siteCurrentLocale: ownProps.siteCurrentLocale,
 	    siteEditMode: ownProps.siteEditMode,
-	    // Articles list specific props: passed in down from App/PageIndexView
-	    // Check whether it wouldn't be smarter to apply the reselect from here
+	
 	    articles: memoizedFilteredArticles.visibleArticles,
 	
 	    articlesWIPStatesOfFields: memoizedFilteredArticles.visibleArticlesWIPStatesOfFields,
@@ -54901,11 +55095,6 @@
 	  createCards: function createCards() {
 	    var _this2 = this;
 	
-	    // const articlesSortedByDate = this.props.articles.sort((a,b) => {
-	    //   const aDate = moment(a.posted_at);
-	    //   const bDate = moment(b.posted_at);
-	    //   return bDate - aDate;
-	    // });
 	    return this.props.articles.map(function (card, i) {
 	      // Iterate over the articles pictures and get the corresponding mediaContainer
 	      var cardMediaContainer = _this2.getMediaContainerForCard(card);
@@ -55762,7 +55951,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _internationalized_link = __webpack_require__(505);
+	var _internationalized_link = __webpack_require__(506);
 	
 	var _news_toolbar_switch = __webpack_require__(543);
 	
@@ -56144,7 +56333,7 @@
 	
 	var _reactIntl = __webpack_require__(365);
 	
-	var _generic_toolbars = __webpack_require__(501);
+	var _generic_toolbars = __webpack_require__(502);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -56350,7 +56539,7 @@
 	
 	var _news_forms_helpers = __webpack_require__(548);
 	
-	var _internationalized_link = __webpack_require__(505);
+	var _internationalized_link = __webpack_require__(506);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -56684,7 +56873,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _generic_buttons = __webpack_require__(502);
+	var _generic_buttons = __webpack_require__(503);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -56848,9 +57037,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _generic_dropdown_menu = __webpack_require__(503);
+	var _generic_dropdown_menu = __webpack_require__(504);
 	
-	var _generic_toolbars = __webpack_require__(501);
+	var _generic_toolbars = __webpack_require__(502);
 	
 	var _reactIntl = __webpack_require__(365);
 	
@@ -60782,7 +60971,7 @@
 	    return _moment;
 	
 	}));
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(514)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(515)(module)))
 
 /***/ },
 /* 556 */
@@ -73801,7 +73990,7 @@
 	  _createClass(Image, [{
 	    key: 'render',
 	    value: function render() {
-	      return _react2.default.createElement('img', { src: this.props.cardImageSource, alt: this.props.title, className: this.props.className });
+	      return _react2.default.createElement('img', { src: this.props.cardImageSource, alt: this.props.title, className: this.props.className, style: this.props.style });
 	    }
 	  }]);
 	
@@ -73813,7 +74002,8 @@
 	Image.propTypes = {
 	  cardImageSource: _react.PropTypes.string,
 	  title: _react.PropTypes.string,
-	  className: _react.PropTypes.string
+	  className: _react.PropTypes.string,
+	  style: _react.PropTypes.object
 	};
 
 /***/ },
@@ -73832,7 +74022,7 @@
 	
 	var _reactIntl = __webpack_require__(365);
 	
-	var _internationalized_link = __webpack_require__(505);
+	var _internationalized_link = __webpack_require__(506);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -73895,7 +74085,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _internationalized_link = __webpack_require__(505);
+	var _internationalized_link = __webpack_require__(506);
 	
 	var _news_form_toolbar_controller = __webpack_require__(703);
 	
@@ -74685,11 +74875,11 @@
 	
 	var _ActionTypes = __webpack_require__(485);
 	
-	var _articlesSizingPositionningActions = __webpack_require__(509);
+	var _articlesSizingPositionningActions = __webpack_require__(510);
 	
-	var _articlesVisibilityFilterActions = __webpack_require__(520);
+	var _articlesVisibilityFilterActions = __webpack_require__(521);
 	
-	var _articles = __webpack_require__(511);
+	var _articles = __webpack_require__(512);
 	
 	var _reduxSimpleRouter = __webpack_require__(479);
 	
@@ -74750,15 +74940,20 @@
 	
 	var _individual_news_component = __webpack_require__(711);
 	
+	var _index = __webpack_require__(523);
+	
 	function mapStateToProps(state, ownProps) {
 	  var currentArticle = _.find(state.articles['' + state.siteCurrentLocale], { 'id': parseInt(ownProps.params.id) });
+	
+	  var localeArticlePictures = (0, _index.localeArticlePicturesSelector)(state);
+	  var localeMediaContainers = (0, _index.localeMediaContainersSelector)(state);
+	
 	  var articlePictures = [];
 	  var mediaContainers = {};
 	
 	  if (currentArticle.article_picture_ids.length > 0) {
-	
 	    _.forEach(currentArticle.article_picture_ids, function (picture_id) {
-	      var currentPicture = ownProps.articlePictures[picture_id];
+	      var currentPicture = localeArticlePictures[picture_id];
 	      // If the selected articlePicture is for the carousel (i.e. for the single article view)
 	      if (currentPicture.for_carousel === "true") {
 	        // push it into the array of articlePictures that will be passed to the individual news component
@@ -74768,11 +74963,13 @@
 	        Priority is given to the storedFiles as they are work in progress */
 	        if (currentPicture.stored_file_id === undefined || null) {
 	          var mediaContainerId = currentPicture.media_container_id;
-	          mediaContainers[mediaContainerId] = ownProps.mediaContainers[mediaContainerId];
+	          mediaContainers[mediaContainerId] = localeMediaContainers[mediaContainerId];
 	        }
 	      }
 	    });
 	  }
+	
+	  var storedFiles = state.storedFiles && state.storedFiles[currentArticle.id] ? state.storedFiles[currentArticle.id] : state.storedFiles;
 	
 	  return {
 	    // Site global props: passed in down from App/PageIndexView
@@ -74786,7 +74983,7 @@
 	    // Ancillary items: from own props (because filtered by language in App/reselect)
 	    articlePictures: articlePictures,
 	    mediaContainers: mediaContainers,
-	    storedFiles: state.storedFiles
+	    storedFiles: storedFiles
 	  };
 	}
 	
@@ -75114,7 +75311,9 @@
 	      { key: 'onEditPlaceholder' },
 	      _react2.default.createElement(
 	        _slider_drop_zone_controller.SliderDropZoneController,
-	        { onDrop: this.props.createAdditionalArticlePicture.bind(null, "false", "true") },
+	        {
+	          onDrop: this.props.createAdditionalArticlePicture.bind(null, "false", "true")
+	        },
 	        _react2.default.createElement(_new_image_drop_zone_content2.default, null)
 	      )
 	    );
@@ -75195,13 +75394,20 @@
 	  },
 	
 	  render: function render() {
+	    var style = {
+	      marginLeft: "auto",
+	      marginRight: "auto",
+	      maxWidth: "100%"
+	    };
+	
 	    return _react2.default.createElement(
 	      'div',
 	      null,
 	      _react2.default.createElement(_image2.default, {
 	        cardImageSource: this.props.cardImageSource,
 	        title: this.props.imageTitle,
-	        className: 'img-for-news-card-' + this.props.sourceId + ' my-news-card-img my-card-img'
+	        className: 'img-for-news-slider-' + this.props.sourceId + ' my-news-slider-img my-card-img',
+	        style: style
 	      }),
 	      _react2.default.createElement('div', { className: 'news-picture-overlay' })
 	    );
@@ -75332,20 +75538,18 @@
 	      false: /* on siteEdtMode.mode === false*/{
 	        autoplay: true,
 	        autoplaySpeed: 2000,
-	        draggable: true,
-	        lazyLoad: true
+	        draggable: true
 	      },
 	      true: /* on siteEditMode.mode === true */{
 	        autoplay: false,
-	        draggable: false,
-	        lazyLoad: false
+	        draggable: false
 	      }
 	    };
 	    return settingsHash[this.props.siteEditMode.mode];
 	  },
 	  render: function render() {
 	    var commonSettings = {
-	      className: "my-slick-slider-top-level-component",
+	      className: 'my-slick-slider-top-level-component',
 	      dots: true,
 	      infinite: true,
 	      speed: 500,
@@ -75353,6 +75557,7 @@
 	      fade: true,
 	      pauseOnHover: true
 	    };
+	
 	    var settings = Object.assign({}, commonSettings, this.variableSettings());
 	
 	    return _react2.default.createElement(
@@ -92039,7 +92244,7 @@
 	  }
 	}.call(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(514)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(515)(module), (function() { return this; }())))
 
 /***/ }
 /******/ ]);

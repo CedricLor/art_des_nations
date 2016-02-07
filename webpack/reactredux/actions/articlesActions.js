@@ -6,17 +6,20 @@ import {
   LOADING_ADDITIONAL_LOCALE_ARTICLES,
   LOADED_ADDITIONAL_LOCALE_ARTICLES,
   REORDER_ARTICLES_ARRAY,
-  REORDER_ALL_THE_ARTICLES_ARRAYS
-   } from '../constants/ActionTypes'
+  REORDER_ALL_THE_ARTICLES_ARRAYS,
+} from '../constants/ActionTypes'
 
 // Import action creators from other actions creators modules
-import { refreshArticlesSizingPositionning } from './articlesSizingPositionningActions';
+import {refreshArticlesSizingPositionning} from './articlesSizingPositionningActions';
 import {
   updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle,
   successCallBackForRestoreText,
   resetAllEditAndWIPStatesForArticle,
-  changeArticleEditStateOfField } from './articleFieldsActions';
-import { createArticleStates } from '../stores/storeCreationHelpers'
+  changeArticleEditStateOfField,
+} from './articleFieldsActions';
+import {deleteArticlePicturesMarkedForDeletionAndCorrespondingStoredFilesForArticleWithId} from './articlePicturesActions';
+
+import {createArticleStates} from '../stores/storeCreationHelpers';
 
 // Import API calls
 import {
@@ -25,9 +28,6 @@ import {
   fetchInitialArticle,
   fetchDeleteArticle, /* note the singular form of article (diff with fetchInitialArticles (plural) which is here below */
   } from '../api/articles.js'
-
-require('es6-promise').polyfill();
-require('isomorphic-fetch');
 
 // Loading initial articles
 function dispatchLoadInitialArticles(jsonFetchedArticlesAndEmbeddedData, locale) {
@@ -74,7 +74,7 @@ function reOrderArticlesArray(locale) {
 
 function updateArticle(articleWithPicturesAndMediaContainers, locale) {
   // data received from the API: {article: Object, media_containers: Array[4], article_pictures: Array[4]}
-  // FIXME - The API should also return information on deleted mediaContainers, deleted articlePictures and storedFiles to delete
+  // FIXME - The API should also return information on deleted mediaContainers
   return {
     type: UPDATE_ARTICLE,
     article: articleWithPicturesAndMediaContainers.article, /* article_picture_ids: Array[4], body: null, id: 74, posted_at: "2016-02-05T19:49:46.439Z", status: "draft", teaser: "Test", title: "Testing" */
@@ -88,7 +88,19 @@ function updateArticle(articleWithPicturesAndMediaContainers, locale) {
 function updateArticleAndRefresh(data, locale, fieldName) {
   return function (dispatch) {
     dispatch(updateArticle(data, locale));
+    // If the field posted_at has changed, reorder the articles' array
+    // It also has to run if the article fieldName has changed because if the user clicked on Save (the article)
+    // the fieldName will be article and the posted_at field may have changed
+    if (fieldName === "article" || fieldName === "posted_at") { dispatch(reOrderArticlesArray(locale)) };
     dispatch(refreshArticlesSizingPositionning());
+  }
+}
+
+function callBacksForHandleUpdateArticle(respData, id, fieldName, locale) {
+  return function (dispatch) {
+    dispatch(updateArticleAndRefresh(respData, locale, fieldName));
+    dispatch(updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle(id, fieldName, locale));
+    dispatch(deleteArticlePicturesMarkedForDeletionAndCorrespondingStoredFilesForArticleWithId(id));
   }
 }
 
@@ -98,25 +110,14 @@ export function handleUpdateArticle(id, fieldName, locale) {
   (ii) the user has clicked on the small save button aside an editable form field
   */
   return function (dispatch, getState) {
-    // select the localized part of the articles state
-    const articles = getState().articles[locale]
-    // select the article to update by its id
-    let data = _.find( articles, { 'id': id } );
-    // if the fieldname calling update is not article,
-    // select only the data from this specific field to make a partial update
-    // (see use case (ii) above)
-    if (fieldName !== 'article') {
-      data = _.pick(data, fieldName);
-    }
     // call the API
     fetchUpdateArticle(
       dispatch,
       getState,
-      data,
       id,
       fieldName,
       locale,
-      [updateEditAndWIPStatesOnDBUpdateOfFieldOrArticle, updateArticleAndRefresh]
+      callBacksForHandleUpdateArticle
     );
   }
 }

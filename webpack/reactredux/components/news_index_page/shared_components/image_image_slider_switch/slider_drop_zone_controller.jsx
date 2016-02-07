@@ -3,13 +3,13 @@ import Dropzone from 'react-dropzone';
 
 export const SliderDropZoneController = React.createClass({
   propTypes: {
-    children: PropTypes.element.isRequired, /* This is an element generated in image_image_slider_switch */
-    onDrop:   PropTypes.func.isRequired,
-    destroyButton: PropTypes.element
+    children:       PropTypes.element.isRequired, /* This is an element generated in image_image_slider_switch */
+    onDrop:         PropTypes.func.isRequired,
+    destroyButton:  PropTypes.element
   },
 
   onDrop(files) {
-    this.props.onDrop(files[0])
+    this.props.onDrop(files[0]);
   },
 
   render() {

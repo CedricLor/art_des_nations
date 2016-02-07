@@ -20,7 +20,9 @@ export const ImageImageSliderSwitch = React.createClass({
 
   createArrayOfDropZones() {
     const newPictureDropZone =  <div key="onEditPlaceholder">
-                                  <SliderDropZoneController onDrop={this.props.createAdditionalArticlePicture.bind(null, "false", "true")}>
+                                  <SliderDropZoneController
+                                    onDrop=         {this.props.createAdditionalArticlePicture.bind(null, "false", "true")}
+                                  >
                                     <NewImageDropZoneContent/>
                                   </SliderDropZoneController>
                                 </div>
@@ -71,8 +73,8 @@ export const ImageImageSliderSwitch = React.createClass({
       (childrenImages.length === 1) ?
       childrenImages[0] :
       <NewsSliderController
-        siteEditMode= {this.props.siteEditMode}
-        children=     {childrenImages}
+        siteEditMode=   {this.props.siteEditMode}
+        children=       {childrenImages}
       />
     )
   }
