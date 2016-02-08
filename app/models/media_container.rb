@@ -1,8 +1,9 @@
 class MediaContainer < ActiveRecord::Base
-  has_many :article_pictures, inverse_of: :media_container
-  has_many :articles, through: :article_pictures
+  has_many :picturizings, inverse_of: :media_container
+  has_many :articles, through: :picturizings, :source => :picturizable,
+           :source_type => 'Article'
 
-  translates :title, :author, :source
+  translates :title, :author
 
   has_attached_file :media,
     styles: { medium: "300x300>", thumb: "100x100>" }

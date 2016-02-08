@@ -16,28 +16,6 @@ ActiveRecord::Schema.define(version: 20151215194108) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "article_picture_translations", force: :cascade do |t|
-    t.integer  "article_picture_id", null: false
-    t.string   "locale",             null: false
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.string   "for_card"
-    t.string   "for_carousel"
-  end
-
-  add_index "article_picture_translations", ["article_picture_id"], name: "index_article_picture_translations_on_article_picture_id", using: :btree
-  add_index "article_picture_translations", ["locale"], name: "index_article_picture_translations_on_locale", using: :btree
-
-  create_table "article_pictures", force: :cascade do |t|
-    t.integer "article_id"
-    t.integer "media_container_id"
-    t.string  "for_card"
-    t.string  "for_carousel"
-  end
-
-  add_index "article_pictures", ["article_id"], name: "index_article_pictures_on_article_id", using: :btree
-  add_index "article_pictures", ["media_container_id"], name: "index_article_pictures_on_media_container_id", using: :btree
-
   create_table "article_translations", force: :cascade do |t|
     t.integer  "article_id", null: false
     t.string   "locale",     null: false
@@ -69,7 +47,6 @@ ActiveRecord::Schema.define(version: 20151215194108) do
     t.datetime "updated_at",         null: false
     t.string   "title"
     t.string   "author"
-    t.string   "source"
   end
 
   add_index "media_container_translations", ["locale"], name: "index_media_container_translations_on_locale", using: :btree
@@ -78,7 +55,7 @@ ActiveRecord::Schema.define(version: 20151215194108) do
   create_table "media_containers", force: :cascade do |t|
     t.string   "title"
     t.string   "author"
-    t.string   "source"
+    t.string   "source_url"
     t.date     "creation_date"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
@@ -87,5 +64,28 @@ ActiveRecord::Schema.define(version: 20151215194108) do
     t.integer  "media_file_size"
     t.datetime "media_updated_at"
   end
+
+  create_table "picturizing_translations", force: :cascade do |t|
+    t.integer  "picturizing_id", null: false
+    t.string   "locale",         null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.string   "for_card"
+    t.string   "for_carousel"
+  end
+
+  add_index "picturizing_translations", ["locale"], name: "index_picturizing_translations_on_locale", using: :btree
+  add_index "picturizing_translations", ["picturizing_id"], name: "index_picturizing_translations_on_picturizing_id", using: :btree
+
+  create_table "picturizings", force: :cascade do |t|
+    t.integer "media_container_id",            null: false
+    t.integer "picturizable_id",               null: false
+    t.string  "picturizable_type",  limit: 20, null: false
+    t.string  "for_card",           limit: 8,  null: false
+    t.string  "for_carousel",       limit: 12, null: false
+  end
+
+  add_index "picturizings", ["media_container_id"], name: "index_picturizings_on_media_container_id", using: :btree
+  add_index "picturizings", ["picturizable_id", "picturizable_type"], name: "index_picturizings_on_picturizable_id_and_picturizable_type", using: :btree
 
 end
