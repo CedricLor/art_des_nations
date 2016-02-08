@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  devise_for :users
   scope '(:locale)', locale: /fr|en|ru|zh/ do
     get 'article/:id' => "pages#show"
 
@@ -13,7 +14,9 @@ Rails.application.routes.draw do
   # root 'welcome#index'
     get 'pages/show'
 
-    root to: "pages#show"
+    # FIXME -- This was the React default route
+    # root to: "pages#show"
+    root to: "home_pages#show"
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

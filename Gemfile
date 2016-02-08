@@ -75,3 +75,8 @@ gem 'paperclip'
 
 # Adding active model serializer to render nice json
 gem 'active_model_serializers'
+
+# Authentication with Devise
+gem 'devise'
+gem 'devise-i18n'
+gem 'devise-i18n-views'
