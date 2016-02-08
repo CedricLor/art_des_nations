@@ -55984,8 +55984,7 @@
 	    cardNumber: _react.PropTypes.number.isRequired,
 	    card: _react.PropTypes.object.isRequired,
 	    cardMediaContainer: _react.PropTypes.object,
-	    // cardImageSource:                   PropTypes.string,
-	    // cardImageTitle:                    PropTypes.string,
+	
 	    articlesPassedInUiProps: _react.PropTypes.object.isRequired,
 	
 	    articlesActions: _react.PropTypes.objectOf(_react.PropTypes.func.isRequired).isRequired,
@@ -56097,6 +56096,25 @@
 	      })
 	    );
 	  },
+	  renderImage: function renderImage() {
+	    return this.props.siteEditMode.mode === false && this.props.card.article_picture_ids.length === 0 ? null : _react2.default.createElement(ImageDropZoneSwitch, {
+	      siteEditMode: this.props.siteEditMode
+	      // Not here yet -- we need it!!!
+	      // articlePictures=                {this.props.articlePictures}
+	      , cardMediaContainer: this.props.cardMediaContainer
+	      // Not here -- we need something similar
+	      , storedFiles: this.props.storedFiles,
+	      sourceId: this.props.card.id
+	      // I do not think we need this one
+	      // createAdditionalArticlePicture= {this.createAdditionalArticlePicture}
+	      // Not here -- we need it !!!!
+	      // changeArticlePicture=           {this.changeArticlePicture}
+	      // Not here -- we need it !!!
+	      // deleteArticlePicture=           {this.deleteArticlePicture}
+	    });
+	  },
+	
+	  // This will be pushed down into the hierarchy
 	  imageLinkedToArticle: function imageLinkedToArticle() {
 	    var newsImage = _react2.default.createElement(
 	      'span',

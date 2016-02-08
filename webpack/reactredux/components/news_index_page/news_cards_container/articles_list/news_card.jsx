@@ -16,8 +16,7 @@ export const NewsCard = React.createClass({
     cardNumber:                        PropTypes.number.isRequired,
     card:                              PropTypes.object.isRequired,
     cardMediaContainer:                PropTypes.object,
-    // cardImageSource:                   PropTypes.string,
-    // cardImageTitle:                    PropTypes.string,
+
     articlesPassedInUiProps:           PropTypes.object.isRequired,
 
     articlesActions:                   PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
@@ -143,6 +142,28 @@ export const NewsCard = React.createClass({
     )
   },
 
+  renderImage() {
+    return (
+      (this.props.siteEditMode.mode === false && this.props.card.article_picture_ids.length === 0) ?
+      null :
+      <ImageDropZoneSwitch
+        siteEditMode=                   {this.props.siteEditMode}
+        // Not here yet -- we need it!!!
+        // articlePictures=                {this.props.articlePictures}
+        cardMediaContainer=             {this.props.cardMediaContainer}
+        // Not here -- we need something similar
+        storedFiles=                    {this.props.storedFiles}
+        sourceId=                       {this.props.card.id}
+        // I do not think we need this one
+        // createAdditionalArticlePicture= {this.createAdditionalArticlePicture}
+        // Not here -- we need it !!!!
+        // changeArticlePicture=           {this.changeArticlePicture}
+        // Not here -- we need it !!!
+        // deleteArticlePicture=           {this.deleteArticlePicture}
+      />
+    )
+  },
+  // This will be pushed down into the hierarchy
   imageLinkedToArticle() {
     const newsImage =
       <span>
