@@ -2,6 +2,10 @@ class MediaContainer < ActiveRecord::Base
   has_many :picturizings, inverse_of: :media_container
   has_many :articles, through: :picturizings, :source => :picturizable,
            :source_type => 'Article'
+  has_many :actions, through: :picturizings, :source => :picturizable,
+           :source_type => 'Action'
+  has_many :portraits, through: :picturizings, :source => :picturizable,
+           :source_type => 'Portrait'
 
   translates :title, :author
 
