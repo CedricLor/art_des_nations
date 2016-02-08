@@ -6,6 +6,10 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+User.create!(email: 'cedric.lor@gmail.com', password: '1234567890', password_confirmation: "1234567890")
+user = User.find_by_email('cedric.lor@gmail.com')
+user.admin = true
+user.save!
 
 statusOfArticles = ["draft", "published", "featured", "archived"]
 
@@ -19,7 +23,7 @@ def fakerForBody
 end
 
 20.times do
-  article = Article.create({
+  Article.create({
     title:     "Fr - #{Faker::Hipster.sentence(3, true, 4)}",
     teaser:    Faker::Hipster.paragraph(4),
     body:      fakerForBody,

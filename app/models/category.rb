@@ -1,7 +1,7 @@
 class Category < ActiveRecord::Base
   validates :name, presence: true
 
-  default_scope { order(name: :asc) }
+  # default_scope { order(name: :asc) }
 
   has_many :categorizings, inverse_of: :category
   has_many :articles, through: :categorizings, :source => :categorizable,

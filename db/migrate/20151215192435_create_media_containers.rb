@@ -1,8 +1,6 @@
 class CreateMediaContainers < ActiveRecord::Migration
   def up
     create_table :media_containers do |t|
-      t.string :title
-      t.string :author
       t.string :source_url
       t.date :creation_date
 

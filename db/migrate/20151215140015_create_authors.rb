@@ -1,7 +1,7 @@
 class CreateAuthors < ActiveRecord::Migration
   def up
     create_table :authors do |t|
-      t.string :full_name, :null => false
+      t.string :full_name, null: false
 
       t.timestamps null: false
     end

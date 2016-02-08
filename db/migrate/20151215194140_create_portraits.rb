@@ -1,14 +1,11 @@
 class CreatePortraits < ActiveRecord::Migration
   def up
     create_table :portraits do |t|
-      t.string :title, :null => false
-      t.text :body
-      t.text :teaser
-      t.string :status, :null => false
-
       t.timestamps null: false
     end
-    Portrait.create_translation_table! :title => :string, :body => :text, :teaser => :text, :status => :string
+    Portrait.create_translation_table! :title => {:type => :string, :null => false},
+      :body => :text, :teaser => :text,
+      :status => {:type => :string, :null => false}
   end
 
   def down

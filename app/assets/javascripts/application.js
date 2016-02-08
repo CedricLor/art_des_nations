@@ -15,3 +15,6 @@
 // require redux_bundle
 //= require bootstrap-sprockets
 //= require ckeditor/init
+
+// FIXME -- This is loaded in every pages of the site
+//= require active_admin.js.coffee

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  ActiveAdmin.routes(self)
   devise_for :users
   scope '(:locale)', locale: /fr|en|ru|zh/ do
     get 'article/:id' => "pages#show"

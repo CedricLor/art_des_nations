@@ -1,7 +1,6 @@
 class CreateHomePages < ActiveRecord::Migration
   def up
     create_table :home_pages do |t|
-      t.string :call_to_action
       t.string :call_to_action_url
       t.integer :article_id, :null => false
 
