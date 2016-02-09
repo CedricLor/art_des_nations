@@ -5,8 +5,11 @@ class Article < ActiveRecord::Base
   validates :status, presence: true
   validates :status, inclusion: { in: %w(draft published featured archived),
     message: "%{value} is not a valid status for an article. Choose between draft, published, featured or archived" }
+  validates :author_id, presence: true
 
   default_scope { order(posted_at: :desc) }
+
+  belongs_to :author, inverse_of: :article
 
   has_many :portraitizings, :as => :portraitizable, inverse_of: :article
   has_many :portraits, through: :portraitizings

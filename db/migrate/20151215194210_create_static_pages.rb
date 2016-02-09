@@ -7,7 +7,9 @@ class CreateStaticPages < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    StaticPage.create_translation_table! :title => :string, :body => :text, :teaser => :text
+    StaticPage.create_translation_table! :title => {type: :string, null: false},
+      :body => {type: :text, null: false, default: ""},
+      :teaser => {type: :text, null: false, default: ""}
   end
 
   def down

@@ -1,6 +1,7 @@
 class CreateArticles < ActiveRecord::Migration
   def up
     create_table :articles do |t|
+      t.integer :author_id, :null => false
       t.datetime :posted_at, :null => false
 
       t.timestamps null: false

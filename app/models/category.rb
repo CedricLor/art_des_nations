@@ -10,6 +10,7 @@ class Category < ActiveRecord::Base
            :source_type => 'Action'
 
   translates :name, :editorial, :fallbacks_for_empty_translations => true
+
 end
 
 # class CreateCategories < ActiveRecord::Migration

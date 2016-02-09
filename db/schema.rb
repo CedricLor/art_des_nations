@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20160208200059) do
   add_index "article_translations", ["locale"], name: "index_article_translations_on_locale", using: :btree
 
   create_table "articles", force: :cascade do |t|
+    t.integer  "author_id",  null: false
     t.datetime "posted_at",  null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -188,8 +189,6 @@ ActiveRecord::Schema.define(version: 20160208200059) do
   add_index "media_container_translations", ["media_container_id"], name: "index_media_container_translations_on_media_container_id", using: :btree
 
   create_table "media_containers", force: :cascade do |t|
-    t.string   "title"
-    t.string   "author"
     t.string   "source_url"
     t.date     "creation_date"
     t.datetime "created_at",         null: false

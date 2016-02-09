@@ -1,4 +1,7 @@
 class MediaContainer < ActiveRecord::Base
+
+  validates :media, presence: true
+
   has_many :picturizings, inverse_of: :media_container
   has_many :articles, through: :picturizings, :source => :picturizable,
            :source_type => 'Article'
