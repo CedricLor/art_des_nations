@@ -267,8 +267,7 @@ I18n.locale = :fr
 
 # 10. External linking
 
-selected_article_collection = external_link_ids - [HomePage.first.article_id]
-selected_article_collection.shuffle.each_slice(5).to_a[1].each do | el_id |
+external_link_ids.shuffle.each_slice(5).to_a[1].each do | el_id |
   ExternalLinking.create!(
     external_link_id: el_id,
     external_linkable_id: HomePage.first.id,
@@ -283,5 +282,63 @@ Country.all.each do | country |
       external_linkable_id: country.id,
       external_linkable_type: "Country"
     })
+  end
+end
+
+# 11. Portraits
+
+def create_portraits(statusOfArticles)
+  Portrait.create!({
+    title:       "Fr - #{Faker::Hipster.sentence(3, true, 4)}",
+    teaser:      Faker::Hipster.paragraph(4),
+    body:        fakerForBody,
+    status:      statusOfArticles.sample
+  })
+end
+
+10.times do
+  portrait = create_portraits(statusOfArticles)
+  3.times do
+    create_picturizing(portrait.id, media_container_ids.sample)
+  end
+  3.times do
+    create_article_linking(article_ids.sample, portrait.id)
+  end
+end
+
+I18n.locale = :en
+
+Portrait.all.each do | portrait |
+  portrait.update!(
+    title: "En - #{Faker::Hipster.sentence(3, true, 4)}",
+    teaser: Faker::Hipster.paragraph(4),
+    body:   fakerForBody,
+    status: statusOfArticles.sample
+  )
+end
+
+I18n.locale = :fr
+
+portrait_ids = Portrait.all.map {|action| action.id }
+
+# 12. Portraitizings
+
+def add_portrait_to_action_or_article(portrait_id, item_id, item_type)
+  Portraitizing.create!(
+    portrait_id: portrait_id,
+    portraitizable_id: item_id,
+    portraitizable_type: item_type
+  )
+end
+
+action_ids.each do |action_id|
+  portrait_ids.shuffle.each_slice(3).to_a[1].each do | portrait_id |
+    add_portrait_to_action_or_article(portrait_id, action_id, "Action")
+  end
+end
+
+article_ids.each do |article_id|
+  portrait_ids.shuffle.each_slice(3).to_a[1].each do | portrait_id |
+    add_portrait_to_action_or_article(portrait_id, article_id, "Article")
   end
 end
