@@ -1,0 +1,23 @@
+<nav id="main-nav">
+<div class="container-fluid">
+  <div class="container">
+    <div class="row" id="top-nav">
+      <div class="col-xs-12 col-sm-4" id="conteneur-logo">
+        <!-- FIXME -->
+        <%= link_to "ADN Art des Nations", root_path, id: "logo" %>
+      </div>
+      <div class="col-xs-6 col-sm-4 col-lg-6">
+        <ul class="list-inline">
+          <li><%= link_to "FR", '#', class: "active" %></li>
+          <li><%= link_to "EN", '#', class: "active" %></li>
+          <li><%= link_to "PY", '#', class: "active" %></li>
+          <li><%= link_to "中文", '#', class: "active" %></li>
+        </ul>
+      </div>
+      <div class="col-xs-6 col-sm-4 col-lg-2 text-right">
+        <a href="#" href="#wrapper" class="menu-toggle"><i class="fa fa-reorder"></i> Menu</a>
+      </div>
+    </div>
+  </div>
+</div>
+</nav>

@@ -1,5 +1,6 @@
 class Country < ActiveRecord::Base
   validates :name, presence: true
+  validates :title, presence: true
   validates :editorial, presence: true
 
   has_many :actions, inverse_of: :country, dependent: :destroy
@@ -7,7 +8,7 @@ class Country < ActiveRecord::Base
   has_many :external_linkings, :as => :external_linkable, inverse_of: :country
   has_many :external_links, through: :external_linkings
 
-  translates :name, :editorial, :fallbacks_for_empty_translations => true
+  translates :name, :title, :editorial, :fallbacks_for_empty_translations => true
 end
 
 

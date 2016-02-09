@@ -9,6 +9,7 @@ class CreateArticles < ActiveRecord::Migration
     Article.create_translation_table! :title => {:type => :string, :null => false},
       :body => :text,
       :teaser => :text,
+      :posted_from_location => :text,
       :status => {:type => :string, :null => false}
   end
 

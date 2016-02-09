@@ -1,12 +1,11 @@
 class CreateHomePages < ActiveRecord::Migration
   def up
     create_table :home_pages do |t|
-      t.string :call_to_action_url
       t.integer :article_id, :null => false
 
       t.timestamps null: false
     end
-    HomePage.create_translation_table! :call_to_action => :string
+    HomePage.create_translation_table! call_to_action: :text
   end
 
   def down

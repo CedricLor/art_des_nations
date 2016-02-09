@@ -2,6 +2,7 @@ class Article < ActiveRecord::Base
   validates :title, presence: true
   validates :teaser, presence: true
   validates :posted_at, presence: true
+  validates :posted_from_location, presence: true
   validates :status, presence: true
   validates :status, inclusion: { in: %w(draft published featured archived),
     message: "%{value} is not a valid status for an article. Choose between draft, published, featured or archived" }
@@ -30,5 +31,5 @@ class Article < ActiveRecord::Base
 
   has_one  :home_page, inverse_of: :article
 
-  translates :title, :body, :teaser, :status, :fallbacks_for_empty_translations => true
+  translates :title, :body, :teaser, :posted_from_location, :status, :fallbacks_for_empty_translations => true
 end

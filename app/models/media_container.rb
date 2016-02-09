@@ -10,7 +10,7 @@ class MediaContainer < ActiveRecord::Base
   has_many :portraits, through: :picturizings, :source => :picturizable,
            :source_type => 'Portrait'
 
-  translates :title, :author
+  translates :title
 
   has_attached_file :media,
     styles: { medium: "300x300>", thumb: "100x100>" }

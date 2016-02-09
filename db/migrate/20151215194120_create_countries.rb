@@ -4,7 +4,8 @@ class CreateCountries < ActiveRecord::Migration
       t.timestamps null: false
     end
     Country.create_translation_table! :name => {:type => :string, :null => false},
-      :editorial => {:type => :text, null: false}
+      :title => {:type => :string, :null => false, default: ''},
+      :editorial => {:type => :text, null: false, default: ''}
   end
 
   def down

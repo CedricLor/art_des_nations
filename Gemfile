@@ -83,3 +83,4 @@ gem 'devise-i18n-views'
 
 # Active admin
 gem 'activeadmin', github: 'activeadmin'
+

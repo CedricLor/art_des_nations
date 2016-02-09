@@ -1,112 +1,72 @@
 class ArticlesController < ApplicationController
-  def index
-    @feed = Feed.new(articles: Article.all)
-    # SIMPLE STACK WITH CURRENT REDUX STORE
-    render json: @feed.articles, each_serializer: ArticleSerializer
+  before_action :set_article, only: [:show, :edit, :update, :destroy]
 
-    # BLOATED STACK WITH FUTURE STORE
-    # b = ArticlesCustomSerializer.new(articles: @feed.articles).serialize_as_hash
-    # render json: b
-
-    # UNCOMMENT THE FOLLOWING THREE LINES
-    # a = ActiveModel::ArraySerializer.new(@feed.articles, each_serializer: ArticleSerializer).as_json
-    # b = {}
-    # a.each { |item| b[item['id']] = item.keep_if{|key, value| key != "id"}}
-    # render json: b.as_json
-
-    # @articles = Article.order(created_at: :desc).limit(20)
-    # render json: @articles, root: false, each_serializer: ArticleSerializer
-  end
-
+  # GET /articles/1
+  # GET /articles/1.json
   def show
-    # Used by Rails only
-    @article = Article.find(params[:id])
-    render json: @article, serializer: ArticleSerializer
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @article }
+    end
   end
 
+  # GET /articles/new
   def new
-    @article_form = ArticleCreationForm.new
+    @article = Article.new
   end
 
-  def create
-    params.key?('media_file') ?
-    create_from_react :
-    @article_form = ArticleCreationForm.new(
-      article_creation_params(:article_creation_form)
-    )
-
-    if @article_form.save
-      render json: @article_form.article, serializer: ArticleSerializer
-    else
-      # FIXME -- @article is not defined
-      render json: @article.errors, status: :unprocessable_entity
-    end
-  end
-
+  # GET /articles/1/edit
   def edit
-    # Used by Rails only
-    @article = Article.find(params[:id])
   end
 
-  def update
-    prepare_params_for_update
+  # POST /articles
+  # POST /articles.json
+  def create
+    @article = Article.new(article_params)
 
-    @article_update_form = ArticleUpdateForm.new(params[:article])
-
-    # @article = Article.find(params[:id])
-    if @article_update_form.update
-      render json: Article.find(params[:id]), serializer: ArticleSerializer
-    else
-      # FIXME -- @article is not defined
-      render json: @article.errors, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    @ancillaryItemsToDestroy = ArticleDestroy.new(article_id: params[:id]).destroy
-    render json: @ancillaryItemsToDestroy
-    # head :no_content
-  end
-
-  private
-
-  def article_creation_params(required_root_param)
-    params.require(required_root_param).permit(
-      :title,
-      :teaser,
-      :posted_at,
-      :status,
-      :media_file
-    )
-  end
-
-  def article_params
-    params.require(:article).permit(
-      :title,
-      :body,
-      :teaser,
-      :posted_at,
-      :status
-    )
-  end
-
-  def create_from_react
-    params[:article_form] = JSON.parse(params[:article_form])
-    params[:article_form]['media_file'] = params[:media_file]
-    @article_form = ArticleCreationForm.new(
-      article_creation_params(:article_form)
-    )
-  end
-
-  def prepare_params_for_update
-    params[:article] = JSON.parse(params[:article])
-    params[:article]['media_files'] = []
-    params.each do |key, value|
-      if key.include?('media_file_')
-        params[:article][:media_files] << {"#{key.match(/\d/)[0]}" => value}
-        params.delete(key)
+    respond_to do |format|
+      if @article.save
+        format.html { redirect_to @article, notice: 'Article was successfully created.' }
+        format.json { render json: @article, status: :created }
+      else
+        format.html { render action: 'new' }
+        format.json { render json: @article.errors, status: :unprocessable_entity }
       end
     end
   end
-end
 
+  # PATCH/PUT /articles/1
+  # PATCH/PUT /articles/1.json
+  def update
+    respond_to do |format|
+      if @article.update(article_params)
+        format.html { redirect_to @article, notice: 'Article was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @article.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /articles/1
+  # DELETE /articles/1.json
+  def destroy
+    @article.destroy
+    respond_to do |format|
+      format.html { redirect_to articles_url }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_article
+      @article = Article.find(params[:id])
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def article_params
+      params[:article]
+    end
+end

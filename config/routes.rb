@@ -3,20 +3,26 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   devise_for :users
   scope '(:locale)', locale: /fr|en|ru|zh/ do
-    get 'article/:id' => "pages#show"
+    # FIXME -- This was for React
+    # get 'article/:id' => "pages#show"
 
     resources :articles
     resources :media_containers
 
+    resources :countries, only: [:show, :edit, :update]
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
+    # FIXME -- This was for React
+    # get 'pages/show'
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
-    get 'pages/show'
 
     # FIXME -- This was the React default route
     # root to: "pages#show"
+
+    get 'home_pages/:id' => 'home_pages#show'
     root to: "home_pages#show"
 
   # Example of regular route:
@@ -69,6 +75,7 @@ Rails.application.routes.draw do
   #   end
 
   # Redirect to the main articles React page when calling the wrong URL
+  # Redirect to the home page when calling the wrong URL
   # get '*path' => redirect('/')
 
   end

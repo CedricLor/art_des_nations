@@ -63,14 +63,15 @@ ActiveRecord::Schema.define(version: 20160208200059) do
   add_index "article_linkings", ["article_linkable_id", "article_linkable_type"], name: "index_article_linkings_on_linkable_id_and_type", using: :btree
 
   create_table "article_translations", force: :cascade do |t|
-    t.integer  "article_id", null: false
-    t.string   "locale",     null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string   "title",      null: false
+    t.integer  "article_id",           null: false
+    t.string   "locale",               null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.string   "title",                null: false
     t.text     "body"
     t.text     "teaser"
-    t.string   "status",     null: false
+    t.text     "posted_from_location"
+    t.string   "status",               null: false
   end
 
   add_index "article_translations", ["article_id"], name: "index_article_translations_on_article_id", using: :btree
@@ -121,12 +122,13 @@ ActiveRecord::Schema.define(version: 20160208200059) do
   end
 
   create_table "country_translations", force: :cascade do |t|
-    t.integer  "country_id", null: false
-    t.string   "locale",     null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string   "name",       null: false
-    t.text     "editorial",  null: false
+    t.integer  "country_id",              null: false
+    t.string   "locale",                  null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "name",                    null: false
+    t.string   "title",      default: "", null: false
+    t.text     "editorial",  default: "", null: false
   end
 
   add_index "country_translations", ["country_id"], name: "index_country_translations_on_country_id", using: :btree
@@ -163,36 +165,35 @@ ActiveRecord::Schema.define(version: 20160208200059) do
     t.string   "locale",         null: false
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
-    t.string   "call_to_action"
+    t.text     "call_to_action"
   end
 
   add_index "home_page_translations", ["home_page_id"], name: "index_home_page_translations_on_home_page_id", using: :btree
   add_index "home_page_translations", ["locale"], name: "index_home_page_translations_on_locale", using: :btree
 
   create_table "home_pages", force: :cascade do |t|
-    t.string   "call_to_action_url"
-    t.integer  "article_id",         null: false
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.integer  "article_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "media_container_translations", force: :cascade do |t|
-    t.integer  "media_container_id", null: false
-    t.string   "locale",             null: false
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.string   "title"
-    t.string   "author"
+    t.integer  "media_container_id",              null: false
+    t.string   "locale",                          null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "title",              default: "", null: false
   end
 
   add_index "media_container_translations", ["locale"], name: "index_media_container_translations_on_locale", using: :btree
   add_index "media_container_translations", ["media_container_id"], name: "index_media_container_translations_on_media_container_id", using: :btree
 
   create_table "media_containers", force: :cascade do |t|
-    t.string   "source_url"
+    t.string   "source_url",         default: "", null: false
     t.date     "creation_date"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.string   "author",             default: "", null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.string   "media_file_name"
     t.string   "media_content_type"
     t.integer  "media_file_size"
@@ -249,13 +250,13 @@ ActiveRecord::Schema.define(version: 20160208200059) do
   end
 
   create_table "static_page_translations", force: :cascade do |t|
-    t.integer  "static_page_id", null: false
-    t.string   "locale",         null: false
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.string   "title"
-    t.text     "body"
-    t.text     "teaser"
+    t.integer  "static_page_id",              null: false
+    t.string   "locale",                      null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.string   "title",                       null: false
+    t.text     "body",           default: "", null: false
+    t.text     "teaser",         default: "", null: false
   end
 
   add_index "static_page_translations", ["locale"], name: "index_static_page_translations_on_locale", using: :btree

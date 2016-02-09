@@ -1,0 +1,115 @@
+<% content_for :body_class, "page-action" %>
+
+<div class="container">
+  <div class="contenu">
+
+
+    <div class="row">
+      <div class="col-xs-12">
+        <!-- title -->
+        <h1>En Chine</h1>
+      </div>
+    </div>
+
+    <%# <?php //include('inc/galerie-photos.inc.php'); ?> %>
+
+
+
+    <div class="row contenu-principal">
+
+      <!-- editorial -->
+      <!-- FIXME - @country.editorial -->
+      <div class="col-xs-12 col-sm-7">
+        <p>Autres  codes, autre histoire. En Chine, l’important, c’est l’<strong>écrit</strong>.
+        L’écrit c’est ce qui reste. Le premier voyage sera donc celui d’écrivains
+        français au Fujian, à Quanzhou, au Liyuan. Le regard qu’ils poseront sur
+        ce théâtre et cette Chine du Sud, le récit qu’ils en rapporteront seront
+        sans doute plus qu’une invitation au voyage, un chemin de connaissance.</p>
+
+         <p>Écrire, traduire, faire voyager les œuvres d’une mer à l’autre.
+         Brecht, Beckett, Pirandello, Tchekhov.... Pourquoi pas  Cao Yu, Lao She ?</p>
+
+         <p>Un voyage d’écrivains, cinq récits au fil inconstant des jours que nous
+         publierons chez un éditeur de France et, espérons, de Chine.
+         On peut flâner à Quanzhou, même si la ville n’a rien de touristique.
+         Son histoire en revanche est celle du port de la route maritime de la soie
+         où cohabitaient il y a mille ans toutes les religions d’est et d’ouest.
+         Et quelques unes encore.</p>
+
+         <p>Le théâtre en Chine c’est l’acteur, celui qui inspira Brecht, celui
+         d’<em>Adieu ma Concubine</em>. Quelle rencontre possible entre l’acteur
+         chinois et son alter ego français. Le théâtre chinois est un théâtre
+         d’alphabets : de gestes, de pas, de regards, de mains, de couleurs, de voix.
+         Toutes choses qui existent aussi dans notre tradition mais qui ne sont pas
+         vraiment enseignées, ou différemment.</p>
+
+        <p>Comme la langue qui s’approprie des mots, le théâtre, au fil des siècles,
+        a bu l’eau des fleuves lointains. Les comédiens italiens du 17<sup>e</sup> et Molière,
+        Lee Strasberg enseigne à l’Actor Studio la méthode Stanislavski.
+        Brecht développe sa théorie de la distanciation de l’acteur après avoir vu l’acteur
+        de Pékin Mei Lang Fang.</p>
+
+        <p>« L’échange » ne se conclut pas uniquement par l’exportation des talents
+        et savoirs faire. Donner et recevoir : transmettre et  connaître.</p>
+
+        <p>Un travail réunissant chinois et français ? Mettre en scène des acteurs chinois ?
+        Entreprise pleine de risques mais sans doute possible. Cela nécessite un langage commun,
+        et, mis à part le théâtre « parlé » (huaju), les théâtres chinois et d’Europe sont aux antipodes.</p>
+
+        <p>Il faut éclaircir les notions de jeu, de technique d’acteur, de mise en scène,
+        de dramaturgie ; savoir comment le théâtre a évolué et quelle place il a dans la société
+        d’aujourd’hui ; quel langage nouveau il s’est donné pour fixer les codes avec un public
+        qui les a perdus ; partager les compétences, la lumière, le son ne sont pas que des
+        techniques, elles disent comment le théâtre a traversé le temps comme la scénographie,
+        la machinerie. Et la place qu’occupe la musique dans le théâtre opéra chinois,
+        dans le théâtre français.</p>
+
+        <p>Notre  base en Chine est au  théâtre Liyuan. De là, nous allons rayonner sur
+        les provinces du Sud, et  Shanghai, Nanjing, Canton, Hangzhou, Fuzhou.
+        Puis nous irons à Pékin.</p>
+      </div>
+
+      <div class="col-xs-12 col-sm-5">
+
+        <!-- action list -->
+        <!-- FIXME - Convert into a partial, query the actions for country, limit 3 ? -->
+        <div id="recommandations">
+            <div class="recommandation">
+                <!-- FIXME - Convert into link_to -->
+                <a href="/article.php">
+                    <!-- FIXME - Convert into rails/paperclip image_tags -->
+                    <img src="/img/defaut-horiz-thin.png" alt="">
+                    <!-- FIXME - action.title -->
+                    <h3>ADN en Chine - Avril</h3>
+                </a>
+            </div>
+
+            <div class="recommandation">
+
+                <a href="/article.php">
+                    <img src="/img/defaut-horiz-thin.png" alt="">
+                    <h3>Une autre action la voici</h3>
+                </a>
+            </div>
+
+            <div class="recommandation">
+                <a href="/article.php">
+                    <img src="/img/defaut-horiz-thin.png" alt="">
+                    <h3>Encore une autre action que voilà</h3>
+                </a>
+            </div>
+        </div>
+
+        <!-- external links -->
+        <!-- FIXME - Convert into a partial, query the external_links for country -->
+        <h2>Liens</h2>
+        <ul class="">
+          <li><a href="#">Un lien ici qui peut intéresser</a></li>
+          <li><a href="#">Un autre lien que voilà</a></li>
+          <li><a href="#">Encore ici un autre lien</a></li>
+          <li><a href="#">Et un dernier lien ici</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

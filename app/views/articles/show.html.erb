@@ -1,0 +1,112 @@
+<%# content_for(:title, raw("#{@article.title}")) %>
+<% content_for :body_class, "page-article" %>
+
+
+<div class="container">
+  <div class="contenu">
+
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
+        <!-- FIXME = @article.title -->
+        <h1>ADN en Chine - Avril</h1>
+        <!-- FIXME = @article.teaser -->
+        <h2 class="resume">En avril, nous rendrons visite à des comédiens qui vivent loin d’où nous vivons&nbsp;: en Chine, dans la province du Fujian, dans la ville de Quanzhou.</h2>
+      </div>
+    </div>
+
+    <%= render 'articles/partials/galerie_photos' %>
+
+
+    <div class="row contenu-principal" id="container-w-bg">
+      <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
+        <!-- FIXME = @article.body -->
+        <p>Six comédiens, tous au <abbr title="Je ne sais pas">JTN</abbr> en 2016, Élissa Alloula, Pauline Belle,
+        Zoé Fauconnet, Grégoire Lagrange, Guillaume Pottier, Loïc Renard, trois metteurs en scène,
+        <a href="/bio.php">Jean René Lemoine</a>, <a href="/bio.php">David Lescot</a>, <a href="/bio.php">Patrick Sommier</a>, deux traducteurs, Josh Stenberg et Pascale Wei Guinot,
+        un preneur d’images, <a href="/bio.php">Lazare Boghossian</a>, vivront deux semaines durant dans un des plus beaux théâtres
+        de Chine, le Liyuan, un théâtre habité par une troupe et une école étonnantes.</p>
+
+        <p>C’est dans ce théâtre que nous finirons de répéter et représenterons deux scènes du répertoire
+        de ce même Liyuan devant les comédiens qui ont créé les rôles et bien sûr devant le public savant et
+        populaire  de cette petite ville du sud de la Chine. Deux scènes très fortes sur le thème du désir,
+        traité sur le mode de la comédie dans l’une et sur le mode tragique dans l’autre et tirées
+        de pièces écrites dans les Années 90 par le dramaturge Wang Renjié. Deux scènes où ce sont les rôles
+        féminins  qui sont aux commandes. L’une s’appelle <em>la veuve et le lettré</em>, l’autre <em>une femme chaste</em>.</p>
+
+        <div class="conteneur-image text-center">
+          <img src="/contenu/chine-personnes.jpg" alt="">
+          <p class="legende">Une légende ici</p>
+        </div>
+
+        <p>Chaque metteur en scène adaptera les deux textes. Opération complexe s’il en est de passer
+        dans une autre langue par d’autres codes où personnages, situations, règles, lois du théâtre,
+        s’ils ne sont pas toujours aux antipodes ne sont pas toujours transposables.</p>
+
+        <p>Comment interprète-t-on le désir, la folie, le désespoir, le plaisir, la duperie en Europe et en Chine ?
+        Même si l’art du Liyuan nous est infiniment plus proche que ne peut l’être l’opéra de Pékin par exemple,
+        il y a tout de même onze mille kilomètres entre nous, une langue, une histoire, une culture, un théâtre.</p>
+
+        <p>À propos du Liyuan, les codes, la gestuelle, le chant, l’interprétation sont beaucoup moins formels
+        que dans les autres genres d’opéra chinois. Car, et oui, c’est aussi une forme d’opéra où la musique
+        est très présente, ce dont il faudra bien tenir compte dans nos adaptations.</p>
+
+        <blockquote>
+          <p>L’étrange sonorité de notre langue, la grâce ou la maladresse
+        de nos corps, ce que disent le regard et la main, notre façon d’être silencieux, tout cela fonde
+        un récit parallèle...</p>
+        </blockquote>
+
+        <p>Au Liyuan, les répétitions des trois équipes seront ouvertes aux élèves et aux comédiens de la troupe.
+        C’est même un des buts de l’opération. Les comédiens français pourront suivre les entraînements
+        à la gestuelle chinoise, et nous nous nous dirons chaque jour à l’heure profane du thé
+        ce que représente pour chacun de nous le théâtre, comment est le métier et la vie du théâtre. </p>
+
+        <p>Il n’est nullement question d’aller chercher le Graal théâtral à Quanzhou, contrairement à une idée
+        largement répandue aujourd’hui, nos différences sont précieuses. C’est d’elles que nous apprendrons
+        un peu de l’autre et sans doute aussi un peu de nous-mêmes, justement parce que l’autre n’emprunte pas
+        les mêmes chemins de la création théâtrale, n’a pas les mêmes savoirs-faire.</p>
+
+        <p>Le théâtre nous montre tels que nous sommes. Même si ce que l’acteur exprime sur scène est une fiction,
+        l’art et la manière avec lequel il transmet son récit le montrera tel qu'il est, parmi les siens.
+        Le théâtre est une identité, un moi profond. </p>
+
+        <div class='embed-container'><iframe src='https://player.vimeo.com/video/61422350' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>
+
+        <p>Les gestes et les paroles, l’intonation et l’expression du visage, l’ordre et la construction du récit,
+        en disent souvent plus que le discours lui-même. Le théâtre montre comment nous exprimons la joie et la peine,
+        la passion et la haine, l’amour et la mort. L’étrange sonorité de notre langue, la grâce ou la maladresse
+        de nos corps, ce que disent le regard et la main, notre façon d’être silencieux, tout cela fonde
+        un récit parallèle à celui qui passe par les mots.</p>
+
+        <p>Le 15 avril, nous prendrons le chemin du retour, riches d’un savoir nouveau et débarrassé de cette
+        teigne qu’on appelle l’exotisme qui n’est rien d'autre que l’incapacité de voir, d’entendre, de sentir,
+        de comprendre tout ce qui n’est pas nous-même. Un peu du bonheur du théâtre habitera désormais
+        nos cœurs par la grâce du Liyuan. </p>
+
+
+        <hr>
+
+
+        <footer>
+
+          <div class="row">
+            <div class="col-xs-12 col-sm-6">
+              <!-- FIXME @article.author -->
+              <cite>Patrick Sommier</cite>
+            </div>
+            <div class="col-xs-12 col-sm-6 text-right">
+              <!-- FIXME @article.posted_at -->
+              <!-- FIXME @article.posted_from_location -->
+              <p class="meta">Publié <span class="date-publication">le 5 janvier 2015</span>, à <span class="lieu-publication">Paris</span></p>
+            </div>
+          </div>
+
+        </footer>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<%= render 'articles/partials/recommandations' %>

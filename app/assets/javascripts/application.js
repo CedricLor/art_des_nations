@@ -15,6 +15,9 @@
 // require redux_bundle
 //= require bootstrap-sprockets
 //= require ckeditor/init
+//= require plugins/jquery.flexslider.js
+//= require plugins/custom
+//= require plugins/ie_10_viewport_hack
 
 // FIXME -- This is loaded in every pages of the site
 //= require active_admin.js.coffee

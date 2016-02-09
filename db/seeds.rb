@@ -91,7 +91,8 @@ def create_article(author_ids, statusOfArticles)
     teaser:    Faker::Hipster.paragraph(4),
     body:      fakerForBody,
     status:    statusOfArticles.sample,
-    posted_at: Faker::Date.backward(rand(5..30))
+    posted_at: Faker::Date.backward(rand(5..30)),
+    posted_from_location: "Paris"
   })
 end
 
@@ -125,18 +126,18 @@ end
 
 article_ids = Article.all.map { |art| art.id }
 
-def create_article_linking(article_id, article_linkable_id)
+def create_article_linking(article_id, article_linkable_id, article_linkable_type)
   ArticleLinking.create!(
     article_id: article_id,
     article_linkable_id: article_linkable_id,
-    article_linkable_type: 'Article'
+    article_linkable_type: article_linkable_type
   )
 end
 
 def create_article_linkings(article_id, article_ids)
   article_ids_except_current_art_id = article_ids - [ article_id ]
   3.times do
-    create_article_linking(article_id, article_ids_except_current_art_id.sample)
+    create_article_linking(article_id, article_ids_except_current_art_id.sample, "Article")
   end
 end
 
@@ -160,11 +161,13 @@ end
 
 Country.create!(
   name: "Russie",
+  title: "En Russie",
   editorial: fakerForBody
 )
 
 Country.create!(
   name: "Chine",
+  title: "En Chine",
   editorial: fakerForBody
 )
 
@@ -172,11 +175,13 @@ I18n.locale = :en
 
 Country.first.update!(
   name: "Russia",
+  title: "In Russia",
   editorial: fakerForBody
 )
 
 Country.first.update!(
   name: "China",
+  title: "In China",
   editorial: fakerForBody
 )
 
@@ -205,7 +210,7 @@ end
     create_categorizing(action.id, category_ids.sample)
   end
   3.times do
-    create_article_linking(article_ids.sample, action.id)
+    create_article_linking(article_ids.sample, action.id, "Action")
   end
 end
 
@@ -234,11 +239,11 @@ action_ids = Action.all.map {|action| action.id }
 end
 
 external_link_ids = ExternalLink.all.map { |el| el.id }
+
 # 9. Static pages
 
 HomePage.create!(
-  call_to_action_url: Faker::Internet.url('www.example.com'),
-  call_to_action: Faker::Hipster.sentence(3),
+  call_to_action: Faker::Hipster.sentence(10),
   article_id: Article.all.sample.id
 )
 
@@ -302,7 +307,7 @@ end
     create_picturizing(portrait.id, media_container_ids.sample)
   end
   3.times do
-    create_article_linking(article_ids.sample, portrait.id)
+    create_article_linking(article_ids.sample, portrait.id, "Portrait")
   end
 end
 
