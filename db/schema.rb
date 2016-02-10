@@ -221,6 +221,22 @@ ActiveRecord::Schema.define(version: 20160208200059) do
   add_index "picturizings", ["media_container_id"], name: "index_picturizings_on_media_container_id", using: :btree
   add_index "picturizings", ["picturizable_id", "picturizable_type"], name: "index_picturizings_on_picturizable_id_and_picturizable_type", using: :btree
 
+  create_table "portrait_intro_translations", force: :cascade do |t|
+    t.integer  "portrait_intro_id", null: false
+    t.string   "locale",            null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.text     "intro"
+  end
+
+  add_index "portrait_intro_translations", ["locale"], name: "index_portrait_intro_translations_on_locale", using: :btree
+  add_index "portrait_intro_translations", ["portrait_intro_id"], name: "index_portrait_intro_translations_on_portrait_intro_id", using: :btree
+
+  create_table "portrait_intros", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "portrait_translations", force: :cascade do |t|
     t.integer  "portrait_id", null: false
     t.string   "locale",      null: false

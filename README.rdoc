@@ -31,3 +31,8 @@ TODOS:
 - Remove devise-i18n-views and import devise fr yaml files
 - Figure out how to split the require in application.js to generate js per files
 - active-admin.js.coffee is loaded in every pages of the site -> performance hit
+
+- todo:
+  - heavy refactoring needed for the query methods in :
+    - portraits -> portrait model
+    - categories -> category model

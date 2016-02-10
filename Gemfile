@@ -63,6 +63,9 @@ gem 'faker', '~> 1.6', '>= 1.6.1'
 # Adding ckeditor
 gem 'ckeditor'
 
+# Adding rails i18n gem
+gem 'rails-i18n', '~> 4.0', '>= 4.0.8'
+
 # Adding Globalize gem
 gem 'globalize', '~> 5.0.0'
 

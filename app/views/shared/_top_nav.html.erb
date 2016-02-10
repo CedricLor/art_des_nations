@@ -8,14 +8,17 @@
       </div>
       <div class="col-xs-6 col-sm-4 col-lg-6">
         <ul class="list-inline">
-          <li><%= link_to "FR", '#', class: "active" %></li>
-          <li><%= link_to "EN", '#', class: "active" %></li>
-          <li><%= link_to "PY", '#', class: "active" %></li>
-          <li><%= link_to "中文", '#', class: "active" %></li>
+
+          <% @remaining_locales.each do | remaining_locale | %>
+            <li>
+              <%= link_to remaining_locale.values[0], params.merge({:locale => remaining_locale.keys[0]}) %>
+            </li>
+          <% end %>
+
         </ul>
       </div>
       <div class="col-xs-6 col-sm-4 col-lg-2 text-right">
-        <a href="#" href="#wrapper" class="menu-toggle"><i class="fa fa-reorder"></i> Menu</a>
+        <a href="#" href="#wrapper" class="menu-toggle"><i class="fa fa-reorder"></i><%= t(:menu, default: " Menu")%></a>
       </div>
     </div>
   </div>

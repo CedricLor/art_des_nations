@@ -4,11 +4,14 @@ class PortraitsController < ApplicationController
   # GET /portraits
   # GET /portraits.json
   def index
-    @portraits = Portrait.all
+    # @portrait_feed = PortraitFeed.new(portraits: Portrait.all)
+    # FIXME -- No includes !!!!! This is eager loading
+    @portraits = Portrait.with_media_containers_for_card(params[:locale])
+    @portrait_intro = PortraitIntro.find(1)
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @portraits }
+      format.json { render json: @portrait_feed }
     end
   end
 

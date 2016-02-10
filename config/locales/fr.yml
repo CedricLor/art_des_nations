@@ -29,3 +29,10 @@ fr:
       article:
         title: "Titre"
         body: "Corps de l'article"
+
+  menu: " Menu"
+  in_russia: "En Russie"
+  in_china: "En Chine"
+  portraits: "Portraits"
+  close: "Refermer"
+  search: "Rechercher..."

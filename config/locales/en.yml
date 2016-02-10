@@ -29,3 +29,10 @@ en:
       article:
         title: "Title"
         body: "Body of the article"
+
+  menu: " Menu"
+  in_russia: "In Russia"
+  in_china: "In China"
+  portraits: "Profiles"
+  close: "Close"
+  search: "Search..."

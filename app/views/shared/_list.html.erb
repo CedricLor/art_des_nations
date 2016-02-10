@@ -1,0 +1,66 @@
+<div class="page-content">
+  <div class="container">
+
+    <!-- Collection metadata -->
+    <div class="row">
+      <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
+        <!-- List name (Portraits ou nom de la catégorie) -->
+        <h1>
+          <%= list_name %>
+        </h1>
+        <!-- Intro (intro for portraits or categorie teaser) -->
+        <h2 class="resume">
+          <%= intro %>
+        </h2>
+      </div>
+    </div>
+
+    <!-- List -->
+    <div class="row">
+      <% i = 0
+         list.each do |element| %>
+        <div class="col-xs-12 col-sm-4 recommandation">
+          <% i = i + 1 %>
+          <%= link_to polymorphic_path(element[:item]) do %>
+          <!-- a href="/portrait.php" -->
+            <%= image_tag(element[:media], alt: "") %>
+            <h3><%= element[:title] %></h3>
+          <!-- /a -->
+          <% end %>
+        </div>
+        <% if i == 3
+             i = 0 %>
+          <div class="clearfix hidden-xs"></div>
+        <% end %>
+      <% end %>
+
+
+    </div><!-- ./row -->
+
+    <!-- Pagination -->
+    <div class="row">
+      <div class="col-xs-12 text-center">
+        <nav>
+          <ul class="pagination">
+            <li>
+              <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li>
+              <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+  </div>
+</div>

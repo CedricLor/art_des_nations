@@ -57,13 +57,13 @@ category_ids = Category.all.map { |cat| cat.id }
 
 test_photos = ["china-eu.png", "china_5.jpg", "great-wall-of-china.jpg", "russia_lake_maxresdefault.jpg", "staraya-ladoga-russia-1.jpg"]
 
-test_photos.each do | test_photos |
+test_photos.each do | test_photo |
   MediaContainer.create!(
     title: Faker::Lorem.sentence,
     author: Faker::Name.name,
     source_url: Faker::Internet.url('example.com'),
     creation_date: Faker::Date.backward(rand(5..30)),
-    media: File.new("/Users/cedriclor/Desktop/Test_photos/#{test_photos}")
+    media: File.new("#{Rails.root}/app/assets/img/#{test_photo}")
   )
   MediaContainer
 end
@@ -96,31 +96,31 @@ def create_article(author_ids, statusOfArticles)
   })
 end
 
-def create_picturizing(article_id, media_container_id)
+def create_picturizing(picturizable_id, media_container_id, picturizable_type)
   Picturizing.create!({
     media_container_id: media_container_id,
-    picturizable_id: article_id,
-    picturizable_type: "Article",
+    picturizable_id: picturizable_id,
+    picturizable_type: picturizable_type,
     for_carousel: ["true", "false"].sample,
     for_card: ["true", "false"].sample,
   })
 end
 
-def create_categorizing(article_id, category_id)
+def create_categorizing(categorizable_id, category_id, categorizable_type)
   Categorizing.create!({
     category_id: category_id,
-    categorizable_id: article_id,
-    categorizable_type: "Article"
+    categorizable_id: categorizable_id,
+    categorizable_type: categorizable_type
   })
 end
 
 20.times do
   article = create_article(author_ids, statusOfArticles)
   3.times do
-    create_picturizing(article.id, media_container_ids.sample)
+    create_picturizing(article.id, media_container_ids.sample, "Article")
   end
   3.times do
-    create_categorizing(article.id, category_ids.sample)
+    create_categorizing(article.id, category_ids.sample, "Article")
   end
 end
 
@@ -204,10 +204,10 @@ end
 20.times do
   action = create_action(statusOfArticles)
   3.times do
-    create_picturizing(action.id, media_container_ids.sample)
+    create_picturizing(action.id, media_container_ids.sample, "Action")
   end
   3.times do
-    create_categorizing(action.id, category_ids.sample)
+    create_categorizing(action.id, category_ids.sample, "Action")
   end
   3.times do
     create_article_linking(article_ids.sample, action.id, "Action")
@@ -292,6 +292,10 @@ end
 
 # 11. Portraits
 
+PortraitIntro.create!({
+  intro: fakerForBody
+})
+
 def create_portraits(statusOfArticles)
   Portrait.create!({
     title:       "Fr - #{Faker::Hipster.sentence(3, true, 4)}",
@@ -304,10 +308,13 @@ end
 10.times do
   portrait = create_portraits(statusOfArticles)
   3.times do
-    create_picturizing(portrait.id, media_container_ids.sample)
+    create_picturizing(portrait.id, media_container_ids.sample, "Portrait")
   end
   3.times do
     create_article_linking(article_ids.sample, portrait.id, "Portrait")
+  end
+  2.times do
+    create_categorizing(portrait.id, category_ids.sample, "Portrait")
   end
 end
 

@@ -13,7 +13,7 @@ class MediaContainer < ActiveRecord::Base
   translates :title
 
   has_attached_file :media,
-    styles: { medium: "300x300>", thumb: "100x100>" }
+    styles: { medium: "300x300#", for_card: "300x150#", thumb: "100x100#" }
 
   validates_attachment_content_type :media,
     content_type: /\Aimage\/.*\z/

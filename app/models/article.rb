@@ -32,4 +32,5 @@ class Article < ActiveRecord::Base
   has_one  :home_page, inverse_of: :article
 
   translates :title, :body, :teaser, :posted_from_location, :status, :fallbacks_for_empty_translations => true
+
 end
