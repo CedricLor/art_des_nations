@@ -1,8 +1,18 @@
 <%= simple_form_for(@portrait) do |f| %>
   <%= f.error_notification %>
 
-  <div class="form-inputs">
-  </div>
+  <% title = f.input :title %>
+  <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+  <% body = f.cktext_area :body, rows: 50, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+
+  <%= render partial: 'portraits/partials/single_views', locals: {
+    title: title,
+    teaser: teaser,
+    image_url: @portrait.media_containers.first.media,
+    body: body
+    }
+  %>
+
 
   <div class="form-actions">
     <%= f.button :submit %>
