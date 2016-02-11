@@ -1,0 +1,17 @@
+
+<%= render partial: 'shared/article_aktion_static/title_teaser', locals: {
+  title: item.title,
+  teaser: item.teaser
+  }
+%>
+
+<%= render partial: 'shared/article_aktion/galerie_photos', locals: {
+  pictures: item.media_containers
+  }
+%>
+
+<%= render partial: 'shared/aktion_static/body', locals: {
+  body: item.body
+  },
+  layout: 'shared/article_aktion_static/body_layout'
+%>

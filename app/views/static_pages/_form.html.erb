@@ -1,0 +1,24 @@
+<%= simple_form_for(@static_page) do |f| %>
+
+  <%= f.error_notification %>
+
+  <!-- Fields assignment to variables -->
+  <% title = f.input :title %>
+  <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+  <% body = f.cktext_area :body, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+
+  <%= render partial: 'static_pages/partials/container',
+      layout: "shared/article_aktion_static/container_layout",
+      locals: {
+        title: title,
+        teaser: teaser,
+        body: body
+      }
+  %>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
+
+

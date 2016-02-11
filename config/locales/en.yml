@@ -47,6 +47,8 @@ en:
   protagonists: "The Protagonists"
   read_more: "Read more"
   further_reading: "Further readings"
+  credit: "Credits"
+  legal: "Legal mentions"
 
   home_page_title: "Home"
   published_html: "<p class='meta'>Published on <span class='date-publication'>%{posted_at}</span> in <span class='lieu-publication'>%{posted_from_location}</span></p>"

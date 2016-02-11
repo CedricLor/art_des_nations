@@ -1,0 +1,6 @@
+<% content_for(:title, raw("#{@static_page.title}")) %>
+<% content_for :body_class, "page-article" %>
+
+<%= render 'form' %>
+
+<%= link_to 'Show', @static_page %>

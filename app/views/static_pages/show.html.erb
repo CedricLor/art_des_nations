@@ -1,0 +1,14 @@
+<% content_for(:title, raw("#{@static_page.title}")) %>
+<% content_for :body_class, "page-article" %>
+
+<%= render partial: 'static_pages/partials/container',
+    layout: "shared/article_aktion_static/container_layout",
+    locals: {
+      title: @static_page.title,
+      teaser: @static_page.teaser,
+      body: @static_page.body
+    }
+%>
+
+
+<%= link_to 'Edit', edit_static_page_path(@static_page) %>

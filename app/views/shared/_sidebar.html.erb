@@ -40,9 +40,8 @@
     <hr>
     <div class="menu-links">
       <ul class="list-unstyled">
-        <!-- FIXME -->
-        <li><a href="#" class=""><%= t(:the_adn_project, default: "Le projet ADN ") %></a></li>
-        <li><a href="#" class=""><%= t(:contact_us, default: "Nous contacter") %></a></li>
+        <li><%= link_to t(:the_adn_project, default: "Le projet ADN "), static_pages_path(1) %></li>
+        <li><%= link_to t(:contact_us, default: "Nous contacter"), static_pages_path(4) %></li>
       </ul>
   </div>
   <div class="close-link">

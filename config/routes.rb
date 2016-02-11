@@ -25,7 +25,7 @@ Rails.application.routes.draw do
 
     # FIXME -- This was the React default route
     # root to: "pages#show"
-
+    resources :static_pages, only: [:show, :edit, :update]
     resources :home_pages, only: [:show, :edit, :update]
 
     # get 'home_pages/:id' => 'home_pages#show'
