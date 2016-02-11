@@ -1,4 +1,4 @@
-if Rails.env == 'production' do
+if Rails.env == 'production' do | config |
   Paperclip::Attachment.default_options[:storage] = :s3
   Paperclip::Attachment.default_options[:url] = ':s3_domain_url'
   Paperclip::Attachment.default_options[:path] = '/:rails_env/:class/:attachment/:id_partition/:style/:filename'
