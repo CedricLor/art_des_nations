@@ -243,13 +243,13 @@ external_link_ids = ExternalLink.all.map { |el| el.id }
 
 # 9. Static pages
 
-home_page = HomePage.create!(
+HomePage.create!(
   call_to_action: Faker::Hipster.sentence(10),
   editorial: "FR - " + fakerForBody
 )
 
 I18n.locale = :en
-home_page.update!(
+HomePage.first.update!(
   call_to_action: Faker::Hipster.sentence(10),
   editorial: "EN - " + fakerForBody
 )
@@ -306,7 +306,7 @@ portrait_intro = PortraitIntro.create!({
 })
 
 I18n.locale = :en
-portrait_intro = PortraitIntro.update!({
+portrait_intro.update!({
   intro: fakerForBody
 })
 I18n.locale = :fr
