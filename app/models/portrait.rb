@@ -4,10 +4,10 @@ class Portrait < ActiveRecord::Base
   validates :status, inclusion: { in: %w(draft published featured archived),
     message: "%{value} is not a valid status for a portrait. Choose between draft, published, featured or archived" }
 
-  has_many :portaitizings, inverse_of: :portrait
-  has_many :articles, through: :portaitizings, :source => :portraitizable,
+  has_many :portraitizings, inverse_of: :portrait
+  has_many :articles, through: :portraitizings, :source => :portraitizable,
            :source_type => 'Article'
-  has_many :aktions, through: :portaitizings, :source => :portraitizable,
+  has_many :aktions, through: :portraitizings, :source => :portraitizable,
            :source_type => 'Aktion'
 
   has_many :picturizings, :as => :picturizable, inverse_of: :portrait

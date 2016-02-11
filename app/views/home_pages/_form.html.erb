@@ -1,6 +1,10 @@
 <%= simple_form_for(@home_page) do |f| %>
   <%= f.error_notification %>
 
+  <div>
+    <%= f.cktext_area :editorial, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+  </div>
+
   <div class="form-inputs">
     <%= f.input :call_to_action %>
   </div>

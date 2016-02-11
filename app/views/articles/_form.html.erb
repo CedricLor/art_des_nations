@@ -1,11 +1,14 @@
-<% if @article_form.errors.any? %>
+<% if @article.errors.any? %>
+<%# if @article_form.errors.any? %>
   <ul>
-    <%= @article_form.errors.full_messages.each do |message| %>
+    <%= @article.errors.full_messages.each do |message| %>
+    <%#= @article_form.errors.full_messages.each do |message| %>
         <li><%= message %></li>
     <% end %>
   </ul>
 <% end %>
-<%= form_for(@article_form, url: articles_path, method: :post, html: { multipart: true }) do |f| %>
+<%= form_for(@article, url: articles_path, method: :post, html: { multipart: true }) do |f| %>
+<%#= form_for(@article_form, url: articles_path, method: :post, html: { multipart: true }) do |f| %>
   <div>
     <%= f.label :article_title %>
   </div>
@@ -22,10 +25,11 @@
   <div>
     <%#= f.label :article_body %>
   </div>
+  -->
   <div>
+    <%= f.cktext_area :body, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
     <%#= f.cktext_area :article_body, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
   </div>
-  -->
   <div>
     <%= f.label :article_status %>
   </div>
@@ -65,10 +69,10 @@
   </div>
   -->
   <div>
-    <%= f.label :media_file %>
+    <%#= f.label :media_file %>
   </div>
   <div>
-    <%= f.file_field :media_file %>
+    <%#= f.file_field :media_file %>
   </div>
   <!--
   <div>

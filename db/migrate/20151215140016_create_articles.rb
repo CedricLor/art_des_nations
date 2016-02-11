@@ -9,8 +9,8 @@ class CreateArticles < ActiveRecord::Migration
     Article.create_translation_table! :title => {:type => :string, :null => false, default: ''},
       :body => {type: :text, null: false, default: ''},
       :teaser => {type: :text, null: false, default: ''},
-      :posted_from_location => {type: :text, null: false, default: ''},
-      :status => {:type => :string, :null => false, limit: 10, default: 'draft'}
+      :posted_from_location => {type: :string, null: false, limit: 25, default: ''},
+      :status => {:type => :string, null: false, limit: 10, default: 'draft'}
   end
 
   def down

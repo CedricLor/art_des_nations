@@ -22,7 +22,7 @@
   <hr>
   <div class="menu-tags">
     <ul class="list-inline">
-      <% @categories.each do | category | %>
+      <% @categories_for_side_nav.each do | category | %>
         <li>
           <%= link_to category.name, category_path(category.id) %>
         </li>

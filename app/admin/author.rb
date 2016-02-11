@@ -13,5 +13,7 @@ ActiveAdmin.register Author do
 #   permitted
 # end
 
+  permit_params :id, :full_name
+
 
 end

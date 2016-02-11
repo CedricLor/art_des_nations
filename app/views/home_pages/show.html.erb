@@ -13,11 +13,12 @@
         </h2>
         <ul class="list-inline" id="first-links">
             <li class="first">
-              <a href="#"><%= t(:read_more, default: "Lire la suite") %></a>
+              <!-- FIXME -->
+              <%= link_to '#', t(:read_more, default: "Lire la suite") %>
             </li>
             <li>
               <!-- FIXME -->
-              <a href="#"><%= t(:what_is_adn, default: "Qu'est-ce que le projet ADN ?") %></a>
+              <%= link_to '#', t(:what_is_adn, default: "Qu'est-ce que le projet ADN ?") %>
             </li>
         </ul>
       </div>
@@ -92,7 +93,7 @@
         <h2><%= t(:categories, default: "Catégories") %></h2>
         <ul class="list-inline">
 
-          <% @categories.each do | category | %>
+          <% @categories_for_side_nav.each do | category | %>
             <li>
               <span class="categorie">
                 <%= link_to category.name, category_path(category.id) %>

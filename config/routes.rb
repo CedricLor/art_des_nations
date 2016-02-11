@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  mount Ckeditor::Engine => '/ckeditor'
   ActiveAdmin.routes(self)
   devise_for :users
   scope '(:locale)', locale: /fr|en|ru|zh-CN/ do
@@ -25,7 +26,9 @@ Rails.application.routes.draw do
     # FIXME -- This was the React default route
     # root to: "pages#show"
 
-    get 'home_pages/:id' => 'home_pages#show'
+    resources :home_pages, only: [:show, :edit, :update]
+
+    # get 'home_pages/:id' => 'home_pages#show'
     root to: "home_pages#show"
 
   # Example of regular route:
