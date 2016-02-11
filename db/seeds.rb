@@ -311,13 +311,57 @@ portrait_intro.update!({
 })
 I18n.locale = :fr
 
-
 def create_portraits(statusOfArticles)
   Portrait.create!({
     title:       "Fr - #{Faker::Hipster.sentence(3, true, 4)}",
     teaser:      Faker::Hipster.paragraph(4),
-    body:        fakerForBody,
-    status:      statusOfArticles.sample
+    status:      statusOfArticles.sample,
+    body:        <<-eos
+  <h3>Théâtre (auteur)</h3>
+  <ul class="liste-chronologique">
+    <li><span class="annee">2002</span> <em>Mariage</em> suivi de <em>L'Association</em>, Théâtre Actes Sud-Papiers</li>
+    <li><span class="annee">2004</span> <em>L'Amélioration</em> suivi de <em>L'Instrument à pression</em>, Théâtre Actes Sud-Papiers</li>
+    <li><span class="annee">2004</span> <em>L'Après-Guerre</em></li>
+    <li><span class="annee">2004</span> <em>Tragique Troupier</em></li>
+    <li><span class="annee">2007</span> <em>Un homme en faillite</em>, Théâtre Actes Sud-Papiers</li>
+    <li><span class="annee">2007</span> <em>L'Européenne</em>, Théâtre Actes Sud-Papiers</li>
+    <li><span class="annee">2008</span> <em>Nos occupations</em> suivi de <em>La Commission centrale de l'enfance</em>, Théâtre Actes Sud-Papiers</li>
+    <li><span class="annee">2011</span> <em>Les Jeunes</em> suivi de <em>On refait tout</em> et de <em>Réfection</em>, Théâtre Actes Sud-Papiers</li>
+    <li><span class="annee">2012</span> <em>Le Système de Ponzi</em>, Théâtre Actes Sud-Papiers</li>
+    <li><span class="annee">2015</span> <em>Les Glaciers grondants</em> suivi de <em>Le plus près possible</em>, Théâtre Actes Sud-Papiers</li>
+  </ul>
+  <h3>Essai</h3>
+  <ul class="liste-chronologique">
+    <li><span class="annee">2001</span> <em>Dramaturgies de la guerre</em>, Circe</li>
+  </ul>
+  <h3>Auteur, Comédien et/ou Metteur en scène (récent) </h3>
+  <ul class="liste-chronologique">
+    <li><span class="annee">2007</span> <em>Un homme en faillite</em>, Théâtre de la Ville Paris </li>
+    <li><span class="annee">2008</span> <em>La Commission centrale de l’enfance</em>, Théâtre de la Ville Paris </li>
+    <li><span class="annee">2009</span> <em>L’Européenne</em> texte, Théâtre de la Ville Paris </li>
+    <li><span class="annee">2010</span> <em>Nos occupations</em> texte, <abbr title="Centre dramatique national">CDN</abbr> Orléans  </li>
+    <li><span class="annee">2012</span> <em>Le Système de Ponzi</em> Théâtre de la Ville Paris</li>
+    <li><span class="annee">2013, 2014</span> <em>Ceux qui restent</em>, d'après l'histoire de Paul Felenbok et Włodka Blit-Robertson, Le Montfort</li>
+    <li><span class="annee">2015</span> <em>Les Glaciers Grondants</em> Théâtre de la Ville Paris</li>
+  </ul>
+  <h3>Opéra</h3>
+  <ul class="liste-chronologique">
+    <li><span class="annee">2011</span> <em>The Rake's Progress</em> (Stravinsky) Opéra de Lille</li>
+    <li><span class="annee">2013</span> <em>Il Mondo de la Luna</em> (Haydn) Atelier Lyrique Opéra Bastille</li>
+    <li><span class="annee">2014</span> <em>La Finta Giardiniera</em> (Mozart) Opéra de Lille</li>
+  </ul>
+  <h3>Cinéma</h3>
+  <ul class="liste-chronologique">
+    <li><span class="annee">2006</span> <em>Je me fais rare</em> de Dante Desarthe</li>
+  </ul>
+  <h3>Prix et récompenses</h3>
+  <ul class="liste-chronologique">
+    <li><span class="annee">2007</span> Prix du Syndicat de la critique de la meilleure création d'une pièce en langue française pour <em>Un homme en faillite</em></li>
+    <li><span class="annee">2008</span> Prix Nouveau Talent Théâtre de la <abbr title="Société des ...">SACD</abbr> pour <em>L'Européenne</em></li>
+    <li><span class="annee">2008</span> Grand prix de littérature dramatique pour <em>L'Européenne</em></li>
+    <li><span class="annee">2009</span> Molière de la révélation théâtrale masculine pour <em>La Commission centrale de l'enfance</em></li>
+  </ul>
+eos
   })
 end
 
@@ -338,10 +382,55 @@ I18n.locale = :en
 
 Portrait.all.each do | portrait |
   portrait.update!(
-    title: "En - #{Faker::Hipster.sentence(3, true, 4)}",
+    title:  "En - #{Faker::Hipster.sentence(3, true, 4)}",
     teaser: Faker::Hipster.paragraph(4),
-    body:   fakerForBody,
-    status: statusOfArticles.sample
+    status: statusOfArticles.sample,
+    body:   <<-eos
+  <h3>Théâtre (auteur)</h3>
+  <ul class="liste-chronologique">
+    <li><span class="annee">2002</span> <em>Mariage</em> suivi de <em>L'Association</em>, Théâtre Actes Sud-Papiers</li>
+    <li><span class="annee">2004</span> <em>L'Amélioration</em> suivi de <em>L'Instrument à pression</em>, Théâtre Actes Sud-Papiers</li>
+    <li><span class="annee">2004</span> <em>L'Après-Guerre</em></li>
+    <li><span class="annee">2004</span> <em>Tragique Troupier</em></li>
+    <li><span class="annee">2007</span> <em>Un homme en faillite</em>, Théâtre Actes Sud-Papiers</li>
+    <li><span class="annee">2007</span> <em>L'Européenne</em>, Théâtre Actes Sud-Papiers</li>
+    <li><span class="annee">2008</span> <em>Nos occupations</em> suivi de <em>La Commission centrale de l'enfance</em>, Théâtre Actes Sud-Papiers</li>
+    <li><span class="annee">2011</span> <em>Les Jeunes</em> suivi de <em>On refait tout</em> et de <em>Réfection</em>, Théâtre Actes Sud-Papiers</li>
+    <li><span class="annee">2012</span> <em>Le Système de Ponzi</em>, Théâtre Actes Sud-Papiers</li>
+    <li><span class="annee">2015</span> <em>Les Glaciers grondants</em> suivi de <em>Le plus près possible</em>, Théâtre Actes Sud-Papiers</li>
+  </ul>
+  <h3>Essai</h3>
+  <ul class="liste-chronologique">
+    <li><span class="annee">2001</span> <em>Dramaturgies de la guerre</em>, Circe</li>
+  </ul>
+  <h3>Auteur, Comédien et/ou Metteur en scène (récent) </h3>
+  <ul class="liste-chronologique">
+    <li><span class="annee">2007</span> <em>Un homme en faillite</em>, Théâtre de la Ville Paris </li>
+    <li><span class="annee">2008</span> <em>La Commission centrale de l’enfance</em>, Théâtre de la Ville Paris </li>
+    <li><span class="annee">2009</span> <em>L’Européenne</em> texte, Théâtre de la Ville Paris </li>
+    <li><span class="annee">2010</span> <em>Nos occupations</em> texte, <abbr title="Centre dramatique national">CDN</abbr> Orléans  </li>
+    <li><span class="annee">2012</span> <em>Le Système de Ponzi</em> Théâtre de la Ville Paris</li>
+    <li><span class="annee">2013, 2014</span> <em>Ceux qui restent</em>, d'après l'histoire de Paul Felenbok et Włodka Blit-Robertson, Le Montfort</li>
+    <li><span class="annee">2015</span> <em>Les Glaciers Grondants</em> Théâtre de la Ville Paris</li>
+  </ul>
+  <h3>Opéra</h3>
+  <ul class="liste-chronologique">
+    <li><span class="annee">2011</span> <em>The Rake's Progress</em> (Stravinsky) Opéra de Lille</li>
+    <li><span class="annee">2013</span> <em>Il Mondo de la Luna</em> (Haydn) Atelier Lyrique Opéra Bastille</li>
+    <li><span class="annee">2014</span> <em>La Finta Giardiniera</em> (Mozart) Opéra de Lille</li>
+  </ul>
+  <h3>Cinéma</h3>
+  <ul class="liste-chronologique">
+    <li><span class="annee">2006</span> <em>Je me fais rare</em> de Dante Desarthe</li>
+  </ul>
+  <h3>Prix et récompenses</h3>
+  <ul class="liste-chronologique">
+    <li><span class="annee">2007</span> Prix du Syndicat de la critique de la meilleure création d'une pièce en langue française pour <em>Un homme en faillite</em></li>
+    <li><span class="annee">2008</span> Prix Nouveau Talent Théâtre de la <abbr title="Société des ...">SACD</abbr> pour <em>L'Européenne</em></li>
+    <li><span class="annee">2008</span> Grand prix de littérature dramatique pour <em>L'Européenne</em></li>
+    <li><span class="annee">2009</span> Molière de la révélation théâtrale masculine pour <em>La Commission centrale de l'enfance</em></li>
+  </ul>
+eos
   )
 end
 
@@ -370,3 +459,4 @@ article_ids.each do |article_id|
     add_portrait_to_aktion_or_article(portrait_id, article_id, "Article")
   end
 end
+

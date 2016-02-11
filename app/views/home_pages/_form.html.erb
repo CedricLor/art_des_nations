@@ -12,7 +12,7 @@
 
 
   <!-- Call to action -->
-  <% call_to_action = f.input :call_to_action %>
+  <% call_to_action = f.cktext_area :call_to_action, rows: 2, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
   <%= render partial: 'home_pages/partials/shared/call_to_action_wrapper',
     locals: {
       call_to_action: call_to_action

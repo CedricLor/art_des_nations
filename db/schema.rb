@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(version: 20160211162048) do
     t.string   "title",                           default: "",      null: false
     t.text     "body",                            default: "",      null: false
     t.text     "teaser",                          default: "",      null: false
-    t.text     "posted_from_location",            default: "",      null: false
+    t.string   "posted_from_location", limit: 25, default: "",      null: false
     t.string   "status",               limit: 10, default: "draft", null: false
   end
 
