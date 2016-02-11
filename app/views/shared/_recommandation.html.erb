@@ -1,0 +1,9 @@
+
+<div class="<%=additional_class_names%> recommandation " >
+  <%= link_to polymorphic_path(element[:item]) do %>
+  <!-- a href="/portrait.php" -->
+    <%= image_tag(element[:media], alt: "") %>
+    <h3><%= element[:title] %></h3>
+  <!-- /a -->
+  <% end %>
+</div>

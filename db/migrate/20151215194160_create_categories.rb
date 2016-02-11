@@ -3,8 +3,8 @@ class CreateCategories < ActiveRecord::Migration
     create_table :categories do |t|
       t.timestamps null: false
     end
-    Category.create_translation_table! :name => {:type => :string, :null => false},
-      :editorial => :text
+    Category.create_translation_table! :name => {:type => :string, :null => false, default: ''},
+      editorial: {type: :text, null: false, default: ''}
   end
 
   def down

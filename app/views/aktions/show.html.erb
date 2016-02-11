@@ -1,0 +1,17 @@
+
+<% content_for(:title, raw("#{@aktion.title}")) %>
+<% content_for :body_class, "page-article" %>
+
+<%= render partial: 'shared/article_aktion_global_partial',
+    locals: {
+      item: @aktion,
+      is_aktion: true
+    }
+%>
+
+<hr>
+
+<%= render partial: 'articles/partials/recommandations' %>
+
+<%= link_to 'Edit', edit_aktion_path(@aktion) %> |
+<%= link_to 'Back', aktions_path %>

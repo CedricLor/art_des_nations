@@ -7,8 +7,8 @@ class Portrait < ActiveRecord::Base
   has_many :portaitizings, inverse_of: :portrait
   has_many :articles, through: :portaitizings, :source => :portraitizable,
            :source_type => 'Article'
-  has_many :actions, through: :portaitizings, :source => :portraitizable,
-           :source_type => 'Action'
+  has_many :aktions, through: :portaitizings, :source => :portraitizable,
+           :source_type => 'Aktion'
 
   has_many :picturizings, :as => :picturizable, inverse_of: :portrait
   has_many :media_containers, through: :picturizings
@@ -39,7 +39,7 @@ class Portrait < ActiveRecord::Base
     # 1. Select all the portraits
     portraits = Portrait.all
     # 2. Select all the portrait translation in the current locale corresponding to the portraits
-    locale_portrait_translations = Portrait::Translation.where(locale: locale).find(portraits.map { |p| p.id })
+    locale_portrait_translations = Portrait::Translation.where(locale: locale || I18n.default_locale, portrait_id: portraits.map { |a| a.id })
     # 3. Create an array of hashes with the portraits and the corresponding title
     i = -1
     portraits_with_title = locale_portrait_translations.map do |pt|

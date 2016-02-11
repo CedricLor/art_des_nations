@@ -1,9 +1,13 @@
 class CountriesController < ApplicationController
-  before_action :set_country, only: [:show, :edit, :update]
+  before_action :set_country, only: [:edit, :update]
 
   # GET /countries/1
   # GET /countries/1.json
   def show
+    @country = Country.includes(:aktions).find(params[:id])
+    @aktions_by_country = Aktion.by_country(@country, locale)
+    @external_links_by_country = ExternalLink.includes(:countries).where(countries: {id: 1})
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @country }

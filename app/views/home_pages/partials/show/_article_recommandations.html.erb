@@ -1,0 +1,12 @@
+<% i = 1 %>
+<% items.each do |article| %>
+
+  <%= render partial: 'home_pages/partials/show/article_recommandation', locals: {article: article} %>
+
+  <% if i == 3 %>
+    <% i = 0 %>
+    <div class="clearfix hidden-xs"></div>
+  <% end %>
+  <% i = i + 1 %>
+
+<% end %>

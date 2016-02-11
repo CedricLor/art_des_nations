@@ -8,8 +8,8 @@ class Picturizing < ActiveRecord::Base
   validates :picturizable_id, numericality: true
 
   validates :picturizable_type, presence: true
-  validates :picturizable_type, inclusion: { in: %w(Action Article Portrait),
-    message: "%{value} is not a valid association for a picture. Choose between Article, Action and Portrait." }
+  validates :picturizable_type, inclusion: { in: %w(Aktion Article Portrait),
+    message: "%{value} is not a valid association for a picture. Choose between Article, Aktion and Portrait." }
 
   validates :for_card, presence: true
   validates :for_card, inclusion: { in: %w(true false)}

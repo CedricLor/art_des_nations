@@ -63,7 +63,7 @@ test_photos.each do | test_photo |
     author: Faker::Name.name,
     source_url: Faker::Internet.url('example.com'),
     creation_date: Faker::Date.backward(rand(5..30)),
-    media: File.new("#{Rails.root}/app/assets/img/#{test_photo}")
+    media: File.new("#{Rails.root}/app/assets/images/#{test_photo}")
   )
   MediaContainer
 end
@@ -179,7 +179,7 @@ Country.first.update!(
   editorial: fakerForBody
 )
 
-Country.first.update!(
+Country.second.update!(
   name: "China",
   title: "In China",
   editorial: fakerForBody
@@ -187,37 +187,37 @@ Country.first.update!(
 
 I18n.locale = :fr
 
-# 7. Actions
+# 7. Aktions
 
-def create_action(statusOfArticles)
-  Action.create!({
+def create_aktion(statusOfArticles)
+  Aktion.create!({
     country_id:   [1, 2].sample,
     title:       "Fr - #{Faker::Hipster.sentence(3, true, 4)}",
     teaser:      Faker::Hipster.paragraph(4),
     body:        fakerForBody,
     status:      statusOfArticles.sample,
     posted_at:   Faker::Date.backward(rand(5..30)),
-    action_date: Faker::Date.forward(rand(30..60))
+    aktion_date: Faker::Date.forward(rand(30..60))
   })
 end
 
 20.times do
-  action = create_action(statusOfArticles)
+  aktion = create_aktion(statusOfArticles)
   3.times do
-    create_picturizing(action.id, media_container_ids.sample, "Action")
+    create_picturizing(aktion.id, media_container_ids.sample, "Aktion")
   end
   3.times do
-    create_categorizing(action.id, category_ids.sample, "Action")
+    create_categorizing(aktion.id, category_ids.sample, "Aktion")
   end
   3.times do
-    create_article_linking(article_ids.sample, action.id, "Action")
+    create_article_linking(article_ids.sample, aktion.id, "Aktion")
   end
 end
 
 I18n.locale = :en
 
-Action.all.each do | action |
-  action.update!(
+Aktion.all.each do | aktion |
+  aktion.update!(
     title: "En - #{Faker::Hipster.sentence(3, true, 4)}",
     teaser: Faker::Hipster.paragraph(4),
     body:   fakerForBody,
@@ -227,7 +227,7 @@ end
 
 I18n.locale = :fr
 
-action_ids = Action.all.map {|action| action.id }
+aktion_ids = Aktion.all.map {|aktion| aktion.id }
 
 # 8. External links
 
@@ -242,10 +242,18 @@ external_link_ids = ExternalLink.all.map { |el| el.id }
 
 # 9. Static pages
 
-HomePage.create!(
+home_page = HomePage.create!(
   call_to_action: Faker::Hipster.sentence(10),
-  article_id: Article.all.sample.id
+  editorial: "FR - " + fakerForBody
 )
+
+I18n.locale = :en
+home_page.update!(
+  call_to_action: Faker::Hipster.sentence(10),
+  editorial: "EN - " + fakerForBody
+)
+I18n.locale = :fr
+
 
 static_pages_french_titles = ["Le Projet ADN", "Crédits", "Mentions Légales", "Nous contacter"]
 static_pages_english_titles = ["The ADN Project", "Credits", "Legal Mentions", "Contact us"]
@@ -331,11 +339,11 @@ end
 
 I18n.locale = :fr
 
-portrait_ids = Portrait.all.map {|action| action.id }
+portrait_ids = Portrait.all.map {|aktion| aktion.id }
 
 # 12. Portraitizings
 
-def add_portrait_to_action_or_article(portrait_id, item_id, item_type)
+def add_portrait_to_aktion_or_article(portrait_id, item_id, item_type)
   Portraitizing.create!(
     portrait_id: portrait_id,
     portraitizable_id: item_id,
@@ -343,14 +351,14 @@ def add_portrait_to_action_or_article(portrait_id, item_id, item_type)
   )
 end
 
-action_ids.each do |action_id|
+aktion_ids.each do |aktion_id|
   portrait_ids.shuffle.each_slice(3).to_a[1].each do | portrait_id |
-    add_portrait_to_action_or_article(portrait_id, action_id, "Action")
+    add_portrait_to_aktion_or_article(portrait_id, aktion_id, "Aktion")
   end
 end
 
 article_ids.each do |article_id|
   portrait_ids.shuffle.each_slice(3).to_a[1].each do | portrait_id |
-    add_portrait_to_action_or_article(portrait_id, article_id, "Article")
+    add_portrait_to_aktion_or_article(portrait_id, article_id, "Article")
   end
 end

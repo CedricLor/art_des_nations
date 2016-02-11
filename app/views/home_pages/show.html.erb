@@ -1,3 +1,4 @@
+<% content_for :title, t(:home_page_title, default: "Accueil") %>
 <% content_for :body_class, "page-accueil" %>
 
 <div class="page-content" id="main-content">
@@ -8,17 +9,15 @@
 
       <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2 text-center introduction">
         <h2 class="resume">
-          <%# @edito.teaser %>
-
-        Tous mes sens sont émus d'une volupté douce et pure, comme l'haleine du matin dans cette saison délicieuse. Seul, au milieu d'une contrée qui semble fait exprès pour un coeur tel que mien, j'y goûte à longs traits l'ivresse de la vie. Je suis si heureux, mon ami, si absorbé dans le sentiment de ma paisible existence, que mon art en souffre.
+          <%= @home_page.short_editorial.html_safe %>
         </h2>
         <ul class="list-inline" id="first-links">
             <li class="first">
-              <a href="#">Lire la suite</a>
+              <a href="#"><%= t(:read_more, default: "Lire la suite") %></a>
             </li>
             <li>
               <!-- FIXME -->
-              <a href="#">Qu'est-ce que le projet ADN ?</a>
+              <a href="#"><%= t(:what_is_adn, default: "Qu'est-ce que le projet ADN ?") %></a>
             </li>
         </ul>
       </div>
@@ -30,9 +29,7 @@
     <div class="container">
       <div class="row" id="derniere-minute">
         <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-          <%# @home_page.call_to_action %>
-
-          Une information de dernière minute avec <a href="#">davantage de détails par ici</a>.
+          <%= @home_page.call_to_action.html_safe %>
         </div>
       </div>
     </div>
@@ -43,10 +40,14 @@
     <!-- Actions ADN -->
     <div class="row" id="actions">
       <div class="col-xs-12 text-center">
-        <h2>Actions ADN</h2>
+        <h2><%= t(:adn_actions, default: "Actions ADN") %></h2>
       </div>
       <div class="col-xs-12">
-        <%= render 'home_pages/partials/show/diaporama_actions' %>
+        <%= render partial: 'home_pages/partials/show/diaporama_actions',
+          locals: {
+            aktions_for_home_page: @aktions_for_home_page
+          }
+        %>
       </div>
     </div>
 
@@ -57,128 +58,28 @@
       <!-- Articles -->
       <div class="col-xs-12 col-sm-8">
         <div class="col-xs-12 text-center">
-          <h2>Derniers articles</h2>
-        </div>
-        <!-- FIXME - Convert into a partial, make a query on the most recent articles, including their categories-->
-        <!-- 1 -->
-        <div class="col-xs-12 col-sm-6 col-md-4 recommandation">
-          <p class="categorie">
-            <!-- FIXME - article.categories.first -->
-            <a href="">Théâtre</a>
-          </p>
-            <!-- FIXME - Convert into a link_to -->
-          <a href="/article.php">
-            <div class="img-wrapper">
-              <!-- FIXME - article.media_containers.where(for_card: true).first -->
-              <img src="/contenu/chinequipe.jpg" alt="">
-              <div class="layer"></div>
-            </div>
-            <!-- FIXME - article.title -->
-            <h3>Un article</h3>
-          </a>
+          <h2><%= t(:last_articles, default: "Derniers articles")%></h2>
         </div>
 
-        <!-- 2 -->
-        <div class="col-xs-12 col-sm-6 col-md-4 recommandation">
-          <p class="categorie"><a href="">Histoire</a></p>
-          <a href="/article.php">
-          <div class="img-wrapper">
-            <img src="/contenu/beletaj.jpg" alt="">
-            <div class="layer"></div>
-          </div>
-          <h3>Un autre article</h3>
-          </a>
-        </div>
 
-        <div class="clearfix visible-sm-block"></div>
+        <!-- Articles -->
+        <%= render partial: 'home_pages/partials/show/article_recommandations',
+            locals: {
+              items: @articles_for_home_page
+            }
+        %>
 
-        <!-- 3 -->
-        <div class="col-xs-12 col-sm-6 col-md-4 recommandation">
-          <p class="categorie"><a href="">Photographie</a></p>
-          <a href="/article.php">
-            <div class="img-wrapper">
-              <img src="/contenu/chine1.jpg" alt="">
-              <div class="layer"></div>
-            </div>
-        <h3>Encore un article</h3>
-          </a>
-        </div>
-
-        <div class="clearfix hidden-sm hidden-xs"></div>
-
-        <!-- 4 -->
-        <div class="col-xs-12 col-sm-6 col-md-4 recommandation">
-          <p class="categorie"><a href="">Théâtre</a></p>
-          <a href="/article.php">
-          <div class="img-wrapper">
-          <img src="/contenu/chine2.jpg" alt="">
-          <div class="layer"></div>
-          </div>
-          <h3>Un article encore</h3>
-          </a>
-        </div>
-
-        <div class="clearfix visible-sm-block"></div>
-
-        <!-- 5 -->
-        <div class="col-xs-12 col-sm-6 col-md-4 recommandation">
-            <p class="categorie"><a href="">Danse</a></p>
-            <a href="/article.php">
-            <div class="img-wrapper">
-            <img src="/contenu/chine5.jpg" alt="">
-            <div class="layer"></div>
-            </div>
-            <h3>Et voici un article</h3>
-            </a>
-        </div>
-
-        <!-- 6 -->
-        <div class="col-xs-12 col-sm-6 col-md-4 recommandation">
-            <p class="categorie"><a href="">Théâtre</a></p>
-            <a href="/article.php">
-            <div class="img-wrapper">
-            <img src="/contenu/chine4.jpg" alt="">
-            <div class="layer"></div>
-            </div>
-            <h3>Un article de plus</h3>
-            </a>
-
-        </div>
-
-        <div class="clearfix"></div>
-
-        <!-- 7 -->
-        <div class="col-xs-12 col-sm-6 col-md-4 recommandation">
-            <p class="categorie"><a href="">Littérature</a></p>
-            <a href="/article.php">
-            <div class="img-wrapper">
-            <img src="/contenu/chine6.jpg" alt="">
-            <div class="layer"></div>
-            </div>
-            <h3>Un article que voilà</h3>
-            </a>
-
-        </div>
-
-        <!-- 8 -->
-        <div class="col-xs-12 col-sm-6 col-md-4 recommandation">
-            <p class="categorie"><a href="">Théâtre</a></p>
-            <a href="/article.php">
-            <div class="img-wrapper">
-            <img src="/contenu/chine7.jpg" alt="">
-            <div class="layer"></div>
-            </div>
-            <h3>Et voilà un article</h3>
-            </a>
-
-        </div>
       </div><!-- fin des articles -->
       <!-- Portraits -->
       <div class="col-xs-12 col-sm-4 col-md-3 col-md-offset-1 protagonistes">
         <div class="col-xs-12 text-center">
-          <h2>Protagonistes</h2>
+          <h2><%= t(:protagonists, default: "Protagonistes") %></h2>
         </div>
-        <%= render 'home_pages/partials/show/portraits.html.erb' %>
+        <%= render partial: 'home_pages/partials/show/portrait_recommandations.html.erb',
+            locals: {
+              portraits: @portraits_for_home_page
+            }
+        %>
       </div>
     </div><!-- /.row -->
 
@@ -188,36 +89,30 @@
 
       <!-- liens vers les catégories -->
       <div class="col-xs-12 col-sm-4 col-sm-offset-2 text-center" id="categories">
-        <h2>Catégories</h2>
+        <h2><%= t(:categories, default: "Catégories") %></h2>
         <ul class="list-inline">
-          <!-- FIXME - Convert into a partial, get the query on the categories from the application controller, iterate -->
-          <li><span class="categorie">
-            <!-- FIXME - Convert into a link_to on the category, slugize the urls -->
-            <a href="/liste.php">Danse</a>
-          </span></li>
-          <li><span class="categorie"><a href="/liste.php">Histoire</a></span></li>
-          <li><span class="categorie"><a href="/liste.php">Littérature</a></span></li>
-          <li><span class="categorie"><a href="/liste.php">Opéra</a></span></li>
-          <li><span class="categorie"><a href="/liste.php">Philosophie</a></span></li>
-          <li><span class="categorie"><a href="/liste.php">Photographie</a></span></li>
-          <li><span class="categorie"><a href="/liste.php">Théâtre</a></span></li>
+
+          <% @categories.each do | category | %>
+            <li>
+              <span class="categorie">
+                <%= link_to category.name, category_path(category.id) %>
+              </span>
+            </li>
+          <% end %>
+
         </ul>
       </div>
 
       <!-- liens -->
       <div class="col-xs-12 col-sm-4 text-center" id="liens">
-        <h2>Liens</h2>
-        <!-- FIXME - Convert into a partial, query the external_links for the homepage, iterate -->
-        <ul class="list-unstyled">
-          <li>
-            <!-- FIXME - Convert into a url_to for @home_page.external_link -->
-            <a href="#">Un lien vers quelque chose</a>
-          </li>
-          <li><a href="#">Quelque chose d'autre</a></li>
-          <li><a href="#">Encore autre chose</a></li>
-          <li><a href="#">Une autre chose que voici</a></li>
-          <li><a href="#">Une autre chose que voilà</a></li>
-        </ul>
+
+        <!-- external links -->
+        <%= render partial: 'shared/external_links', locals: {
+          external_links: @external_links_for_home_page,
+          class_name_for_ul: "list-unstyled "
+          }
+        %>
+
       </div>
     </div>
   </div>

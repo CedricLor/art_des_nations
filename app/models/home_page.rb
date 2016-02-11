@@ -1,11 +1,18 @@
 class HomePage < ActiveRecord::Base
-  validates :article_id, presence: true
+  validates :editorial, presence: true
 
-  belongs_to :article, inverse_of: :home_page
   has_many :external_linkings, :as => :external_linkable, inverse_of: :home_page
   has_many :external_links, through: :external_linkings
 
-  translates :call_to_action, :fallbacks_for_empty_translations => true
+  translates :call_to_action, :editorial, :fallbacks_for_empty_translations => true
+
+  def short_editorial
+    short_editorial = editorial.slice(0, 350)
+    if editorial.size > 350
+      short_editorial = short_editorial + '...'
+    end
+    short_editorial
+  end
 end
 
 # class CreateHomePages < ActiveRecord::Migration

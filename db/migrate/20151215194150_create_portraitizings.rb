@@ -3,7 +3,7 @@ class CreatePortraitizings < ActiveRecord::Migration
     create_table :portraitizings do |t|
       t.integer :portrait_id, :null => false
       t.integer :portraitizable_id, :null => false
-      t.string  :portraitizable_type, :null => false, :limit => 20
+      t.string  :portraitizable_type, :null => false, :limit => 20, default: ''
     end
 
     add_index :portraitizings, :portrait_id

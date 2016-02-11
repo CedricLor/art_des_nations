@@ -17,23 +17,12 @@
 
     <!-- List -->
     <div class="row">
-      <% i = 0
-         list.each do |element| %>
-        <div class="col-xs-12 col-sm-4 recommandation">
-          <% i = i + 1 %>
-          <%= link_to polymorphic_path(element[:item]) do %>
-          <!-- a href="/portrait.php" -->
-            <%= image_tag(element[:media], alt: "") %>
-            <h3><%= element[:title] %></h3>
-          <!-- /a -->
-          <% end %>
-        </div>
-        <% if i == 3
-             i = 0 %>
-          <div class="clearfix hidden-xs"></div>
-        <% end %>
-      <% end %>
 
+      <%= render partial: 'shared/recommandations', locals: {
+        list: list,
+        additional_class_names: "col-xs-12 col-sm-4 "
+        }
+      %>
 
     </div><!-- ./row -->
 

@@ -6,11 +6,11 @@ class CreateArticles < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    Article.create_translation_table! :title => {:type => :string, :null => false},
-      :body => :text,
-      :teaser => :text,
-      :posted_from_location => :text,
-      :status => {:type => :string, :null => false}
+    Article.create_translation_table! :title => {:type => :string, :null => false, default: ''},
+      :body => {type: :text, null: false, default: ''},
+      :teaser => {type: :text, null: false, default: ''},
+      :posted_from_location => {type: :text, null: false, default: ''},
+      :status => {:type => :string, :null => false, limit: 10, default: 'draft'}
   end
 
   def down

@@ -3,7 +3,7 @@ class CreateExternalLinkings < ActiveRecord::Migration
     create_table :external_linkings do |t|
       t.integer :external_link_id, :null => false
       t.integer :external_linkable_id, :null => false
-      t.string  :external_linkable_type, :null => false
+      t.string  :external_linkable_type, :null => false, default: '', :limit => 20
     end
 
     add_index :external_linkings, :external_link_id

@@ -5,8 +5,7 @@ class PortraitsController < ApplicationController
   # GET /portraits.json
   def index
     # @portrait_feed = PortraitFeed.new(portraits: Portrait.all)
-    # FIXME -- No includes !!!!! This is eager loading
-    @portraits = Portrait.with_media_containers_for_card(params[:locale])
+    @portraits = Portrait.with_media_containers_for_card(locale)
     @portrait_intro = PortraitIntro.find(1)
 
     respond_to do |format|

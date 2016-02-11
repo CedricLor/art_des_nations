@@ -27,19 +27,11 @@
           <%= link_to category.name, category_path(category.id) %>
         </li>
       <% end %>
-      <!--
-      <li><a href="/liste.php">Danse</a></li>
-      <li><a href="/liste.php">Histoire</a></li>
-      <li><a href="/liste.php">Littérature</a></li>
-      <li><a href="/liste.php">Opéra</a></li>
-      <li><a href="/liste.php">Philosophie</a></li>
-      <li><a href="/liste.php">Photographie</a></li>
-      <li><a href="/liste.php">Théâtre</a></li>
-      -->
     </ul>
   </div>
   <hr>
     <div class="input-group" id="search-form">
+      <!-- FIXME -->
       <input type="text" class="form-control" placeholder=<%= t(:search, default: "Rechercher...")%>>
       <span class="input-group-btn">
         <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
@@ -49,8 +41,8 @@
     <div class="menu-links">
       <ul class="list-unstyled">
         <!-- FIXME -->
-        <li><a href="#" class="">Le projet ADN</a></li>
-        <li><a href="#" class="">Nous contacter</a></li>
+        <li><a href="#" class=""><%= t(:the_adn_project, default: "Le projet ADN ") %></a></li>
+        <li><a href="#" class=""><%= t(:contact_us, default: "Nous contacter") %></a></li>
       </ul>
   </div>
   <div class="close-link">

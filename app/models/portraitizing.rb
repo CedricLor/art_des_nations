@@ -8,8 +8,8 @@ class Portraitizing < ActiveRecord::Base
   #   message: "%{value} is not a valid category" }
 
   validates :portraitizable_type, presence: true
-  validates :portraitizable_type, inclusion: { in: %w(Action Article),
-    message: "%{value} is not a valid association with a portrait. Choose between Article and Action." }
+  validates :portraitizable_type, inclusion: { in: %w(Aktion Article),
+    message: "%{value} is not a valid association with a portrait. Choose between Article and Aktion." }
 
   default_scope { order(id: :asc) }
 

@@ -3,7 +3,7 @@ class CreateCategorizings < ActiveRecord::Migration
     create_table :categorizings do |t|
       t.integer :category_id, :null => false
       t.integer :categorizable_id, :null => false
-      t.string  :categorizable_type, :null => false, :limit => 20
+      t.string  :categorizable_type, :null => false, :limit => 20, default: ''
     end
 
     add_index :categorizings, :category_id

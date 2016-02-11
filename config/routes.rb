@@ -2,12 +2,12 @@ Rails.application.routes.draw do
 
   ActiveAdmin.routes(self)
   devise_for :users
-  scope '(:locale)', locale: /fr|en|ru|zh/ do
+  scope '(:locale)', locale: /fr|en|ru|zh-CN/ do
     # FIXME -- This was for React
     # get 'article/:id' => "pages#show"
 
     resources :articles
-    resources :actions
+    resources :aktions
     resources :media_containers
 
     resources :countries, only: [:show, :edit, :update]

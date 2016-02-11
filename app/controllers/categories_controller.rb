@@ -15,8 +15,8 @@ class CategoriesController < ApplicationController
   # GET /categories/1
   # GET /categories/1.json
   def show
-    @category = Category.includes(:actions, :articles).find(params[:id])
-    @categorized_articles_and_actions = Category.categorized_articles_and_actions_for_category(@category, params[:locale])
+    @category = Category.includes(:aktions, :articles).find(params[:id])
+    @categorized_articles_and_aktions = Category.categorized_articles_and_aktions_for_category(@category, params[:locale])
 
     respond_to do |format|
       format.html # show.html.erb

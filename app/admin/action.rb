@@ -1,4 +1,4 @@
-ActiveAdmin.register Action do
+ActiveAdmin.register Aktion do
 
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
@@ -13,7 +13,7 @@ ActiveAdmin.register Action do
 #   permitted
 # end
 
-  permit_params :country_id, :title, :teaser, :body, :status, :posted_at, :action_date
+  permit_params :country_id, :title, :teaser, :body, :status, :posted_at, :aktion_date
 
   index do
     selectable_column
@@ -21,7 +21,7 @@ ActiveAdmin.register Action do
     column :title
     column :status
     column :posted_at
-    column :action_date
+    column :aktion_date
     actions
   end
 
@@ -35,7 +35,7 @@ ActiveAdmin.register Action do
     end
     f.inputs "Dates" do
       f.input :posted_at
-      f.input :action_date
+      f.input :aktion_date
     end
     f.actions
   end
@@ -44,24 +44,24 @@ end
 
 
 
-# class CreateActions < ActiveRecord::Migration
+# class CreateAktions < ActiveRecord::Migration
 #   def up
-#     create_table :actions do |t|
+#     create_table :aktions do |t|
 #       t.integer :country_id, :null => false
 #       t.string :title, :null => false
 #       t.text :body
 #       t.text :teaser
 #       t.string :status, :null => false
 #       t.datetime :posted_at, :null => false
-#       t.datetime :action_date, :null => false
+#       t.datetime :aktion_date, :null => false
 
 #       t.timestamps null: false
 #     end
-#     Action.create_translation_table! :title => :string, :body => :text, :teaser => :text, :status => :string
+#     Aktion.create_translation_table! :title => :string, :body => :text, :teaser => :text, :status => :string
 #   end
 
 #   def down
-#     drop_table :actions
-#     Action.drop_translation_table!
+#     drop_table :aktions
+#     Aktion.drop_translation_table!
 #   end
 # end

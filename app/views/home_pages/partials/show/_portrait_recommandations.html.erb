@@ -1,0 +1,15 @@
+<% portraits.each do |portrait| %>
+
+   <%= render partial: 'home_pages/partials/show/portrait_recommandation', locals: {
+    portrait: portrait
+    }
+  %>
+
+<% end %>
+
+<div class="col-xs-12">
+  <%= link_to t(:tous_les_portraits, default: "Tous les portraits"), portraits_path, class: "more" %>
+</div>
+
+
+

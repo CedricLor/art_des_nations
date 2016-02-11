@@ -4,6 +4,11 @@ class HomePagesController < ApplicationController
   # GET /home_pages/1
   # GET /home_pages/1.json
   def show
+    @external_links_for_home_page = ExternalLink.includes(:home_pages).where(home_pages: {id: 1})
+    @articles_for_home_page = Article.for_home_page(locale)
+    @portraits_for_home_page = Portrait.with_media_containers_for_card(locale).slice(0, 3)
+    @aktions_for_home_page = Aktion.for_home_page(locale)
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @home_page }

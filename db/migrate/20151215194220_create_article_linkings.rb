@@ -3,7 +3,7 @@ class CreateArticleLinkings < ActiveRecord::Migration
     create_table :article_linkings do |t|
       t.integer :article_id, :null => false
       t.integer :article_linkable_id, :null => false
-      t.string  :article_linkable_type, :null => false
+      t.string  :article_linkable_type, :null => false, default: '', :limit => 20
     end
 
     add_index :article_linkings, :article_id

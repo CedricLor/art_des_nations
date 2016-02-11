@@ -29,6 +29,11 @@
 
 
 
-<%= render partial: 'shared/list', locals: {list: @portraits, list_name: t(:portraits, default: "Portraits"), intro: @portrait_intro.intro.html_safe} %>
+<%= render partial: 'shared/list', locals: {
+  list: @portraits,
+  list_name: t(:portraits, default: "Portraits"),
+  intro: @portrait_intro.intro.html_safe
+  }
+%>
 
 

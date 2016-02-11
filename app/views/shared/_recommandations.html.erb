@@ -1,0 +1,12 @@
+<% i = 1 %>
+<% list.each do |element| %>
+
+   <%= render partial: 'shared/recommandation', locals: {element: element, additional_class_names: additional_class_names} %>
+
+  <% if i == 3 %>
+    <% i = 0 %>
+    <div class="clearfix hidden-xs"></div>
+  <% end %>
+  <% i = i + 1 %>
+
+<% end %>

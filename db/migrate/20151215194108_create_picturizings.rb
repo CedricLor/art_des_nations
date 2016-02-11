@@ -24,14 +24,14 @@ class CreatePicturizings < ActiveRecord::Migration
     create_table :picturizings do |t|
       t.integer :media_container_id, :null => false
       t.integer :picturizable_id, :null => false
-      t.string  :picturizable_type, :null => false, :limit => 20
+      t.string  :picturizable_type, :null => false, :limit => 20, default: ''
     end
 
     add_index :picturizings, :media_container_id
     add_index :picturizings, [:picturizable_id, :picturizable_type]
 
-    Picturizing.create_translation_table! :for_card => {:type => :string,  :null => false, :limit => 8},
-      :for_carousel => {:type => :string, :null => false, :limit => 12}
+    Picturizing.create_translation_table! :for_card => {:type => :string,  :null => false, :limit => 8, default: 'false'},
+      :for_carousel => {:type => :string, :null => false, :limit => 12, default: 'true'}
   end
 
   def down

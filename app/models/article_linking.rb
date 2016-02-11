@@ -8,8 +8,8 @@ class ArticleLinking < ActiveRecord::Base
   #   message: "%{value} is not a valid category" }
 
   validates :article_linkable_type, presence: true
-  validates :article_linkable_type, inclusion: { in: %w(Action Article Portrait),
-    message: "%{value} is not a valid association with an article. Choose between Article, Action and Portrait." }
+  validates :article_linkable_type, inclusion: { in: %w(Aktion Article Portrait),
+    message: "%{value} is not a valid association with an article. Choose between Article, Aktion and Portrait." }
 
   default_scope { order(id: :asc) }
 
