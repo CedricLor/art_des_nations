@@ -1,18 +1,18 @@
 <%= simple_form_for(@home_page) do |f| %>
+
   <%= f.error_notification %>
 
-  <% editorial = f.cktext_area :editorial, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
-
   <!-- Edito -->
+  <% editorial = f.cktext_area :editorial, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
   <%= render partial: 'home_pages/partials/shared/editorial_wrapper',
     locals: {
       editorial: editorial
     }
   %>
 
-  <% call_to_action = f.input :call_to_action %>
 
   <!-- Call to action -->
+  <% call_to_action = f.input :call_to_action %>
   <%= render partial: 'home_pages/partials/shared/call_to_action_wrapper',
     locals: {
       call_to_action: call_to_action
