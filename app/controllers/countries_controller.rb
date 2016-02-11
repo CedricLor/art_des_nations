@@ -1,6 +1,8 @@
 class CountriesController < ApplicationController
   before_action :set_country, only: [:edit, :update]
 
+  skip_before_action :authenticate_user!, only: :show
+
   # GET /countries/1
   # GET /countries/1.json
   def show

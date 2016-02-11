@@ -1,120 +1,30 @@
 <% content_for :title, t(:home_page_title, default: "Accueil") %>
 <% content_for :body_class, "page-accueil" %>
 
-<div class="page-content" id="main-content">
 
-  <!-- Edito -->
-  <div class="container">
-    <div class="row">
+<!-- Edito -->
+<%= render partial: 'home_pages/partials/shared/editorial_wrapper',
+  locals: {
+    editorial: @home_page.short_editorial.html_safe
+  }
+%>
 
-      <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2 text-center introduction">
-        <h2 class="resume">
-          <%= @home_page.short_editorial.html_safe %>
-        </h2>
-        <ul class="list-inline" id="first-links">
-            <li class="first">
-              <!-- FIXME -->
-              <%= link_to '#', t(:read_more, default: "Lire la suite") %>
-            </li>
-            <li>
-              <!-- FIXME -->
-              <%= link_to '#', t(:what_is_adn, default: "Qu'est-ce que le projet ADN ?") %>
-            </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <!-- Call to action -->
-  <div class="container-fluid" id="derniere-minute-wrapper">
-    <div class="container">
-      <div class="row" id="derniere-minute">
-        <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-          <%= @home_page.call_to_action.html_safe %>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Main content-->
-  <div class="container" id="container-w-bg">
-    <!-- Actions ADN -->
-    <div class="row" id="actions">
-      <div class="col-xs-12 text-center">
-        <h2><%= t(:adn_actions, default: "Actions ADN") %></h2>
-      </div>
-      <div class="col-xs-12">
-        <%= render partial: 'home_pages/partials/show/diaporama_actions',
-          locals: {
-            aktions_for_home_page: @aktions_for_home_page
-          }
-        %>
-      </div>
-    </div>
-
-    <hr>
-
-    <!-- Articles and portraits -->
-    <div class="row" id="articles-et-protagonistes">
-      <!-- Articles -->
-      <div class="col-xs-12 col-sm-8">
-        <div class="col-xs-12 text-center">
-          <h2><%= t(:last_articles, default: "Derniers articles")%></h2>
-        </div>
+<!-- Call to action -->
+<%= render partial: 'home_pages/partials/shared/call_to_action_wrapper',
+  locals: {
+    call_to_action: @home_page.call_to_action.html_safe
+  }
+%>
 
 
-        <!-- Articles -->
-        <%= render partial: 'home_pages/partials/show/article_recommandations',
-            locals: {
-              items: @articles_for_home_page
-            }
-        %>
+<!-- HOME_PAGES LAYOUT CONSTANT -->
+<%= render partial: 'home_pages/partials/shared/main_content',
+  locals: {
+    aktions_for_home_page: @aktions_for_home_page,
+    articles_for_home_page: @articles_for_home_page,
+    portraits_for_home_page: @portraits_for_home_page,
+    external_links_for_home_page: @external_links_for_home_page,
+    categories: @categories_for_side_nav
+  }
+%>
 
-      </div><!-- fin des articles -->
-      <!-- Portraits -->
-      <div class="col-xs-12 col-sm-4 col-md-3 col-md-offset-1 protagonistes">
-        <div class="col-xs-12 text-center">
-          <h2><%= t(:protagonists, default: "Protagonistes") %></h2>
-        </div>
-        <%= render partial: 'home_pages/partials/show/portrait_recommandations.html.erb',
-            locals: {
-              portraits: @portraits_for_home_page
-            }
-        %>
-      </div>
-    </div><!-- /.row -->
-
-    <hr>
-
-    <div class="row">
-
-      <!-- liens vers les catégories -->
-      <div class="col-xs-12 col-sm-4 col-sm-offset-2 text-center" id="categories">
-        <h2><%= t(:categories, default: "Catégories") %></h2>
-        <ul class="list-inline">
-
-          <% @categories_for_side_nav.each do | category | %>
-            <li>
-              <span class="categorie">
-                <%= link_to category.name, category_path(category.id) %>
-              </span>
-            </li>
-          <% end %>
-
-        </ul>
-      </div>
-
-      <!-- liens -->
-      <div class="col-xs-12 col-sm-4 text-center" id="liens">
-
-        <!-- external links -->
-        <%= render partial: 'shared/external_links', locals: {
-          external_links: @external_links_for_home_page,
-          class_name_for_ul: "list-unstyled "
-          }
-        %>
-
-      </div>
-    </div>
-  </div>
-</div>

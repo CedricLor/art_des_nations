@@ -1,15 +1,27 @@
 <%= simple_form_for(@home_page) do |f| %>
   <%= f.error_notification %>
 
-  <div>
-    <%= f.cktext_area :editorial, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
-  </div>
+  <% editorial = f.cktext_area :editorial, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
 
-  <div class="form-inputs">
-    <%= f.input :call_to_action %>
-  </div>
+  <!-- Edito -->
+  <%= render partial: 'home_pages/partials/shared/editorial_wrapper',
+    locals: {
+      editorial: editorial
+    }
+  %>
+
+  <% call_to_action = f.input :call_to_action %>
+
+  <!-- Call to action -->
+  <%= render partial: 'home_pages/partials/shared/call_to_action_wrapper',
+    locals: {
+      call_to_action: call_to_action
+    }
+  %>
 
   <div class="form-actions">
     <%= f.button :submit %>
   </div>
+
 <% end %>
+

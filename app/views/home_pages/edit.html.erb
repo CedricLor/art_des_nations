@@ -1,8 +1,21 @@
+<% content_for :title, t(:home_page_title, default: "Accueil") %>
 <% content_for :body_class, "page-accueil" %>
 
-<h1>Editing Home Page</h1>
 
 <%= render 'form' %>
+
+<!-- HOME_PAGES LAYOUT CONSTANT -->
+<%= render partial: 'home_pages/partials/shared/main_content',
+  locals: {
+    aktions_for_home_page: @aktions_for_home_page,
+    articles_for_home_page: @articles_for_home_page,
+    portraits_for_home_page: @portraits_for_home_page,
+    external_links_for_home_page: @external_links_for_home_page,
+    categories: @categories_for_side_nav
+  }
+%>
+
+
 
 <%= link_to 'Show', @home_page %> |
 <%= link_to 'Back', home_page_path(1) %>

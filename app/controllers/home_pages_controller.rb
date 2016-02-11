@@ -1,16 +1,13 @@
 class HomePagesController < ApplicationController
   before_action :set_home_page, only: [:show, :edit, :update]
+  before_action :set_ancillary_collections, only: [:show, :edit, :update]
+  skip_before_action :authenticate_user!, only: :show
 
   # GET /home_pages/1
   # GET /home_pages/1.json
   def show
-    @external_links_for_home_page = ExternalLink.includes(:home_pages).where(home_pages: {id: 1})
-    @articles_for_home_page = Article.for_home_page(locale)
-    @portraits_for_home_page = Portrait.with_media_containers_for_card(locale).slice(0, 3)
-    @aktions_for_home_page = Aktion.for_home_page(locale)
-
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render } # show.html.erb
       format.json { render json: @home_page }
     end
   end
@@ -39,8 +36,15 @@ class HomePagesController < ApplicationController
       @home_page = HomePage.find(1)
     end
 
+    def set_ancillary_collections
+      @external_links_for_home_page = ExternalLink.includes(:home_pages).where(home_pages: {id: 1})
+      @articles_for_home_page = Article.for_home_page(locale)
+      @portraits_for_home_page = Portrait.with_media_containers_for_card(locale).slice(0, 3)
+      @aktions_for_home_page = Aktion.for_home_page(locale)
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def home_page_params
-      params.require(:home_page).permit(:show)
+      params.require(:home_page).permit(:editorial, :call_to_action)
     end
 end
