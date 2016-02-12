@@ -31,12 +31,6 @@ class Article < ActiveRecord::Base
 
   translates :title, :body, :teaser, :posted_from_location, :status, :fallbacks_for_empty_translations => true
 
-  # Active Admin Translate
-  active_admin_translates :title, :body, :teaser, :posted_from_location, :status do
-    validates_presence_of :title
-  end
-
-
   def self.for_home_page(locale)
     articles = Article.all
 
