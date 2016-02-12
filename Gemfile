@@ -83,9 +83,3 @@ gem 'active_model_serializers'
 gem 'devise'
 gem 'devise-i18n'
 gem 'devise-i18n-views'
-
-# Active admin
-gem 'activeadmin', github: 'activeadmin'
-
-# I18n support for ActiveAdmin
-gem 'activeadmin-globalize', '~> 1.0.0.pre', github: 'fabn/activeadmin-globalize', branch: 'develop'

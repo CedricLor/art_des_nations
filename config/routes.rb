@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
 
   mount Ckeditor::Engine => '/ckeditor'
-  ActiveAdmin.routes(self)
   devise_for :users
   scope '(:locale)', locale: /fr|en|ru|zh-CN/ do
     # FIXME -- This was for React
