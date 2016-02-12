@@ -2,9 +2,12 @@
 <% content_for :body_class, "portraits" %>
 
 <%= render partial: 'portraits/partials/single_views', locals: {
-  title: @portrait.title,
-  teaser: @portrait.teaser,
-  image_url: @portrait.media_containers.first.media,
-  body: @portrait.body.html_safe
+  params: [@portrait.title,
+  @portrait.teaser,
+  image_tag(@portrait.media_containers.first.media, alt: ""),
+  @portrait.body.html_safe]
   }
 %>
+
+
+<%= link_to 'Edit', edit_portrait_path(@portrait) %>

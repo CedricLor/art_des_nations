@@ -1,39 +1,59 @@
+
 <div class="page-content">
   <div class="container">
     <div class="row">
       <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-        <h1><%= title %></h1>
+        <h1><%= params[0] %></h1>
         <h2 class="resume">
-          <%= teaser %>
+          <%= params[1] %>
         </h2>
       </div>
     </div>
     <div class="row contenu illustration">
       <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-        <%= image_tag(image_url, alt: "") %>
+        <%= params[2] %>
       </div>
     </div>
     <div class="row contenu-principal">
       <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-        <%= body %>
+        <%= params[3] %>
       </div>
     </div>
-  </div>
-</div>
+    <% if params.size > 4 %>
 
-<hr>
+    <style>
+      div.my-inline-status-radios {
+        margin-top: 32px;
+      }
+      div.my-inline-status-radios > div > div > span {
+        display: inline-block;
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+      div.my-inline-status-radios > div > div > label {
+        display: block;
+      }
+      .my-submit-button {
 
-<div class="container-fluid recommandations">
-  <div class="container">
-    <h2><%= t(:related, default: "En lien") %></h2>
+      }
+    </style>
+
+
+    <div class="row my-inline-status-radios">
+      <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
+        <%= params[4] %>
+      </div>
+    </div>
+
     <div class="row">
-      <div class="col-xs-12 col-sm-4 recommandation">
-          <p class="categorie"><a href="#">En Chine</a></p>
-          <a href="/article.php">
-          <img src="/img/defaut-horiz-thin.png" alt="">
-          <h3>ADN en Chine - Avril</h3>
-          </a>
+      <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
+        <%= params[5] %>
       </div>
     </div>
+
+    <% end %>
   </div>
 </div>
+
+<%= render partial: 'portraits/partials/recommandations' %>
+
