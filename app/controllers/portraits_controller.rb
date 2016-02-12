@@ -52,6 +52,8 @@ class PortraitsController < ApplicationController
   # PATCH/PUT /portraits/1
   # PATCH/PUT /portraits/1.json
   def update
+    byebug
+
     respond_to do |format|
       if @portrait.update(portrait_params)
         format.html { redirect_to @portrait, notice: 'Portrait was successfully updated.' }
@@ -81,6 +83,6 @@ class PortraitsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def portrait_params
-      params[:portrait]
+      params.require(:portrait).permit(:title, :body, :teaser, :status)
     end
 end

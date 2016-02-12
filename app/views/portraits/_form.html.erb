@@ -1,7 +1,9 @@
+<%# portraits/_form.html.erb %>
+
 <%= simple_form_for(@portrait) do |f| %>
   <%= f.error_notification %>
 
-  <!-- dispatching the form fields in variables to pass them to the partial -->
+  <%# dispatching the form fields in variables to pass them to the partial %>>
   <% title = f.input :title %>
   <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
   <% body = f.cktext_area :body, rows: 50, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
@@ -12,14 +14,21 @@
     selected: "draft",
     label: 'Please select a status for this portrait',
     hint: 'If you select draft or archived, the portrait will not be published on the website',
-    error: 'Username is mandatory, please specify one'
+    error: 'Assigning a status to a portrait is mandatory, please specify one'
   %>
   <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
 
-  <!-- render the partial with the variables passed in an array -->
+  <%# render the partial with the variables passed in an array %>
   <%= render partial: 'portraits/partials/single_views',
     object: @portrait, locals: {
-      params: [ title, teaser, image_tag(@portrait.media_containers.first.media, alt: ""), body, status, submit_button ]
+      params: [
+        title,
+        teaser,
+        image_tag(@portrait.media_containers.first.media, alt: ""),
+        body,
+        status,
+        submit_button
+      ]
     }
   %>
 

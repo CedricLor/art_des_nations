@@ -1,10 +1,18 @@
+<%# aktions/show.html.erb %>
+
 <% content_for(:title, raw("#{@aktion.title}")) %>
 <% content_for :body_class, "page-article" %>
 
 <%= render partial: 'aktions/partials/container',
     layout: "shared/article_aktion_static/container_layout",
     locals: {
-      item: @aktion
+      parameters: [
+        @aktion.title,
+        @aktion.teaser,
+        @aktion.media_containers,
+        @aktion.body.html_safe
+      ]
+      # item: @aktion
     }
 %>
 

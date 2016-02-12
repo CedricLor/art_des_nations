@@ -50,6 +50,11 @@ class AktionsController < ApplicationController
   # PATCH/PUT /aktions/1
   # PATCH/PUT /aktions/1.json
   def update
+    # FIXME -- Take this out of the controller!!!
+    aktion = params[:aktion]
+    params[:aktion][:aktion_date] = Date.new aktion["aktion_date(1i)"].to_i, aktion["aktion_date(2i)"].to_i, aktion["aktion_date(3i)"].to_i
+    params[:aktion][:posted_at] = Date.new aktion["posted_at(1i)"].to_i, aktion["posted_at(2i)"].to_i, aktion["posted_at(3i)"].to_i
+
     respond_to do |format|
       if @aktion.update(aktion_params)
         format.html { redirect_to @aktion, notice: 'Aktion was successfully updated.' }
@@ -79,6 +84,6 @@ class AktionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def aktion_params
-      params[:aktion]
+      params.require(:aktion).permit(:title, :body, :teaser, :status, :aktion_date, :posted_at)
     end
 end

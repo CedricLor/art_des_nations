@@ -1,17 +1,43 @@
+<%# aktions/partials/_container.html.erb %>
+<%# called from:
+- view aktions/show.html.erb
+- view aktions/edit.html.erb
+- to come: view aktions/new.html.erb
+%>
 
 <%= render partial: 'shared/article_aktion_static/title_teaser', locals: {
-  title: item.title,
-  teaser: item.teaser
+  title: parameters[0],
+  teaser: parameters[1]
+  # title: item.title,
+  # teaser: item.teaser
   }
 %>
 
 <%= render partial: 'shared/article_aktion/galerie_photos', locals: {
-  pictures: item.media_containers
+  pictures: parameters[2]
+  # pictures: item.media_containers
   }
 %>
 
 <%= render partial: 'shared/aktion_static/body', locals: {
-  body: item.body
+  body: parameters[3]
+  # body: item.body
   },
   layout: 'shared/article_aktion_static/body_layout'
 %>
+
+<%# if params > 4, the partial is being called from the edit or the new aktions_controller actions
+Remaining params are (in this order -- important!!!):
+- status
+- aktion_date
+- posted_at
+- the submit button
+%>
+<% if parameters.size > 4 %>
+  <%= render partial: 'aktions/partials/additional_form_fields',
+    locals: {
+      remaining_params: parameters - parameters[0..3]
+    }
+  %>
+<% end %>
+

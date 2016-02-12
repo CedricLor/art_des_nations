@@ -1,3 +1,5 @@
+<%# View: static_pages/show.html.erb %>
+
 <% content_for(:title, raw("#{@static_page.title}")) %>
 <% content_for :body_class, "page-article" %>
 
@@ -6,7 +8,7 @@
     locals: {
       title: @static_page.title,
       teaser: @static_page.teaser,
-      body: @static_page.body
+      body: @static_page.body.html_safe
     }
 %>
 
