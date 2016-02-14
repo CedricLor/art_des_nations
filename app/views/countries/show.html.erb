@@ -1,43 +1,11 @@
-<% content_for :body_class, "page-action" %>
+<%# view: countries/show.html.erb %>
 
-<div class="container">
-  <div class="contenu">
-
-
-    <div class="row">
-      <div class="col-xs-12">
-        <!-- title -->
-        <h1>
-          <%= @country.title %>
-        </h1>
-      </div>
-    </div>
-
-
-    <div class="row contenu-principal">
-
-      <!-- editorial -->
-      <div class="col-xs-12 col-sm-7">
-        <%= @country.editorial.html_safe %>
-      </div>
-
-      <div class="col-xs-12 col-sm-5">
-
-        <!-- aktion list -->
-        <div id="recommandations">
-
-          <%= render partial: 'shared/recommandations', locals: {list: @aktions_by_country, additional_class_names: ""} %>
-
-        </div>
-
-        <!-- external links -->
-        <%= render partial: 'shared/external_links', locals: {
-          external_links: @external_links_by_country,
-          class_name_for_ul: " "
-          }
-        %>
-
-      </div>
-    </div>
-  </div>
-</div>
+<%= render partial: 'countries/partials/container',
+    object: @country,
+    locals: {
+      parameters: [
+        @country.title,
+        @country.editorial.html_safe
+      ]
+    }
+%>

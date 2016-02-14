@@ -1,5 +1,17 @@
 <%# aktions/partials/_additional_form_fields.html.erb %>
+<%# called from:
+- aktions/partials/_container.html.erb
+- articles/partials_container.html.erb
+%>
 
+<%# !!!!!!!!!! THIS IS A LOOP ITERATING ON THE REMAINING FORM FIELDS !!!!!!!! %>
+<%# The remaining form fields are :
+Remaining parameters are (in this order -- important!!!):
+- status
+- aktion_date
+- posted_at
+- the submit button
+%>
 <% remaining_params.each do |parameter| %>
   <!-- FIXME - Refactor the layout aspects into a layout
   - check portraits/partials/_single_views.html.erb which also needs the same refactoring
@@ -7,6 +19,10 @@
   -->
   <div class="row">
     <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
+      <%# FIXME
+      - Rename the called partial to item_of_type_body
+      - Move it to shared/article_aktion_static
+      - update the callers %>
       <%= render partial: 'shared/aktion_static/body', locals: {
         body: parameter
         }

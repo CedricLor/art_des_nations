@@ -1,19 +1,44 @@
+<%# articles/partials/_container.html.erb %>
+<%# called from:
+- articles/show.html.erb
+- articles/_form.html.erb
+%>
 
 <%= render partial: 'shared/article_aktion_static/title_teaser', locals: {
-  title: item.title,
-  teaser: item.teaser
+  title: parameters[0],
+  teaser: parameters[1]
+  # title: item.title,
+  # teaser: item.teaser
   }
 %>
 
 <%= render partial: 'shared/article_aktion/galerie_photos', locals: {
-  pictures: item.media_containers
+  pictures: parameters[2]
+  # pictures: item.media_containers
   }
 %>
 
-<%= render partial: 'articles/partials/body', locals: {
-  article: item
+<%= render partial: 'articles/partials/body',
+  object: @article,
+  locals: {
+    body_content: parameters[3],
+    posted_from_location: parameters[4],
+    posted_at: parameters[5]
   },
   layout: 'shared/article_aktion_static/body_layout'
 %>
+
+<%# if parameters > 4, the partial is being called from the edit or the new articles_controller actions
+Remaining parameters are (in this order -- important!!!):
+- status
+- the submit button
+%>
+<% if parameters.size > 6 %>
+  <%= render partial: 'shared/article_aktion/additional_form_fields',
+    locals: {
+      remaining_params: parameters - parameters[0..5]
+    }
+  %>
+<% end %>
 
 

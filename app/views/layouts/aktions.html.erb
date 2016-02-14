@@ -1,0 +1,12 @@
+<%# layout/aktions.html.erb %>
+
+<% content_for(:title, raw("#{@aktion.title}")) %>
+<% content_for :body_class, "page-article" %>
+
+<% content_for :content do %>
+  <%= content_for?(:aktions_content) ? yield(:aktions_content) : yield %>
+  <hr>
+  <%= render partial: 'shared/article_aktion/recommandations' %>
+<% end %>
+<%= render template: "layouts/application" %>
+

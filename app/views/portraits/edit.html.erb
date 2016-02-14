@@ -1,6 +1,7 @@
+<% content_for :title, raw(@portrait.title) %>
 <% content_for :body_class, "portraits" %>
 
 <%= render 'form' %>
 
 <%= link_to 'Show', @portrait %> |
-<%= link_to 'Back', portraits_path %>
+<%= link_to 'Back', portrait_intro_path(1) %>

@@ -11,7 +11,8 @@ Rails.application.routes.draw do
     resources :media_containers
 
     resources :countries, only: [:show, :edit, :update]
-    resources :portraits
+    resources :portraits, only: [:show, :edit, :update]
+    resources :portrait_intros, only: [:show, :edit, :update]
     resources :categories, only: [:show, :index, :new, :edit, :update]
 
   # The priority is based upon order of creation: first created -> highest priority.

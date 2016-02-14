@@ -25,21 +25,19 @@
 
     <div id="wrapper">
       <!-- Side nav -->
-      <%= render 'shared/sidebar.html.erb' %>
+      <%= render 'shared/sidebar' %>
 
       <!-- Page Content -->
       <div id="page-content-wrapper">
 
         <!-- Top nav -->
-        <%= render 'shared/top_nav.html.erb' %>
+        <%= render 'shared/top_nav' %>
 
         <!-- Flash messages -->
-        <%= render 'shared/flash' %>
-
+        <%= render 'shared/flash/flash' %>
 
         <!-- Dynamic content -->
         <%= content_for?(:content) ? yield(:content) : yield %>
-
 
         <!-- Footer -->
         <%= render 'shared/footer.html.erb' %>

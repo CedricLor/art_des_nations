@@ -1,3 +1,10 @@
+<%# shared/portraits_categories/_list.html.erb %>
+<%# called from:
+- portraits/index.html.erb
+- categories/show.html.erb
+- categories/_form.html.erb
+%>
+
 <div class="page-content">
   <div class="container">
 
@@ -6,11 +13,17 @@
       <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
         <!-- List name (Portraits ou nom de la catégorie) -->
         <h1>
-          <%= list_name %>
+          <%= parameters[0] %>
         </h1>
         <!-- Intro (intro for portraits or categorie teaser) -->
         <h2 class="resume">
-          <%= intro %>
+          <%= parameters[1] %>
+          <!-- submit button in case the partials is called from a form -->
+          <% if parameters.size > 3 %>
+            <div>
+              <%= parameters[3] %>
+            </div>
+          <% end %>
         </h2>
       </div>
     </div>
@@ -19,7 +32,7 @@
     <div class="row">
 
       <%= render partial: 'shared/recommandations', locals: {
-        list: list,
+        list: parameters[2],
         additional_class_names: "col-xs-12 col-sm-4 "
         }
       %>

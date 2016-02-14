@@ -39,6 +39,10 @@ class ArticlesController < ApplicationController
   # PATCH/PUT /articles/1
   # PATCH/PUT /articles/1.json
   def update
+    # FIXME -- Take this out of the controller!!!
+    aktion = params[:article]
+    params[:article][:posted_at] = Date.new aktion["posted_at(1i)"].to_i, aktion["posted_at(2i)"].to_i, aktion["posted_at(3i)"].to_i
+
     respond_to do |format|
       if @article.update(article_params)
         format.html { redirect_to @article, notice: 'Article was successfully updated.' }
@@ -68,6 +72,6 @@ class ArticlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
-      params[:article]
+      params.require(:article).permit(:title, :body, :teaser, :status, :posted_from_location, :posted_at)
     end
 end

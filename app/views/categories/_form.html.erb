@@ -1,10 +1,37 @@
+<%# categories/_form.html.erb %>
+
+<% content_for(:title, raw("#{@category.name}")) %>
+<% content_for :body_class, "portraits" %>
+
+<!--
+<%#= link_to 'Edit', edit_category_path(@category) %> |
+<%#= link_to 'Back', categories_path %>
+-->
+
 <%= simple_form_for(@category) do |f| %>
   <%= f.error_notification %>
 
-  <div class="form-inputs">
-  </div>
+  <% list_name = f.input :name %>
+  <% editorial = f.cktext_area :editorial, rows: 50, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+  <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
+  <%= render partial: 'shared/portraits_categories/list', locals: {
+    parameters: [
+      list_name,
+      editorial,
+      @categorized_articles_and_aktions,
+      submit_button
+    ]
+    # list: @categorized_articles_and_aktions,
+    # list_name: @category.name,
+    # intro: @category.editorial.html_safe
+    }
+  %>
+
+  <!--<div class="form-inputs">
+  </div>-->
+
+  <!--<div class="form-actions">
+    <%#= f.button :submit %>
+  </div>-->
 <% end %>

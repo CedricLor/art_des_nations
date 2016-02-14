@@ -2,19 +2,6 @@ class PortraitsController < ApplicationController
   before_action :set_portrait, only: [:show, :edit, :update, :destroy]
   skip_before_action :authenticate_user!, only: [:index, :show]
 
-  # GET /portraits
-  # GET /portraits.json
-  def index
-    # @portrait_feed = PortraitFeed.new(portraits: Portrait.all)
-    @portraits = Portrait.with_media_containers_for_card(locale)
-    @portrait_intro = PortraitIntro.find(1)
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @portrait_feed }
-    end
-  end
-
   # GET /portraits/1
   # GET /portraits/1.json
   def show

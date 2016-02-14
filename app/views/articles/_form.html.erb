@@ -1,47 +1,97 @@
-<% if @article.errors.any? %>
+<%# articles/_form.html.erb %>
+
+<%= simple_form_for(@article) do |f| %>
+  <%= f.error_notification %>
+
+  <%# dispatching the form fields in variables to pass them to the partial %>
+  <% title = f.input :title %>
+  <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+  <% body = f.cktext_area :body, rows: 50, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+  <% posted_from_location = f.input :posted_from_location %>
+  <% posted_at = f.input :posted_at, as: :date %>
+  <% status = f.input :status,
+    collection: %w(draft published featured archived),
+    as: :radio_buttons,
+    prompt: "Please select a status for this article",
+    selected: "draft",
+    label: 'Please select a status for this article',
+    hint: 'If you select draft or archived, the article will not be published on the website.',
+    error: 'Assigning a status to an article is mandatory, please specify one.'
+  %>
+  <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
+
+  <%# render the partial with the variables passed in an array %>
+  <%= render partial: 'articles/partials/container',
+      layout: "shared/article_aktion_static/container_layout",
+      object: @article,
+      locals: {
+        parameters: [
+          title,
+          teaser,
+          @article.media_containers,
+          body,
+          posted_from_location,
+          posted_at,
+          status,
+          submit_button
+        ]
+      }
+  %>
+
+<% end %>
+
+
+
+
+
+<!--
+<%# if @article.errors.any? %>
 <%# if @article_form.errors.any? %>
   <ul>
-    <%= @article.errors.full_messages.each do |message| %>
+    <%#= @article.errors.full_messages.each do |message| %>
     <%#= @article_form.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-    <% end %>
+        <li><%#= message %></li>
+    <%# end %>
   </ul>
-<% end %>
-<%= form_for(@article, url: articles_path, method: :post, html: { multipart: true }) do |f| %>
+<%# end %>
+<%#= form_for(@article, url: articles_path, method: :post, html: { multipart: true }) do |f| %>
 <%#= form_for(@article_form, url: articles_path, method: :post, html: { multipart: true }) do |f| %>
   <div>
-    <%= f.label :article_title %>
+    <%#= f.label :article_title %>
   </div>
   <div>
-    <%= f.text_field :title %>
+    <%#= f.text_field :title %>
   </div>
   <div>
-    <%= f.label :article_teaser %>
+    <%#= f.label :article_teaser %>
   </div>
   <div>
-    <%= f.text_area :teaser, rows: 5 %>
+    <%#= f.text_area :teaser, rows: 5 %>
   </div>
+  -->
   <!--
   <div>
     <%#= f.label :article_body %>
   </div>
   -->
+  <!--
   <div>
-    <%= f.cktext_area :body, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+    <%#= f.cktext_area :body, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
     <%#= f.cktext_area :article_body, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
   </div>
   <div>
-    <%= f.label :article_status %>
+    <%#= f.label :article_status %>
   </div>
   <div>
-    <%= f.text_field :status %>
+    <%#= f.text_field :status %>
   </div>
   <div>
-    <%= f.label :article_posted_at %>
+    <%#= f.label :article_posted_at %>
   </div>
   <div>
-    <%= f.date_field :posted_at %>
+    <%#= f.date_field :posted_at %>
   </div>
+  -->
   <!--
   <div>
     <%#= f.label :media_title %>
@@ -68,12 +118,14 @@
     <%#= f.date_field :media_creation_date %>
   </div>
   -->
+  <!--
   <div>
     <%#= f.label :media_file %>
   </div>
   <div>
     <%#= f.file_field :media_file %>
   </div>
+  -->
   <!--
   <div>
     <%#= f.label :picture_for_card %>
@@ -88,7 +140,9 @@
     <%#= select_tag(:picture_for_carousel, options_for_select([["True", "true"], ["False", "false"]], "false")) %>
   </div>
   -->
+  <!--
   <div>
-    <%= f.submit %>
+    <%#= f.submit %>
   </div>
-<% end %>
+<%# end %>
+-->

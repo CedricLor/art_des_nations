@@ -1,0 +1,17 @@
+<%# layouts/countries.html.erb %>
+
+<% content_for :body_class, "page-action" %>
+<% content_for(:title, raw("#{@country.title}")) %>
+
+<% content_for :content do %>
+
+  <div class="container">
+    <div class="contenu">
+
+    <%= content_for?(:countries_content) ? yield(:countries_content) : yield %>
+
+    </div>
+  </div>
+
+<% end %>
+<%= render template: "layouts/application" %>

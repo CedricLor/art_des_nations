@@ -1,5 +1,6 @@
 class CategoriesController < ApplicationController
-  before_action :set_category, only: [:edit, :update, :destroy]
+  before_action :set_category_with_aktions_and_articles, only: [:show, :edit, :update]
+  before_action :set_category, only: [:destroy]
   skip_before_action :authenticate_user!, only: :show
 
   # GET /categories
@@ -75,6 +76,11 @@ class CategoriesController < ApplicationController
   end
 
   private
+    def set_category_with_aktions_and_articles
+      @category = Category.includes(:aktions, :articles).find(params[:id])
+      @categorized_articles_and_aktions = Category.categorized_articles_and_aktions_for_category(@category, params[:locale])
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_category
       @category = @categories.find(params[:id])
@@ -82,6 +88,6 @@ class CategoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def category_params
-      params[:category]
+      params.require(:category).permit(:name, :editorial)
     end
 end

@@ -1,0 +1,16 @@
+<%# portrait_intros/show %>
+
+<% content_for(:title, t(:portraits, default: "Portraits")) %>
+<% content_for :body_class, "portraits" %>
+
+<%= render partial: 'shared/portraits_categories/list', locals: {
+    parameters: [
+      t(:portraits, default: "Portraits"),
+      @portrait_intro.intro.html_safe,
+      @portraits
+    ]
+    # list_name: t(:portraits, default: "Portraits"),
+    # intro: @portrait_intro.intro.html_safe,
+    # list: @portraits,
+  }
+%>

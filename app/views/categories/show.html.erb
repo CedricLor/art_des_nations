@@ -1,3 +1,4 @@
+<% content_for(:title, raw("#{@category.name}")) %>
 <% content_for :body_class, "portraits" %>
 
 <!--
@@ -5,9 +6,11 @@
 <%#= link_to 'Back', categories_path %>
 -->
 
-<%= render partial: 'shared/list', locals: {
-  list: @categorized_articles_and_aktions,
-  list_name: @category.name,
-  intro: @category.editorial.html_safe
+<%= render partial: 'shared/portraits_categories/list', locals: {
+    parameters: [
+      @category.name,
+      @category.editorial.html_safe,
+      @categorized_articles_and_aktions
+    ]
   }
 %>

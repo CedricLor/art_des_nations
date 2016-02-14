@@ -1,13 +1,17 @@
-<% content_for(:title, raw("#{@article.title}")) %>
-<% content_for :body_class, "page-article" %>
+<%# view: articles/show.html.erb %>
+<%# rendered in layout/articles.html.erb %>
 
 <%= render partial: 'articles/partials/container',
     layout: "shared/article_aktion_static/container_layout",
+    object: @article,
     locals: {
-      item: @article
+      parameters: [
+        @article.title,
+        @article.teaser.html_safe,
+        @article.media_containers,
+        @article.body.html_safe,
+        @article.posted_from_location,
+        @article.posted_at
+      ]
     }
 %>
-
-<hr>
-
-<%= render partial: 'articles/partials/recommandations' %>

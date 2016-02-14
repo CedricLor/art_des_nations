@@ -1,27 +1,30 @@
 <%# portraits/partials/_single_views.html.erb %>
+<%# called from:
+- portraits/show.html.erb
+%>
 
 <div class="page-content">
   <div class="container">
     <div class="row">
       <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
         <%# Title %>
-        <h1><%= params[0] %></h1>
+        <h1><%= parameters[0] %></h1>
         <%# Teaser %>
         <h2 class="resume">
-          <%= params[1] %>
+          <%= parameters[1] %>
         </h2>
       </div>
     </div>
     <%# Picture %>
     <div class="row contenu illustration">
       <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-        <%= params[2] %>
+        <%= parameters[2] %>
       </div>
     </div>
     <%# Body %>
     <div class="row contenu-principal">
       <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-        <%= params[3] %>
+        <%= parameters[3] %>
       </div>
     </div>
 
@@ -29,7 +32,7 @@
       its params array has more than four items ()
     %>
 
-    <% if params.size > 4 %>
+    <% if parameters.size > 4 %>
 
     <!-- FIXME - put this into the css -->
     <style>
@@ -52,14 +55,14 @@
     <%# status selection %>
     <div class="row my-inline-status-radios">
       <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-        <%= params[4] %>
+        <%= parameters[4] %>
       </div>
     </div>
 
     <%# submit button %>
     <div class="row">
       <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-        <%= params[5] %>
+        <%= parameters[5] %>
       </div>
     </div>
 

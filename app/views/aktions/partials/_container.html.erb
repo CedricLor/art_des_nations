@@ -26,15 +26,15 @@
   layout: 'shared/article_aktion_static/body_layout'
 %>
 
-<%# if params > 4, the partial is being called from the edit or the new aktions_controller actions
-Remaining params are (in this order -- important!!!):
+<%# if parameters > 4, the partial is being called from the edit or the new aktions_controller actions
+Remaining parameters are (in this order -- important!!!):
 - status
 - aktion_date
 - posted_at
 - the submit button
 %>
 <% if parameters.size > 4 %>
-  <%= render partial: 'aktions/partials/additional_form_fields',
+  <%= render partial: 'shared/article_aktion/additional_form_fields',
     locals: {
       remaining_params: parameters - parameters[0..3]
     }

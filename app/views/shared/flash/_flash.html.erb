@@ -1,0 +1,7 @@
+<% if flash[:notice] %>
+  <% render partial: 'shared/flash/flash_notice', layout: 'shared/flash/flash_layout' %>
+<% end %>
+
+<% if flash[:alert] %>
+  <% render partial: 'shared/flash/flash_alert', layout: 'shared/flash/flash_layout' %>
+<% end %>

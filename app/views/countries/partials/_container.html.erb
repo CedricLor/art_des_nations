@@ -1,0 +1,31 @@
+<%# countries/partials/_container.html.erb %>
+<%# called from:
+- countries/_form.html.erb
+- countries/show.html.erb
+%>
+
+<%= render partial: 'countries/partials/title',
+    locals: {
+      title: parameters[0]
+    }
+%>
+
+<%= render partial: 'countries/partials/main_content',
+    locals: {
+      editorial: parameters[1]
+    }
+%>
+
+<%# if parameters > 2, the partial is being called from the edit or the new countries_controller actions
+Remaining parameters are (in this order -- important!!!):
+- the submit button
+%>
+<% if parameters.size > 2 %>
+  <%= render partial: 'shared/article_aktion/additional_form_fields',
+    locals: {
+      remaining_params: parameters - parameters[0..1]
+    }
+  %>
+<% end %>
+
+

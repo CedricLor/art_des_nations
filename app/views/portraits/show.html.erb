@@ -1,11 +1,11 @@
 <%# portraits/show.html.erb %>
 
-<% content_for :title, t(:portraits, default: "Portraits") %>
+<% content_for :title, raw(@portrait.title) %>
 <% content_for :body_class, "portraits" %>
 
 <%= render partial: 'portraits/partials/single_views',
   locals: {
-    params: [
+    parameters: [
       @portrait.title,
       @portrait.teaser.html_safe,
       image_tag(@portrait.media_containers.first.media, alt: ""),
