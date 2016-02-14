@@ -7,6 +7,11 @@ class CreateAktions < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+
+    add_index :aktions, :country_id
+    add_index :aktions, :posted_at
+    add_index :aktions, :aktion_date
+
     Aktion.create_translation_table! :title => {:type => :string, :null => false, default: ''},
       :body => {type: :text, null: false, default: ''},
       :teaser => {type: :text, null: false, default: ''},

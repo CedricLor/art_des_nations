@@ -11,25 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211162048) do
+ActiveRecord::Schema.define(version: 20160214165924) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "active_admin_comments", force: :cascade do |t|
-    t.string   "namespace"
-    t.text     "body"
-    t.string   "resource_id",   null: false
-    t.string   "resource_type", null: false
-    t.integer  "author_id"
-    t.string   "author_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
-  add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
-  add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
 
   create_table "aktion_translations", force: :cascade do |t|
     t.integer  "aktion_id",                    null: false
@@ -52,6 +37,10 @@ ActiveRecord::Schema.define(version: 20160211162048) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  add_index "aktions", ["aktion_date"], name: "index_aktions_on_aktion_date", using: :btree
+  add_index "aktions", ["country_id"], name: "index_aktions_on_country_id", using: :btree
+  add_index "aktions", ["posted_at"], name: "index_aktions_on_posted_at", using: :btree
 
   create_table "article_linkings", force: :cascade do |t|
     t.integer "article_id",                                    null: false
@@ -83,6 +72,8 @@ ActiveRecord::Schema.define(version: 20160211162048) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_index "articles", ["author_id"], name: "index_articles_on_author_id", using: :btree
 
   create_table "authors", force: :cascade do |t|
     t.string   "full_name",  default: "", null: false
@@ -182,7 +173,6 @@ ActiveRecord::Schema.define(version: 20160211162048) do
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.text     "call_to_action", default: "", null: false
-    t.text     "editorial",      default: "", null: false
   end
 
   add_index "home_page_translations", ["home_page_id"], name: "index_home_page_translations_on_home_page_id", using: :btree
@@ -279,6 +269,25 @@ ActiveRecord::Schema.define(version: 20160211162048) do
   create_table "portraits", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "site_editorial_translations", force: :cascade do |t|
+    t.integer  "site_editorial_id",                   null: false
+    t.string   "locale",                              null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.string   "title",             default: "",      null: false
+    t.text     "body",              default: "",      null: false
+    t.text     "status",            default: "draft", null: false
+  end
+
+  add_index "site_editorial_translations", ["locale"], name: "index_site_editorial_translations_on_locale", using: :btree
+  add_index "site_editorial_translations", ["site_editorial_id"], name: "index_site_editorial_translations_on_site_editorial_id", using: :btree
+
+  create_table "site_editorials", force: :cascade do |t|
+    t.integer  "home_page_id", default: 1, null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "static_page_translations", force: :cascade do |t|

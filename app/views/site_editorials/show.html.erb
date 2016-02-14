@@ -1,0 +1,17 @@
+<%# site_editorials/show.html.erb %>
+
+<% content_for :title, raw(@site_editorial.title) %>
+<% content_for :body_class, "portraits" %>
+
+<%= render partial: 'site_editorials/partials/container',
+    layout: "shared/article_aktion_static/container_layout",
+    locals: {
+      parameters: [
+        @site_editorial.title,
+        @site_editorial.body.html_safe
+      ]
+    }
+%>
+
+<%= link_to 'Edit', edit_site_editorial_path(@site_editorial) %> |
+<%= link_to 'Back', site_editorials_path %>

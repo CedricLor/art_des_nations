@@ -4,8 +4,7 @@ class CreateHomePages < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    HomePage.create_translation_table! call_to_action: {type: :text, null: false, default: ''},
-      editorial: {type: :text, null: false, default: ''}
+    HomePage.create_translation_table! call_to_action: {type: :text, null: false, default: ''}
   end
 
   def down

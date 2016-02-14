@@ -1,10 +1,27 @@
 class HomePage < ActiveRecord::Base
-  validates :editorial, presence: true
-
   has_many :external_linkings, :as => :external_linkable, inverse_of: :home_page
   has_many :external_links, through: :external_linkings
+  has_many :site_editorials, inverse_of: :home_page
 
-  translates :call_to_action, :editorial, :fallbacks_for_empty_translations => true
+  translates :call_to_action, :fallbacks_for_empty_translations => true
+
+  def site_editorial
+    SiteEditorial.where(status: "published").last
+  end
+
+  def editorial
+    site_editorial.body
+  end
+
+  def editorial_id
+    site_editorial.id
+  end
+
+  def editorial=(value)
+    SiteEditorial.where(status: "published").last.update!(
+      body: value
+    )
+  end
 
   def short_editorial
     short_editorial = editorial.slice(0, 350)

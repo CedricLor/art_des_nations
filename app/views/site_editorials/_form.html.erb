@@ -1,0 +1,34 @@
+<%# site_editorials/_form.html.erb %>
+
+<% content_for :title, raw(@site_editorial.title) %>
+<% content_for :body_class, "portraits" %>
+
+<%= simple_form_for(@site_editorial) do |f| %>
+  <%= f.error_notification %>
+
+  <% title = f.input :title %>
+  <% body = f.cktext_area :body, rows: 50, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+  <% status = f.input :status,
+    collection: %w(draft published archived),
+    as: :radio_buttons,
+    prompt: "Please select a status for this editorial",
+    selected: "draft",
+    label: 'Please select a status for this editorial',
+    hint: 'If you select draft or archived, the editorial will not be published on the website.',
+    error: 'Assigning a status to an editorial is mandatory, please specify one.'
+  %>
+  <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
+
+  <%= render partial: 'site_editorials/partials/container',
+      layout: "shared/article_aktion_static/container_layout",
+      locals: {
+        parameters: [
+          title,
+          body,
+          status,
+          submit_button
+        ]
+      }
+  %>
+
+<% end %>

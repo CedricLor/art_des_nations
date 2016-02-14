@@ -1,0 +1,31 @@
+<%# site_editorials/partials/_container.html.erb %>
+<%# called from:
+- site_editorials/show.html.erb
+- site_editorials/_form.html.erb
+%>
+
+<%= render partial: 'site_editorials/partials/title', locals: {
+  title: parameters[0]
+  }
+%>
+
+<%= render partial: 'shared/aktion_static/body', locals: {
+  body: parameters[1]
+  },
+  layout: 'shared/article_aktion_static/body_layout'
+%>
+
+<%# if parameters > 2, the partial is being called from the edit or the new site_editorial_controller actions
+Remaining parameters are (in this order -- important!!!):
+- status
+- the submit button
+%>
+<% if parameters.size > 2 %>
+  <%= render partial: 'shared/article_aktion/additional_form_fields',
+    locals: {
+      remaining_params: parameters - parameters[0..1]
+    }
+  %>
+<% end %>
+
+

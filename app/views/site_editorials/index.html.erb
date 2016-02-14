@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Site Editorials</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @site_editorials.each do |site_editorial| %>
+      <tr>
+        <td><%= link_to 'Show', site_editorial %></td>
+        <td><%= link_to 'Edit', edit_site_editorial_path(site_editorial) %></td>
+        <td><%= link_to 'Destroy', site_editorial, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Site editorial', new_site_editorial_path %>

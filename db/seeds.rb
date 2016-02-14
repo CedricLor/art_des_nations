@@ -244,14 +244,22 @@ external_link_ids = ExternalLink.all.map { |el| el.id }
 # 9. Static pages
 
 HomePage.create!(
-  call_to_action: Faker::Hipster.sentence(10),
-  editorial: "FR - " + fakerForBody
+  call_to_action: Faker::Hipster.sentence(10)
+)
+SiteEditorial.create!(
+  title: Faker::Hipster.sentence(3),
+  body: "FR - " + fakerForBody,
+  status: "published"
 )
 
 I18n.locale = :en
 HomePage.first.update!(
   call_to_action: Faker::Hipster.sentence(10),
-  editorial: "EN - " + fakerForBody
+)
+SiteEditorial.first.update!(
+  title: Faker::Hipster.sentence(3),
+  body: "EN - " + fakerForBody,
+  status: "published"
 )
 I18n.locale = :fr
 

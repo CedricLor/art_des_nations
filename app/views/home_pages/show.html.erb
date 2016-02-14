@@ -5,7 +5,8 @@
 <!-- Edito -->
 <%= render partial: 'home_pages/partials/shared/editorial_wrapper',
   locals: {
-    editorial: @home_page.short_editorial.html_safe
+    editorial: @home_page.short_editorial.html_safe,
+    editorial_id: @home_page.editorial_id
   }
 %>
 

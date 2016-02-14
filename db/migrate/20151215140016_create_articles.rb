@@ -6,6 +6,9 @@ class CreateArticles < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+
+    add_index :articles, :author_id
+
     Article.create_translation_table! :title => {:type => :string, :null => false, default: ''},
       :body => {type: :text, null: false, default: ''},
       :teaser => {type: :text, null: false, default: ''},
