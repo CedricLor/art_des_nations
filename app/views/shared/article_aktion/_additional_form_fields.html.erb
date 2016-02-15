@@ -2,15 +2,21 @@
 <%# called from:
 - aktions/partials/_container.html.erb
 - articles/partials_container.html.erb
+- countries/partials/_container.html.erb
+- site_editorials/partials/_container.html.erb
 %>
 
 <%# !!!!!!!!!! THIS IS A LOOP ITERATING ON THE REMAINING FORM FIELDS !!!!!!!! %>
-<%# The remaining form fields are :
+<%# For the aktions, the remaining form fields are :
 Remaining parameters are (in this order -- important!!!):
 - status
 - aktion_date
 - posted_at
 - the submit button
+
+TO BE COMPLETED: remaining params for other types (articles, countries, site_editorials)
+FIXME: Move to folder entitled aktion_article_country_siteeditorial
+FIXME: Check in the other types (static, categories, portraits) how they render the additional form_fields
 %>
 <% remaining_params.each do |parameter| %>
   <!-- FIXME - Refactor the layout aspects into a layout

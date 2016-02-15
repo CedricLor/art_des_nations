@@ -54,17 +54,7 @@ en:
   home_page_title: "Home"
   published_html: "<p class='meta'>Published on <span class='date-publication'>%{posted_at}</span> in <span class='lieu-publication'>%{posted_from_location}</span></p>"
 
-
-
-  active_admin:
-    globalize:
-      translations: 'Available translations'
-      language:
-        en: 'English'
-        fr: 'French'
-        ru: 'Russian'
-        zh-CN: 'Chinese'
-
+  mark_for_deletion: "Mark this picture 'for deletion'"
 
 
   activerecord:

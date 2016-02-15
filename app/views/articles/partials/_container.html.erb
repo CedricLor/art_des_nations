@@ -5,40 +5,29 @@
 %>
 
 <%= render partial: 'shared/article_aktion_static/title_teaser', locals: {
-  title: parameters[0],
-  teaser: parameters[1]
-  # title: item.title,
-  # teaser: item.teaser
+  title: parameters[:title],
+  teaser: parameters[:teaser]
   }
 %>
 
-<%= render partial: 'shared/article_aktion/galerie_photos', locals: {
-  pictures: parameters[2]
-  # pictures: item.media_containers
-  }
-%>
+<%= yield :pictures %>
 
 <%= render partial: 'articles/partials/body',
   object: @article,
   locals: {
-    body_content: parameters[3],
-    posted_from_location: parameters[4],
-    posted_at: parameters[5]
+    body_content: parameters[:body],
+    posted_from_location: parameters[:posted_from_location],
+    posted_at: parameters[:posted_at]
   },
   layout: 'shared/article_aktion_static/body_layout'
 %>
 
-<%# if parameters > 4, the partial is being called from the edit or the new articles_controller actions
-Remaining parameters are (in this order -- important!!!):
-- status
-- the submit button
-%>
+<%# if parameters > 4, the partial is being called from the edit or the new articles_controller actions %>
 <% if parameters.size > 6 %>
   <%= render partial: 'shared/article_aktion/additional_form_fields',
     locals: {
-      remaining_params: parameters - parameters[0..5]
+      remaining_params: parameters.select { |key, value| key === :status || key === :submit_button }.values
     }
   %>
 <% end %>
-
 

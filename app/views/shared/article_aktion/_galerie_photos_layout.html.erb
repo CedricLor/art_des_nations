@@ -1,0 +1,16 @@
+<%# shared/article_aktion/_galerie_photos_layout.html.erb %>
+<%# called with:
+- shared/article_aktion/_galerie_photos.html.erb
+and by:
+- aktions/partials/_container.html.erb
+- articles/_form.html.erb
+- articles/show.html.erb
+%>
+
+<div class="diaporama-wrapper">
+  <div id="galerie-photos" class="flexslider">
+    <ul class="slides">
+      <%= yield %>
+    </ul>
+  </div><!-- fin de diaporama -->
+</div><!-- fin de diaporama-wrapper -->

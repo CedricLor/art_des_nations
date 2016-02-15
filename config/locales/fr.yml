@@ -54,16 +54,8 @@ fr:
   home_page_title: "Accueil"
   published_html: "<p class='meta'>Publié le <span class='date-publication'>%{posted_at}</span> à <span class='lieu-publication'>%{posted_from_location}</span></p>"
 
+  mark_for_deletion: "Marquer cette photo comme 'à supprimer'"
 
-
-  active_admin:
-    globalize:
-      translations: 'Traductions disponibles'
-      language:
-        en: 'Anglais'
-        fr: 'Français'
-        ru: 'Russe'
-        zh-CN: 'Chinois'
 
   activerecord:
     errors:

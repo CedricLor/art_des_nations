@@ -13,10 +13,12 @@
   }
 %>
 
-<%= render partial: 'shared/article_aktion/galerie_photos', locals: {
-  pictures: parameters[2]
-  # pictures: item.media_containers
-  }
+<%= render partial: 'shared/article_aktion/galerie_photos',
+    layout: 'shared/article_aktion/galerie_photos_layout',
+    locals: {
+      pictures: parameters[2]
+    # pictures: item.media_containers
+    }
 %>
 
 <%= render partial: 'shared/aktion_static/body', locals: {

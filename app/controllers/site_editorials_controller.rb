@@ -1,5 +1,6 @@
 class SiteEditorialsController < ApplicationController
   before_action :set_site_editorial, only: [:show, :edit, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [:index, :show]
 
   # GET /site_editorials
   # GET /site_editorials.json

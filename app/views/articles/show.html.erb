@@ -1,17 +1,27 @@
 <%# view: articles/show.html.erb %>
 <%# rendered in layout/articles.html.erb %>
 
+<% provide :pictures do %>
+  <%= render partial: 'shared/article_aktion/galerie_photos',
+      layout: 'shared/article_aktion/galerie_photos_layout',
+      locals: {
+        pictures: @article.media_containers,
+        sub_partial: 'shared/article_aktion/slide_wrapper'
+      }
+  %>
+<% end %>
+
+
 <%= render partial: 'articles/partials/container',
     layout: "shared/article_aktion_static/container_layout",
     object: @article,
     locals: {
-      parameters: [
-        @article.title,
-        @article.teaser.html_safe,
-        @article.media_containers,
-        @article.body.html_safe,
-        @article.posted_from_location,
-        @article.posted_at
-      ]
+      parameters: {
+        title: @article.title,
+        teaser: @article.teaser.html_safe,
+        body: @article.body.html_safe,
+        posted_from_location: @article.posted_from_location,
+        posted_at: @article.posted_at
+      }
     }
 %>

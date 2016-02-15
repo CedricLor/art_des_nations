@@ -1,0 +1,16 @@
+<%# shared/article_aktion/_slide_wrapper_form.html.erb %>
+<%# called from:
+- shared/article_aktion/_galerie_photos.html.erb
+%>
+
+<%= image_tag(pict.media(:for_slider), alt: "") %>
+<p class="legende"><%= pict.title %></p>
+
+<!-- ADDITIONAL ITEM: DESTROY BUTTON -->
+<span class="checkbox">
+  <label for=<%= "article_media_container_#{pict.id}"%> >
+    <input class="check_boxes required"  type="checkbox" name=<%= "article[md_for_destruction][#{pict.id}]"%> id=<%="article_media_container_#{pict.id}"%> value='true' >
+    <%= t :mark_for_deletion, default: "Mark this picture for deletion" %>
+  </label>
+</span>
+<!-- END ADDITIONAL ITEM: DESTROY BUTTON -->

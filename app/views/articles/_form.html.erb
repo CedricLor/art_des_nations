@@ -1,5 +1,6 @@
 <%# articles/_form.html.erb %>
 
+
 <%= simple_form_for(@article) do |f| %>
   <%= f.error_notification %>
 
@@ -20,21 +21,34 @@
   %>
   <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
 
+  <%# building the pictures'array together with media_containers editable fields %>
+  <% provide :pictures do %>
+
+    <%= render partial: 'shared/article_aktion/galerie_photos',
+        layout: 'shared/article_aktion/galerie_photos_layout',
+        locals: {
+          pictures: @article.media_containers,
+          sub_partial: 'shared/article_aktion/slide_wrapper_form'
+        }
+    %>
+
+  <% end %>
+
+
   <%# render the partial with the variables passed in an array %>
   <%= render partial: 'articles/partials/container',
       layout: "shared/article_aktion_static/container_layout",
       object: @article,
       locals: {
-        parameters: [
-          title,
-          teaser,
-          @article.media_containers,
-          body,
-          posted_from_location,
-          posted_at,
-          status,
-          submit_button
-        ]
+        parameters: {
+          title: title,
+          teaser: teaser,
+          body: body,
+          posted_from_location: posted_from_location,
+          posted_at: posted_at,
+          status: status,
+          submit_button: submit_button
+        }
       }
   %>
 

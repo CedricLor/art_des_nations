@@ -1,18 +1,18 @@
-<div class="diaporama-wrapper">
-  <div id="galerie-photos" class="flexslider">
-    <ul class="slides">
-      <% pictures.each do |pict| %>
-        <li>
-          <%= render partial: 'shared/article_aktion/slide_wrapper',
-            object: pict,
-            locals: {
-              pict: pict
-            }
-          %>
-        </li>
-      <% end %>
-    </ul>
+<%# shared/article_aktion/_galerie_photos.html.erb %>
+<%# called from:
+- aktions/partials/_container.html.erb
+- articles/_form.html.erb
+- articles/show.html.erb
+%>
 
-  </div><!-- fin de diaporama -->
 
-</div><!-- fin de diaporama-wrapper -->
+<% pictures.each do |pict| %>
+  <li>
+    <%= render partial: "#{sub_partial}",
+      layout: 'shared/article_aktion/slide_wrapper_layout',
+      locals: {
+        pict: pict
+      }
+    %>
+  </li>
+<% end %>
