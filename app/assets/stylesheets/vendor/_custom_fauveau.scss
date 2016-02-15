@@ -3,11 +3,11 @@
 //@import "yamm";
 @font-face {
   font-family: 'Futura';
-  src: url('305536_0_0.eot');
-  src: url('305536_0_0.eot?#iefix') format('embedded-opentype'),
-    url('305536_0_0.woff2') format('woff2'),
-    url('305536_0_0.woff') format('woff'),
-    url('305536_0_0.ttf') format('truetype');
+  src: font-url(font-path('305536_0_0.eot'));
+  src: font-url(font-path('305536_0_0.eot?#iefix')) format('embedded-opentype'),
+    font-url(font-path('305536_0_0.woff2')) format('woff2'),
+    font-url(font-path('305536_0_0.woff')) format('woff'),
+    font-url(font-path('305536_0_0.ttf')) format('truetype');
 }
 
 /******************
@@ -95,7 +95,7 @@ HEADER
 ******************/
 #logo {
     text-indent: -9999px;
-    background-image:url('logo-adn.png');
+    background-image:image-url(image-path('logo-adn.png'));
     background-size: 97px 67px;
     background-repeat:no-repeat;
     display: block;
@@ -281,7 +281,7 @@ OFF CANVAS
     float: right;
 
     a.menu-toggle {
-    background:url('close.png') no-repeat;
+    background:image-url(image-path('close.png')) no-repeat;
     display: block;
     width:34px;
     height:34px;
@@ -681,7 +681,7 @@ UTILITAIRES
     text-indent: 100%;
     white-space: nowrap;
 
-    background: rgba($vert, .8) url('cd-top-arrow.svg') no-repeat center 50%;
+    background: rgba($vert, .8) image-url(image-path('cd-top-arrow.svg')) no-repeat center 50%;
 
     visibility: hidden;
     opacity: 0;
