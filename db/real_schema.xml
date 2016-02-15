@@ -52,7 +52,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1461" y="821" name="authors">
+<table x="1521" y="691" name="authors">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -164,7 +164,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="817" y="675" name="portraitizing">
+<table x="817" y="674" name="portraitizing">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -278,14 +278,11 @@
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
-<row name="intro" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="1649" y="255" name="article_translations">
+<table x="1553" y="334" name="article_translations">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>

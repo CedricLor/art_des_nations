@@ -21,6 +21,9 @@ class Picturizing < ActiveRecord::Base
   # belongs_to :article, inverse_of: :picturizings
   belongs_to :media_container, inverse_of: :picturizings
   belongs_to :picturizable, :polymorphic => true
+  belongs_to :article, inverse_of: :picturizings
+  belongs_to :aktion, inverse_of: :picturizings
+  belongs_to :portrait, inverse_of: :portraits
 
   translates :for_card, :for_carousel, :fallbacks_for_empty_translations => true
 end

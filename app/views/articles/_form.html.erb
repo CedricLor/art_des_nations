@@ -19,7 +19,7 @@
     error: 'Assigning a status to an article is mandatory, please specify one.'
   %>
   <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
-
+  <% byebug %>
   <%# render the partial with the variables passed in an array %>
   <%= render partial: 'articles/partials/container',
       layout: "shared/article_aktion_static/container_layout",

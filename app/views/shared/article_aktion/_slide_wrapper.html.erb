@@ -1,0 +1,9 @@
+<%# _slide_wrapper.html.erb %>
+<%# called from:
+- shared/article_aktion/_galerie_photos.html.erb
+%>
+
+<div class="slide-wrapper">
+  <%= image_tag(pict.media(:for_slider), alt: "") %>
+  <p class="legende"><%= pict.title %></p>
+</div>

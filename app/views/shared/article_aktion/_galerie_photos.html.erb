@@ -1,13 +1,14 @@
 <div class="diaporama-wrapper">
   <div id="galerie-photos" class="flexslider">
     <ul class="slides">
-      <!-- FIXME - Iterate here on the @article.media_containers collection -->
       <% pictures.each do |pict| %>
         <li>
-          <div class="slide-wrapper">
-            <%= image_tag(pict.media(:for_slider), alt: "") %>
-            <p class="legende"><%= pict.title %></p>
-          </div>
+          <%= render partial: 'shared/article_aktion/slide_wrapper',
+            object: pict,
+            locals: {
+              pict: pict
+            }
+          %>
         </li>
       <% end %>
     </ul>

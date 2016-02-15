@@ -15,5 +15,6 @@ class Portraitizing < ActiveRecord::Base
 
   belongs_to :portrait, inverse_of: :portraitizings
   belongs_to :portraitizable, :polymorphic => true
-
+  belongs_to :article, inverse_of: :portraitizings
+  belongs_to :aktion, inverse_of: :portraitizings
 end
