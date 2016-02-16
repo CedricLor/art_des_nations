@@ -3,12 +3,17 @@
 
 <% provide :pictures do %>
   <%= render partial: 'shared/article_aktion/galerie_photos',
-      layout: 'shared/article_aktion/galerie_photos_layout',
       locals: {
-        pictures: @article.media_containers,
-        sub_partial: 'shared/article_aktion/slide_wrapper'
+        pictures: @media_containers,
+        sub_partial: 'shared/article_aktion/slide_wrapper',
+        class_name_for_slider: 'slides',
+        item: ''
       }
   %>
+<% end %>
+
+<% provide :author_full_name do %>
+  <%= @article.author.full_name %>
 <% end %>
 
 
@@ -21,7 +26,8 @@
         teaser: @article.teaser.html_safe,
         body: @article.body.html_safe,
         posted_from_location: @article.posted_from_location,
-        posted_at: @article.posted_at
+        posted_at: @article.posted_at,
+        author_full_name: @article.author.full_name
       }
     }
 %>

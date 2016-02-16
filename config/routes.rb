@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
     resources :articles
     resources :aktions
-    resources :media_containers
+    resources :media_containers, only: [:index]
 
     resources :countries, only: [:show, :edit, :update]
     resources :portraits, only: [:show, :edit, :update]

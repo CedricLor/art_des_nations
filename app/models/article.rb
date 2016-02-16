@@ -32,13 +32,18 @@ class Article < ActiveRecord::Base
   translates :title, :body, :teaser, :posted_from_location, :status, :fallbacks_for_empty_translations => true
 
   def self.for_home_page(locale)
-    articles = Article.all
+    articles = Article.where(status: ["published", "featured"])
 
     articles_with_title = get_articles_titles_translations(articles, locale)
 
     media_container_ids_by_element_id, medias_by_media_container_ids = get_media_sub_hashes('Article')
 
     add_medias_and_categories_to_articles(articles_with_title, media_container_ids_by_element_id, medias_by_media_container_ids)
+  end
+
+  def media_containers_for_carousel
+    md_ids = MediaContainer.connection.select_all("SELECT media_containers.id FROM media_containers INNER JOIN picturizings ON media_containers.id = picturizings.media_container_id INNER JOIN picturizing_translations ON picturizings.id = picturizing_translations.picturizing_id WHERE for_carousel = 'true' AND picturizable_type = 'Article' AND picturizable_id = #{id}").rows.flatten
+    MediaContainer.find(md_ids)
   end
 
   private

@@ -12,22 +12,24 @@
 
 <%= yield :pictures %>
 
+<%= yield :additional_pictures_form %>
+
 <%= render partial: 'articles/partials/body',
   object: @article,
   locals: {
     body_content: parameters[:body],
     posted_from_location: parameters[:posted_from_location],
-    posted_at: parameters[:posted_at]
+    posted_at: parameters[:posted_at],
+    author_full_name: parameters[:author_full_name]
   },
   layout: 'shared/article_aktion_static/body_layout'
 %>
 
-<%# if parameters > 4, the partial is being called from the edit or the new articles_controller actions %>
-<% if parameters.size > 6 %>
+<%# if parameters > 5, the partial is being called from the edit or the new articles_controller actions %>
+<% if parameters.size > 5 %>
   <%= render partial: 'shared/article_aktion/additional_form_fields',
     locals: {
       remaining_params: parameters.select { |key, value| key === :status || key === :submit_button }.values
     }
   %>
 <% end %>
-

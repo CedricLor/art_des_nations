@@ -14,10 +14,10 @@
 %>
 
 <%= render partial: 'shared/article_aktion/galerie_photos',
-    layout: 'shared/article_aktion/galerie_photos_layout',
     locals: {
-      pictures: parameters[2]
-    # pictures: item.media_containers
+      pictures: parameters[2],
+      sub_partial: 'shared/article_aktion/slide_wrapper',
+      class_name_for_slider: 'slides'
     }
 %>
 

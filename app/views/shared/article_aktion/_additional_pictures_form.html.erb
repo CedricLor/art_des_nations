@@ -1,0 +1,45 @@
+<%# shared/article_aktion/_additional_pictures_form.html.erb %>
+<%# called from:
+- articles/_form.html.erb
+- should be called from aktions/_form.html.erb
+%>
+
+<% i = 0 %>
+<% 3.times do %>
+
+  <!-- File upload field -->
+  <div class="form-group">
+    <%= file_field_tag("article[new_md][#{i}][file]", id:"article_new_md_#{i}_title") %>
+  </div>
+  <!-- end file upload field -->
+
+  <!-- Picture title field -->
+  <div class="form-group">
+    <%= text_field_tag("article[new_md][#{i}][title]", '', id:"article_new_md_#{i}_file", class: "form-control", placeholder: t(:placeholder_for_new_picture_title, default: "You may enter a legend for your new picture here")) %>
+  </div>
+  <!-- end picture title field -->
+
+  <!-- Check box picture is for_card -->
+  <span class="radio">
+    <label for=<%= "article_new_md_#{i}_for_card"%> >
+      <input class="radio_buttons required"  type="radio" name=<%="article[for_card]"%> id=<%="article_new_md_#{i}_for_card"%> value=<%= "new_md_#{i}"%> >
+      <%= t :check_box_label_is_picture_for_card, item: item, default: "You want to use this picture as main illustration on the index pages where this #{item} is displayed." %>
+    </label>
+  </span>
+  <!-- end check box picture is for_card -->
+
+  <!-- Check box picture is for_carousel -->
+  <div>
+    <%= t :check_box_label_is_picture_for_carousel, default: "You want this picture to appear in the carousel: " %>
+    <label for=<%= "article_new_md_#{i}_for_carousel_yes"%> class="radio-inline" >
+      <input class="radio_buttons required"  type="radio" name=<%="article[new_md][#{i}][for_carousel]"%> id=<%="article_new_md_#{i}_for_carousel_yes"%> value='true' checked ><%= t :si, default: "Yes" %>
+    </label>
+    <label for=<%= "article_new_md_#{i}_for_carousel_no"%> class="radio-inline" >
+      <input class="radio_buttons required"  type="radio" name=<%="article[new_md][#{i}][for_carousel]"%> id=<%="article_new_md_#{i}_for_carousel_no"%> value='false'><%= t :no, default: "No" %>
+    </label>
+  </div>
+  <!-- end check box picture is for_carousel -->
+
+  <hr>
+  <% i = i + 1 %>
+<% end %>

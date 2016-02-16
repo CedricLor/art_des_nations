@@ -54,8 +54,16 @@ en:
   home_page_title: "Home"
   published_html: "<p class='meta'>Published on <span class='date-publication'>%{posted_at}</span> in <span class='lieu-publication'>%{posted_from_location}</span></p>"
 
-  mark_for_deletion: "Mark this picture 'for deletion'"
+  mark_for_deletion: "Delete this picture"
 
+  placeholder_for_new_picture_title: "You may enter a legend for your new picture here"
+  item_article_for_check_box_label: 'this article'
+  item_article_for_check_box_label: 'this action'
+  check_box_label_is_picture_for_card: "You want to use this picture as main illustration on the index pages where %{item} is displayed."
+  check_box_label_is_picture_for_carousel: "You want this picture to appear in the carousel: "
+
+  article_change_author: "Choose the name of an author for this article:"
+  article_create_new_author: "or enter the name of a new author:"
 
   activerecord:
     errors:

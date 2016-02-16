@@ -4,15 +4,25 @@
 - articles/_form.html.erb
 - articles/show.html.erb
 %>
-
-
-<% pictures.each do |pict| %>
-  <li>
-    <%= render partial: "#{sub_partial}",
-      layout: 'shared/article_aktion/slide_wrapper_layout',
-      locals: {
-        pict: pict
-      }
+<div class="diaporama-wrapper">
+  <div id="galerie-photos" class="flexslider">
+    <%# Check this variable "class_name_for_slider" out!!!
+    This is important: it is being set to an empty string when the partial
+    is supposed to be rendered with a form. Otherwise, the params do catch
+    the picture (media_containers) titles.
     %>
-  </li>
-<% end %>
+    <ul class=<%= class_name_for_slider %>>
+      <% pictures.each do |pict| %>
+        <li>
+          <%= render partial: "#{sub_partial}",
+            layout: 'shared/article_aktion/slide_wrapper_layout',
+            locals: {
+              pict: pict,
+              item: item
+            }
+          %>
+        </li>
+      <% end %>
+    </ul>
+  </div><!-- fin de diaporama -->
+</div><!-- fin de diaporama-wrapper -->

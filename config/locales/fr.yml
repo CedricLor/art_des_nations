@@ -54,8 +54,16 @@ fr:
   home_page_title: "Accueil"
   published_html: "<p class='meta'>Publié le <span class='date-publication'>%{posted_at}</span> à <span class='lieu-publication'>%{posted_from_location}</span></p>"
 
-  mark_for_deletion: "Marquer cette photo comme 'à supprimer'"
+  mark_for_deletion: "Supprimer cette photo"
 
+  placeholder_for_new_picture_title: "Vous pouvez entrer une légende pour votre nouvelle image ici."
+  item_article_for_check_box_label: 'cet article'
+  item_article_for_check_box_label: 'cette action'
+  check_box_label_is_picture_for_card: "Vous voulez utiliser cette photo pour les pages d'index où %{item} est affichée."
+  check_box_label_is_picture_for_carousel: "Vous souhaitez que cette photo soit utilisée dans le caroussel : "
+
+  article_change_author: "Choisissez le nom d'un auteur pour cet article :"
+  article_create_new_author: "ou entrez le nom d'un nouvel auteur :"
 
   activerecord:
     errors:

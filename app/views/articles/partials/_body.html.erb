@@ -24,13 +24,13 @@ with layout:
 <footer>
 
   <div class="row">
+
     <div class="col-xs-12 col-sm-6">
       <cite>
-        <%# FIXME - author is extracted from a different collection (the authors collection). While this is not a true problem for rendering in read only,
-        it is more problematic when rendering as a form field %>
-        <%= @article.author.full_name %>
+      <%= yield :author_full_name %>
       </cite>
     </div>
+
     <div class="col-xs-12 col-sm-6 text-right">
       <% default_for_posted_at =
         "<p class='meta'>

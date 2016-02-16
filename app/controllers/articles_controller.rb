@@ -1,10 +1,12 @@
 class ArticlesController < ApplicationController
-  before_action :set_article, only: [:show, :edit, :update, :destroy]
+  before_action :set_article, only: [:show, :destroy]
   skip_before_action :authenticate_user!, only: :show
 
   # GET /articles/1
   # GET /articles/1.json
   def show
+    @media_containers = @article.media_containers_for_carousel
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @article }
@@ -18,6 +20,7 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1/edit
   def edit
+    @article = Article.includes(:media_containers, :author).find(params[:id])
   end
 
   # POST /articles
@@ -39,14 +42,12 @@ class ArticlesController < ApplicationController
   # PATCH/PUT /articles/1
   # PATCH/PUT /articles/1.json
   def update
-    byebug
-    # FIXME -- Take this out of the controller!!!
-    aktion = params[:article]
-    params[:article][:posted_at] = Date.new aktion["posted_at(1i)"].to_i, aktion["posted_at(2i)"].to_i, aktion["posted_at(3i)"].to_i
+    params[:article] = clean_up_posted_at_params
+    @article_update_form = ArticleUpdateForm.new({id: params[:id]}.merge(params[:article]))
 
     respond_to do |format|
-      if @article.update(article_params)
-        format.html { redirect_to @article, notice: 'Article was successfully updated.' }
+      if @article_update_form.update
+        format.html { redirect_to @article_update_form.article, notice: 'The article was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -73,6 +74,20 @@ class ArticlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
-      params.require(:article).permit(:title, :body, :teaser, :status, :posted_from_location, :posted_at)
+      params.require(:article).permit(
+        :id,
+        :title,
+        :body,
+        :teaser,
+        :status,
+        :posted_from_location,
+        :posted_at
+      )
+    end
+
+    def clean_up_posted_at_params
+      article = params[:article]
+      article[:posted_at] = Date.new article["posted_at(1i)"].to_i, article["posted_at(2i)"].to_i, article["posted_at(3i)"].to_i
+      params[:article] = article.except('posted_at(1i)', 'posted_at(2i)', 'posted_at(3i)')
     end
 end
