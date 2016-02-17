@@ -58,7 +58,7 @@ fr:
 
   placeholder_for_new_picture_title: "Vous pouvez entrer une légende pour votre nouvelle image ici."
   item_article_for_check_box_label: 'cet article'
-  item_article_for_check_box_label: 'cette action'
+  item_action_for_check_box_label: 'cette action'
   check_box_label_is_picture_for_card: "Vous voulez utiliser cette photo pour les pages d'index où %{item} est affichée."
   check_box_label_is_picture_for_carousel: "Vous souhaitez que cette photo soit utilisée dans le caroussel : "
 

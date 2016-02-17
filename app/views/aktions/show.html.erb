@@ -7,15 +7,11 @@
         pictures: @media_containers,
         sub_partial: 'shared/article_aktion/slide_wrapper',
         class_name_for_slider: 'slides',
-        item: ''
+        item: '',
+        item_18n_name: ''
       }
   %>
 <% end %>
-
-<% provide :country_name do %>
-  <%= @aktion.country.name %>
-<% end %>
-
 
 <%= render partial: 'aktions/partials/container',
     layout: "shared/article_aktion_static/container_layout",

@@ -1,0 +1,13 @@
+<%# _country_form.html.erb %>
+<%# called from:
+- aktions/_form.html.erb
+%>
+
+<div class="form-group">
+  <%= label_tag("aktion_change_country", t(:aktion_change_country, default: "Choose a country to which this action relates:")) %>
+  <%# The following tag will create a select with the countries.
+  - The name attribute of the select will be aktion[country_id].
+  - It will automatically select the country currently alloted to the current aktion. %>
+  <%= collection_select(:aktion, :country_id, Country.all, :id, :name, {}, {class: "form-control"}) %>
+</div>
+<hr>

@@ -1,6 +1,7 @@
 <%# shared/article_aktion/_galerie_photos.html.erb %>
 <%# called from:
-- aktions/partials/_container.html.erb
+- aktions/_form.html.erb
+- aktions/show.html.erb
 - articles/_form.html.erb
 - articles/show.html.erb
 %>
@@ -18,7 +19,8 @@
             layout: 'shared/article_aktion/slide_wrapper_layout',
             locals: {
               pict: pict,
-              item: item
+              item: item,
+              item_18n_name: item_18n_name
             }
           %>
         </li>

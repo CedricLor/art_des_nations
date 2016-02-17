@@ -28,7 +28,10 @@
 <% if parameters.size > 5 %>
   <%= render partial: 'shared/article_aktion/additional_form_fields',
     locals: {
-      remaining_params: parameters.select { |key, value| key === :status || key === :submit_button }.values
+      remaining_params: parameters.
+        select { |key, value|
+          key === :status || key === :submit_button }.
+        values
     }
   %>
 <% end %>

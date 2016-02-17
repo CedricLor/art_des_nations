@@ -15,6 +15,8 @@
 
 <%= yield :pictures %>
 
+<%= yield :additional_pictures_form %>
+
 <%= render partial: 'shared/aktion_static/body', locals: {
   body: parameters[:body]
   # body: item.body
@@ -22,17 +24,21 @@
   layout: 'shared/article_aktion_static/body_layout'
 %>
 
-<%# if parameters > 4, the partial is being called from the edit or the new aktions_controller actions
+<%= yield :country %>
+
+<%# if parameters > 3, the partial is being called from the edit or the new aktions_controller actions
 Remaining parameters are (in this order -- important!!!):
 - status
 - aktion_date
 - posted_at
 - the submit button
 %>
-<% if parameters.size > 4 %>
+
+<% if parameters.size > 3 %>
   <%= render partial: 'shared/article_aktion/additional_form_fields',
     locals: {
-      remaining_params: parameters - parameters[0..3]
+      remaining_params: parameters.select { |key, value| key === :status || key === :submit_button || key === :aktion_date || key === :posted_at }.values
+      # remaining_params: parameters - parameters[0..3]
     }
   %>
 <% end %>

@@ -8,15 +8,15 @@
 <%= image_tag(pict.media_container.media(:for_slider), alt: "#{title}") %>
 <!-- FORM FIELD FOR THE PICTURE (MEDIA_CONTAINER) TITLE-->
 <div class="form-group">
-  <%= text_field_tag("article[md_to_update][#{pict.id}]", title, id:"article_media_container_md_to_update_#{pict.id}", class: "form-control") %>
+  <%= text_field_tag("#{item}[md_to_update][#{pict.id}]", title, id:"#{item}_media_container_md_to_update_#{pict.id}", class: "form-control") %>
 </div>
 <!-- END FORM FIELD FOR THE PICTURE TITLE-->
 
 <!-- ADDITIONAL ITEMS: -->
   <!-- DESTROY CHECKBOX -->
   <span class="checkbox">
-    <label for=<%= "article_media_container_md_for_destruction_#{pict.id}"%> >
-      <input class="check_boxes required"  type="checkbox" name=<%="article[md_for_destruction][#{pict.id}]"%> id=<%="article_media_container_md_for_destruction_#{pict.id}"%> value='true' >
+    <label for=<%= "#{item}_media_container_md_for_destruction_#{pict.id}"%> >
+      <input class="check_boxes required"  type="checkbox" name=<%="#{item}[md_for_destruction][#{pict.id}]"%> id=<%="#{item}_media_container_md_for_destruction_#{pict.id}"%> value='true' >
       <%= t :mark_for_deletion, default: "Delete this picture" %>
     </label>
   </span>
@@ -24,9 +24,9 @@
 
   <!-- Check box picture is for_card -->
   <span class="radio">
-    <label for=<%= "article_media_container_for_card_#{pict.id}"%> >
-      <input class="radio_buttons required"  type="radio" name=<%="article[for_card]"%> id=<%="article_media_container_for_card_#{pict.id}"%> value=<%= "existing_md_#{pict.id}"%> <%= "checked" if pict.for_card == "true" %> >
-      <%= t :check_box_label_is_picture_for_card, item: item, default: "You want to use this picture as main illustration on the index pages where this #{item} is displayed." %>
+    <label for=<%= "#{item}_media_container_for_card_#{pict.id}"%> >
+      <input class="radio_buttons required"  type="radio" name=<%="#{item}[for_card]"%> id=<%="#{item}_media_container_for_card_#{pict.id}"%> value=<%= "existing_md_#{pict.id}"%> <%= "checked" if pict.for_card == "true" %> >
+      <%= t :check_box_label_is_picture_for_card, item: item_18n_name, default: "You want to use this picture as main illustration on the index pages where this #{item_18n_name} is displayed." %>
     </label>
   </span>
   <!-- end check box picture is for_card -->
@@ -34,11 +34,11 @@
   <!-- CHECKBOX USE THIS PICTURE IN SLIDER -->
   <div>
     <%= t :check_box_label_is_picture_for_carousel, default: "You want this picture to appear in the carousel: " %>
-    <label for=<%= "article_media_container_for_carousel_#{pict.id}_yes"%> class="radio-inline" >
-      <input class="radio_buttons required"  type="radio" name=<%="article[md_for_carousel][#{pict.id}]"%> id=<%="article_media_container_for_carousel_#{pict.id}_yes"%> value='true' <%= "checked" if pict.for_carousel == "true" %> ><%= t :si, default: "Yes" %>
+    <label for=<%= "#{item}_media_container_for_carousel_#{pict.id}_yes"%> class="radio-inline" >
+      <input class="radio_buttons required"  type="radio" name=<%="#{item}[md_for_carousel][#{pict.id}]"%> id=<%="#{item}_media_container_for_carousel_#{pict.id}_yes"%> value='true' <%= "checked" if pict.for_carousel == "true" %> ><%= t :si, default: "Yes" %>
     </label>
-    <label for=<%= "article_media_container_for_carousel_#{pict.id}_no"%> class="radio-inline" >
-      <input class="radio_buttons required"  type="radio" name=<%="article[md_for_carousel][#{pict.id}]"%> id=<%="article_media_container_for_carousel_#{pict.id}_no"%> value='false' <%= "checked" if pict.for_carousel == "false" %> ><%= t :no, default: "No" %>
+    <label for=<%= "#{item}_media_container_for_carousel_#{pict.id}_no"%> class="radio-inline" >
+      <input class="radio_buttons required"  type="radio" name=<%="#{item}[md_for_carousel][#{pict.id}]"%> id=<%="#{item}_media_container_for_carousel_#{pict.id}_no"%> value='false' <%= "checked" if pict.for_carousel == "false" %> ><%= t :no, default: "No" %>
     </label>
   </div>
   <!-- END CHECKBOX USE THIS PICTURE IN SLIDER -->

@@ -1,10 +1,10 @@
 <%# aktions/_form.html.erb %>
 
-<%= simple_form_for(@aktion) do |f| %>
+<%= simple_form_for @aktion, html: {multipart: true} do |f| %>
   <%= f.error_notification %>
 
   <%# dispatching the form fields in variables to pass them to the partial %>
-  <% title = f.input :title %>
+  <% title = f.input :title, label: false %>
   <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
   <% body = f.cktext_area :body, rows: 50, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
   <% status = f.input :status,
@@ -20,21 +20,45 @@
   <% aktion_date = f.input :aktion_date, as: :date %>
   <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
 
+  <%# building a pictures' array for the photo gallery together with media_containers editable fields %>
+  <% provide :pictures do %>
+    <%= render partial: 'shared/article_aktion/galerie_photos',
+        locals: {
+          pictures: @aktion.picturizings,
+          sub_partial: 'shared/article_aktion/slide_wrapper_form',
+          class_name_for_slider: '',
+          item: 'aktion',
+          item_18n_name: t(:item_action_for_check_box_label, default: 'this action')
+        }
+    %>
+  <% end %>
+
+  <% provide :additional_pictures_form do %>
+    <%= render partial: 'shared/article_aktion/additional_pictures_form',
+       locals: {
+        item: 'aktion',
+        item_18n_name: t(:item_action_for_check_box_label, default: 'this action')
+       }
+    %>
+  <% end %>
+
+  <% provide :country do %>
+    <%= render partial: 'aktions/partials/country_form' %>
+  <% end %>
+
   <%# render the partial with the variables passed in an array %>
   <%= render partial: 'aktions/partials/container',
       layout: "shared/article_aktion_static/container_layout",
       locals: {
-        parameters: [
-          title,
-          teaser,
-          @aktion.media_containers,
-          body,
-          status,
-          aktion_date,
-          posted_at,
-          submit_button
-        ]
-        # item: @aktion
+        parameters: {
+          title: title,
+          teaser: teaser,
+          body: body,
+          status: status,
+          aktion_date: aktion_date,
+          posted_at: posted_at,
+          submit_button: submit_button
+        }
       }
   %>
 

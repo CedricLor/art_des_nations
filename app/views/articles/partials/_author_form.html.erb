@@ -6,7 +6,6 @@
 <div class="form-group">
   <%= label_tag("article_change_author", t(:article_change_author, default: "Choose the name of an author:")) %>
   <%= collection_select(:article, :author_id, Author.all, :id, :full_name, {}, {class: "form-control"}) %>
-  <%#= text_field_tag("article[change_author]", @article.author.full_name, id:"article_change_author", class: "form-control") %>
 </div>
 <div class="form-group">
   <%= label_tag("article_create_new_author", t(:article_create_new_author, default: "or enter the name of a new author:")) %>

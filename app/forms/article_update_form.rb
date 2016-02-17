@@ -1,5 +1,6 @@
 class ArticleUpdateForm
   include ActiveModel::Model
+  include AktionArticlePictures
 
   attr_accessor :id, :body, :title, :teaser, :posted_from_location, :posted_at, :status, :md_for_destruction, :md_for_carousel, :for_card, :new_md, :md_to_update, :author_id, :create_new_author
   attr_reader :article
@@ -32,79 +33,22 @@ class ArticleUpdateForm
 
   def persist_ancillary_data
     if md_to_update
-      update_pictures
-    end
-    byebug
-    if md_for_carousel
-      update_pictures_for_carousel
+      update_pictures(@article, md_to_update, md_for_carousel)
     end
 
     if new_md
-      create_pictures
+      create_pictures(@article.id, 'Article', new_md, for_card)
     end
 
     if pict_id = for_card.sub(/existing_md_/, '')
-      update_pictures_for_card(pict_id)
+      update_pictures_for_card(@article, pict_id)
     end
 
     if md_for_destruction
-      destroy_pictures
+      destroy_pictures(@article, md_for_destruction)
     end
 
     handle_author_name
-  end
-
-  def update_pictures
-    @article.picturizings.each do |pict|
-      pict.media_container.update(
-        title: md_to_update["#{pict.id}"]
-      )
-    end
-  end
-
-  def update_pictures_for_carousel
-    byebug
-    pics_ids = @article.picturizings.
-      select{|p| md_for_carousel.keys.include?(p.id.to_s)}.
-      map {|p| p.id}
-    Picturizing::Translation.where(picturizing_id: pics_ids).update_all(for_carousel: "true")
-  end
-
-  def update_pictures_for_card(pict_id)
-    Picturizing::Translation.where(picturizing_id: @article.picturizings.ids).update_all(for_card: "false")
-    Picturizing::Translation.where(picturizing_id: pict_id).update_all(for_card: "true")
-  end
-
-  def destroy_pictures
-    # destroy each picturizings which id has been passed in for destruction
-    @article.picturizings.each do | picturizing |
-      picturizing.destroy if md_for_destruction.keys.include?(picturizing.id.to_s)
-    end
-    # if the media_container marked for destruction is not associated with any other picturizing, destroy it
-    @article.media_containers.each do |md|
-      md.destroy if md.picturizings.size == 0
-    end
-  end
-
-  def create_pictures
-    new_md.each do |md|
-      unless md[1]["file"].nil?
-        new_md = MediaContainer.create(
-          title: md[1]["title"],
-          media: md[1]["file"]
-        )
-        new_md.picturizings.create(
-          picturizable_id: @id,
-          picturizable_type: "Article",
-          for_carousel: md[1]["for_carousel"] || "true",
-          for_card: new_pic_is_for_card || "false"
-        )
-      end
-    end
-  end
-
-  def new_pic_is_for_card
-    for_card.sub(/new_card_/) != for_card ? false : true
   end
 
   def handle_author_name
