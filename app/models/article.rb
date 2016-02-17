@@ -42,8 +42,7 @@ class Article < ActiveRecord::Base
   end
 
   def media_containers_for_carousel
-    md_ids = MediaContainer.connection.select_all("SELECT media_containers.id FROM media_containers INNER JOIN picturizings ON media_containers.id = picturizings.media_container_id INNER JOIN picturizing_translations ON picturizings.id = picturizing_translations.picturizing_id WHERE for_carousel = 'true' AND picturizable_type = 'Article' AND picturizable_id = #{id}").rows.flatten
-    MediaContainer.find(md_ids)
+    MediaContainer.for_carousel_for('Article', id)
   end
 
   private

@@ -51,6 +51,10 @@ class Aktion < ActiveRecord::Base
     )
   end
 
+  def media_containers_for_carousel
+    MediaContainer.for_carousel_for('Aktion', id)
+  end
+
   private
 
   def self.get_items_titles_translations(items, locale)
