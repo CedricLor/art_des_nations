@@ -1,4 +1,5 @@
 <%# aktions/show.html.erb %>
+<%# rendered in layout/aktions.html.erb %>
 
 <%= render partial: 'aktions/partials/container',
     layout: "shared/article_aktion_static/container_layout",
@@ -9,5 +10,20 @@
         @aktion.media_containers,
         @aktion.body.html_safe
       ]
+    }
+%>
+
+<%= render partial: 'articles/partials/container',
+    layout: "shared/article_aktion_static/container_layout",
+    object: @article,
+    locals: {
+      parameters: {
+        title: @article.title,
+        teaser: @article.teaser.html_safe,
+        body: @article.body.html_safe,
+        posted_from_location: @article.posted_from_location,
+        posted_at: @article.posted_at,
+        author_full_name: @article.author.full_name
+      }
     }
 %>
