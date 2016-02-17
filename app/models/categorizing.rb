@@ -16,6 +16,8 @@ class Categorizing < ActiveRecord::Base
 
   belongs_to :category, inverse_of: :categorizings
   belongs_to :categorizable, :polymorphic => true
+  belongs_to :article, inverse_of: :categorizings
+  belongs_to :aktion, inverse_of: :categorizings
 
 end
 

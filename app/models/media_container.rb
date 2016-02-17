@@ -18,8 +18,3 @@ class MediaContainer < ActiveRecord::Base
   validates_attachment_content_type :media,
     content_type: /\Aimage\/.*\z/
 end
-
-
-# Format d'images:
-# 1200 x 500
-# thumb: 300 x 125

@@ -14,4 +14,6 @@ class ExternalLinking < ActiveRecord::Base
 
   belongs_to :external_link, inverse_of: :external_linkings
   belongs_to :external_linkable, :polymorphic => true
+  belongs_to :country, inverse_of: :external_linkings
+  belongs_to :home_page, inverse_of: :external_linkings
 end
