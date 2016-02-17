@@ -58,8 +58,8 @@ module AktionArticlePictures
   end
 
   def update_pictures_for_card(item, pict_id)
-    Picturizing::Translation.where(picturizing_id: item.picturizings.ids).update_all(for_card: "false")
-    Picturizing::Translation.where(picturizing_id: pict_id).update_all(for_card: "true")
+    Picturizing::Translation.where(picturizing_id: item.picturizings.ids, locale: I18n.locale).update_all(for_card: "false")
+    Picturizing::Translation.where(picturizing_id: pict_id, locale: I18n.locale).update_all(for_card: "true")
   end
 
   def destroy_pictures(item, md_for_destruction)

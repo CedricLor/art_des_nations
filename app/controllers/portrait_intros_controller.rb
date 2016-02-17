@@ -1,5 +1,6 @@
 class PortraitIntrosController < ApplicationController
   before_action :set_portrait_intro_and_portraits, only: [:show, :edit, :update]
+  skip_before_action :authenticate_user!, only: :show
 
   # GET /portrait_intros/1
   # GET /portrait_intros/1.json

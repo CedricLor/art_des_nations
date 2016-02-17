@@ -1,14 +1,14 @@
 <div class="col-xs-12 recommandation">
   <!-- wrapper link -->
-  <%= link_to portrait_path(portrait[:item_id]) do %>
+  <%= link_to portrait_path(portrait) do %>
     <div class="img-wrapper">
       <!-- image -->
-      <%= image_tag(portrait[:media], alt: "") %>
+      <%= image_tag(portrait.media_container.media(:for_card), alt: portrait.media_container.title) %>
       <div class="layer"></div>
     </div>
     <!-- name -->
     <h3>
-      <%= portrait[:title] %>
+      <%= portrait.title %>
     </h3>
 
   <% end %>

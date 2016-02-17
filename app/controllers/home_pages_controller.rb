@@ -39,7 +39,7 @@ class HomePagesController < ApplicationController
     def set_ancillary_collections
       @external_links_for_home_page = ExternalLink.includes(:home_pages).where(home_pages: {id: 1})
       @articles = Article.for_home_page
-      @portraits_for_home_page = Portrait.with_media_containers_for_card(locale).slice(0, 3)
+      @portraits_for_home_page = Portrait.with_media_containers_for_card.slice(0, 3)
       @aktions = Aktion.for_home_page
     end
 
