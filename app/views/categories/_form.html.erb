@@ -11,21 +11,19 @@
 <%= simple_form_for(@category) do |f| %>
   <%= f.error_notification %>
 
-  <% list_name = f.input :name %>
+  <% category_name = f.input :name %>
   <% editorial = f.cktext_area :editorial, rows: 50, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
   <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
 
-  <%= render partial: 'shared/portraits_categories/list', locals: {
-    parameters: [
-      list_name,
-      editorial,
-      @categorized_articles_and_aktions,
-      submit_button
-    ]
-    # list: @categorized_articles_and_aktions,
-    # list_name: @category.name,
-    # intro: @category.editorial.html_safe
-    }
+  <%= render partial: 'shared/portraits_categories/list',
+      locals: {
+        parameters: {
+          list_name: category_name,
+          list_editorial: editorial,
+          list_items: @categorized_articles_and_aktions,
+          submit_button: submit_button
+        }
+      }
   %>
 
   <!--<div class="form-inputs">

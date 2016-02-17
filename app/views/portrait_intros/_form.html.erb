@@ -7,21 +7,16 @@
   <% portrait_intro_content = f.cktext_area :intro, rows: 50, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
   <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
 
-  <%= render partial: 'shared/portraits_categories/list', locals: {
-      parameters: [
-        t(:portraits, default: "Portraits"),
-        portrait_intro_content,
-        @portraits,
-        submit_button
-      ]
-      # list_name: t(:portraits, default: "Portraits"),
-      # intro: @portrait_intro.intro.html_safe,
-      # list: @portraits,
-    }
+  <%= render partial: 'shared/portraits_categories/list',
+      locals: {
+        parameters: {
+          list_name: t(:portraits, default: "Portraits"),
+          list_editorial: portrait_intro_content,
+          list_items: @portraits,
+          submit_button: submit_button
+        }
+      }
   %>
-
-  <div class="form-inputs">
-  </div>
 
   <div class="form-actions">
     <%= f.button :submit %>

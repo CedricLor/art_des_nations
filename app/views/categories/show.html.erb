@@ -7,10 +7,10 @@
 -->
 
 <%= render partial: 'shared/portraits_categories/list', locals: {
-    parameters: [
-      @category.name,
-      @category.editorial.html_safe,
-      @categorized_articles_and_aktions
-    ]
+    parameters: {
+      list_name: @category.name,
+      list_editorial: @category.editorial.html_safe,
+      list_items: @categorized_articles_and_aktions
+    }
   }
 %>

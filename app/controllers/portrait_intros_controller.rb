@@ -34,7 +34,7 @@ class PortraitIntrosController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_portrait_intro_and_portraits
       @portrait_intro = PortraitIntro.find(1)
-      @portraits = Portrait.with_media_containers_for_card(locale)
+      @portraits = Portrait.with_media_containers_for_card
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

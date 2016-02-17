@@ -8,7 +8,8 @@
   <% editorial = f.cktext_area :editorial, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
   <%= render partial: 'home_pages/partials/shared/editorial_wrapper',
     locals: {
-      editorial: editorial
+      editorial: editorial,
+      editorial_id: @home_page.editorial_id
     }
   %>
 

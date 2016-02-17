@@ -17,9 +17,6 @@ class CategoriesController < ApplicationController
   # GET /categories/1
   # GET /categories/1.json
   def show
-    @category = Category.includes(:aktions, :articles).find(params[:id])
-    @categorized_articles_and_aktions = Category.categorized_articles_and_aktions_for_category(@category, params[:locale])
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @category }
@@ -77,8 +74,8 @@ class CategoriesController < ApplicationController
 
   private
     def set_category_with_aktions_and_articles
-      @category = Category.includes(:aktions, :articles).find(params[:id])
-      @categorized_articles_and_aktions = Category.categorized_articles_and_aktions_for_category(@category, params[:locale])
+      @category = Category.find(params[:id])
+      @categorized_articles_and_aktions = Category.categorized_articles_and_aktions_for_category(@category.id)
     end
 
     # Use callbacks to share common setup or constraints between actions.

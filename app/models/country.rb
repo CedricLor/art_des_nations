@@ -9,6 +9,7 @@ class Country < ActiveRecord::Base
   has_many :external_links, through: :external_linkings
 
   translates :name, :title, :editorial, :fallbacks_for_empty_translations => true
+
 end
 
 

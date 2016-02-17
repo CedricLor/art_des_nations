@@ -4,13 +4,10 @@
 <% content_for :body_class, "portraits" %>
 
 <%= render partial: 'shared/portraits_categories/list', locals: {
-    parameters: [
-      t(:portraits, default: "Portraits"),
-      @portrait_intro.intro.html_safe,
-      @portraits
-    ]
-    # list_name: t(:portraits, default: "Portraits"),
-    # intro: @portrait_intro.intro.html_safe,
-    # list: @portraits,
+    parameters: {
+      list_name: t(:portraits, default: "Portraits"),
+      list_editorial: @portrait_intro.intro.html_safe,
+      list_items: @portraits
+    }
   }
 %>

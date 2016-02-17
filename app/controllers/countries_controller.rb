@@ -34,11 +34,11 @@ class CountriesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_country
-      @country = Country.includes(:aktions).find(params[:id])
+      @country = Country.find(params[:id])
     end
 
     def set_ancillary_collections
-      @aktions_by_country = Aktion.by_country(@country, locale)
+      @aktions = Aktion.for_country(@country)
       @external_links_by_country = ExternalLink.includes(:countries).where(countries: {id: 1})
     end
 

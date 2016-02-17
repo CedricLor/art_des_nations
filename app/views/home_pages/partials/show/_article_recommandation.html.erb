@@ -1,18 +1,23 @@
+<%# home_pages/partials/show/_article_recommandation.html.erb %>
+<%# Called from:
+- home_pages/partials/show/_article_recommandations.html.erb
+%>
+
 <div class="col-xs-12 col-sm-6 col-md-4 recommandation">
   <!-- categorie link -->
   <p class="categorie">
-    <%= link_to article[:category].name, category_path(article[:category]) %>
+    <%= link_to article.categories[0].name, category_path(article.categories[0]) %>
   </p>
   <!-- wrapper link -->
-  <%= link_to article_path(article[:id]) do %>
+  <%= link_to article_path(article) do %>
     <!-- image -->
     <div class="img-wrapper">
-      <%= image_tag(article[:media], alt: "") %>
+      <%= image_tag(article.picturizings[0].media_container.media(:for_card), alt: article.picturizings[0].media_container.title) %>
       <div class="layer"></div>
     </div>
     <!-- article title -->
     <h3>
-      <%= article[:title] %>
+      <%= article.title %>
     </h3>
 
   <% end %>

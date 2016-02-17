@@ -23,7 +23,7 @@ class Picturizing < ActiveRecord::Base
   belongs_to :picturizable, :polymorphic => true
   belongs_to :article, inverse_of: :picturizings
   belongs_to :aktion, inverse_of: :picturizings
-  belongs_to :portrait, inverse_of: :portraits
+  belongs_to :portrait, inverse_of: :picturizings
 
   translates :for_card, :for_carousel, :fallbacks_for_empty_translations => true
 end
