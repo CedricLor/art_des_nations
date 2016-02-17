@@ -65,6 +65,8 @@ en:
   article_change_author: "Choose the name of an author for this article:"
   article_create_new_author: "or enter the name of a new author:"
 
+  portrait_file_upload_back_office_legend: "If you want to change your picture, please upload a file here:"
+
   activerecord:
     errors:
       messages:

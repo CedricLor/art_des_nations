@@ -375,9 +375,7 @@ end
 
 10.times do
   portrait = create_portraits(statusOfArticles)
-  3.times do
-    create_picturizing(portrait.id, media_container_ids.sample, "Portrait")
-  end
+  create_picturizing(portrait.id, media_container_ids.sample, "Portrait")
   3.times do
     create_article_linking(article_ids.sample, portrait.id, "Portrait")
   end
@@ -444,7 +442,7 @@ end
 
 I18n.locale = :fr
 
-portrait_ids = Portrait.all.map {|aktion| aktion.id }
+portrait_ids = Portrait.all.map {|portrait| portrait.id }
 
 # 12. Portraitizings
 

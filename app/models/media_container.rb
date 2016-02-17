@@ -18,10 +18,10 @@ class MediaContainer < ActiveRecord::Base
   validates_attachment_content_type :media,
     content_type: /\Aimage\/.*\z/
 
-
   def self.for_carousel_for(picturizable_type, picturizable_id)
-    md_ids = MediaContainer.connection.select_all("SELECT media_containers.id FROM media_containers INNER JOIN picturizings ON media_containers.id = picturizings.media_container_id INNER JOIN picturizing_translations ON picturizings.id = picturizing_translations.picturizing_id WHERE for_carousel = 'true' AND picturizable_type = '#{picturizable_type}' AND picturizable_id = #{picturizable_id}").rows.flatten
-    MediaContainer.find(md_ids)
+    MediaContainer.with_translations(I18n.locale).
+      includes([picturizings: :translations]).
+      where(picturizing_translations: {for_carousel: 'true'}).
+      where(picturizings: {picturizable_type: picturizable_type, picturizable_id: picturizable_id})
   end
-
 end

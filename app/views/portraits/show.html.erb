@@ -3,16 +3,23 @@
 <% content_for :title, raw(@portrait.title) %>
 <% content_for :body_class, "portraits" %>
 
-<%= render partial: 'portraits/partials/single_views',
-  locals: {
-    parameters: [
-      @portrait.title,
-      @portrait.teaser.html_safe,
-      image_tag(@portrait.media_containers.first.media, alt: ""),
-      @portrait.body.html_safe
-    ]
+<% provide :picture do %>
+  <div class="row contenu illustration">
+    <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
+      <%= image_tag(@portrait.media_container.media(:for_slider), alt: @portrait.media_container.title) %>
+    </div>
+  </div>
+<% end %>
+
+<%# render the partial with the variables passed in an object %>
+<%= render partial: 'portraits/partials/container',
+  object: @portrait, locals: {
+    parameters: {
+      title: @portrait.title,
+      teaser: @portrait.teaser.html_safe,
+      body: @portrait.body.html_safe
+    }
   }
 %>
-
 
 <%= link_to 'Edit', edit_portrait_path(@portrait) %>

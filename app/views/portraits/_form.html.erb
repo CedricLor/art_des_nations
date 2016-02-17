@@ -1,10 +1,10 @@
 <%# portraits/_form.html.erb %>
 
-<%= simple_form_for(@portrait) do |f| %>
+<%= simple_form_for @portrait, html: {multipart: true} do |f| %>
   <%= f.error_notification %>
 
-  <%# dispatching the form fields in variables to pass them to the partial %>>
-  <% title = f.input :title %>
+  <%# dispatching the form fields in variables to pass them to the partial %>
+  <% title = f.input :title, label: false %>
   <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
   <% body = f.cktext_area :body, rows: 50, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
   <% status = f.input :status,
@@ -18,21 +18,40 @@
   %>
   <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
 
-  <%# render the partial with the variables passed in an array %>
-  <%= render partial: 'portraits/partials/single_views',
+  <% provide :picture do %>
+    <div class="row contenu illustration">
+      <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
+        <%= image_tag(@portrait.media_container.media(:for_slider), alt: @portrait.media_container.title) %>
+        <div class="form-group">
+          <%= text_field_tag("portrait[picture_title]", @portrait.media_container.title, id:"portrait_picture_title", class: "form-control") %>
+        </div>
+        <p>
+          <%= t :portrait_file_upload_back_office_legend, default: "If you want to change your picture, please upload a file here:" %>
+        </p>
+          <%= render partial: 'shared/portrait_aktion_article/additional_picture_form.html.erb',
+              locals: {
+                file_field_name: "portrait[new_md][file]",
+                file_field_id: "portrait_new_md_file",
+                title_field_name: "portrait[new_md][title]",
+                title_field_id: "portrait_new_md_title"
+              }
+          %>
+        <hr>
+      </div>
+    </div>
+  <% end %>
+
+  <%# render the partial with the variables passed in an object %>
+  <%= render partial: 'portraits/partials/container',
     object: @portrait, locals: {
-      params: [
-        title,
-        teaser,
-        image_tag(@portrait.media_containers.first.media, alt: ""),
-        body,
-        status,
-        submit_button
-      ]
+      parameters: {
+        title: title,
+        teaser: teaser,
+        body: body,
+        status: status,
+        submit_button: submit_button
+      }
     }
   %>
 
-  <div class="form-actions">
-
-  </div>
 <% end %>

@@ -1,4 +1,4 @@
-<%# portraits/partials/_single_views.html.erb %>
+<%# portraits/partials/_container.html.erb %>
 <%# called from:
 - portraits/show.html.erb
 %>
@@ -8,31 +8,28 @@
     <div class="row">
       <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
         <%# Title %>
-        <h1><%= parameters[0] %></h1>
+        <h1><%= parameters[:title] %></h1>
         <%# Teaser %>
         <h2 class="resume">
-          <%= parameters[1] %>
+          <%= parameters[:teaser] %>
         </h2>
       </div>
     </div>
     <%# Picture %>
-    <div class="row contenu illustration">
-      <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-        <%= parameters[2] %>
-      </div>
-    </div>
+    <%= yield :picture %>
+
     <%# Body %>
     <div class="row contenu-principal">
       <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-        <%= parameters[3] %>
+        <%= parameters[:body] %>
       </div>
     </div>
 
     <%# if the partial is called from the edit (or new) action,
-      its params array has more than four items ()
+      its parameters array has more than three items
     %>
 
-    <% if parameters.size > 4 %>
+    <% if parameters.size > 3 %>
 
     <!-- FIXME - put this into the css -->
     <style>
@@ -55,14 +52,14 @@
     <%# status selection %>
     <div class="row my-inline-status-radios">
       <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-        <%= parameters[4] %>
+        <%= parameters[:status] %>
       </div>
     </div>
 
     <%# submit button %>
     <div class="row">
       <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-        <%= parameters[5] %>
+        <%= parameters[:submit_button] %>
       </div>
     </div>
 

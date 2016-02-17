@@ -1,0 +1,17 @@
+<%# shared/portrait_aktion_article/_additional_picture_form.html.erb %>
+<%# called from:
+- shared/article_aktion/_additional_pictures_form.html.erb
+- portrait/_form.html.erb
+%>
+
+<!-- File upload field -->
+<div class="form-group">
+  <%= file_field_tag(file_field_name, id: file_field_id) %>
+</div>
+<!-- end file upload field -->
+
+<!-- Picture title field -->
+<div class="form-group">
+  <%= text_field_tag(title_field_name, '', id: title_field_id, class: "form-control", placeholder: t(:placeholder_for_new_picture_title, default: "You may enter a legend for your new picture here")) %>
+</div>
+<!-- end picture title field -->
