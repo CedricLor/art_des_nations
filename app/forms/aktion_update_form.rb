@@ -33,21 +33,13 @@ class AktionUpdateForm
   end # End persist!
 
   def persist_ancillary_data
-    if md_to_update
-      update_pictures(@aktion, md_to_update, md_for_carousel)
-    end
-
-    if new_md
-      create_pictures(@aktion.id, 'Aktion', new_md, for_card)
-    end
-
-    if for_card && for_card.match(/existing_md_/)
-      pict_id = for_card.sub(/existing_md_/, '')
-      update_pictures_for_card(@aktion, pict_id)
-    end
-
-    if md_for_destruction
-      destroy_pictures(@aktion, md_for_destruction)
-    end
+    persist_picture_changes(
+      @aktion,
+      "Aktion",
+      md_to_update,
+      md_for_carousel,
+      new_md, for_card,
+      md_for_destruction
+    )
   end
 end

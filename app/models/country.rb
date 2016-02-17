@@ -3,7 +3,7 @@ class Country < ActiveRecord::Base
   validates :title, presence: true
   validates :editorial, presence: true
 
-  has_many :aktions, inverse_of: :country, dependent: :destroy
+  has_many :aktions, inverse_of: :country
 
   has_many :external_linkings, :as => :external_linkable, inverse_of: :country
   has_many :external_links, through: :external_linkings

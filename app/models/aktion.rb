@@ -37,7 +37,7 @@ class Aktion < ActiveRecord::Base
   end
 
   def self.for_home_page(locale)
-    aktions = Aktion.includes(:country)
+    aktions = Aktion.where(status: ["published", "featured"]).includes(:country)
 
     items_with_title = get_items_titles_translations(aktions, locale)
 
@@ -74,7 +74,7 @@ class Aktion < ActiveRecord::Base
   end
 
   def self.get_media_sub_hashes(picturizable_type)
-    # 4. Select all the picturizings associated with the Portrait and flagged as for card
+    # 4. Select all the picturizings associated with the Aktion type and flagged as for card
     picturizings = Picturizing.where(for_card: 'true', picturizable_type: picturizable_type)
     # 5. Create a hashmap of the media_container_ids by portrait_id
     media_container_ids_by_element_id = Hash[picturizings.map { |p| [p.picturizable_id, p.media_container_id] }]

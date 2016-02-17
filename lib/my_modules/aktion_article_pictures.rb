@@ -1,6 +1,27 @@
 # lib/my_modules/aktion_article.rb
 
 module AktionArticlePictures
+  def persist_picture_changes(item, item_type, md_to_update, md_for_carousel, new_md, for_card, md_for_destruction)
+    if md_to_update
+      update_pictures(item, md_to_update, md_for_carousel)
+    end
+
+    if new_md
+      create_pictures(item.id, item_type, new_md, for_card)
+    end
+
+    if for_card && for_card.match(/existing_md_/)
+      pict_id = for_card.sub(/existing_md_/, '')
+      update_pictures_for_card(item, pict_id)
+    end
+
+    if md_for_destruction
+      destroy_pictures(item, md_for_destruction)
+    end
+  end
+
+  private
+
   def update_pictures(item, md_to_update, md_for_carousel)
     item.picturizings.each do |pict|
       pict.update(
