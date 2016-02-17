@@ -42,7 +42,7 @@ class ArticlesController < ApplicationController
   # PATCH/PUT /articles/1
   # PATCH/PUT /articles/1.json
   def update
-    params[:article] = clean_up_posted_at_params
+    clean_up_posted_at_params
     @article_update_form = ArticleUpdateForm.new({id: params[:id]}.merge(params[:article]))
 
     respond_to do |format|

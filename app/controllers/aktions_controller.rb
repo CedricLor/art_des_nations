@@ -16,6 +16,8 @@ class AktionsController < ApplicationController
   # GET /aktions/1
   # GET /aktions/1.json
   def show
+    @media_containers = @aktion.media_containers_for_carousel
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @aktion }
@@ -29,6 +31,7 @@ class AktionsController < ApplicationController
 
   # GET /aktions/1/edit
   def edit
+    @aktion = Aktion.includes(:media_containers, :country).find(params[:id])
   end
 
   # POST /aktions
@@ -50,14 +53,12 @@ class AktionsController < ApplicationController
   # PATCH/PUT /aktions/1
   # PATCH/PUT /aktions/1.json
   def update
-    # FIXME -- Take this out of the controller!!!
-    aktion = params[:aktion]
-    params[:aktion][:aktion_date] = Date.new aktion["aktion_date(1i)"].to_i, aktion["aktion_date(2i)"].to_i, aktion["aktion_date(3i)"].to_i
-    params[:aktion][:posted_at] = Date.new aktion["posted_at(1i)"].to_i, aktion["posted_at(2i)"].to_i, aktion["posted_at(3i)"].to_i
+    clean_up_date_params
+    @aktion_update_form = AktionUpdateForm.new({id: params[:id]}.merge(params[:aktion]))
 
     respond_to do |format|
-      if @aktion.update(aktion_params)
-        format.html { redirect_to @aktion, notice: 'Aktion was successfully updated.' }
+      if @aktion_update_form.update
+        format.html { redirect_to @aktion_update_form.aktion, notice: 'The action was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -85,5 +86,12 @@ class AktionsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def aktion_params
       params.require(:aktion).permit(:title, :body, :teaser, :status, :aktion_date, :posted_at)
+    end
+
+    def clean_up_date_params
+      aktion = params[:aktion]
+      params[:aktion][:aktion_date] = Date.new aktion["aktion_date(1i)"].to_i, aktion["aktion_date(2i)"].to_i, aktion["aktion_date(3i)"].to_i
+      params[:aktion][:posted_at] = Date.new aktion["posted_at(1i)"].to_i, aktion["posted_at(2i)"].to_i, aktion["posted_at(3i)"].to_i
+      params[:aktion] = aktion.except('aktion_date(1i)', 'aktion_date(2i)', 'aktion_date(3i)', 'posted_at(1i)', 'posted_at(2i)', 'posted_at(3i)')
     end
 end
