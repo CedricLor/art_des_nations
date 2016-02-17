@@ -375,7 +375,13 @@ end
 
 10.times do
   portrait = create_portraits(statusOfArticles)
-  create_picturizing(portrait.id, media_container_ids.sample, "Portrait")
+  Picturizing.create!({
+    media_container_id: media_container_ids.sample,
+    picturizable_id: portrait.id,
+    picturizable_type: "Portrait",
+    for_carousel: "true",
+    for_card: "true"
+  })
   3.times do
     create_article_linking(article_ids.sample, portrait.id, "Portrait")
   end
