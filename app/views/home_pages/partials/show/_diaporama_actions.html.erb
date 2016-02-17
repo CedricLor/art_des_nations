@@ -2,18 +2,18 @@
 <div class="flexslider" id="slide-actions">
   <ul class="slides">
 
-    <% aktions_for_home_page.each do | aktion | %>
+    <% aktions.each do | aktion | %>
       <li class="slide">
         <p class="categorie">
-          <%= link_to aktion[:country_name], country_path(aktion[:item].country_id) %> /
-          <%= link_to aktion[:category].name, category_path(aktion[:category]) %>
+          <%= link_to aktion.country.name, country_path(aktion.country) %> /
+          <%= link_to aktion.categories[0].name, category_path(aktion.categories[0]) %>
         </p>
-        <%= link_to aktion_path(aktion[:item]) do %>
+        <%= link_to aktion_path(aktion) do %>
           <div class="img-wrapper">
-            <%= image_tag(aktion[:media], alt: "") %>
+            <%= image_tag(aktion.picturizings[0].media_container.media(:for_card), alt: aktion.picturizings[0].media_container.title) %>
             <div class="layer"></div>
           </div>
-              <h3><%= aktion[:title]%></h3>
+              <h3><%= aktion.title %></h3>
         <% end %>
       </li>
     <% end %>

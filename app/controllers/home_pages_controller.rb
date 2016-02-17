@@ -40,7 +40,7 @@ class HomePagesController < ApplicationController
       @external_links_for_home_page = ExternalLink.includes(:home_pages).where(home_pages: {id: 1})
       @articles_for_home_page = Article.for_home_page(locale)
       @portraits_for_home_page = Portrait.with_media_containers_for_card(locale).slice(0, 3)
-      @aktions_for_home_page = Aktion.for_home_page(locale)
+      @aktions = Aktion.for_home_page
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

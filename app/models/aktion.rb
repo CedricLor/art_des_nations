@@ -36,19 +36,25 @@ class Aktion < ActiveRecord::Base
     aktions_with_title.map { |act| act.merge({media: medias_by_media_container_ids[media_container_ids_by_element_id[act[:item_id]]]}) }
   end
 
-  def self.for_home_page(locale)
-    aktions = Aktion.where(status: ["published", "featured"]).includes(:country)
+  def self.for_home_page
+    Aktion.where(status: ["published", "featured"]).
+      includes([
+        country: :translations,
+        categories: :translations,
+        picturizings: :translations,
+        media_containers: :translations
+      ]).
+      where(picturizing_translations: {for_card: "true"})
+    # items_with_title = get_items_titles_translations(aktions, locale)
 
-    items_with_title = get_items_titles_translations(aktions, locale)
+    # media_container_ids_by_element_id, medias_by_media_container_ids = get_media_sub_hashes('Aktion')
 
-    media_container_ids_by_element_id, medias_by_media_container_ids = get_media_sub_hashes('Aktion')
-
-    add_medias_categories_and_countries_to_items(
-      items_with_title,
-      media_container_ids_by_element_id,
-      medias_by_media_container_ids,
-      locale
-    )
+    # add_medias_categories_and_countries_to_items(
+    #   items_with_title,
+    #   media_container_ids_by_element_id,
+    #   medias_by_media_container_ids,
+    #   locale
+    # )
   end
 
   def media_containers_for_carousel
@@ -61,7 +67,7 @@ class Aktion < ActiveRecord::Base
     # 2. Select all the aktion translation in the current locale corresponding to the aktions
     locale_item_translations = Aktion::Translation.where(locale: locale || I18n.default_locale, aktion_id: items.map { |a| a.id })
 
-    # 3. Create an array of hashes with the portraits and the corresponding title
+    # 3. Create an array of hashes with the aktions and the corresponding title
     i = -1
     locale_item_translations.map do |item|
       i = i + 1
