@@ -1,29 +1,29 @@
 <%# aktions/show.html.erb %>
 <%# rendered in layout/aktions.html.erb %>
 
+<% provide :pictures do %>
+  <%= render partial: 'shared/article_aktion/galerie_photos',
+      locals: {
+        pictures: @media_containers,
+        sub_partial: 'shared/article_aktion/slide_wrapper',
+        class_name_for_slider: 'slides',
+        item: ''
+      }
+  %>
+<% end %>
+
+<% provide :country_name do %>
+  <%= @aktion.country.name %>
+<% end %>
+
+
 <%= render partial: 'aktions/partials/container',
     layout: "shared/article_aktion_static/container_layout",
     locals: {
-      parameters: [
-        @aktion.title,
-        @aktion.teaser.html_safe,
-        @aktion.media_containers,
-        @aktion.body.html_safe
-      ]
-    }
-%>
-
-<%= render partial: 'articles/partials/container',
-    layout: "shared/article_aktion_static/container_layout",
-    object: @article,
-    locals: {
       parameters: {
-        title: @article.title,
-        teaser: @article.teaser.html_safe,
-        body: @article.body.html_safe,
-        posted_from_location: @article.posted_from_location,
-        posted_at: @article.posted_at,
-        author_full_name: @article.author.full_name
+        title: @aktion.title,
+        teaser: @aktion.teaser.html_safe,
+        body: @aktion.body.html_safe
       }
     }
 %>

@@ -6,23 +6,17 @@
 %>
 
 <%= render partial: 'shared/article_aktion_static/title_teaser', locals: {
-  title: parameters[0],
-  teaser: parameters[1]
+  title: parameters[:title],
+  teaser: parameters[:teaser]
   # title: item.title,
   # teaser: item.teaser
   }
 %>
 
-<%= render partial: 'shared/article_aktion/galerie_photos',
-    locals: {
-      pictures: parameters[2],
-      sub_partial: 'shared/article_aktion/slide_wrapper',
-      class_name_for_slider: 'slides'
-    }
-%>
+<%= yield :pictures %>
 
 <%= render partial: 'shared/aktion_static/body', locals: {
-  body: parameters[3]
+  body: parameters[:body]
   # body: item.body
   },
   layout: 'shared/article_aktion_static/body_layout'
