@@ -8,12 +8,11 @@
             <i class="fa fa-home"></i>
           <% end %>
         </li>
-        <li>
-          <%= link_to t(:in_russia, default: "En Russie"), country_path(1) %>
-        </li>
-        <li>
-          <%= link_to t(:in_china, default: "En Chine"), country_path(2) %>
-        </li>
+        <% @countries.each do |kountry| %>
+          <li>
+          <%= link_to t(kountry.title), country_path(kountry) %>
+          </li>
+        <% end %>
         <li>
           <%= link_to t(:portraits, default: "Portraits"), portrait_intro_path(1) %>
         </li>

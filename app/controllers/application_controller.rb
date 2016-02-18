@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
 
   before_action :set_locale
   before_action :set_categories_for_side_nav
+  before_action :set_countries_for_side_nav
   before_action :set_remaining_locales_for_language_switcher
 
   def set_locale
@@ -19,6 +20,10 @@ class ApplicationController < ActionController::Base
 
   def set_categories_for_side_nav
     @categories_for_side_nav = Category.includes(:translations)
+  end
+
+  def set_countries_for_side_nav
+    @countries = Country.includes(:translations).all
   end
 
   def set_remaining_locales_for_language_switcher

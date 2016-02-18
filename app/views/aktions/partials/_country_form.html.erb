@@ -8,6 +8,6 @@
   <%# The following tag will create a select with the countries.
   - The name attribute of the select will be aktion[country_id].
   - It will automatically select the country currently alloted to the current aktion. %>
-  <%= collection_select(:aktion, :country_id, Country.all, :id, :name, {}, {class: "form-control"}) %>
+  <%= collection_select(:aktion, :country_id, @countries, :id, :name, {}, {class: "form-control"}) %>
 </div>
 <hr>
