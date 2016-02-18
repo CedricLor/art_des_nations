@@ -26,7 +26,7 @@
   <span class="radio">
     <label for=<%= "#{item}_media_container_for_card_#{pict.id}"%> >
       <input class="radio_buttons required"  type="radio" name=<%="#{item}[for_card]"%> id=<%="#{item}_media_container_for_card_#{pict.id}"%> value=<%= "existing_md_#{pict.id}"%> <%= "checked" if pict.for_card == "true" %> >
-      <%= t :check_box_label_is_picture_for_card, item: item_18n_name, default: "You want to use this picture as main illustration on the index pages where this #{item_18n_name} is displayed." %>
+      <%= t :check_box_label_is_picture_for_card, item: item_i18n_name, default: "You want to use this picture as main illustration on the index pages where this #{item_i18n_name} is displayed." %>
     </label>
   </span>
   <!-- end check box picture is for_card -->
@@ -38,7 +38,7 @@
       <input class="radio_buttons required"  type="radio" name=<%="#{item}[md_for_carousel][#{pict.id}]"%> id=<%="#{item}_media_container_for_carousel_#{pict.id}_yes"%> value='true' <%= "checked" if pict.for_carousel == "true" %> ><%= t :si, default: "Yes" %>
     </label>
     <label for=<%= "#{item}_media_container_for_carousel_#{pict.id}_no"%> class="radio-inline" >
-      <input class="radio_buttons required"  type="radio" name=<%="#{item}[md_for_carousel][#{pict.id}]"%> id=<%="#{item}_media_container_for_carousel_#{pict.id}_no"%> value='false' <%= "checked" if pict.for_carousel == "false" %> ><%= t :no, default: "No" %>
+      <input class="radio_buttons required"  type="radio" name=<%="#{item}[md_for_carousel][#{pict.id}]"%> id=<%="#{item}_media_container_for_carousel_#{pict.id}_no"%> value='false' <%= "checked" if pict.for_carousel == "false" %> ><%= t :non, default: "No" %>
     </label>
   </div>
   <!-- END CHECKBOX USE THIS PICTURE IN SLIDER -->

@@ -59,13 +59,22 @@ fr:
   placeholder_for_new_picture_title: "Vous pouvez entrer une légende pour votre nouvelle image ici."
   item_article_for_check_box_label: 'cet article'
   item_action_for_check_box_label: 'cette action'
-  check_box_label_is_picture_for_card: "Vous voulez utiliser cette photo pour les pages d'index où %{item} est affichée."
+  item_portrait_for_check_box_label: 'ce portrait'
+  check_box_label_is_picture_for_card: "Vous voulez utiliser cette photo pour les pages d'index où %{item} est affiché(e)."
   check_box_label_is_picture_for_carousel: "Vous souhaitez que cette photo soit utilisée dans le caroussel : "
 
   article_change_author: "Choisissez le nom d'un auteur pour cet article :"
   article_create_new_author: "ou entrez le nom d'un nouvel auteur :"
 
   portrait_file_upload_back_office_legend: "Si vous souhaitez changer votre photo, téléchargez une image ici :"
+
+  si: "oui"
+  non: "non"
+
+  categories_to_apply_to_this_item: "Sélectionner les catégories applicables à %{this_item} ici :"
+  item_change_main_category: "Sélectionnez la catégorie principale applicable à %{this_item} ici :"
+  item_add_new_category: "Ajoutez une nouvelle categorie qui s'appliquera à %{this_item} ici :"
+  make_this_new_category_main_category_for_this_item?: "Souhaitez-vous faire de cette nouvelle catégorie la catégorie principale applicable à %{this_item} ?"
 
   activerecord:
     errors:

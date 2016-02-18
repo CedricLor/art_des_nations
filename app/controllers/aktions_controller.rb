@@ -31,7 +31,7 @@ class AktionsController < ApplicationController
 
   # GET /aktions/1/edit
   def edit
-    @aktion = Aktion.includes(:media_containers, :country).find(params[:id])
+    @aktion = Aktion.includes(:media_containers, :country).includes(categorizings: [category: :translations]).find(params[:id])
   end
 
   # POST /aktions

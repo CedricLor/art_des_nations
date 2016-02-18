@@ -18,7 +18,7 @@ class Article < ActiveRecord::Base
   has_many :picturizings, :as => :picturizable, inverse_of: :article
   has_many :media_containers, through: :picturizings
 
-  has_many :categorizings, :as => :categorizable, inverse_of: :article
+  has_many :categorizings, :as => :categorizable, inverse_of: :article, dependent: :destroy
   has_many :categories, through: :categorizings
 
   has_many :article_linkings, inverse_of: :article

@@ -1,8 +1,9 @@
 class ArticleUpdateForm
   include ActiveModel::Model
   include AktionArticlePictures
+  include AktionArticlePortraitCategories
 
-  attr_accessor :id, :body, :title, :teaser, :posted_from_location, :posted_at, :status, :md_for_destruction, :md_for_carousel, :for_card, :new_md, :md_to_update, :author_id, :create_new_author
+  attr_accessor :id, :body, :title, :teaser, :posted_from_location, :posted_at, :status, :md_for_destruction, :md_for_carousel, :for_card, :new_md, :md_to_update, :author_id, :create_new_author, :applicable_existing_categories, :main_category_id, :new_category_name, :new_category_is_main_category
   attr_reader :article
 
   def update
@@ -39,6 +40,15 @@ class ArticleUpdateForm
       md_for_carousel,
       new_md, for_card,
       md_for_destruction
+    )
+
+    persist_category_changes(
+      @article,
+      "Article",
+      applicable_existing_categories,
+      main_category_id,
+      new_category_name,
+      new_category_is_main_category
     )
 
     handle_author_name

@@ -24,6 +24,8 @@
   layout: 'shared/article_aktion_static/body_layout'
 %>
 
+<%= yield :categories_form %>
+
 <%# if parameters > 5, the partial is being called from the edit or the new articles_controller actions %>
 <% if parameters.size > 5 %>
   <%= render partial: 'shared/article_aktion/additional_form_fields',

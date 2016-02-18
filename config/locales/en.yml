@@ -59,6 +59,7 @@ en:
   placeholder_for_new_picture_title: "You may enter a legend for your new picture here"
   item_article_for_check_box_label: 'this article'
   item_action_for_check_box_label: 'this action'
+  item_portrait_for_check_box_label: 'this portrait'
   check_box_label_is_picture_for_card: "You want to use this picture as main illustration on the index pages where %{item} is displayed."
   check_box_label_is_picture_for_carousel: "You want this picture to appear in the carousel: "
 
@@ -66,6 +67,14 @@ en:
   article_create_new_author: "or enter the name of a new author:"
 
   portrait_file_upload_back_office_legend: "If you want to change your picture, please upload a file here:"
+
+  si: "yes"
+  non: "no"
+
+  categories_to_apply_to_this_item: "Select the categories you want to apply to %{this_item} here:"
+  item_change_main_category: "Change the main category applying to %{this_item} here:"
+  item_add_new_category: "Add a new category that will apply to %{this_item} here:"
+  make_this_new_category_main_category_for_this_item?: "Do you want to make this new category the main category applicable to %{this_item} ?"
 
   activerecord:
     errors:

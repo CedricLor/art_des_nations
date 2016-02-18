@@ -29,22 +29,35 @@
           sub_partial: 'shared/article_aktion/slide_wrapper_form',
           class_name_for_slider: '',
           item: 'article',
-          item_18n_name: t(:item_article_for_check_box_label, default: 'this article')
+          item_i18n_name: t(:item_article_for_check_box_label, default: 'this article')
         }
     %>
   <% end %>
 
+  <%# building a form to allow user to upload additional pictures %>
   <% provide :additional_pictures_form do %>
     <%= render partial: 'shared/article_aktion/additional_pictures_form',
        locals: {
         item: 'article',
-        item_18n_name: t(:item_article_for_check_box_label, default: 'this article')
+        item_i18n_name: t(:item_article_for_check_box_label, default: 'this article')
        }
     %>
   <% end %>
 
+  <%# building a form to allow user to change author name or add a new author %>
   <% provide :author_full_name do %>
     <%= render partial: 'articles/partials/author_form' %>
+  <% end %>
+
+  <%# building a form to allow user to change the categories applying to the articles, select the main category and add new categories %>
+  <% provide :categories_form do %>
+    <%= render partial: 'shared/portrait_aktion_article/categories_form',
+      locals: {
+        chosen_category_ids: @article.categorizings.map(&:category_id),
+        item: 'article',
+        item_i18n_name: t(:item_article_for_check_box_label, default: 'this article')
+      }
+    %>
   <% end %>
 
   <%# render the partial with the variables passed in an array %>

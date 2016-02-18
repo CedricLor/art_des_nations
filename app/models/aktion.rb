@@ -15,7 +15,7 @@ class Aktion < ActiveRecord::Base
   has_many :picturizings, :as => :picturizable, inverse_of: :aktion
   has_many :media_containers, through: :picturizings
 
-  has_many :categorizings, :as => :categorizable, inverse_of: :aktion
+  has_many :categorizings, :as => :categorizable, inverse_of: :aktion, dependent: :destroy
   has_many :categories, through: :categorizings
 
   has_many :article_linkings, :as => :article_linkable, inverse_of: :aktion

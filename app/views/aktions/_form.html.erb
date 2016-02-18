@@ -28,7 +28,7 @@
           sub_partial: 'shared/article_aktion/slide_wrapper_form',
           class_name_for_slider: '',
           item: 'aktion',
-          item_18n_name: t(:item_action_for_check_box_label, default: 'this action')
+          item_i18n_name: t(:item_action_for_check_box_label, default: 'this action')
         }
     %>
   <% end %>
@@ -37,13 +37,24 @@
     <%= render partial: 'shared/article_aktion/additional_pictures_form',
        locals: {
         item: 'aktion',
-        item_18n_name: t(:item_action_for_check_box_label, default: 'this action')
+        item_i18n_name: t(:item_action_for_check_box_label, default: 'this action')
        }
     %>
   <% end %>
 
   <% provide :country do %>
     <%= render partial: 'aktions/partials/country_form' %>
+  <% end %>
+
+  <%# building a form to allow user to change the categories applying to the aktion, select the main category and add new categories %>
+  <% provide :categories_form do %>
+    <%= render partial: 'shared/portrait_aktion_article/categories_form',
+      locals: {
+        chosen_category_ids: @aktion.categorizings.map(&:category_id),
+        item: 'aktion',
+        item_i18n_name: t(:item_action_for_check_box_label, default: 'this action')
+      }
+    %>
   <% end %>
 
   <%# render the partial with the variables passed in an array %>

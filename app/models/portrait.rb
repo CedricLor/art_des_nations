@@ -1,4 +1,6 @@
 class Portrait < ActiveRecord::Base
+  include AktionArticlePortraitCategories
+
   validates :title, presence: true
   validates :status, presence: true
   validates :status, inclusion: { in: %w(draft published featured archived),
@@ -13,7 +15,7 @@ class Portrait < ActiveRecord::Base
   has_one :picturizing, :as => :picturizable, inverse_of: :portrait
   has_one :media_container, through: :picturizing
 
-  has_many :categorizings, :as => :categorizable, inverse_of: :portrait
+  has_many :categorizings, :as => :categorizable, inverse_of: :portrait, dependent: :destroy
   has_many :categories, through: :categorizings
 
   has_many :article_linkings, :as => :article_linkable, inverse_of: :portrait
@@ -22,6 +24,7 @@ class Portrait < ActiveRecord::Base
   translates :title, :body, :teaser, :status, :fallbacks_for_empty_translations => true
 
   after_update :update_associated_picture_acmb
+  after_update :update_categories
 
   attr_accessor :picture_title, :new_md
 
@@ -51,6 +54,17 @@ class Portrait < ActiveRecord::Base
         media: new_md[:file]
       )
     end
+  end
+
+  def update_categories
+    persist_category_changes(
+      @article,
+      "Article",
+      applicable_existing_categories,
+      main_category_id,
+      new_category_name,
+      new_category_is_main_category
+    )
   end
 end
 
