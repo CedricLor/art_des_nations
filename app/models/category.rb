@@ -12,7 +12,7 @@ class Category < ActiveRecord::Base
   translates :name, :editorial, :fallbacks_for_empty_translations => true
 
 
-  def self.categorized_articles_and_aktions_for_category(category_id)
+  def self.articles_aktions_and_portraits_for_category(category_id)
     articles = Article.where(status: ["published", "featured"]).
       includes([
         :categories,
@@ -29,7 +29,14 @@ class Category < ActiveRecord::Base
       where(picturizing_translations: {for_card: "true"}).
       where(categories: {id: category_id})
 
-    articles_aktions = (articles + aktions).sort { |a, b| b.date_sorting_field <=> a.date_sorting_field }
+    portraits = Portrait.where(status: ["published", "featured"]).
+      includes([
+        :categories,
+        picturizing: [media_container: :translations]
+      ]).
+      where(categories: {id: category_id})
+
+    articles_aktions = (articles + aktions + portraits).sort { |a, b| b.date_sorting_field <=> a.date_sorting_field }
 
   end
 

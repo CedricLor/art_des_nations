@@ -13,6 +13,9 @@ class Portrait < ActiveRecord::Base
   has_one :picturizing, :as => :picturizable, inverse_of: :portrait
   has_one :media_container, through: :picturizing
 
+  has_many :categorizings, :as => :categorizable, inverse_of: :portrait
+  has_many :categories, through: :categorizings
+
   has_many :article_linkings, :as => :article_linkable, inverse_of: :portrait
   has_many :articles, through: :article_linkings
 
@@ -28,6 +31,10 @@ class Portrait < ActiveRecord::Base
 
   def picturizings
     [picturizing]
+  end
+
+  def date_sorting_field
+    updated_at
   end
 
   private
