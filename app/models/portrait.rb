@@ -4,8 +4,6 @@ class Portrait < ActiveRecord::Base
   validates :status, inclusion: { in: %w(draft published featured archived),
     message: "%{value} is not a valid status for a portrait. Choose between draft, published, featured or archived" }
 
-  default_scope {where(status: ["published", "featured"]).includes(media_container: :translations)}
-
   has_many :portraitizings, inverse_of: :portrait
   has_many :articles, through: :portraitizings, :source => :portraitizable,
            :source_type => 'Article'
@@ -25,7 +23,11 @@ class Portrait < ActiveRecord::Base
   attr_accessor :picture_title, :new_md
 
   def self.with_media_containers_for_card
-    Portrait.where(status: ["published", "featured"]).includes(media_container: :translations)
+    Portrait.where(status: ["published", "featured"]).includes(:picturizing, media_container: :translations)
+  end
+
+  def picturizings
+    [picturizing]
   end
 
   private
