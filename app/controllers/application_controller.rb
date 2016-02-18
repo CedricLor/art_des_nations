@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_categories_for_side_nav
-    @categories_for_side_nav = Category.all
+    @categories_for_side_nav = Category.includes(:translations)
   end
 
   def set_remaining_locales_for_language_switcher

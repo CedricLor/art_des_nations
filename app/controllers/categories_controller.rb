@@ -74,7 +74,7 @@ class CategoriesController < ApplicationController
 
   private
     def set_category_with_aktions_and_articles
-      @category = Category.find(params[:id])
+      @category = Category.includes(:translations).find(params[:id])
       @categorized_articles_and_aktions = Category.articles_aktions_and_portraits_for_category(@category.id)
     end
 

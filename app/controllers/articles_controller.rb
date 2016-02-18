@@ -20,7 +20,7 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1/edit
   def edit
-    @article = Article.includes(:media_containers, :author).find(params[:id])
+    @article = Article.includes(:media_containers, :author).includes(categories: :translations).find(params[:id])
   end
 
   # POST /articles
