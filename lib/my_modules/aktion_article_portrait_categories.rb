@@ -1,20 +1,33 @@
 # lib/my_modules/aktion_article_portrait_categories.rb
 
 module AktionArticlePortraitCategories
-  def persist_category_changes(item, item_type, applicable_existing_categories, main_category_id, new_category_name, new_category_is_main_category)
+  def persist_category_changes(item, item_type, applicable_existing_categories, main_category_id, new_category_name)
 
     clean_up_categories(item)
 
-    if new_category_name && new_category_is_main_category == "true"
-      save_and_apply_new_category(item.id, item_type, new_category_name)
+    # if main_category_id is equal to the new category AND new_category_name exist
+    if main_category_id == "new_category" && new_category_name.present?
+      # save the new category first to make it main category
+      save_and_apply_new_category(
+        new_category_name,
+        item.id,
+        item_type
+      )
     else
-      create_categorizing(item.id, item_type, main_category_id)
-      save_and_apply_new_category(item.id, item_type, new_category_name)
+      if main_category_id.present?
+        # 1. create the main category first
+        create_categorizing(item.id, item_type, main_category_id)
+        # 2. extract the first category id from the existing categories array to avoid duplication
+        applicable_existing_categories.except!(main_category_id)
+      end
+      save_and_apply_new_category(new_category_name, item.id, item_type) if new_category_name.present?
     end
 
-    if applicable_existing_categories
-      save_applicable_existing_categories(item.id, item_type, applicable_existing_categories)
-    end
+    save_applicable_existing_categories(
+      item.id,
+      item_type,
+      applicable_existing_categories
+    )
   end
 
   private
@@ -23,18 +36,22 @@ module AktionArticlePortraitCategories
     item.categorizings.clear
   end
 
-  def save_and_apply_new_category(item_id, item_type, new_category_name)
+  def save_and_apply_new_category(new_category_name, item_id, item_type)
     kategory = Category.create(
       name: new_category_name
     )
-    create_categorizing(item_id, item_type, kategory.id)
+    create_categorizing(
+      item_id,
+      item_type,
+      kategory.id
+    )
   end
 
-  def create_categorizing(item_id, item_type, main_category_id)
+  def create_categorizing(item_id, item_type, category_id)
     Categorizing.create(
       categorizable_id: item_id,
       categorizable_type: item_type,
-      category_id: main_category_id
+      category_id: category_id
     )
   end
 

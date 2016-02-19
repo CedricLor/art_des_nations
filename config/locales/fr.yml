@@ -75,6 +75,7 @@ fr:
   item_change_main_category: "Sélectionnez la catégorie principale applicable à %{this_item} ici :"
   item_add_new_category: "Ajoutez une nouvelle categorie qui s'appliquera à %{this_item} ici :"
   make_this_new_category_main_category_for_this_item?: "Souhaitez-vous faire de cette nouvelle catégorie la catégorie principale applicable à %{this_item} ?"
+  main_category: 'catégorie principale:'
 
   activerecord:
     errors:

@@ -26,7 +26,7 @@ class Portrait < ActiveRecord::Base
   after_update :update_associated_picture_acmb
   after_update :update_categories
 
-  attr_accessor :picture_title, :new_md
+  attr_accessor :picture_title, :new_md, :applicable_existing_categories, :main_category_id, :new_category_name
 
   def self.with_media_containers_for_card
     Portrait.where(status: ["published", "featured"]).includes(:picturizing, media_container: :translations)
@@ -58,12 +58,11 @@ class Portrait < ActiveRecord::Base
 
   def update_categories
     persist_category_changes(
-      @article,
-      "Article",
+      @portrait,
+      "Portrait",
       applicable_existing_categories,
       main_category_id,
-      new_category_name,
-      new_category_is_main_category
+      new_category_name
     )
   end
 end

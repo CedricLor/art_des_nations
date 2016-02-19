@@ -3,7 +3,7 @@ class ArticleUpdateForm
   include AktionArticlePictures
   include AktionArticlePortraitCategories
 
-  attr_accessor :id, :body, :title, :teaser, :posted_from_location, :posted_at, :status, :md_for_destruction, :md_for_carousel, :for_card, :new_md, :md_to_update, :author_id, :create_new_author, :applicable_existing_categories, :main_category_id, :new_category_name, :new_category_is_main_category
+  attr_accessor :id, :body, :title, :teaser, :posted_from_location, :posted_at, :status, :md_for_destruction, :md_for_carousel, :for_card, :new_md, :md_to_update, :author_id, :create_new_author, :applicable_existing_categories, :main_category_id, :new_category_name
   attr_reader :article
 
   def update
@@ -47,8 +47,7 @@ class ArticleUpdateForm
       "Article",
       applicable_existing_categories,
       main_category_id,
-      new_category_name,
-      new_category_is_main_category
+      new_category_name
     )
 
     handle_author_name

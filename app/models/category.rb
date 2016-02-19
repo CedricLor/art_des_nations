@@ -6,6 +6,8 @@ class Category < ActiveRecord::Base
            :source_type => 'Article'
   has_many :aktions, through: :categorizings, :source => :categorizable,
            :source_type => 'Aktion'
+  has_many :portraits, through: :categorizings, :source => :categorizable,
+           :source_type => 'Portrait'
 
   translates :name, :editorial, :fallbacks_for_empty_translations => true
 

@@ -3,7 +3,7 @@ class AktionUpdateForm
   include AktionArticlePictures
   include AktionArticlePortraitCategories
 
-  attr_accessor :id, :body, :title, :teaser, :posted_at, :aktion_date,:status, :country_id, :md_for_destruction, :md_for_carousel, :for_card, :new_md, :md_to_update, :applicable_existing_categories, :main_category_id, :new_category_name, :new_category_is_main_category
+  attr_accessor :id, :body, :title, :teaser, :posted_at, :aktion_date,:status, :country_id, :md_for_destruction, :md_for_carousel, :for_card, :new_md, :md_to_update, :applicable_existing_categories, :main_category_id, :new_category_name
   attr_reader :aktion
 
   def update
@@ -48,8 +48,7 @@ class AktionUpdateForm
       "Aktion",
       applicable_existing_categories,
       main_category_id,
-      new_category_name,
-      new_category_is_main_category
+      new_category_name
     )
   end
 end
