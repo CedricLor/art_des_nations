@@ -58,7 +58,7 @@ class Portrait < ActiveRecord::Base
 
   def update_categories
     persist_category_changes(
-      @portrait,
+      self,
       "Portrait",
       applicable_existing_categories,
       main_category_id,

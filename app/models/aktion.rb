@@ -5,7 +5,7 @@ class Aktion < ActiveRecord::Base
   validates :aktion_date, presence: true
   validates :status, presence: true
   validates :status, inclusion: { in: %w(draft published featured archived),
-    message: "%{value} is not a valid status for an aktion. Choose between draft, published, featured or archived" }
+    message: "%{value} is not a valid status for an action. Choose between draft, published, featured or archived." }
 
   default_scope { order(aktion_date: :desc) }
 

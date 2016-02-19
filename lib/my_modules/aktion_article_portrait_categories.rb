@@ -13,16 +13,26 @@ module AktionArticlePortraitCategories
         item.id,
         item_type
       )
-    else
+    else # if main_category_id is not equal to the new category OR new_category_name has not been set
+      # A. if the main_category_id is equal to something (other than new_category):
       if main_category_id.present?
         # 1. create the main category first
-        create_categorizing(item.id, item_type, main_category_id)
+        create_categorizing(
+          item.id,
+          item_type,
+          main_category_id
+        )
         # 2. extract the first category id from the existing categories array to avoid duplication
         applicable_existing_categories.except!(main_category_id)
       end
-      save_and_apply_new_category(new_category_name, item.id, item_type) if new_category_name.present?
+      # B. if the new_category_name has been set to something (but is not main_category), create the new category
+      save_and_apply_new_category(
+        new_category_name,
+        item.id,
+        item_type) if new_category_name.present?
     end
 
+    # in all cases, save all the existing categories (except, as the case may be, the main category which has already been saved)
     save_applicable_existing_categories(
       item.id,
       item_type,

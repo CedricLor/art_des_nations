@@ -68,6 +68,16 @@ class PortraitsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def portrait_params
-      params.require(:portrait).permit(:title, :body, :teaser, :status, :picture_title, new_md: [:file, :title])
+      params.require(:portrait).permit(
+        :title,
+        :body,
+        :teaser,
+        :status,
+        :picture_title,
+        :main_category_id,
+        :new_category_name,
+        new_md: [:file, :title],
+        applicable_existing_categories: params[:portrait][:applicable_existing_categories].try(:keys)
+      )
     end
 end
