@@ -42,15 +42,6 @@ ActiveRecord::Schema.define(version: 20160214165940) do
   add_index "aktions", ["country_id"], name: "index_aktions_on_country_id", using: :btree
   add_index "aktions", ["posted_at"], name: "index_aktions_on_posted_at", using: :btree
 
-  create_table "article_linkings", force: :cascade do |t|
-    t.integer "article_id",                                    null: false
-    t.integer "article_linkable_id",                           null: false
-    t.string  "article_linkable_type", limit: 20, default: "", null: false
-  end
-
-  add_index "article_linkings", ["article_id"], name: "index_article_linkings_on_article_id", using: :btree
-  add_index "article_linkings", ["article_linkable_id", "article_linkable_type"], name: "index_article_linkings_on_linkable_id_and_type", using: :btree
-
   create_table "article_translations", force: :cascade do |t|
     t.integer  "article_id",                                        null: false
     t.string   "locale",                                            null: false
@@ -266,15 +257,6 @@ ActiveRecord::Schema.define(version: 20160214165940) do
 
   add_index "portrait_translations", ["locale"], name: "index_portrait_translations_on_locale", using: :btree
   add_index "portrait_translations", ["portrait_id"], name: "index_portrait_translations_on_portrait_id", using: :btree
-
-  create_table "portraitizings", force: :cascade do |t|
-    t.integer "portrait_id",                                 null: false
-    t.integer "portraitizable_id",                           null: false
-    t.string  "portraitizable_type", limit: 20, default: "", null: false
-  end
-
-  add_index "portraitizings", ["portrait_id"], name: "index_portraitizings_on_portrait_id", using: :btree
-  add_index "portraitizings", ["portraitizable_id", "portraitizable_type"], name: "index_portraitizings_on_portraitizable_id_and_type", using: :btree
 
   create_table "portraits", force: :cascade do |t|
     t.datetime "created_at", null: false

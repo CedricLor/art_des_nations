@@ -127,20 +127,20 @@ end
 
 article_ids = Article.all.map { |art| art.id }
 
-def create_article_linking(article_id, article_linkable_id, article_linkable_type)
-  ArticleLinking.create!(
-    article_id: article_id,
-    article_linkable_id: article_linkable_id,
-    article_linkable_type: article_linkable_type
-  )
-end
+# def create_article_linking(article_id, article_linkable_id, article_linkable_type)
+#   ArticleLinking.create!(
+#     article_id: article_id,
+#     article_linkable_id: article_linkable_id,
+#     article_linkable_type: article_linkable_type
+#   )
+# end
 
-def create_article_linkings(article_id, article_ids)
-  article_ids_except_current_art_id = article_ids - [ article_id ]
-  3.times do
-    create_article_linking(article_id, article_ids_except_current_art_id.sample, "Article")
-  end
-end
+# def create_article_linkings(article_id, article_ids)
+#   article_ids_except_current_art_id = article_ids - [ article_id ]
+#   3.times do
+#     create_article_linking(article_id, article_ids_except_current_art_id.sample, "Article")
+#   end
+# end
 
 def create_english_versions_of_article(article, statusOfArticles)
   I18n.locale = :en
@@ -154,7 +154,7 @@ def create_english_versions_of_article(article, statusOfArticles)
 end
 
 Article.all.each do | article |
-  create_article_linkings(article.id, article_ids)
+  # create_article_linkings(article.id, article_ids)
   create_english_versions_of_article(article, statusOfArticles)
 end
 
@@ -210,9 +210,9 @@ end
   3.times do
     create_categorizing(aktion.id, category_ids.sample, "Aktion")
   end
-  3.times do
-    create_article_linking(article_ids.sample, aktion.id, "Aktion")
-  end
+  # 3.times do
+  #   create_article_linking(article_ids.sample, aktion.id, "Aktion")
+  # end
 end
 
 I18n.locale = :en
@@ -382,9 +382,9 @@ end
     for_carousel: "true",
     for_card: "true"
   })
-  3.times do
-    create_article_linking(article_ids.sample, portrait.id, "Portrait")
-  end
+  # 3.times do
+  #   create_article_linking(article_ids.sample, portrait.id, "Portrait")
+  # end
   2.times do
     create_categorizing(portrait.id, category_ids.sample, "Portrait")
   end
@@ -448,27 +448,27 @@ end
 
 I18n.locale = :fr
 
-portrait_ids = Portrait.all.map {|portrait| portrait.id }
+# portrait_ids = Portrait.all.map {|portrait| portrait.id }
 
 # 12. Portraitizings
 
-def add_portrait_to_aktion_or_article(portrait_id, item_id, item_type)
-  Portraitizing.create!(
-    portrait_id: portrait_id,
-    portraitizable_id: item_id,
-    portraitizable_type: item_type
-  )
-end
+# def add_portrait_to_aktion_or_article(portrait_id, item_id, item_type)
+#   Portraitizing.create!(
+#     portrait_id: portrait_id,
+#     portraitizable_id: item_id,
+#     portraitizable_type: item_type
+#   )
+# end
 
-aktion_ids.each do |aktion_id|
-  portrait_ids.shuffle.each_slice(3).to_a[1].each do | portrait_id |
-    add_portrait_to_aktion_or_article(portrait_id, aktion_id, "Aktion")
-  end
-end
+# aktion_ids.each do |aktion_id|
+#   portrait_ids.shuffle.each_slice(3).to_a[1].each do | portrait_id |
+#     add_portrait_to_aktion_or_article(portrait_id, aktion_id, "Aktion")
+#   end
+# end
 
-article_ids.each do |article_id|
-  portrait_ids.shuffle.each_slice(3).to_a[1].each do | portrait_id |
-    add_portrait_to_aktion_or_article(portrait_id, article_id, "Article")
-  end
-end
+# article_ids.each do |article_id|
+#   portrait_ids.shuffle.each_slice(3).to_a[1].each do | portrait_id |
+#     add_portrait_to_aktion_or_article(portrait_id, article_id, "Article")
+#   end
+# end
 
