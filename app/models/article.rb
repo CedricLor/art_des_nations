@@ -12,22 +12,39 @@ class Article < ActiveRecord::Base
 
   belongs_to :author, inverse_of: :articles
 
-  has_many :portraitizings, :as => :portraitizable, inverse_of: :article
-  has_many :portraits, through: :portraitizings
-
   has_many :picturizings, :as => :picturizable, inverse_of: :article
   has_many :media_containers, through: :picturizings
 
   has_many :categorizings, :as => :categorizable, inverse_of: :article, dependent: :destroy
   has_many :categories, through: :categorizings
 
-  has_many :article_linkings, inverse_of: :article
-  has_many :articles, through: :article_linkings, :source => :article_linkable,
-           :source_type => 'Article'
-  has_many :aktions, through: :article_linkings, :source => :article_linkable,
-           :source_type => 'Aktion'
-  has_many :portaits, through: :article_linkings, :source => :article_linkable,
-           :source_type => 'Portrait'
+
+
+  has_many :to_linkings, :as => :from_linkable, class_name: "Linking"
+  has_many :from_linkings, :as => :to_linkable, class_name: "Linking"
+
+  has_many :to_aktions, through: :to_linkings, source: :to_linkable, source_type: "Aktion"
+  has_many :from_aktions, through: :from_linkings, source: :from_linkable, source_type: "Aktion"
+
+  has_many :to_article, through: :to_linkings, source: :to_linkable, source_type: "Article"
+  has_many :from_article, through: :from_linkings, source: :from_linkable, source_type: "Article"
+
+  has_many :to_portraits, through: :to_linkings, source: :to_linkable, source_type: "Portrait"
+  has_many :from_portraits, through: :from_linkings, source: :from_linkable, source_type: "Portrait"
+
+
+  # has_many :portraitizings, :as => :portraitizable, inverse_of: :article
+  # has_many :portraits, through: :portraitizings
+
+  # has_many :article_linkings, inverse_of: :article
+  # has_many :articles, through: :article_linkings, :source => :article_linkable,
+  #          :source_type => 'Article'
+  # has_many :aktions, through: :article_linkings, :source => :article_linkable,
+  #          :source_type => 'Aktion'
+  # has_many :portaits, through: :article_linkings, :source => :article_linkable,
+  #          :source_type => 'Portrait'
+
+
 
   translates :title, :body, :teaser, :posted_from_location, :status, :fallbacks_for_empty_translations => true
 

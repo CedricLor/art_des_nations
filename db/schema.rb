@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160214165924) do
+ActiveRecord::Schema.define(version: 20160214165940) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -182,6 +182,16 @@ ActiveRecord::Schema.define(version: 20160214165924) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "linkings", force: :cascade do |t|
+    t.integer "from_linkable_id",                           null: false
+    t.string  "from_linkable_type", limit: 20, default: "", null: false
+    t.integer "to_linkable_id",                             null: false
+    t.string  "to_linkable_type",   limit: 20, default: "", null: false
+  end
+
+  add_index "linkings", ["from_linkable_id", "from_linkable_type"], name: "index_from_linkable", using: :btree
+  add_index "linkings", ["to_linkable_id", "to_linkable_type"], name: "index_to_linkable", using: :btree
 
   create_table "media_container_translations", force: :cascade do |t|
     t.integer  "media_container_id",              null: false

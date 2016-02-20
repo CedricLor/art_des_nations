@@ -6,11 +6,14 @@ class Portrait < ActiveRecord::Base
   validates :status, inclusion: { in: %w(draft published featured archived),
     message: "%{value} is not a valid status for a portrait. Choose between draft, published, featured or archived" }
 
-  has_many :portraitizings, inverse_of: :portrait
-  has_many :articles, through: :portraitizings, :source => :portraitizable,
-           :source_type => 'Article'
-  has_many :aktions, through: :portraitizings, :source => :portraitizable,
-           :source_type => 'Aktion'
+  # has_many :portraitizings, inverse_of: :portrait
+  # has_many :articles, through: :portraitizings, :source => :portraitizable,
+  #          :source_type => 'Article'
+  # has_many :aktions, through: :portraitizings, :source => :portraitizable,
+  #          :source_type => 'Aktion'
+
+  # has_many :article_linkings, :as => :article_linkable, inverse_of: :portrait
+  # has_many :articles, through: :article_linkings
 
   has_one :picturizing, :as => :picturizable, inverse_of: :portrait
   has_one :media_container, through: :picturizing
@@ -18,8 +21,19 @@ class Portrait < ActiveRecord::Base
   has_many :categorizings, :as => :categorizable, inverse_of: :portrait, dependent: :destroy
   has_many :categories, through: :categorizings
 
-  has_many :article_linkings, :as => :article_linkable, inverse_of: :portrait
-  has_many :articles, through: :article_linkings
+
+  has_many :to_linkings, :as => :from_linkable, class_name: "Linking"
+  has_many :from_linkings, :as => :to_linkable, class_name: "Linking"
+
+  has_many :to_aktions, through: :to_linkings, source: :to_linkable, source_type: "Aktion"
+  has_many :from_aktions, through: :from_linkings, source: :from_linkable, source_type: "Aktion"
+
+  has_many :to_article, through: :to_linkings, source: :to_linkable, source_type: "Article"
+  has_many :from_article, through: :from_linkings, source: :from_linkable, source_type: "Article"
+
+  has_many :to_portraits, through: :to_linkings, source: :to_linkable, source_type: "Portrait"
+  has_many :from_portraits, through: :from_linkings, source: :from_linkable, source_type: "Portrait"
+
 
   translates :title, :body, :teaser, :status, :fallbacks_for_empty_translations => true
 
