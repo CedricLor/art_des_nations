@@ -8,8 +8,8 @@
 
 # 1. Users
 
-user = User.create!(email: 'cedric.lor@gmail.com', password: '1234567890', password_confirmation: '1234567890', admin: true)
-user = User.create!(email: 'sebastien@artiscode.net', password: '1234567890', password_confirmation: '1234567890', admin: true)
+User.create!(email: 'cedric.lor@gmail.com', password: '1234567890', password_confirmation: '1234567890', admin: true)
+User.create!(email: 'sebastien@artiscode.net', password: '1234567890', password_confirmation: '1234567890', admin: true)
 
 # 2. Authors
 
