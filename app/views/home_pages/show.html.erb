@@ -17,6 +17,14 @@
   }
 %>
 
+<% provide :external_links do %>
+  <%= render partial: 'shared/country_home_page/external_links', locals: {
+    sub_partial: 'shared/country_home_page/external_link',
+    external_links: @home_page.external_links,
+    class_name_for_ul: "list-unstyled "
+    }
+  %>
+<% end %>
 
 <!-- HOME_PAGES LAYOUT CONSTANT -->
 <%= render partial: 'home_pages/partials/shared/main_content',
@@ -24,7 +32,6 @@
     aktions: @aktions,
     articles: @articles,
     portraits_for_home_page: @portraits_for_home_page,
-    external_links_for_home_page: @external_links_for_home_page,
     categories: @categories_for_side_nav
   }
 %>

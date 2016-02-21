@@ -4,8 +4,7 @@
 - aktions/_form.html.erb
 %>
 
-<% i = 0 %>
-<% 3.times do %>
+<% 3.times do |i| %>
 
   <%= render partial: 'shared/portrait_aktion_article/additional_picture_form.html.erb',
       locals: {
@@ -38,5 +37,4 @@
   <!-- end check box picture is for_carousel -->
 
   <hr>
-  <% i = i + 1 %>
 <% end %>

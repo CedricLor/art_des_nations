@@ -1,0 +1,13 @@
+<%# shared/country_home_page/_editable_external_link.html.erb %>
+<%# called from:
+- shared/country_home_page/_external_links.html.erb
+%>
+
+<li>
+  <div class="form-group">
+    <%= text_field_tag "external_links[#{index}][name]", "#{name}", class: "form-control", placeholder: 'Enter link name here' %>
+  </div>
+  <div class="form-group">
+    <%= text_field_tag "external_links[#{index}][url]", "#{url}", class: "form-control", placeholder: 'http://...' %>
+  </div>
+</li>

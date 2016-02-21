@@ -18,11 +18,7 @@
     </div>
 
     <!-- external links -->
-    <%= render partial: 'shared/external_links', locals: {
-      external_links: @external_links_by_country,
-      class_name_for_ul: " "
-      }
-    %>
+    <%= yield :external_links %>
 
   </div>
 </div>

@@ -33,11 +33,11 @@ class HomePagesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_home_page
-      @home_page = HomePage.find(1)
+      @home_page = HomePage.includes(external_links: :translations).find(1)
     end
 
     def set_ancillary_collections
-      @external_links_for_home_page = ExternalLink.includes(:home_pages).where(home_pages: {id: 1})
+      # @external_links_for_home_page = ExternalLink.includes(:home_pages).where(home_pages: {id: 1})
       @articles = Article.for_home_page
       @portraits_for_home_page = Portrait.with_media_containers_for_card.slice(0, 3)
       @aktions = Aktion.for_home_page

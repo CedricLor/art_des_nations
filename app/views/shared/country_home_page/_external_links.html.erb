@@ -1,0 +1,21 @@
+<%# shared/country_home_page/_external_links.html.erb %>
+<%# called from:
+- home_pages/show.html.erb
+- home_pages/edit.html.erb
+- countries/show.html.erb
+- countries/edit.html.erb
+%>
+
+<h2><%= t(:liens, default: "Liens") %></h2>
+<ul class="<%= class_name_for_ul %>">
+  <% external_links.each do |external_link| %>
+    <%= render partial: "#{sub_partial}",
+        locals: {
+          index: "existing_external_links][#{external_link.id}",
+          name: external_link.name,
+          url: external_link.url
+        }
+    %>
+  <% end %>
+  <%= yield :additional_external_links %>
+</ul>

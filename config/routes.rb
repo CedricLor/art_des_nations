@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     # root to: "pages#show"
     resources :static_pages, only: [:show, :edit, :update]
     resources :home_pages, only: [:show, :edit, :update]
+    resources :external_links, only: [:create]
     resources :site_editorials
 
     # get 'home_pages/:id' => 'home_pages#show'

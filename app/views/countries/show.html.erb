@@ -1,5 +1,13 @@
 <%# view: countries/show.html.erb %>
 
+<% provide :external_links do %>
+  <%= render partial: 'shared/country_home_page/external_links', locals: {
+    external_links: @external_links_by_country,
+    class_name_for_ul: " "
+    }
+  %>
+<% end %>
+
 <%= render partial: 'countries/partials/container',
     object: @country,
     locals: {
