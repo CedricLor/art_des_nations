@@ -42,8 +42,16 @@ class Portrait < ActiveRecord::Base
 
   attr_accessor :picture_title, :new_md, :applicable_existing_categories, :main_category_id, :new_category_name
 
+  def self.for_home_page
+    with_media_containers_for_card.where(status: ["featured"])
+  end
+
+  def self.for_portrait_list
+    with_media_containers_for_card.where(status: ["published", "featured"])
+  end
+
   def self.with_media_containers_for_card
-    Portrait.where(status: ["published", "featured"]).includes(:picturizing, media_container: :translations)
+    includes(picturizing: [:translations, media_container: :translations])
   end
 
   def picturizings

@@ -50,7 +50,7 @@ class Aktion < ActiveRecord::Base
     Aktion.includes(country: :translations).
       includes(categorizings: [category: :translations]).
       includes(picturizings: [:translations, media_container: :translations]).
-      where(status: ["published", "featured"])
+      where(status: ["featured"])
   end
 
   def media_containers_for_carousel

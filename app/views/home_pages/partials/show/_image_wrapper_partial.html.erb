@@ -1,0 +1,13 @@
+<%# _image_wrapper_partial.html.erb %>
+
+<%= link_to polymorphic_path(item) do %>
+  <% if (picturizing = item.picturizings.size > 0 && item.picturizings.select { |p| p.for_card == "true" }) && picturizing.size > 0 %>
+    <div class="img-wrapper">
+      <%= image_tag(picturizing[0].media_container.media(:for_card), alt: picturizing[0].media_container.title) %>
+      <div class="layer"></div>
+    </div>
+  <% end %>
+  <h3>
+    <%= item.title %>
+  </h3>
+<% end %>

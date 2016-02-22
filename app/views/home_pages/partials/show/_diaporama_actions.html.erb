@@ -8,15 +8,12 @@
           <%= link_to aktion.country.name, country_path(aktion.country) %> /
           <%= link_to aktion.categories[0].name, category_path(aktion.categories[0]) %>
         </p>
-        <%= link_to aktion_path(aktion) do %>
-          <% if (picturizing = aktion.picturizings.size > 0 && aktion.picturizings.select { |p| p.for_card == "true" }) && picturizing.size > 0 %>
-            <div class="img-wrapper">
-              <%= image_tag(picturizing[0].media_container.media(:for_card), alt: picturizing[0].media_container.title) %>
-              <div class="layer"></div>
-            </div>
-          <% end %>
-            <h3><%= aktion.title %></h3>
-        <% end %>
+
+        <%= render partial: 'home_pages/partials/show/image_wrapper_partial', locals: {
+            item: aktion
+          }
+        %>
+
       </li>
     <% end %>
 

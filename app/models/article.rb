@@ -50,7 +50,7 @@ class Article < ActiveRecord::Base
   def self.for_home_page
     Article.includes(categorizings: [category: :translations]).
       includes(picturizings: [:translations, media_container: :translations]).
-      where(status: ["published", "featured"])
+      where(status: ["featured"])
   end
 
   def media_containers_for_carousel
