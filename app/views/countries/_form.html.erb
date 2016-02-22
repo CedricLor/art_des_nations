@@ -3,7 +3,7 @@
 
   <!-- div class="form-inputs"-->
     <% title = f.input :title %>
-    <% editorial = f.cktext_area :editorial, rows: 50, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+    <% editorial = f.cktext_area :editorial, rows: 50, :ckeditor => {language: I18n.locale} %>
   <!-- /div-->
 
   <!--div class="form-actions" -->

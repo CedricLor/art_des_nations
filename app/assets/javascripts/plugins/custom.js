@@ -6,13 +6,9 @@ $(document).ready(function () {
     $('#derniere-minute-wrapper').slideDown('slow');
   }
 
-  var showBreve;
-
-  $(document).ready(function() {
-
+  if $('#derniere-minute div').children().length > 0 {
     setTimeout(showDerniereMinute, 2000);
-
-  })
+  }
 
   // browser window scroll (in pixels) after which the "back to top" link is shown
   var offset = 300,

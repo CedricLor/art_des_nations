@@ -18,7 +18,6 @@ class ArticleUpdateForm
   private
 
   def persist!
-    byebug
     @article = Article.includes(:media_containers, :author).find(@id)
 
     @article.update(
@@ -29,8 +28,6 @@ class ArticleUpdateForm
       posted_at: posted_at,
       status: status
     )
-
-    byebug
 
     persist_ancillary_data
   end # End persist!

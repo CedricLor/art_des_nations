@@ -12,7 +12,7 @@
   <%= f.error_notification %>
 
   <% category_name = f.input :name %>
-  <% editorial = f.cktext_area :editorial, rows: 50, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+  <% editorial = f.cktext_area :editorial, rows: 50, :ckeditor => {language: I18n.locale} %>
   <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
 
   <%= render partial: 'shared/portraits_categories/list',

@@ -13,7 +13,7 @@
 <!-- Call to action -->
 <%= render partial: 'home_pages/partials/shared/call_to_action_wrapper',
   locals: {
-    call_to_action: @home_page.call_to_action.html_safe
+    call_to_action: @home_page.call_to_action || ''
   }
 %>
 

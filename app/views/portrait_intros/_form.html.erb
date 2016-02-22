@@ -4,7 +4,7 @@
 <%= simple_form_for(@portrait_intro) do |f| %>
   <%= f.error_notification %>
 
-  <% portrait_intro_content = f.cktext_area :intro, rows: 50, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+  <% portrait_intro_content = f.cktext_area :intro, rows: 50, :ckeditor => {language: I18n.locale} %>
   <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
 
   <%= render partial: 'shared/portraits_categories/list',

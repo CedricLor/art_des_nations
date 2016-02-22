@@ -5,8 +5,8 @@
 
   <%# dispatching the form fields in variables to pass them to the partial %>
   <% title = f.input :title, label: false %>
-  <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
-  <% body = f.cktext_area :body, rows: 50, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini', language: I18n.locale} %>
+  <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {language: I18n.locale} %>
+  <% body = f.cktext_area :body, rows: 50, :ckeditor => {language: I18n.locale} %>
   <% status = f.input :status,
     collection: %w(draft published featured archived),
     as: :radio_buttons,
