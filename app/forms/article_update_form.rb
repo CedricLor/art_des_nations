@@ -63,7 +63,6 @@ class ArticleUpdateForm
     return create_author_and_assign_article if create_new_author.present?
     # else if the user has selected a different author in the list, update the article and return
     return @article.update(author_id: author_id) if @article.author_id.to_s != author_id
-    byebug
   end
 
   def create_author_and_assign_article

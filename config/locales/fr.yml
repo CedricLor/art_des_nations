@@ -82,7 +82,8 @@ fr:
     errors:
       messages:
         record_invalid: 'La validation a échoué : %{errors}'
-  date:
+
+  dates:
     abbr_day_names:
     - dim
     - lun
@@ -280,6 +281,6 @@ fr:
     am: am
     formats:
       default: "%d %B %Y %Hh %Mmin %Ss"
-      long: "%A %d %B %Y %Hh%M"
+      long: "%A %d %B %Y"
       short: "%d %b %Hh%M"
     pm: pm

@@ -7,17 +7,6 @@ with layout:
 
 <%= body_content.html_safe %>
 
-<!-- FIXME -- This is an exemple of article embedded image -->
-<!--
-<div class="conteneur-image text-center">
-  <%#= image_tag(pict.media(:for_slider), alt: "") %>
-  <p class="legende">Une légende ici</p>
-</div>
--->
-<!-- FIXME -- This is an exemple of article embedded image -->
-<!--<div class='embed-container'><iframe src='https://player.vimeo.com/video/61422350' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>-->
-
-
 <hr>
 
 <!-- signature and posted_at and posted_from_location -->
@@ -46,9 +35,10 @@ with layout:
       %>
       <%= t(
         :published_html,
-        posted_at: posted_at.is_a?(ActiveSupport::TimeWithZone) ? l(posted_at, format: :short) : posted_at,
+        posted_at: posted_at.is_a?(ActiveSupport::TimeWithZone) ? l(posted_at, format: :long) : posted_at,
         posted_from_location: posted_from_location,
-        default: default_for_posted_at.html_safe) %>
+        default: default_for_posted_at.html_safe)
+      %>
     </div>
   </div>
 
