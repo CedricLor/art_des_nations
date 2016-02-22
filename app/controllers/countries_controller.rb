@@ -30,7 +30,7 @@ class CountriesController < ApplicationController
 
     respond_to do |format|
       if @country_update_form.update
-        format.html { redirect_to @country_update_form.country, notice: 'Country was successfully updated.' }
+        format.html { redirect_to @country_update_form.country, notice: 'The country page was successfully updated.' }
         format.json { head :no_content }
       else
         set_country
