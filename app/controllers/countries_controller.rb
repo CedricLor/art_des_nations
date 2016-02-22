@@ -1,6 +1,6 @@
 class CountriesController < ApplicationController
-  before_action :set_country, only: [:show, :edit, :update]
-  before_action :set_ancillary_collections, only: [:show, :edit, :update]
+  before_action :set_country, only: [:show, :edit]
+  before_action :set_ancillary_collections, only: [:show, :edit]
 
   skip_before_action :authenticate_user!, only: :show
 
@@ -45,9 +45,7 @@ class CountriesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_country
       @country = Country.
-        includes(:translations, external_links: :translations).
-        # includes(aktions: [:translations, picturizings: [:translations, media_container: :translations]]).
-        # where(picturizing_translations: {for_card: "true"}).
+        includes(:translations, external_linkings: [external_link: :translations]).
         find(params[:id])
     end
 
