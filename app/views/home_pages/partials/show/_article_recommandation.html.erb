@@ -11,10 +11,12 @@
   <!-- wrapper link -->
   <%= link_to article_path(article) do %>
     <!-- image -->
-    <div class="img-wrapper">
-      <%= image_tag(article.picturizings[0].media_container.media(:for_card), alt: article.picturizings[0].media_container.title) %>
-      <div class="layer"></div>
-    </div>
+    <% if (picturizing = article.picturizings.size > 0 && article.picturizings.select { |p| p.for_card == "true" }) && picturizing.size > 0 %>
+      <div class="img-wrapper">
+        <%= image_tag(picturizing[0].media_container.media(:for_card), alt: picturizing[0].media_container.title) %>
+        <div class="layer"></div>
+      </div>
+    <% end %>
     <!-- article title -->
     <h3>
       <%= article.title %>

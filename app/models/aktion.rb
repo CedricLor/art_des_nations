@@ -40,6 +40,19 @@ class Aktion < ActiveRecord::Base
 
   translates :title, :body, :teaser, :status, :fallbacks_for_empty_translations => true
 
+  # def self.for_country(country)
+  #   Aktion.includes(picturizings: [:translations, media_container: :translations]).
+  #     where(status: ["published", "featured"]).
+  #     where(country_id: country.id)
+  # end
+
+  # def self.for_home_page
+  #   Aktion.includes(country: :translations).
+  #     includes(categorizings: [category: :translations]).
+  #     includes(picturizings: [:translations, media_container: :translations]).
+  #     where(status: ["published", "featured"])
+  # end
+
   def self.for_country(country)
     Aktion.where(status: ["published", "featured"]).
       where(country_id: country.id).
