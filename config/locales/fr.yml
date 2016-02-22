@@ -54,7 +54,8 @@ fr:
   home_page_title: "Accueil"
   published_html: "<p class='meta'>Publié le <span class='date-publication'>%{posted_at}</span> à <span class='lieu-publication'>%{posted_from_location}</span></p>"
 
-  mark_for_deletion: "Supprimer cette photo"
+  mark_for_deletion: "Marquer comme à supprimer"
+  picture_mark_for_deletion: "Supprimer cette photo"
 
   placeholder_for_new_picture_title: "Vous pouvez entrer une légende pour votre nouvelle image ici."
   item_article_for_check_box_label: 'cet article'

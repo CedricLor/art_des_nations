@@ -3,7 +3,7 @@ class ExternalLinksController < ApplicationController
   # PATCH/PUT /external_links/1
   # PATCH/PUT /external_links/1.json
   def create
-    @external_links_update_form = ExternalLinksUpdateForm.new(params[:external_links])
+    @external_links_update_form = ExternalLinksUpdateForm.new(params[:external_linkings])
 
     respond_to do |format|
       if @external_links_update_form.update

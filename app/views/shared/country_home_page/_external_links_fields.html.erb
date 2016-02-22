@@ -4,23 +4,23 @@
 - country/_form.html.erb
 %>
 
-  <% provide :additional_external_links do %>
-    <% 3.times do |i| %>
-      <%= render partial: 'shared/country_home_page/editable_external_link', locals: {
-          index: "new_external_links][#{i}",
-          name: '',
-          url: ''
-        }
-      %>
-    <% end %>
+<% provide :additional_external_links do %>
+  <% 3.times do |i| %>
+    <%= render partial: 'shared/country_home_page/editable_external_link', locals: {
+        index: "new_external_links][#{i}",
+        name: '',
+        url: ''
+      }
+    %>
   <% end %>
+<% end %>
 
-  <%= hidden_field_tag 'external_links[parent_type]', parent_type %>
-  <%= hidden_field_tag 'external_links[parent_id]', parent_id %>
+<%= hidden_field_tag 'external_linkings[parent_type]', parent_type %>
+<%= hidden_field_tag 'external_linkings[parent_id]', parent_id %>
 
-  <%= render partial: 'shared/country_home_page/external_links', locals: {
-    sub_partial: 'shared/country_home_page/editable_external_link',
-    external_links: external_links,
-    class_name_for_ul: class_name_for_ul
-    }
-  %>
+<%= render partial: 'shared/country_home_page/external_links', locals: {
+  sub_partial: 'shared/country_home_page/editable_external_link',
+  external_linkings: external_linkings,
+  class_name_for_ul: class_name_for_ul
+  }
+%>

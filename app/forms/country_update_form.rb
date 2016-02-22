@@ -1,7 +1,7 @@
 class CountryUpdateForm
   include ActiveModel::Model
 
-  attr_accessor :id, :title, :editorial, :external_links
+  attr_accessor :id, :title, :editorial, :external_linkings
   attr_reader :country
 
   def update
@@ -23,11 +23,11 @@ class CountryUpdateForm
       editorial: editorial
     )
 
-    ExternalLinksUpdateForm.
-      new(
+    ExternalLinksUpdateForm.new(
         parent: @country,
-        existing_external_links: external_links["existing_external_links"],
-        new_external_links: external_links["new_external_links"]
+        existing_external_links: external_linkings["existing_external_links"],
+        marked_for_deletion: external_linkings["marked_for_deletion"],
+        new_external_links: external_linkings["new_external_links"]
       ).
       update
   end # End persist!

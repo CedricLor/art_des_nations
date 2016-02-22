@@ -4,10 +4,21 @@
 %>
 
 <li>
-  <div class="form-group">
-    <%= text_field_tag "external_links[#{index}][name]", "#{name}", class: "form-control", placeholder: 'Enter link name here' %>
-  </div>
-  <div class="form-group">
-    <%= text_field_tag "external_links[#{index}][url]", "#{url}", class: "form-control", placeholder: 'http://...' %>
+  <div class="panel panel-default">
+    <div class="panel-body">
+
+      <div class="form-group">
+        <%= text_field_tag "external_linkings[#{index}][name]", "#{name}", class: "form-control", placeholder: 'Enter link name here' %>
+      </div>
+      <div class="form-group">
+        <%= text_field_tag "external_linkings[#{index}][url]", "#{url}", class: "form-control", placeholder: 'http://...' %>
+      </div>
+      <div class="from-group text-left">
+        <div class="checkbox">
+          <label><%= check_box_tag "external_linkings[marked_for_deletion][#{index}]", "true" %><%= t(:mark_for_deletion, default: "Mark for deletion") %></label>
+        </div>
+      </div>
+
+    </div>
   </div>
 </li>

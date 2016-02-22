@@ -17,7 +17,7 @@
   <span class="checkbox">
     <label for=<%= "#{item}_media_container_md_for_destruction_#{pict.id}"%> >
       <input class="check_boxes required"  type="checkbox" name=<%="#{item}[md_for_destruction][#{pict.id}]"%> id=<%="#{item}_media_container_md_for_destruction_#{pict.id}"%> value='true' >
-      <%= t :mark_for_deletion, default: "Delete this picture" %>
+      <%= t :picture_mark_for_deletion, default: "Delete this picture" %>
     </label>
   </span>
   <!-- END DESTROY CHECKBOX -->
