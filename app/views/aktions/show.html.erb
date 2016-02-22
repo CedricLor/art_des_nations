@@ -18,8 +18,8 @@
     locals: {
       parameters: {
         title: @aktion.title,
-        teaser: @aktion.teaser.html_safe,
-        body: @aktion.body.html_safe
+        teaser: @aktion.teaser || '',
+        body: @aktion.body
       }
     }
 %>

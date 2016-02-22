@@ -1,6 +1,5 @@
 class Article < ActiveRecord::Base
   validates :title, presence: true
-  validates :teaser, presence: true
   validates :posted_at, presence: true
   validates :posted_from_location, presence: true
   validates :status, presence: true

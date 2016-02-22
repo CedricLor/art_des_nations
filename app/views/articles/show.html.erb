@@ -23,8 +23,8 @@
     locals: {
       parameters: {
         title: @article.title,
-        teaser: @article.teaser.html_safe,
-        body: @article.body.html_safe,
+        teaser: @article.teaser  || '',
+        body: @article.body,
         posted_from_location: @article.posted_from_location,
         posted_at: @article.posted_at
       }

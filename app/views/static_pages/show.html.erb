@@ -7,8 +7,8 @@
     layout: "shared/article_aktion_static/container_layout",
     locals: {
       title: @static_page.title,
-      teaser: @static_page.teaser,
-      body: @static_page.body.html_safe
+      teaser: @static_page.teaser  || '',
+      body: @static_page.body
     }
 %>
 
