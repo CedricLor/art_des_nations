@@ -25,11 +25,7 @@ class HomePage < ActiveRecord::Base
 
   def short_editorial
     end_of_short_edito = editorial.index('</p>', 350) + 4
-    short_editorial = editorial.slice(0, end_of_short_edito)
-    if editorial.size > end_of_short_edito
-      short_editorial = short_editorial + '...'
-    end
-    short_editorial
+    editorial.slice(0, end_of_short_edito)
   end
 end
 
