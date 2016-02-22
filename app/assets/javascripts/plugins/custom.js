@@ -6,7 +6,7 @@ $(document).ready(function () {
     $('#derniere-minute-wrapper').slideDown('slow');
   }
 
-  if $('#derniere-minute div').children().length > 0 {
+  if ($('#derniere-minute div').children().length > 0) {
     setTimeout(showDerniereMinute, 2000);
   }
 
