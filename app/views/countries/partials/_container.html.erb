@@ -6,13 +6,13 @@
 
 <%= render partial: 'countries/partials/title',
     locals: {
-      title: parameters[0]
+      title: parameters[:title]
     }
 %>
 
 <%= render partial: 'countries/partials/main_content',
     locals: {
-      editorial: parameters[1]
+      editorial: parameters[:editorial]
     }
 %>
 
@@ -23,7 +23,9 @@ Remaining parameters are (in this order -- important!!!):
 <% if parameters.size > 2 %>
   <%= render partial: 'shared/article_aktion/additional_form_fields',
     locals: {
-      remaining_params: parameters - parameters[0..1]
+      remaining_params: parameters.
+        select { |key, value| key === :submit_button }.
+        values
     }
   %>
 <% end %>

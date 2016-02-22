@@ -2,7 +2,8 @@
 
 <% provide :external_links do %>
   <%= render partial: 'shared/country_home_page/external_links', locals: {
-    external_links: @external_links_by_country,
+    sub_partial: 'shared/country_home_page/external_link',
+    external_links: @country.external_links,
     class_name_for_ul: " "
     }
   %>
@@ -11,9 +12,9 @@
 <%= render partial: 'countries/partials/container',
     object: @country,
     locals: {
-      parameters: [
-        @country.title,
-        @country.editorial.html_safe
-      ]
+      parameters: {
+        title: @country.title,
+        editorial: @country.editorial.html_safe
+      }
     }
 %>

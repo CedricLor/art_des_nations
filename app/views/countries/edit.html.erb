@@ -1,12 +1,17 @@
 <%# view: countries/edit.html.erb %>
 
+
 <% provide :external_links do %>
-  <%= render partial: 'shared/country_home_page/external_links', locals: {
-    external_links: @external_links_by_country,
-    class_name_for_ul: " "
+  <%= render partial: 'shared/country_home_page/external_links_fields',
+    locals: {
+      parent_type: 'Country',
+      parent_id: @country.id,
+      external_links: @country.external_links,
+      class_name_for_ul: " "
     }
   %>
 <% end %>
+
 
 <%= render 'form' %>
 

@@ -20,13 +20,23 @@ class CountriesController < ApplicationController
   # PATCH/PUT /countries/1
   # PATCH/PUT /countries/1.json
   def update
+    @country_update_form = CountryUpdateForm.new(
+      {id: params[:id]}.
+      merge(params[:country]).
+      merge({
+        external_links: params[:external_links]
+      })
+    )
+
     respond_to do |format|
-      if @country.update(country_params)
-        format.html { redirect_to @country, notice: 'Country was successfully updated.' }
+      if @country_update_form.update
+        format.html { redirect_to @country_update_form.country, notice: 'Country was successfully updated.' }
         format.json { head :no_content }
       else
+        set_country
+        set_ancillary_collections
         format.html { render action: 'edit' }
-        format.json { render json: @country.errors, status: :unprocessable_entity }
+        format.json { render json: @country_update_form.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -34,12 +44,15 @@ class CountriesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_country
-      @country = Country.includes(:translations).find(params[:id])
+      @country = Country.
+        includes(:translations, external_links: :translations).
+        # includes(aktions: [:translations, picturizings: [:translations, media_container: :translations]]).
+        # where(picturizing_translations: {for_card: "true"}).
+        find(params[:id])
     end
 
     def set_ancillary_collections
       @aktions = Aktion.for_country(@country)
-      @external_links_by_country = ExternalLink.includes(:countries).where(countries: {id: 1})
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

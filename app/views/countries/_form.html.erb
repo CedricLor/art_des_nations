@@ -15,11 +15,11 @@
   <%= render partial: 'countries/partials/container',
       object: @country,
       locals: {
-        parameters: [
-          title,
-          editorial,
-          submit_button
-        ]
+        parameters: {
+          title: title,
+          editorial: editorial,
+          submit_button: submit_button
+        }
       }
   %>
 

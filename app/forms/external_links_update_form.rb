@@ -1,8 +1,14 @@
 class ExternalLinksUpdateForm
   include ActiveModel::Model
 
-  attr_accessor :parent_id, :parent_type, :existing_external_links, :new_external_links
-  attr_reader :parent
+  attr_accessor :parent_id, :parent_type, :existing_external_links, :new_external_links, :parent
+
+  def initialize(attributes={})
+    super
+    @parent ||= Object.const_get("#{parent_type}").find(parent_id)
+    @parent_id ||= @parent.id
+    @parent_type ||= @parent.class.to_s
+  end
 
   def update
     if valid?
@@ -16,8 +22,6 @@ class ExternalLinksUpdateForm
   private
 
   def persist!
-    @parent = Object.const_get("#{parent_type}").find(parent_id)
-
     persist_existing_external_links
     persist_new_external_links
   end # End persist!
