@@ -41,16 +41,21 @@ class Aktion < ActiveRecord::Base
   translates :title, :body, :teaser, :status, :fallbacks_for_empty_translations => true
 
   def self.for_country(country)
-    Aktion.includes(picturizings: [:translations, media_container: :translations]).
-      where(status: ["published", "featured"]).
-      where(country_id: country.id)
+    Aktion.where(status: ["published", "featured"]).
+      where(country_id: country.id).
+      includes([
+        categories: :translations,
+        picturizings: [:translations, [media_container: :translations]]
+      ]).
+      where(picturizing_translations: {for_card: "true"})
   end
 
   def self.for_home_page
-    Aktion.includes(country: :translations).
+    Aktion.where(status: ["published", "featured"]).
+      includes(country: :translations).
       includes(categorizings: [category: :translations]).
-      includes(picturizings: [:translations, media_container: :translations]).
-      where(status: ["published", "featured"])
+      includes(picturizings: [:translations, [media_container: :translations]]).
+      where(picturizing_translations: {for_card: "true"})
   end
 
   def media_containers_for_carousel
