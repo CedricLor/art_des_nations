@@ -53,10 +53,8 @@ class Aktion < ActiveRecord::Base
   def self.for_home_page
     Aktion.where(status: ["published", "featured"]).
       includes(country: :translations).
-      includes([
-        categories: :translations,
-        picturizings: [:translations, [media_container: :translations]]
-      ]).
+      includes(categorizings: [category: :translations]).
+      includes(picturizings: [:translations, [media_container: :translations]]).
       where(picturizing_translations: {for_card: "true"})
   end
 
