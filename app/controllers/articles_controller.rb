@@ -2,6 +2,18 @@ class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :destroy]
   skip_before_action :authenticate_user!, only: :show
 
+
+  # GET /categories
+  # GET /categories.json
+  def index
+    @articles = Article.all
+
+    respond_to do |format|
+      format.html {render :layout => 'application'} # index.html.erb
+      format.json { render json: @articles }
+    end
+  end
+
   # GET /articles/1
   # GET /articles/1.json
   def show

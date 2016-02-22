@@ -1,25 +1,34 @@
-<p id="notice"><%= notice %></p>
 
-<h1>Listing Aktions</h1>
+<div class="container">
+  <h1>Listing actions</h1>
 
-<table>
-  <thead>
+  <table class="table table-striped">
     <tr>
-      <th colspan="3"></th>
+      <th>Id</th>
+      <th>Title</th>
+      <th>Country</th>
+      <th>Action date</th>
+      <th>Status</th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
-  </thead>
 
-  <tbody>
-    <% @aktions.each do |aktion| %>
-      <tr>
-        <td><%= link_to 'Show', aktion %></td>
-        <td><%= link_to 'Edit', edit_aktion_path(aktion) %></td>
-        <td><%= link_to 'Destroy', aktion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+  <% @aktions.each do |aktion| %>
+    <tr>
+      <td><%= aktion.id %></td>
+      <td><%= aktion.title %></td>
+      <td><%= aktion.country.name %></td>
+      <td><%= aktion.aktion_date %></td>
+      <td><%= aktion.status %></td>
+      <td><%= link_to 'Show', aktion %></td>
+      <td><%= link_to 'Edit', edit_aktion_path(aktion) %></td>
+      <td><%#= link_to 'Destroy', aktion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  <% end %>
+  </table>
 
-<br>
+  <br />
 
-<%= link_to 'New Aktion', new_aktion_path %>
+  <%= link_to t('New Aktion'), new_aktion_path %>
+</div>

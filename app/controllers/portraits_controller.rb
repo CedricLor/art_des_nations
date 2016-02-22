@@ -2,6 +2,17 @@ class PortraitsController < ApplicationController
   before_action :set_portrait, only: [:show, :edit, :update, :destroy]
   skip_before_action :authenticate_user!, only: [:index, :show]
 
+  # GET /portraits
+  # GET /portraits.json
+  def index
+    @portraits = Portrait.all
+
+    respond_to do |format|
+      format.html {render :layout => 'application'} # index.html.erb
+      format.json { render json: @portraits }
+    end
+  end
+
   # GET /portraits/1
   # GET /portraits/1.json
   def show

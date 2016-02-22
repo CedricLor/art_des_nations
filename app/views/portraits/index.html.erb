@@ -1,0 +1,30 @@
+
+<div class="container">
+  <h1>Listing portraits</h1>
+
+  <table class="table table-striped">
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Status</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+
+  <% @portraits.each do |portrait| %>
+    <tr>
+      <td><%= portrait.id %></td>
+      <td><%= portrait.title %></td>
+      <td><%= portrait.status %></td>
+      <td><%= link_to 'Show', portrait %></td>
+      <td><%= link_to 'Edit', edit_portrait_path(portrait) %></td>
+      <td><%#= link_to 'Destroy', aktion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  <% end %>
+  </table>
+
+  <br />
+
+  <%= link_to t('New Portrait'), new_portrait_path %>
+</div>

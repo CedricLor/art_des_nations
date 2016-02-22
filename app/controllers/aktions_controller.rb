@@ -8,7 +8,7 @@ class AktionsController < ApplicationController
     @aktions = Aktion.all
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html {render :layout => 'application'} # index.html.erb
       format.json { render json: @aktions }
     end
   end

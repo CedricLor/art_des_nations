@@ -1,18 +1,50 @@
-<%= link_to t('.new_article'), new_article_path %>
 
 <%#= react_component('NewsIndexPage', { articles: @articles } ) %>
+<div class="container">
+  <h1>Listing articles</h1>
 
-<% @articles.each do |article| %>
-  <h3><%= article.title.html_safe %></h3>
-  <% if article.galleries.last %>
-    <%= image_tag article.galleries.last.media_containers.last.media.url(:medium) %>
+  <table class="table table-striped">
+    <tr>
+      <th>Id</th>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Posted at</th>
+      <th>Status</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+
+  <% @articles.each do |article| %>
+    <tr>
+      <td><%= article.id %></td>
+      <td><%= article.title %></td>
+      <td><%= article.author.full_name %></td>
+      <td><%= article.posted_at %></td>
+      <td><%= article.status %></td>
+      <td><%= link_to 'Show', article %></td>
+      <td><%= link_to 'Edit', edit_article_path(article) %></td>
+      <td><%#= link_to 'Destroy', article, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
   <% end %>
+  </table>
+
+  <br />
+
+  <%= link_to t('.new_article'), new_article_path %>
+</div>
+
+<%# @articles.each do |article| %>
+  <h3><%#= article.title.html_safe %></h3>
+  <%# if article.galleries.last %>
+    <%#= image_tag article.galleries.last.media_containers.last.media.url(:medium) %>
+  <%# end %>
   <%#= image_tag article.picture.url(:medium) %>
-  <p><%= article.teaser.nil? ? "" : article.teaser.html_safe %></p>
-  <p><%= article.body.html_safe %></p>
-  <%= link_to t('.edit_article'), edit_article_path(article) %>
-  <% if article != @articles.last %>
+  <p><%#= article.teaser.nil? ? "" : article.teaser.html_safe %></p>
+  <p><%#= article.body.html_safe %></p>
+  <%#= link_to t('.edit_article'), edit_article_path(article) %>
+  <%# if article != @articles.last %>
     <hr />
-  <% end %>
-<% end %>
+  <%# end %>
+<%# end %>
 
