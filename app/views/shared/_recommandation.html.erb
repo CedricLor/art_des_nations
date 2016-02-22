@@ -6,8 +6,11 @@
 <div class="<%=additional_class_names%> recommandation " >
   <%= link_to polymorphic_path(element) do %>
   <!-- a href="/portrait.php" -->
-      <%= image_tag(element.picturizings[0].media_container.media(:for_card), alt: element.picturizings[0].media_container.title) %>
+    <% if (picturizing = element.picturizings.size > 0 && element.picturizings.select { |p| p.for_card == "true" }) && picturizing.size > 0 %>
+      <%= image_tag(picturizing[0].media_container.media(:for_card), alt: picturizing[0].media_container.title) %>
+    <% end %>
     <h3><%= element.title %></h3>
   <!-- /a -->
   <% end %>
 </div>
+

@@ -1,4 +1,9 @@
-<%# _image_wrapper_partial.html.erb %>
+<%# _card_link_wrapper_partial.html.erb %>
+<%# called from:
+- home_pages/partials/show/_article_recommandation.html.erb
+- home_pages/partials/show/_portrait_recommandation.html.erb
+- home_pages/partials/show/_diaporama_actions.html.erb
+%>
 
 <%= link_to polymorphic_path(item) do %>
   <% if (picturizing = item.picturizings.size > 0 && item.picturizings.select { |p| p.for_card == "true" }) && picturizing.size > 0 %>

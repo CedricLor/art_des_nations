@@ -1,6 +1,11 @@
+<%# home_pages/partials/show/_portrait_recommandation.html.erb %>
+<%# called from:
+home_pages/partials/shared/_main_content.html.erb
+%>
+
 <div class="col-xs-12 recommandation">
   <!-- wrapper link -->
-  <%= render partial: 'home_pages/partials/show/image_wrapper_partial', locals: {
+  <%= render partial: 'home_pages/partials/show/card_link_wrapper_partial', locals: {
       item: portrait
     }
   %>

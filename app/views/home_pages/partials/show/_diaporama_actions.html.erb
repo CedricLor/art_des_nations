@@ -1,3 +1,7 @@
+<%# home_pages/partials/show/_diaporama_actions.html.erb %>
+<%# called from:
+- home_pages/partials/shared/_main_content.html.erb
+%>
 
 <div class="flexslider" id="slide-actions">
   <ul class="slides" style="margin-left: 0px;">
@@ -9,7 +13,7 @@
           <%= link_to aktion.categories[0].name, category_path(aktion.categories[0]) %>
         </p>
 
-        <%= render partial: 'home_pages/partials/show/image_wrapper_partial', locals: {
+        <%= render partial: 'home_pages/partials/show/card_link_wrapper_partial', locals: {
             item: aktion
           }
         %>
