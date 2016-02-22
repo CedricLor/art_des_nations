@@ -24,7 +24,7 @@ class CountriesController < ApplicationController
       {id: params[:id]}.
       merge(params[:country]).
       merge({
-        external_links: params[:external_linkings]
+        external_linkings: params[:external_linkings]
       })
     )
 
