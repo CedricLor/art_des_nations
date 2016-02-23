@@ -1,5 +1,6 @@
 class StaticPagesController < ApplicationController
   before_action :set_static_page, only: [:show, :edit, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [:show]
 
   # GET /static_pages
   # GET /static_pages.json
