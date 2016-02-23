@@ -65,7 +65,6 @@ class Portrait < ActiveRecord::Base
   private
 
   def update_associated_picture_acmb
-    byebug
     if picture_title
       media_container.update(
         title: picture_title,
@@ -85,7 +84,6 @@ class Portrait < ActiveRecord::Base
   end
 
   def update_picture_everywhere
-    byebug
     media_container.update(
       title: new_md[:title],
       media: new_md[:file]
@@ -93,14 +91,11 @@ class Portrait < ActiveRecord::Base
   end
 
   def update_picture_only_here
-    byebug
     Picturizing.destroy_all(picturizable_id: id, picturizable_type: "Portrait")
-    byebug
     created_md = MediaContainer.create(
       title: new_md[:title],
       media: new_md[:file]
     )
-    byebug
     created_md.picturizings.create(
       picturizable_id: id,
       picturizable_type: "Portrait",
