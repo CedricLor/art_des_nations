@@ -22,10 +22,9 @@ class CountryUpdateForm
       title: title,
       editorial: editorial
     )
-
     ExternalLinksUpdateForm.new(
         parent: @country,
-        existing_external_links: external_linkings["existing_external_links"],
+        existing_external_linkings: external_linkings["existing_external_linkings"],
         marked_for_deletion: external_linkings["marked_for_deletion"],
         new_external_links: external_linkings["new_external_links"]
       ).
