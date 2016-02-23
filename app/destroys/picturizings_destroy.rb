@@ -1,7 +1,6 @@
 class PicturizingsDestroy
 
   def self.destroy_with_content(picturizable_id, picturizable_type)
-    byebug
     @picturizings_to_destroy = Picturizing.where(
       picturizable_id: picturizable_id,
       picturizable_type: picturizable_type
@@ -19,7 +18,6 @@ class PicturizingsDestroy
   private
 
   def self.destroy_picturizings
-    byebug
     @picturizings_to_destroy.each do |picturizing|
       if picturizing.media_container.picturizings.size <= 1
         picturizing.media_container.destroy
