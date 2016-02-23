@@ -1,6 +1,11 @@
+<% content_for :title, t(:new_portrait, default: "New portrait") %>
 <% content_for :body_class, "portraits" %>
 
-<h1>New Portrait</h1>
+<% provide :picture_form_intro do %>
+  <p>
+    <%= t :portrait_create_file_upload_back_office_legend, default: "Please upload a picture for your portrait here::" %>
+  </p>
+<% end %>
 
 <%= render 'form' %>
 

@@ -6,6 +6,14 @@ class Portrait < ActiveRecord::Base
   validates :status, inclusion: { in: %w(draft published featured archived),
     message: "%{value} is not a valid status for a portrait. Choose between draft, published, featured or archived" }
 
+  with_options unless: "(status == 'draft' || 'archived') && media_container.present?" do |portrait|
+    portrait.validates :new_md, presence: {
+      in: true,
+      message: I18n.t(:media_container_presence_required_validation_message, default: "You have choosen to publish your portrait. A portrait may not be validly published without a picture.")
+    }
+    portrait.validate :has_an_attached_file
+  end
+
   # has_many :portraitizings, inverse_of: :portrait
   # has_many :articles, through: :portraitizings, :source => :portraitizable,
   #          :source_type => 'Article'
@@ -37,6 +45,7 @@ class Portrait < ActiveRecord::Base
 
   translates :title, :body, :teaser, :status, :fallbacks_for_empty_translations => true
 
+  after_create :add_new_picture_to_portrait, if: "new_md && new_md[:file].present?"
   after_update :update_associated_picture_acmb
   after_update :update_categories
 
@@ -64,6 +73,12 @@ class Portrait < ActiveRecord::Base
 
   private
 
+  def has_an_attached_file
+    if new_md[:file].blank?
+      errors.add(:new_md, I18n.t(:media_container_presence_of_file_required_validation_message, default: "You have not attached any picture to your portrait."))
+    end
+  end
+
   def update_associated_picture_acmb
     if picture_title
       media_container.update(
@@ -71,7 +86,7 @@ class Portrait < ActiveRecord::Base
       )
     end
     if new_md && new_md[:file].present?
-      update_picture
+      add_new_picture_to_portrait
     end
   end
 
@@ -90,7 +105,7 @@ class Portrait < ActiveRecord::Base
     )
   end
 
-  def update_picture_only_here
+  def add_new_picture_to_portrait
     Picturizing.destroy_all(picturizable_id: id, picturizable_type: "Portrait")
     created_md = MediaContainer.create(
       title: new_md[:title],

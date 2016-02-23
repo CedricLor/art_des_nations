@@ -1,6 +1,64 @@
 <% content_for :title, raw(@portrait.title) %>
 <% content_for :body_class, "portraits" %>
 
+
+<% provide :picture_form_intro do %>
+  <%= image_tag(@portrait.media_container.media(:for_slider), alt: @portrait.media_container.title) %>
+  <div class="form-group">
+    <%= text_field_tag("portrait[picture_title]", @portrait.media_container.title, id:"portrait_picture_title", class: "form-control") %>
+  </div>
+  <p>
+    <%= t :portrait_update_file_upload_back_office_legend, default: "If you want to change your picture, please upload a file here:" %>
+  </p>
+<% end %>
+
+
+<% provide :type_of_picture_change_block do %>
+  <style>
+    .my-row-wrapper-label {
+      display: block;
+      cursor: pointer;
+      font-weight: normal;
+    }
+    .flex-row {
+      display: flex;
+      flex-direction: row;
+    }
+    .flex-col-11 {
+      flex-grow: 11;
+    }
+    .flex-col-1 {
+      flex-grow: 1;
+    }
+    .flex-bottom-aligned-content {
+      align-self: flex-end;
+    }
+  </style>
+
+  <label for=<%= "change_picture_everywhere_yes"%> class="my-row-wrapper-label" >
+    <div class="row flex-row">
+      <div class="col-xs-11 flex-col-11">
+          <%= t(:portrait_change_this_picture_every_where_html, default: "Do you want this picture to be changed everywhere it appears in the website (i.e. as illustration of other contents such as articles, actions or other portraits)?") %>
+      </div>
+      <div class="col-xs-1 text-right flex-col-1 flex-bottom-aligned-content">
+        <input class="radio_buttons required"  type="radio" name=<%="portrait[new_md][change_everywhere]"%> id=<%="change_picture_everywhere_yes"%> value='true'>
+      </div>
+    </div>
+  </label>
+
+  <label for=<%= "change_picture_everywhere_no"%> class="my-row-wrapper-label" >
+    <div class="row flex-row">
+      <div class="col-xs-11 flex-col-11">
+          <%= t :portrait_change_this_picture_only_here_html, default: "Or do you want this picture to be changed only on this portrait (including where this portrait appears on index pages or as a link at the bottom of articles, actions or other portraits)?" %>
+      </div>
+      <div class="col-xs-1 text-right flex-col-1 flex-bottom-aligned-content">
+        <input class="radio_buttons required"  type="radio" name=<%="portrait[new_md][change_everywhere]"%> id=<%="change_picture_everywhere_no"%> value='false'>
+      </div>
+    </div>
+  </label>
+<% end %>
+
+
 <%= render 'form' %>
 
 <%= link_to 'Show', @portrait %> |
