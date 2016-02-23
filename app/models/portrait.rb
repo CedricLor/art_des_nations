@@ -65,17 +65,48 @@ class Portrait < ActiveRecord::Base
   private
 
   def update_associated_picture_acmb
+    byebug
     if picture_title
       media_container.update(
         title: picture_title,
       )
     end
-    if new_md
-      media_container.update(
-        title: new_md[:title],
-        media: new_md[:file]
-      )
+    if new_md && new_md[:file].present?
+      update_picture
     end
+  end
+
+  def update_picture
+    if new_md[:change_everywhere] == true
+      update_picture_everywhere
+    else
+      update_picture_only_here
+    end
+  end
+
+  def update_picture_everywhere
+    byebug
+    media_container.update(
+      title: new_md[:title],
+      media: new_md[:file]
+    )
+  end
+
+  def update_picture_only_here
+    byebug
+    Picturizing.destroy_all(picturizable_id: id, picturizable_type: "Portrait")
+    byebug
+    created_md = MediaContainer.create(
+      title: new_md[:title],
+      media: new_md[:file]
+    )
+    byebug
+    created_md.picturizings.create(
+      picturizable_id: id,
+      picturizable_type: "Portrait",
+      for_carousel: "true",
+      for_card: "true"
+    )
   end
 
   def update_categories

@@ -28,7 +28,7 @@
         <p>
           <%= t :portrait_file_upload_back_office_legend, default: "If you want to change your picture, please upload a file here:" %>
         </p>
-          <%= render partial: 'shared/portrait_aktion_article/additional_picture_form.html.erb',
+          <%= render partial: 'shared/aktion_article_portrait/additional_picture_form.html.erb',
               locals: {
                 file_field_name: "portrait[new_md][file]",
                 file_field_id: "portrait_new_md_file",
@@ -36,6 +36,50 @@
                 title_field_id: "portrait_new_md_title"
               }
           %>
+
+        <style>
+          .my-row-wrapper-label {
+            display: block;
+            cursor: pointer;
+            font-weight: normal;
+          }
+          .flex-row {
+            display: flex;
+            flex-direction: row;
+          }
+          .flex-col-11 {
+            flex-grow: 11;
+          }
+          .flex-col-1 {
+            flex-grow: 1;
+          }
+          .flex-bottom-aligned-content {
+            align-self: flex-end;
+          }
+        </style>
+
+        <label for=<%= "change_picture_everywhere_yes"%> class="my-row-wrapper-label" >
+          <div class="row flex-row">
+            <div class="col-xs-11 flex-col-11">
+                <%= t(:portrait_change_this_picture_every_where_html, default: "Do you want this picture to be changed everywhere it appears in the website (i.e. as illustration of other contents such as articles, actions or other portraits)?") %>
+            </div>
+            <div class="col-xs-1 text-right flex-col-1 flex-bottom-aligned-content">
+              <input class="radio_buttons required"  type="radio" name=<%="portrait[new_md][change_everywhere]"%> id=<%="change_picture_everywhere_yes"%> value='true'>
+            </div>
+          </div>
+        </label>
+
+        <label for=<%= "change_picture_everywhere_no"%> class="my-row-wrapper-label" >
+          <div class="row flex-row">
+            <div class="col-xs-11 flex-col-11">
+                <%= t :portrait_change_this_picture_only_here_html, default: "Or do you want this picture to be changed only on this portrait (including where this portrait appears on index pages or as a link at the bottom of articles, actions or other portraits)?" %>
+            </div>
+            <div class="col-xs-1 text-right flex-col-1 flex-bottom-aligned-content">
+              <input class="radio_buttons required"  type="radio" name=<%="portrait[new_md][change_everywhere]"%> id=<%="change_picture_everywhere_no"%> value='false'>
+            </div>
+          </div>
+        </label>
+
         <hr>
       </div>
     </div>
@@ -43,7 +87,7 @@
 
   <%# building a form to allow user to change the categories applying to the aktion, select the main category and add new categories %>
   <% provide :categories_form do %>
-    <%= render partial: 'shared/portrait_aktion_article/categories_form',
+    <%= render partial: 'shared/aktion_article_portrait/categories_form',
       locals: {
         chosen_category_ids: @portrait.categorizings.map(&:category_id),
         item: 'portrait',

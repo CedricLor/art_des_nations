@@ -69,6 +69,10 @@ en:
 
   portrait_file_upload_back_office_legend: "If you want to change your picture, please upload a file here:"
 
+  portrait_change_this_picture_every_where: "Do you want this picture to be changed everywhere it appears in the website (i.e. as illustration of other contents such as articles, actions or other portraits)?"
+  portrait_change_this_picture_only_here: "Or do you want this picture to be changed only on this portrait (including where this portrait appears on index pages or as a link at the bottom of articles, actions or other portraits)?"
+
+
   si: "yes"
   non: "no"
 

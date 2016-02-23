@@ -69,6 +69,10 @@ fr:
 
   portrait_file_upload_back_office_legend: "Si vous souhaitez changer votre photo, téléchargez une image ici :"
 
+  portrait_change_this_picture_every_where_html: "Souhaitez-vous que cette photo soit changée partout où elle apparait sur le site internet (c'est-à-dire lorsqu'elle apparait comme une illustration pour d'autres contenus, tels que des articles, des actions ou d'autres portraits)&nbsp;?"
+  portrait_change_this_picture_only_here_html: "Ou souhaitez-vous plutôt que cette photo ne soit changée que pour ce portrait (y compris lorsque ce portrait apparait sur des pages d'index ou en lien en bas d'articles, d'actions ou d'autres portraits)&nbsp;?"
+
+
   si: "oui"
   non: "non"
 
