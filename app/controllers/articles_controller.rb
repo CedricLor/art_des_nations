@@ -7,7 +7,7 @@ class ArticlesController < ApplicationController
   # GET /articles.json
   def index
     @articles = Article.includes(:author, :translations).
-      includes(picturizings: [:translations, media_container: :translations])
+      includes(picturizings: [:translations, :media_container])
 
     respond_to do |format|
       format.html {render :layout => 'application'} # index.html.erb

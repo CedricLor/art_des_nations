@@ -10,6 +10,8 @@
       <th>Author</th>
       <th>Posted at</th>
       <th>Status</th>
+      <th>Pics</th>
+      <th>for cards</th>
       <th>FR</th>
       <th>EN</th>
       <th>PY</th>
@@ -26,6 +28,8 @@
       <td><%= article.author.full_name %></td>
       <td><%= l(article.posted_at, format: :long) %></td>
       <td><%= article.status %></td>
+      <td><%= article.picturizings.count %></td>
+      <td><%= article.picturizings.select{|p| p.for_card == 'true'}.count %></td>
       <td><%= article.translations.select { |at| at.locale == :fr }.size %></td>
       <td><%= article.translations.select { |at| at.locale == :en }.size %></td>
       <td><%= article.translations.select { |at| at.locale == :ru }.size %></td>
@@ -46,6 +50,8 @@
       <th>Author</th>
       <th>Posted at</th>
       <th>Status</th>
+      <th>Pics</th>
+      <th>for cards</th>
       <th>FR</th>
       <th>EN</th>
       <th>PY</th>
@@ -62,6 +68,8 @@
       <td><%= article.author.full_name %></td>
       <td><%= l(article.posted_at, format: :long) %></td>
       <td><%= article.status %></td>
+      <td><%= article.picturizings.count %></td>
+      <td><%= article.picturizings.select{|p| p.for_card == 'true'}.count %></td>
       <td><%= article.translations.select { |at| at.locale == :fr }.size %></td>
       <td><%= article.translations.select { |at| at.locale == :en }.size %></td>
       <td><%= article.translations.select { |at| at.locale == :ru }.size %></td>
