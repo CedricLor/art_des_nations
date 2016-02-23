@@ -9,7 +9,7 @@
 <%= render partial: 'shared/portraits_categories/list', locals: {
     parameters: {
       list_name: @category.name,
-      list_editorial: @category.editorial.html_safe,
+      list_editorial: @category.editorial || '',
       list_items: @categorized_articles_and_aktions
     }
   }

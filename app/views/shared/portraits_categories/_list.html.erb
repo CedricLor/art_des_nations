@@ -1,6 +1,7 @@
 <%# shared/portraits_categories/_list.html.erb %>
 <%# called from:
 - portrait_intros/show.html.erb
+- portrait_intros/_form.html.erb
 - categories/show.html.erb
 - categories/_form.html.erb
 %>
@@ -17,7 +18,7 @@
         </h1>
         <!-- Intro (intro for portraits or categorie teaser) -->
         <h2 class="resume">
-          <%= parameters[:list_editorial] %>
+          <%= parameters[:list_editorial].html_safe %>
           <!-- submit button in case the partials is called from a form -->
           <% if parameters.size > 3 %>
             <div>
