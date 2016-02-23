@@ -40,10 +40,10 @@
         <%= content_for?(:content) ? yield(:content) : yield %>
 
         <!-- Footer -->
-        <%= render 'shared/footer.html.erb' %>
+        <%= render 'shared/footer' %>
       </div>
     </div>
-
+    <%= render 'shared/admin_nav' %>
 
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= javascript_tag do -%>
