@@ -3,10 +3,11 @@ class ArticlesController < ApplicationController
   skip_before_action :authenticate_user!, only: :show
 
 
-  # GET /categories
-  # GET /categories.json
+  # GET /articles
+  # GET /articles.json
   def index
-    @articles = Article.all
+    @articles = Article.includes(:author, :translations).
+      includes(picturizings: [:translations, media_container: :translations])
 
     respond_to do |format|
       format.html {render :layout => 'application'} # index.html.erb

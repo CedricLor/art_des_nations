@@ -10,18 +10,62 @@
       <th>Author</th>
       <th>Posted at</th>
       <th>Status</th>
+      <th>FR</th>
+      <th>EN</th>
+      <th>PY</th>
+      <th>中文</th>
       <th></th>
       <th></th>
       <th></th>
     </tr>
 
-  <% @articles.each do |article| %>
+  <% @articles.sort{|a,b| a.status <=> b.status}.each do |article| %>
     <tr>
       <td><%= article.id %></td>
       <td><%= article.title %></td>
       <td><%= article.author.full_name %></td>
-      <td><%= article.posted_at %></td>
+      <td><%= l(article.posted_at, format: :long) %></td>
       <td><%= article.status %></td>
+      <td><%= article.translations.select { |at| at.locale == :fr }.size %></td>
+      <td><%= article.translations.select { |at| at.locale == :en }.size %></td>
+      <td><%= article.translations.select { |at| at.locale == :ru }.size %></td>
+      <td><%= article.translations.select { |at| at.locale == :'zh-CN' }.size %></td>
+      <td><%= link_to 'Show', article %></td>
+      <td><%= link_to 'Edit', edit_article_path(article) %></td>
+      <td><%#= link_to 'Destroy', article, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  <% end %>
+  </table>
+
+  <br />
+
+  <table class="table table-striped">
+    <tr>
+      <th>Id</th>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Posted at</th>
+      <th>Status</th>
+      <th>FR</th>
+      <th>EN</th>
+      <th>PY</th>
+      <th>中文</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+
+  <% @articles.sort{|a,b| a.posted_at <=> b.posted_at}.each do |article| %>
+    <tr>
+      <td><%= article.id %></td>
+      <td><%= article.title %></td>
+      <td><%= article.author.full_name %></td>
+      <td><%= l(article.posted_at, format: :long) %></td>
+      <td><%= article.status %></td>
+      <td><%= article.translations.select { |at| at.locale == :fr }.size %></td>
+      <td><%= article.translations.select { |at| at.locale == :en }.size %></td>
+      <td><%= article.translations.select { |at| at.locale == :ru }.size %></td>
+      <td><%= article.translations.select { |at| at.locale == :'zh-CN' }.size %></td>
       <td><%= link_to 'Show', article %></td>
       <td><%= link_to 'Edit', edit_article_path(article) %></td>
       <td><%#= link_to 'Destroy', article, method: :delete, data: { confirm: 'Are you sure?' } %></td>
