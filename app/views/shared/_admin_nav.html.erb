@@ -11,24 +11,28 @@
 
   <div class="admin-nav-wrapper">
     <div class="btn-group dropup" role="group" aria-label="admin-nav">
-      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        User
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-        <li><%= link_to 'Profile', edit_user_registration_path %></li>
-        <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
-        <li role="separator" class="divider"></li>
-        <li><a href="#">Separated link</a></li>
-      </ul>
-      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Content
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-        <li><%= link_to 'Edit', edit_user_registration_path %></li>
-        <li><%= link_to 'Delete', destroy_user_session_path, method: :delete %></li>
-      </ul>
+      <div class="btn-group dropup" role="group" aria-label="admin-nav">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          User
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+          <li><%= link_to 'Profile', edit_user_registration_path %></li>
+          <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#">Separated link</a></li>
+        </ul>
+      </div>
+      <div class="btn-group dropup" role="group" aria-label="admin-nav">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Content
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+          <li><%= link_to 'Edit', edit_user_registration_path %></li>
+          <li><%= link_to 'Delete', destroy_user_session_path, method: :delete %></li>
+        </ul>
+      </div>
     </div>
   </div>
 
