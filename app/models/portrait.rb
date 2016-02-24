@@ -1,5 +1,4 @@
 class Portrait < ActiveRecord::Base
-  include FriendlyId
   include AktionArticlePortraitCategories
 
   validates :title, presence: true
@@ -7,7 +6,7 @@ class Portrait < ActiveRecord::Base
   validates :status, inclusion: { in: %w(draft published featured archived),
     message: "%{value} is not a valid status for a portrait. Choose between draft, published, featured or archived" }
 
-  with_options unless: "(status == 'draft' || 'archived') && media_container.present?" do |portrait|
+  with_options unless: "(status == 'draft' || 'archived') || media_container.present?" do |portrait|
     portrait.validates :new_md, presence: {
       in: true,
       message: I18n.t(:media_container_presence_required_validation_message, default: "You have choosen to publish your portrait. A portrait may not be validly published without a picture.")
@@ -47,8 +46,19 @@ class Portrait < ActiveRecord::Base
   translates :title, :body, :teaser, :status, :fallbacks_for_empty_translations => true
 
 
-  friendly_id :title, use: :slugged
+  include FriendlyId
+  friendly_id :slug_candidates, use: [:slugged, :finders, :simple_i18n, :history]
 
+  def slug_candidates
+    [
+      [:id, :title],
+      [:id, :title, "#{I18n.locale}"]
+    ]
+  end
+
+  def should_generate_new_friendly_id?
+    translation.title_changed? || super
+  end
 
   after_create :add_new_picture_to_portrait, if: "new_md && new_md[:file].present?"
   after_update :update_associated_picture_acmb
@@ -74,6 +84,14 @@ class Portrait < ActiveRecord::Base
 
   def date_sorting_field
     updated_at
+  end
+
+  def title
+    translation.title
+  end
+
+  def title=(val)
+    translation.title = val
   end
 
   private

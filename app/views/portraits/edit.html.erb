@@ -7,8 +7,9 @@
 
 <% provide :admin_nav_content_actions do %>
   <li><%= link_to t(:admin_nav_delete_content, default: 'Delete'), portrait_path, method: :delete, data: { confirm: "Are you sure you want to delete this #{@portrait.class.name}?" } %></li>
-  <li><%= link_to t(:admin_nav_edit_content, default: 'New'), new_portrait_path %></li>
+  <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_portrait_path %></li>
   <li><%= link_to t(:admin_nav_show_content, default: 'Show'), @portrait %></li>
+  <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), portraits_path %></li>
   <li><%= link_to t(:admin_nav_show_portrait_intro, default: 'Portrait intro page'), portrait_intro_path(1) %></li>
 <% end %>
 
