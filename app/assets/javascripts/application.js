@@ -18,3 +18,4 @@
 //= require plugins/jquery.flexslider.js
 //= require plugins/custom
 //= require plugins/ie_10_viewport_hack
+// require turbolinks

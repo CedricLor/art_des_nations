@@ -83,3 +83,8 @@ gem 'active_model_serializers'
 gem 'devise'
 gem 'devise-i18n'
 gem 'devise-i18n-views'
+
+# Turbolinks
+gem 'turbolinks', '~> 5.0.0.beta'
+
+gem 'friendly_id'
