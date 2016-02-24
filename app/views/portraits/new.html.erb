@@ -1,6 +1,18 @@
 <% content_for :title, t(:new_portrait, default: "New portrait") %>
 <% content_for :body_class, "portraits" %>
 
+<% provide :admin_nav_content_type do %>
+  <% "#{@portrait.class.name}" %>
+<% end %>
+
+<% provide :admin_nav_content_actions do %>
+  <li><%= link_to t(:admin_nav_edit_content, default: 'New'), new_portrait_path %></li>
+  <li><%= link_to t(:admin_nav_show_content, default: 'Show'), @portrait %></li>
+  <li><%= link_to t(:admin_nav_show_portrait_intro, default: 'Portrait intro page'), portrait_intro_path(1) %></li>
+<% end %>
+
+<% render 'shared/admin_nav_content' %>
+
 <% provide :picture_form_intro do %>
   <p>
     <%= t :portrait_create_file_upload_back_office_legend, default: "Please upload a picture for your portrait here::" %>

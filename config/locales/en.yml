@@ -84,6 +84,9 @@ en:
   make_this_new_category_main_category_for_this_item?: "Do you want to make this new category the main category applicable to %{this_item} ?"
   main_category: 'main category:'
 
+  admin_nav_session: "Session"
+
+
   activerecord:
     errors:
       messages:

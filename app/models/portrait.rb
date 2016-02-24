@@ -90,21 +90,6 @@ class Portrait < ActiveRecord::Base
     end
   end
 
-  def update_picture
-    if new_md[:change_everywhere] == true
-      update_picture_everywhere
-    else
-      update_picture_only_here
-    end
-  end
-
-  def update_picture_everywhere
-    media_container.update(
-      title: new_md[:title],
-      media: new_md[:file]
-    )
-  end
-
   def add_new_picture_to_portrait
     Picturizing.destroy_all(picturizable_id: id, picturizable_type: "Portrait")
     created_md = MediaContainer.create(
