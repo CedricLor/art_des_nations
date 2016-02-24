@@ -17,15 +17,13 @@
   }
 %>
 
-<% if @home_page.external_linkings.present? %>
-  <% provide :external_links do %>
-    <%= render partial: 'shared/country_home_page/external_links', locals: {
-      sub_partial: 'shared/country_home_page/external_link',
-      external_linkings: @home_page.external_linkings,
-      class_name_for_ul: "list-unstyled "
-      }
-    %>
-  <% end %>
+<% provide :external_links do %>
+  <%= render partial: 'shared/country_home_page/external_links', locals: {
+    sub_partial: 'shared/country_home_page/external_link',
+    external_linkings: @home_page.external_linkings,
+    class_name_for_ul: "list-unstyled "
+    }
+  %>
 <% end %>
 
 <!-- HOME_PAGES LAYOUT CONSTANT -->
