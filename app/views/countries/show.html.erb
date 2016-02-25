@@ -14,7 +14,7 @@
     locals: {
       parameters: {
         title: @country.title,
-        editorial: @country.editorial.html_safe
+        editorial: @country.editorial || ''
       }
     }
 %>

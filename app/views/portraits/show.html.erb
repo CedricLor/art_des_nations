@@ -32,8 +32,8 @@
   object: @portrait, locals: {
     parameters: {
       title: @portrait.title,
-      teaser: @portrait.teaser.html_safe,
-      body: @portrait.body.html_safe
+      teaser: @portrait.teaser || '',
+      body: @portrait.body || ''
     }
   }
 %>
