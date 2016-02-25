@@ -5,12 +5,12 @@
 %>
 
 <%= render partial: 'site_editorials/partials/title', locals: {
-  title: parameters[0]
+  title: parameters[:title]
   }
 %>
 
 <%= render partial: 'shared/aktion_static/body', locals: {
-  body: parameters[1]
+  body: parameters[:editorial]
   },
   layout: 'shared/article_aktion_static/body_layout'
 %>
@@ -23,7 +23,9 @@ Remaining parameters are (in this order -- important!!!):
 <% if parameters.size > 2 %>
   <%= render partial: 'shared/article_aktion/additional_form_fields',
     locals: {
-      remaining_params: parameters - parameters[0..1]
+      remaining_params: parameters.
+        select { |key, value| key === :submit_button || key == :status }.
+        values
     }
   %>
 <% end %>

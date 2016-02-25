@@ -22,12 +22,12 @@
   <%= render partial: 'site_editorials/partials/container',
       layout: "shared/article_aktion_static/container_layout",
       locals: {
-        parameters: [
-          title,
-          body,
-          status,
-          submit_button
-        ]
+        parameters: {
+          title: title,
+          editorial: body,
+          status: status,
+          submit_button: submit_button
+        }
       }
   %>
 
