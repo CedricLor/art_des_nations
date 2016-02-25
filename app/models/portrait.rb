@@ -14,14 +14,8 @@ class Portrait < ActiveRecord::Base
     portrait.validate :has_an_attached_file
   end
 
-  # has_many :portraitizings, inverse_of: :portrait
-  # has_many :articles, through: :portraitizings, :source => :portraitizable,
-  #          :source_type => 'Article'
-  # has_many :aktions, through: :portraitizings, :source => :portraitizable,
-  #          :source_type => 'Aktion'
 
-  # has_many :article_linkings, :as => :article_linkable, inverse_of: :portrait
-  # has_many :articles, through: :article_linkings
+
 
   has_one :picturizing, :as => :picturizable, inverse_of: :portrait
   has_one :media_container, through: :picturizing
@@ -43,7 +37,11 @@ class Portrait < ActiveRecord::Base
   has_many :from_portraits, through: :from_linkings, source: :from_linkable, source_type: "Portrait"
 
 
+
+
   translates :title, :body, :teaser, :status, :fallbacks_for_empty_translations => true
+
+
 
 
   include FriendlyId
@@ -60,11 +58,27 @@ class Portrait < ActiveRecord::Base
     translation.title_changed? || super
   end
 
+  def title
+    translation.title
+  end
+
+  def title=(val)
+    translation.title = val
+  end
+
+
+
+
   after_create :add_new_picture_to_portrait, if: "new_md && new_md[:file].present?"
   after_update :update_associated_picture_acmb
   after_update :update_categories
 
+
+
+
   attr_accessor :picture_title, :new_md, :applicable_existing_categories, :main_category_id, :new_category_name
+
+
 
   def self.for_home_page
     with_media_containers_for_card.where(status: ["featured"])
@@ -86,15 +100,10 @@ class Portrait < ActiveRecord::Base
     updated_at
   end
 
-  def title
-    translation.title
-  end
 
-  def title=(val)
-    translation.title = val
-  end
 
   private
+
 
   def has_an_attached_file
     if new_md[:file].blank?
