@@ -6,7 +6,7 @@ class Portrait < ActiveRecord::Base
   validates :status, inclusion: { in: %w(draft published featured archived),
     message: "%{value} is not a valid status for a portrait. Choose between draft, published, featured or archived" }
 
-  with_options unless: "(status == 'draft' || 'archived') && media_container.present?" do |portrait|
+  with_options unless: "(status == 'draft' || 'archived') || media_container.present?" do |portrait|
     portrait.validates :new_md, presence: {
       in: true,
       message: I18n.t(:media_container_presence_required_validation_message, default: "You have choosen to publish your portrait. A portrait may not be validly published without a picture.")
@@ -14,14 +14,8 @@ class Portrait < ActiveRecord::Base
     portrait.validate :has_an_attached_file
   end
 
-  # has_many :portraitizings, inverse_of: :portrait
-  # has_many :articles, through: :portraitizings, :source => :portraitizable,
-  #          :source_type => 'Article'
-  # has_many :aktions, through: :portraitizings, :source => :portraitizable,
-  #          :source_type => 'Aktion'
 
-  # has_many :article_linkings, :as => :article_linkable, inverse_of: :portrait
-  # has_many :articles, through: :article_linkings
+
 
   has_one :picturizing, :as => :picturizable, inverse_of: :portrait
   has_one :media_container, through: :picturizing
@@ -43,13 +37,48 @@ class Portrait < ActiveRecord::Base
   has_many :from_portraits, through: :from_linkings, source: :from_linkable, source_type: "Portrait"
 
 
+
+
   translates :title, :body, :teaser, :status, :fallbacks_for_empty_translations => true
+
+
+
+
+  include FriendlyId
+  friendly_id :slug_candidates, use: [:slugged, :finders, :simple_i18n, :history]
+
+  def slug_candidates
+    [
+      [:id, :title],
+      [:id, :title, "#{I18n.locale}"]
+    ]
+  end
+
+  def should_generate_new_friendly_id?
+    translation.title_changed? || super
+  end
+
+  def title
+    translation.title
+  end
+
+  def title=(val)
+    translation.title = val
+  end
+
+
+
 
   after_create :add_new_picture_to_portrait, if: "new_md && new_md[:file].present?"
   after_update :update_associated_picture_acmb
   after_update :update_categories
 
+
+
+
   attr_accessor :picture_title, :new_md, :applicable_existing_categories, :main_category_id, :new_category_name
+
+
 
   def self.for_home_page
     with_media_containers_for_card.where(status: ["featured"])
@@ -71,7 +100,10 @@ class Portrait < ActiveRecord::Base
     updated_at
   end
 
+
+
   private
+
 
   def has_an_attached_file
     if new_md[:file].blank?
@@ -88,21 +120,6 @@ class Portrait < ActiveRecord::Base
     if new_md && new_md[:file].present?
       add_new_picture_to_portrait
     end
-  end
-
-  def update_picture
-    if new_md[:change_everywhere] == true
-      update_picture_everywhere
-    else
-      update_picture_only_here
-    end
-  end
-
-  def update_picture_everywhere
-    media_container.update(
-      title: new_md[:title],
-      media: new_md[:file]
-    )
   end
 
   def add_new_picture_to_portrait

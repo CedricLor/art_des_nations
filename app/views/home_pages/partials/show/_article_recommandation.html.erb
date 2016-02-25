@@ -6,7 +6,7 @@
 <div class="col-xs-12 col-sm-6 col-md-4 recommandation">
   <!-- categorie link -->
   <p class="categorie">
-    <%= link_to article.categories[0].name, category_path(article.categories[0]) %>
+    <%= link_to article.categorizings[0].category.name, category_path(article.categorizings[0].category) %>
   </p>
 
   <!-- wrapper link -->

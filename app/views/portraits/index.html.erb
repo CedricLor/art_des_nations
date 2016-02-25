@@ -1,3 +1,18 @@
+<% content_for :title, t(:portrait_admin_index_title, default: "Portraits admin index") %>
+<% content_for :body_class, "portraits" %>
+
+
+<% provide :admin_nav_content_type do %>
+  <% "#{@portraits.first.class.name.pluralize}" %>
+<% end %>
+
+<% provide :admin_nav_content_actions do %>
+  <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_portrait_path %></li>
+  <li><%= link_to t(:admin_nav_show_portrait_intro, default: 'Portrait intro page'), portrait_intro_path(1) %></li>
+<% end %>
+
+<% render 'shared/admin_nav_content' %>
+
 
 <div class="container">
   <h1>Listing portraits</h1>
@@ -22,8 +37,13 @@
       <td><%= portrait.id %></td>
       <td><%= portrait.title %></td>
       <td><%= portrait.status %></td>
-      <td><%= portrait.picturizing.id %></td>
-      <td><%= portrait.media_container.id %></td>
+      <% if portrait.picturizing.present? %>
+        <td><%= portrait.picturizing.id %></td>
+        <td><%= portrait.media_container.id %></td>
+      <% else %>
+        <td><%= t(:not_avalaible_short, default: "n.a.") %></td>
+        <td><%= t(:not_avalaible_short, default: "n.a.") %></td>
+      <% end %>
       <td><%= link_to 'Show', portrait %></td>
       <td><%= link_to 'Edit', edit_portrait_path(portrait) %></td>
       <td><%= link_to 'Destroy', portrait, method: :delete, data: { confirm: 'Are you sure?' } %></td>

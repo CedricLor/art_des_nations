@@ -94,7 +94,7 @@ class PortraitsController < ApplicationController
         :picture_title,
         :main_category_id,
         :new_category_name,
-        new_md: [:file, :title, :change_everywhere],
+        new_md: [:file, :title],
         applicable_existing_categories: params[:portrait][:applicable_existing_categories].try(:keys)
       )
     end
