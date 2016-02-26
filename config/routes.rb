@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     resources :home_pages, only: [:show, :edit, :update]
     resources :external_links, only: [:create]
     resources :site_editorials
+    get 'editorial/:id', to: 'site_editorials#show', as: 'editorial'
 
     # get 'home_pages/:id' => 'home_pages#show'
     root to: "home_pages#show"
