@@ -1,0 +1,15 @@
+<%# shared/_categories_block %>
+<%# called from:
+- shared/_sidebar.html.erb
+- home_pages/partials/shared/_main_content.html.erb
+%>
+
+<ul class="list-inline">
+  <% @categories.each do | category | %>
+    <li>
+      <span class=<%= span_class_name %> >
+        <%= link_to category.name, category_path(category) %>
+      </span>
+    </li>
+  <% end %>
+</ul>

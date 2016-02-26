@@ -58,17 +58,13 @@
       <!-- liens vers les catégories -->
       <div class="col-xs-12 col-sm-4 col-sm-offset-2 text-center" id="categories">
         <h2><%= t(:categories, default: "Catégories") %></h2>
-        <ul class="list-inline">
 
-          <% categories.each do | category | %>
-            <li>
-              <span class="categorie">
-                <%= link_to category.name, category_path(category.id) %>
-              </span>
-            </li>
-          <% end %>
+        <%= render partial: 'shared/categories_block',
+          locals: {
+            span_class_name: 'categorie'
+          }
+        %>
 
-        </ul>
       </div>
 
       <!-- liens -->

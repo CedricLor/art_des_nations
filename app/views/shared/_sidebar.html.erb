@@ -20,13 +20,13 @@
   </div>
   <hr>
   <div class="menu-tags">
-    <ul class="list-inline">
-      <% @categories_for_side_nav.each do | category | %>
-        <li>
-          <%= link_to category.name, category_path(category.id) %>
-        </li>
-      <% end %>
-    </ul>
+
+    <%= render partial: 'shared/categories_block',
+      locals: {
+        span_class_name: ''
+      }
+    %>
+
   </div>
   <hr>
   <!--<div class="input-group" id="search-form">-->

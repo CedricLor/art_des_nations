@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :set_locale
-  before_action :set_categories_for_side_nav
+  before_action :set_categories
   before_action :set_countries_for_side_nav
   before_action :set_locales_for_language_switcher
 
@@ -18,8 +18,8 @@ class ApplicationController < ActionController::Base
     { locale: I18n.locale == I18n.default_locale ? nil : I18n.locale }
   end
 
-  def set_categories_for_side_nav
-    @categories_for_side_nav = Category.includes(:translations)
+  def set_categories
+    @categories = Category.includes(:translations)
   end
 
   def set_countries_for_side_nav
