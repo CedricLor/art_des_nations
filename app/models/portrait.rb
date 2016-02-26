@@ -43,27 +43,8 @@ class Portrait < ActiveRecord::Base
 
 
 
-
-  include FriendlyId
-  friendly_id :slug_candidates, use: [:slugged, :finders, :simple_i18n, :history]
-
-  def slug_candidates
-    [
-      [:id, :title],
-      [:id, :title, "#{I18n.locale}"]
-    ]
-  end
-
-  def should_generate_new_friendly_id?
-    translation.title_changed? || super
-  end
-
-  def title
-    translation.title
-  end
-
-  def title=(val)
-    translation.title = val
+  def to_param
+    "#{id}-#{title.parameterize}"
   end
 
 
