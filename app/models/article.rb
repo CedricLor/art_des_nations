@@ -47,6 +47,13 @@ class Article < ActiveRecord::Base
 
   translates :title, :body, :teaser, :posted_from_location, :status, :fallbacks_for_empty_translations => true
 
+
+
+  def to_param
+    "#{id}-#{title.parameterize}"
+  end
+
+
   def self.for_home_page
     Article.includes(categorizings: [category: :translations]).
       includes(picturizings: [:translations, media_container: :translations]).
