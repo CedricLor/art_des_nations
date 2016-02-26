@@ -40,6 +40,14 @@ class Aktion < ActiveRecord::Base
 
   translates :title, :body, :teaser, :status, :fallbacks_for_empty_translations => true
 
+
+
+  def to_param
+    "#{id}-#{title.parameterize}"
+  end
+
+
+
   def self.for_country(country)
     Aktion.includes(picturizings: [:translations, media_container: :translations]).
       where(status: ["published", "featured"]).
