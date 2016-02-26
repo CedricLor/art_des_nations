@@ -13,6 +13,9 @@ Rails.application.routes.draw do
 
     resources :articles
     resources :aktions
+    get 'actions/:id', to: 'aktions#show', as: 'action'
+    # get 'actions/:id' => 'aktions#show'
+    # get '/actions/:id', to: redirect('/aktions/%{id}')
     resources :portraits
     resources :media_containers, only: [:index]
 

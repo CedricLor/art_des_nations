@@ -4,7 +4,7 @@
 %>
 
 <div class="<%=additional_class_names%> recommandation " >
-  <%= link_to polymorphic_path(element) do %>
+  <%= link_to element.class.name != "Aktion" ? polymorphic_path(element) : action_path(element) do %>
   <!-- a href="/portrait.php" -->
     <% if (picturizing = element.picturizings.size > 0 && element.picturizings.select { |p| p.for_card == "true" }) && picturizing.size > 0 %>
       <%= image_tag(picturizing[0].media_container.media(:for_card), alt: picturizing[0].media_container.title) %>
