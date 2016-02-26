@@ -33,7 +33,10 @@ class HomePagesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_home_page
-      @home_page = HomePage.includes(external_linkings: [external_link: :translations]).find(1)
+      @home_page = HomePage.
+        includes(external_linkings: [external_link: :translations]).
+        includes(site_editorials: :translations).
+        find(1)
     end
 
     def set_ancillary_collections

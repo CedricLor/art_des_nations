@@ -6,7 +6,10 @@ class HomePage < ActiveRecord::Base
   translates :call_to_action, :fallbacks_for_empty_translations => true
 
   def site_editorial
-    SiteEditorial.where(status: "published").last
+    site_editorials.
+      select{|se| se.translation.status == "published" }.
+      sort{|a,b| a.update_at <=> b.updated_at }.
+      last
   end
 
   def editorial
