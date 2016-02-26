@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   before_action :set_categories
   before_action :set_countries_for_side_nav
   before_action :set_locales_for_language_switcher
+  before_action :set_static_pages
 
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
@@ -28,5 +29,11 @@ class ApplicationController < ActionController::Base
 
   def set_locales_for_language_switcher
     @languages_array = [{fr: "FR"}, {en: "EN"}, {ru: "PY"}, {:"zh-CN" => "中文"}]
+  end
+
+  def set_static_pages
+    @static_pages = Hash[StaticPage.all.
+      map {|elt| [elt.id, elt] }
+    ]
   end
 end

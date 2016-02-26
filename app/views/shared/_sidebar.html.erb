@@ -39,8 +39,8 @@
   <!--<hr>-->
   <div class="menu-links">
     <ul class="list-unstyled">
-      <li><%= link_to t(:the_adn_project, default: "Le projet ADN "), static_page_path(1) %></li>
-      <li><%= link_to t(:contact_us, default: "Nous contacter"), static_page_path(4) %></li>
+      <li><%= link_to t(:the_adn_project, default: "Le projet ADN "), page_path(@static_pages[1]) %></li>
+      <li><%= link_to t(:contact_us, default: "Nous contacter"), page_path(@static_pages[4]) %></li>
     </ul>
   </div>
   <div class="close-link">

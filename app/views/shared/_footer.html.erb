@@ -8,16 +8,16 @@
       <div class="col-xs-12 col-sm-12 col-md-4">
         <ul class="list-inline">
           <!-- FIXME -->
-          <li><%= link_to t(:contact_us, default: "Nous contacter"), static_page_path(4) %></li>
-          <li><%= link_to t(:credits, default: "Crédits"), static_page_path(2) %></li>
-          <li><%= link_to t(:legal, default: "Mentions légales"), static_page_path(3) %></li>
+          <li><%= link_to t(:contact_us, default: "Nous contacter"), page_path(@static_pages[4]) %></li>
+          <li><%= link_to t(:credits, default: "Crédits"), page_path(@static_pages[2]) %></li>
+          <li><%= link_to t(:legal, default: "Mentions légales"), page_path(@static_pages[3]) %></li>
           <!-- <li><a href="#"><i class="fa fa-twitter"></i></a></li>
           <li><a href="#"><i class="fa fa-facebook"></i></a></li> -->
         </ul>
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-4 text-center">
-         
+
           <a href="http://www.jeune-theatre-national.com/" target="_blank"><img src="http://adn.beatles.artiscode.org/img/jtn.jpg" alt="Jeune Théâtre National"></a>
       </div>
 

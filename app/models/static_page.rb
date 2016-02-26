@@ -3,6 +3,11 @@ class StaticPage < ActiveRecord::Base
   validates :body, presence: true
 
   translates :title, :body, :teaser, :fallbacks_for_empty_translations => true
+
+  def to_param
+    "#{id}-#{title.parameterize}"
+  end
+
 end
 
 
