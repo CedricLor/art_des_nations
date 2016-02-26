@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_countries_for_side_nav
-    @countries = Country.includes(:translations).all
+    @countries = Country.includes(:translations)
   end
 
   def set_locales_for_language_switcher

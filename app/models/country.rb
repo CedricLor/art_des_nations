@@ -10,6 +10,12 @@ class Country < ActiveRecord::Base
 
   translates :name, :title, :editorial, :fallbacks_for_empty_translations => true
 
+
+  def to_param
+    "#{id}-#{name.parameterize}"
+  end
+
+
 end
 
 

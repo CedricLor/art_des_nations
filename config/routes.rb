@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
     resources :countries, only: [:show, :edit, :update]
     resources :portrait_intros, only: [:show, :edit, :update]
+    get 'protagonistes', to: 'portrait_intros#show', as: 'protagonistes'
     resources :categories, only: [:show, :index, :new, :edit, :update]
 
   # The priority is based upon order of creation: first created -> highest priority.
