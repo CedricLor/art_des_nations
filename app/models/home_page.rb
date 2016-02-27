@@ -6,9 +6,11 @@ class HomePage < ActiveRecord::Base
   translates :call_to_action, :fallbacks_for_empty_translations => true
 
   def site_editorial
+    # FIXME -- need to add a published_at column to the database and sort by published_at
     site_editorials.
-      select{|se| se.translation.status == "published" }.
-      sort{|a,b| a.update_at <=> b.updated_at }.
+      includes(:translations).
+      where(status: 'published').
+      order(:updated_at).
       last
   end
 
@@ -21,7 +23,11 @@ class HomePage < ActiveRecord::Base
   end
 
   def editorial=(value)
-    SiteEditorial.where(status: "published").last.update!(
+    site_editorials.
+      includes(:translations).
+      where(status: "published").
+      last.
+      update!(
       body: value
     )
   end
