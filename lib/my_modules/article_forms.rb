@@ -2,7 +2,6 @@
 
 module ArticleForms
   def handle_author_name
-    byebug
     # 1. if nothing has changed, return true
     return true if @article.author_id.to_s == author_id && (@article.author.full_name == create_new_author || create_new_author.blank?)
     # 2. else if the user has entered a new name in the input field, create author and assign it the article

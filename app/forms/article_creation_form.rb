@@ -39,7 +39,8 @@ class ArticleCreationForm
   #     article_picture_is_for_card: 'true',
   #     article_picture_is_for_carousel: 'true'
   #   ).save
-  # end
+  end
+
   def persist_ancillary_data
     create_pictures(@article.id, "Article", new_md, for_card)
 
