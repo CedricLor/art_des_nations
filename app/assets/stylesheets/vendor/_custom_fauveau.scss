@@ -314,12 +314,12 @@ h1, h2, h3 etc
 
 h1 {
   margin:2em 0 1em 0;
-    font-family: Futura, $serif;
-    color:$vert;
+  font-family: Futura, $serif;
+  color:$vert;
 }
 
 h2.resume {
-    font-family: Futura, $serif;
+  font-family: Futura, $serif;
   font-size:1.6em;
   line-height:140%;
   margin-bottom:2em;
@@ -482,19 +482,29 @@ CONTENU
     }
 
     h2 {
-        margin-bottom: 1em;
-        font-family: Futura, $serif;
-        // font-size: 2em;
+      margin-bottom: 1em;
+      font-family: Futura, $serif;
+      // font-size: 2em;
+    }
+
+    #page-content-wrapper .container {
+      margin-top: 2em;
     }
 
     .introduction {
-        margin-bottom: 3em;
-        li {
-            font-size: 1.2em;
+      margin-bottom: 3em;
+      li {
+        font-size: 1.4em;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        @media (min-width: $my-screen-sm-min) {
+          font-size: 1.2em;
         }
-        li.first {
-            margin-right: 2em;
-        }
+        // font-size: 1.2em;
+      }
+      li.first {
+        margin-right: 2em;
+      }
     }
 
     h3 {
