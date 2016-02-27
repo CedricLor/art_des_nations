@@ -27,8 +27,7 @@
           pictures: @aktion.picturizings,
           sub_partial: 'shared/article_aktion/slide_wrapper_form',
           class_name_for_slider: '',
-          item: 'aktion',
-          item_i18n_name: t(:item_action_for_check_box_label, default: 'this action')
+          item: 'aktion'
         }
     %>
   <% end %>
@@ -36,8 +35,7 @@
   <% provide :additional_pictures_form do %>
     <%= render partial: 'shared/article_aktion/additional_pictures_form',
        locals: {
-        item: 'aktion',
-        item_i18n_name: t(:item_action_for_check_box_label, default: 'this action')
+        item: 'aktion'
        }
     %>
   <% end %>
@@ -51,8 +49,7 @@
     <%= render partial: 'shared/aktion_article_portrait/categories_form',
       locals: {
         chosen_category_ids: @aktion.categorizings.map(&:category_id),
-        item: 'aktion',
-        item_i18n_name: t(:item_action_for_check_box_label, default: 'this action')
+        item: 'aktion'
       }
     %>
   <% end %>

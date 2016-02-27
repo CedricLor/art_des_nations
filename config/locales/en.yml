@@ -70,10 +70,9 @@ en:
   portrait_update_file_upload_back_office_legend: "If you want to change your picture, please upload a file here:"
   portrait_create_file_upload_back_office_legend: "Please upload a picture for your portrait here:"
 
-  portrait_change_this_picture_every_where: "Do you want this picture to be changed everywhere it appears in the website (i.e. as illustration of other contents such as articles, actions or other portraits)?"
-  portrait_change_this_picture_only_here: "Or do you want this picture to be changed only on this portrait (including where this portrait appears on index pages or as a link at the bottom of articles, actions or other portraits)?"
-
   new_portrait: "New portrait"
+  new_article: "New article"
+  new_aktion: "New action"
 
   si: "yes"
   non: "no"
@@ -93,6 +92,9 @@ en:
   admin_nav_admin_index_content: 'Index'
 
   admin_nav_show_portrait_intro: 'Portrait intro page'
+
+  deletion_confirmation: "Are you sure you want to delete %{this_item}?"
+
   portrait_admin_index_title: "Portraits admin index"
 
   media_container_presence_required_validation_message: "You have choosen to publish your portrait. A portrait may not be validly published without a picture."

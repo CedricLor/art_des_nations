@@ -1,4 +1,5 @@
-<h3><%= t('.new_article')%></h3>
+<% content_for :title, t(:new_article, default: "New article") %>
+
 <%= render "form" %>
 
 

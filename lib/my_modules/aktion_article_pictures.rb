@@ -1,6 +1,23 @@
 # lib/my_modules/aktion_article.rb
 
 module AktionArticlePictures
+  def create_pictures(picturizable_id, picturizable_type, new_mds, for_card)
+    new_mds.each do |key,value|
+      unless value["file"].nil?
+        created_md = MediaContainer.create(
+          title: value["title"],
+          media: value["file"]
+        )
+        created_md.picturizings.create(
+          picturizable_id: picturizable_id,
+          picturizable_type: picturizable_type,
+          for_carousel: value["for_carousel"],
+          for_card: for_card.sub(/new_md_/, '') == key ? "true" : "false"
+        )
+      end
+    end
+  end
+
   def persist_picture_changes(item, item_type, md_to_update, md_for_carousel, new_md, for_card, md_for_destruction)
     if md_to_update
       update_pictures(item, md_to_update, md_for_carousel)
@@ -30,30 +47,6 @@ module AktionArticlePictures
       pict.media_container.update(
         title: md_to_update["#{pict.id}"]
       )
-    end
-  end
-
-  # def update_pictures_for_carousel(item, md_for_carousel)
-  #   pics_ids = item.picturizings.
-  #     select{|p| md_for_carousel.keys.include?(p.id.to_s)}.
-  #     map {|p| p.id}
-  #   Picturizing::Translation.where(picturizing_id: pics_ids).update_all(for_carousel: "true")
-  # end
-
-  def create_pictures(picturizable_id, picturizable_type, new_mds, for_card)
-    new_mds.each do |key,value|
-      unless value["file"].nil?
-        created_md = MediaContainer.create(
-          title: value["title"],
-          media: value["file"]
-        )
-        created_md.picturizings.create(
-          picturizable_id: picturizable_id,
-          picturizable_type: picturizable_type,
-          for_carousel: value["for_carousel"],
-          for_card: for_card.sub(/new_md_/, '') == key ? "true" : "false"
-        )
-      end
     end
   end
 

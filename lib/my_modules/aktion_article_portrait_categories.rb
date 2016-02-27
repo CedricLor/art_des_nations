@@ -1,7 +1,7 @@
 # lib/my_modules/aktion_article_portrait_categories.rb
 
 module AktionArticlePortraitCategories
-  def persist_category_changes(item, item_type, applicable_existing_categories, main_category_id, new_category_name)
+  def persist_categories(item, item_type, applicable_existing_categories, main_category_id, new_category_name)
 
     clean_up_categories(item)
 

@@ -12,9 +12,9 @@
 
   <!-- Checkboxes Categories Chooser -->
   <div class="form-group">
-    <label><%= t :categories_to_apply_to_this_item, this_item: item_i18n_name, default: "Choose the categories you want to apply to #{item_i18n_name} here:" %></label>
+    <label><%= t :categories_to_apply_to_this_item, this_item: @this_item_i18n_name, default: "Choose the categories you want to apply to #{@this_item_i18n_name} here:" %></label>
     <table style="width: 100%;">
-      <% @categories_for_side_nav.each do |kateg| %>
+      <% @categories.each do |kateg| %>
         <tr>
           <!-- Category chooser -->
           <td>
@@ -36,15 +36,15 @@
 
   <!-- New Category Text Input -->
   <div class="form-group">
-    <%= label_tag("#{item}_add_category", t(:item_add_new_category, this_item: item_i18n_name, default: "Add a new category that will apply to #{item_i18n_name} here:")) %>
-    <%= text_field_tag("#{item}[new_category_name]", '', id:"article_create_new_author", class: "form-control", placeholder: t(:item_add_new_category, this_item: item_i18n_name, default: "Add a new category that will apply to #{item_i18n_name} here:")) %>
+    <%= label_tag("#{item}_add_category", t(:item_add_new_category, this_item: @this_item_i18n_name, default: "Add a new category that will apply to #{@this_item_i18n_name} here:")) %>
+    <%= text_field_tag("#{item}[new_category_name]", '', id:"#{item}_add_category", class: "form-control", placeholder: t(:item_add_new_category, this_item: @this_item_i18n_name, default: "Add a new category that will apply to #{@this_item_i18n_name} here:")) %>
   </div>
   <!-- End New Category Text Input -->
 
   <!-- Radio to make new category the main category -->
   <div class="form-group">
     <label>
-      <%= t :make_this_new_category_main_category_for_this_item?, this_item: item_i18n_name, default: "Do you want to make this new category the main category applicable to #{item_i18n_name}?" %>
+      <%= t :make_this_new_category_main_category_for_this_item?, this_item: @this_item_i18n_name, default: "Do you want to make this new category the main category applicable to #{@this_item_i18n_name}?" %>
     </label>
     <div>
       <label for=<%= "#{item}_new_category_main_category_yes"%> class="radio-inline" ><input class="radio_buttons required"  type="radio" name=<%="#{item}[main_category_id]"%> id=<%="#{item}_new_category_main_category_yes"%> value='new_category' ><%= t :si, default: "Yes" %></label>

@@ -2,6 +2,7 @@ class ArticleUpdateForm
   include ActiveModel::Model
   include AktionArticlePictures
   include AktionArticlePortraitCategories
+  include ArticleForms
 
   attr_accessor :id, :body, :title, :teaser, :posted_from_location, :posted_at, :status, :md_for_destruction, :md_for_carousel, :for_card, :new_md, :md_to_update, :author_id, :create_new_author, :applicable_existing_categories, :main_category_id, :new_category_name
   attr_reader :article
@@ -42,7 +43,7 @@ class ArticleUpdateForm
       md_for_destruction
     )
 
-    persist_category_changes(
+    persist_categories(
       @article,
       "Article",
       applicable_existing_categories,
@@ -51,23 +52,6 @@ class ArticleUpdateForm
     )
 
     handle_author_name
-  end
-
-  def handle_author_name
-    # FIXME -- We need some kind of validation rule before executing this
-    # if nothing has changed, return true
-    return true if @article.author.full_name == create_new_author && @article.author_id.to_s == author_id
-    # else if the user has entered a new name in the input field, create author and assign it the article
-    # if the user has both changed the author from the list and entered a new name in the field,
-    # we skip the registration of another author from the list
-    return create_author_and_assign_article if create_new_author.present?
-    # else if the user has selected a different author in the list, update the article and return
-    return @article.update(author_id: author_id) if @article.author_id.to_s != author_id
-  end
-
-  def create_author_and_assign_article
-    author = Author.create(full_name: create_new_author)
-    @article.update(author_id: author.id)
   end
 end # End class
 

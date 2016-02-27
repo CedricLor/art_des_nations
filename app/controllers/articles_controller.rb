@@ -1,5 +1,7 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :destroy]
+  before_action :set_item_i18n_name
+  before_action :clean_up_posted_at_params, only: [:create, :update]
   skip_before_action :authenticate_user!, only: :show
 
 
@@ -29,17 +31,20 @@ class ArticlesController < ApplicationController
   # GET /articles/new
   def new
     @article = Article.new
+    @article.build_author()
   end
 
   # GET /articles/1/edit
   def edit
-    @article = Article.includes(:media_containers, :author).includes(categorizings: [category: :translations]).find(params[:id])
+    @article = Article.includes(:media_containers, :author).
+      includes(categorizings: [category: :translations]).
+      find(params[:id])
   end
 
   # POST /articles
   # POST /articles.json
   def create
-    @article = Article.new(article_params)
+    @article_creation_form = ArticleCreationForm.new({id: params[:id]}.merge(params[:article]))
 
     respond_to do |format|
       if @article.save
@@ -55,7 +60,6 @@ class ArticlesController < ApplicationController
   # PATCH/PUT /articles/1
   # PATCH/PUT /articles/1.json
   def update
-    clean_up_posted_at_params
     @article_update_form = ArticleUpdateForm.new({id: params[:id]}.merge(params[:article]))
 
     respond_to do |format|
@@ -86,21 +90,25 @@ class ArticlesController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def article_params
-      params.require(:article).permit(
-        :id,
-        :title,
-        :body,
-        :teaser,
-        :status,
-        :posted_from_location,
-        :posted_at
-      )
-    end
+    # def article_params
+    #   params.require(:article).permit(
+    #     :id,
+    #     :title,
+    #     :body,
+    #     :teaser,
+    #     :status,
+    #     :posted_from_location,
+    #     :posted_at
+    #   )
+    # end
 
     def clean_up_posted_at_params
       article = params[:article]
       article[:posted_at] = Date.new article["posted_at(1i)"].to_i, article["posted_at(2i)"].to_i, article["posted_at(3i)"].to_i
       params[:article] = article.except('posted_at(1i)', 'posted_at(2i)', 'posted_at(3i)')
+    end
+
+    def set_item_i18n_name
+      @this_item_i18n_name = t(:item_article_for_check_box_label, default: 'this article')
     end
 end

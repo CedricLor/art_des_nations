@@ -43,7 +43,7 @@ class AktionUpdateForm
       md_for_destruction
     )
 
-    persist_category_changes(
+    persist_categories(
       @aktion,
       "Aktion",
       applicable_existing_categories,

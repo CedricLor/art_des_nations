@@ -19,7 +19,7 @@
   <span class="radio">
     <label for=<%= "#{item}_new_md_#{i}_for_card"%> >
       <input class="radio_buttons required"  type="radio" name=<%="#{item}[for_card]"%> id=<%="#{item}_new_md_#{i}_for_card"%> value=<%= "new_md_#{i}"%> >
-      <%= t :check_box_label_is_picture_for_card, item: item_i18n_name, default: "You want to use this picture as main illustration on the index pages where this #{item_i18n_name} is displayed." %>
+      <%= t :check_box_label_is_picture_for_card, item: @this_item_i18n_name, default: "You want to use this picture as main illustration on the index pages where this #{@this_item_i18n_name} is displayed." %>
     </label>
   </span>
   <!-- end check box picture is for_card -->

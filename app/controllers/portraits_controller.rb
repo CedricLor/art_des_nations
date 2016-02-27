@@ -1,5 +1,6 @@
 class PortraitsController < ApplicationController
   before_action :set_portrait, only: [:show, :edit, :update]
+  before_action :set_item_i18n_name
   skip_before_action :authenticate_user!, only: [:index, :show]
 
   # GET /portraits
@@ -97,5 +98,9 @@ class PortraitsController < ApplicationController
         new_md: [:file, :title],
         applicable_existing_categories: params[:portrait][:applicable_existing_categories].try(:keys)
       )
+    end
+
+    def set_item_i18n_name
+      @this_item_i18n_name = t(:item_portrait_for_check_box_label, default: 'this portrait')
     end
 end

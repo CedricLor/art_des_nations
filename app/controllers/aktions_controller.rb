@@ -1,5 +1,6 @@
 class AktionsController < ApplicationController
   before_action :set_aktion, only: [:show, :destroy]
+  before_action :set_item_i18n_name
   skip_before_action :authenticate_user!, only: :show
 
   # GET /aktions
@@ -93,5 +94,9 @@ class AktionsController < ApplicationController
       params[:aktion][:aktion_date] = Date.new aktion["aktion_date(1i)"].to_i, aktion["aktion_date(2i)"].to_i, aktion["aktion_date(3i)"].to_i
       params[:aktion][:posted_at] = Date.new aktion["posted_at(1i)"].to_i, aktion["posted_at(2i)"].to_i, aktion["posted_at(3i)"].to_i
       params[:aktion] = aktion.except('aktion_date(1i)', 'aktion_date(2i)', 'aktion_date(3i)', 'posted_at(1i)', 'posted_at(2i)', 'posted_at(3i)')
+    end
+
+    def set_item_i18n_name
+      @this_item_i18n_name = t(:item_action_for_check_box_label, default: 'this action')
     end
 end

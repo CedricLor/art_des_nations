@@ -74,6 +74,8 @@ fr:
   portrait_change_this_picture_only_here_html: "Ou souhaitez-vous plutôt que cette photo ne soit changée que pour ce portrait (y compris lorsque ce portrait apparait sur des pages d'index ou en lien en bas d'articles, d'actions ou d'autres portraits)&nbsp;?"
 
   new_portrait: "Nouveau portrait"
+  new_article: "Nouvel article"
+  new_aktion: "Nouvelle action"
 
   si: "oui"
   non: "non"
@@ -93,6 +95,9 @@ fr:
   admin_nav_admin_index_content: 'Index'
 
   admin_nav_show_portrait_intro: "Page d'introduction des portraits"
+
+  deletion_confirmation: "Etes-vous certain que vous voulez effacer %{this_item}?"
+
   portrait_admin_index_title: "Index admin des portraits"
 
   media_container_presence_required_validation_message: "Vous avez choisi de publier votre portrait. Un portrait ne peut pas être publié sans une photo pour l'illustrer."

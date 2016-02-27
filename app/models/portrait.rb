@@ -119,7 +119,7 @@ class Portrait < ActiveRecord::Base
 
   def update_categories
     if applicable_existing_categories || main_category_id || new_category_name
-      persist_category_changes(
+      persist_categories(
         self,
         "Portrait",
         applicable_existing_categories,

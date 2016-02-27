@@ -40,13 +40,12 @@
     </div>
   <% end %>
 
-  <%# building a form to allow user to change the categories applying to the aktion, select the main category and add new categories %>
+  <%# building a form to allow user to change the categories applying to the portrait, select the main category and add new categories %>
   <% provide :categories_form do %>
     <%= render partial: 'shared/aktion_article_portrait/categories_form',
       locals: {
         chosen_category_ids: @portrait.categorizings.map(&:category_id),
-        item: 'portrait',
-        item_i18n_name: t(:item_portrait_for_check_box_label, default: 'this portrait')
+        item: 'portrait'
       }
     %>
   <% end %>
