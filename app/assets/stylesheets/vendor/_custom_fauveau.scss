@@ -101,24 +101,22 @@ HEADER
     display: block;
     height:67px;
     width:97px;
-    -webkit-transition: all .5s ease;
-    -moz-transition: all .5s ease;
+    // -webkit-transition: all .5s ease;
+    // -moz-transition: all .5s ease;
     transition: all .5s ease;
 }
 
 #main-nav {
-    -webkit-transition: all .5s ease;
-    -moz-transition: all .5s ease;
+  // -webkit-transition: all .5s ease;
+  // -moz-transition: all .5s ease;
   transition: all .5s ease;
   background:#fff;
-  height: 70px;
+  // height: 70px;
   line-height: 70px;
-
-    width:100%;
-
-    z-index: 1000;
-    opacity: 1;
-    padding-top:1.5em;
+  width:100%;
+  z-index: 1000;
+  opacity: 1;
+  padding-top:1.5em;
 }
 
 #main-nav.scrolled {
