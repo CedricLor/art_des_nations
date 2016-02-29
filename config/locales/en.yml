@@ -109,7 +109,7 @@ en:
   item_add_new_category: "Add a new category that will apply to %{this_item} here:"
   make_this_new_category_main_category_for_this_item?: "Do you want to make this new category the main category applicable to %{this_item} ?"
   main_category: 'main category:'
-  missing_categories_error: "You cannot choose the status \"%{status}\" without giving at least one category to your %{item_name}."
+  missing_categories_error: "You cannot choose the status \"%{published}\" ou \"%{featured}\" without giving at least one category to your %{item_name}."
 
   admin_nav_session: "Session"
 

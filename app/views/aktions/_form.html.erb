@@ -47,6 +47,7 @@
   <%# building a form to allow user to change the categories applying to the aktion, select the main category and add new categories %>
   <% provide :categories_form do %>
     <%= render partial: 'shared/aktion_article_portrait/categories_form',
+      object: @aktion,
       locals: {
         chosen_category_ids: @aktion.categorizings.map(&:category_id),
         item: 'aktion'

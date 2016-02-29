@@ -43,8 +43,9 @@ class ArticleForm
       errors.add(:categories, I18n.t(
         :missing_categories_error,
         item_name: model_name.name.downcase,
-        status: status,
-        default: "You cannot choose the status \"#{status}\" without giving at least one category to your #{model_name.name.downcase}."))
+        published: I18n.t(:published),
+        featured: I18n.t(:featured),
+        default: "You cannot choose the status \"#{I18n.t(:published)}\" or \"#{I18n.t(:featured)}\" without giving at least one category to your #{model_name.name.downcase}."))
     end
   end
 
