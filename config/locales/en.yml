@@ -78,6 +78,14 @@ en:
   this_item_portrait: 'this portrait'
   an_item_portrait: 'a portrait'
 
+  the_item_site_editorial: 'the editorial'
+  this_item_site_editorial: 'this editorial'
+  an_item_site_editorial: 'an editorial'
+
+  the_item_category: 'the category'
+  this_item_category: 'this category'
+  an_item_category: 'a category'
+
   missing_title_error: "%{an_item_i18n_name} must have a title. Please specify one."
   missing_posted_from_location: "You must indicate a publication place for %{this_item_i18n_name}. Please specificy one."
 
@@ -99,6 +107,8 @@ en:
   new_portrait: "New portrait"
   new_article: "New article"
   new_aktion: "New action"
+  new_category: "New category"
+  new_editorial: "New editorial"
 
   si: "yes"
   non: "no"
@@ -126,6 +136,9 @@ en:
 
   portrait_admin_index_title: "Portraits admin index"
   article_admin_index_title: "Articles admin index"
+  aktion_admin_index_title: "Actions admin index"
+  categories_admin_index_title: "Categories admin index"
+  site_editorial_admin_index_title: "Editorials admin index"
 
   media_container_presence_required_validation_message: "You have choosen to publish your portrait. A portrait may not be validly published without a picture."
 

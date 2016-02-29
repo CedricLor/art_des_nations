@@ -1,12 +1,25 @@
 <%# view: countries/show.html.erb %>
+<% content_for :title, raw(@country.title) %>
 
-<% provide :external_links do %>
-  <%= render partial: 'shared/country_home_page/external_links', locals: {
-    sub_partial: 'shared/country_home_page/external_link',
-    external_linkings: @country.external_linkings,
-    class_name_for_ul: " "
-    }
-  %>
+<% provide :admin_nav_content_type do %>
+  <% "#{@country.class.name}" %>
+<% end %>
+
+<% provide :admin_nav_content_actions do %>
+  <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), edit_country_path(@country) %></li>
+<% end %>
+
+<% render 'shared/admin_nav_content' %>
+
+<% if @country.external_linkings.present? %>
+  <% provide :external_links do %>
+    <%= render partial: 'shared/country_home_page/external_links', locals: {
+      sub_partial: 'shared/country_home_page/external_link',
+      external_linkings: @country.external_linkings,
+      class_name_for_ul: " "
+      }
+    %>
+  <% end %>
 <% end %>
 
 <%= render partial: 'countries/partials/container',

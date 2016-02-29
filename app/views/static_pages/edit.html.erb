@@ -1,6 +1,14 @@
 <% content_for(:title, raw("#{@static_page.title}")) %>
 <% content_for :body_class, "page-article" %>
 
-<%= render 'form' %>
+<% provide :admin_nav_content_type do %>
+  <% "#{@static_page.class.name}" %>
+<% end %>
 
-<%= link_to 'Show', @static_page %>
+<% provide :admin_nav_content_actions do %>
+  <li><%= link_to t(:admin_nav_show_content, default: 'Show'), @static_page %></li>
+<% end %>
+
+<% render 'shared/admin_nav_content' %>
+
+<%= render 'form' %>

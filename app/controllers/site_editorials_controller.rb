@@ -1,5 +1,6 @@
 class SiteEditorialsController < ApplicationController
   before_action :set_site_editorial, only: [:show, :edit, :update, :destroy]
+  before_action :set_item_i18n_name
   skip_before_action :authenticate_user!, only: [:index, :show]
 
   # GET /site_editorials
@@ -80,5 +81,11 @@ class SiteEditorialsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def site_editorial_params
       params.require(:site_editorial).permit(:title, :body, :status)
+    end
+
+    def set_item_i18n_name
+      @the_item_i18n_name = t(:the_item_site_editorial, default: 'the editorial')
+      @this_item_i18n_name = t(:this_item_site_editorial, default: 'this editorial')
+      @an_item_i18n_name = t(:an_item_site_editorial, default: 'an editorial')
     end
 end

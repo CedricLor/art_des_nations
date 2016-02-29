@@ -1,5 +1,15 @@
 <%# view: countries/edit.html.erb %>
+<% content_for :title, raw(@country.title) %>
 
+<% provide :admin_nav_content_type do %>
+  <% "#{@country.model_name.name}" %>
+<% end %>
+
+<% provide :admin_nav_content_actions do %>
+  <li><%= link_to t(:admin_nav_show_content, default: 'Show'), @country %></li>
+<% end %>
+
+<% render 'shared/admin_nav_content' %>
 
 <% provide :external_links do %>
   <%= render partial: 'shared/country_home_page/external_links_fields',
@@ -14,5 +24,3 @@
 
 
 <%= render 'form' %>
-
-<%= link_to 'Show', @country %>

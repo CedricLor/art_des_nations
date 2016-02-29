@@ -1,7 +1,5 @@
 <% content_for :title, t(:new_action, default: "New action") %>
 
-<%= render 'form' %>
-
 <% provide :admin_nav_content_type do %>
   <% "#{@aktion.model_name.name}" %>
 <% end %>
@@ -11,3 +9,6 @@
 <% end %>
 
 <% render 'shared/admin_nav_content' %>
+
+<%= render 'form' %>
+

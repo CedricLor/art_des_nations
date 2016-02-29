@@ -3,17 +3,19 @@
 <% content_for(:title, raw("#{@category.name}")) %>
 <% content_for :body_class, "portraits" %>
 
-<!--
-<%#= link_to 'Edit', edit_category_path(@category) %> |
-<%#= link_to 'Back', categories_path %>
--->
-
 <%= simple_form_for(@category) do |f| %>
   <%= f.error_notification %>
+  <% category_name = f.input :name,
+    label: false,
+    error: t(
+      :missing_title_error,
+      an_item_i18n_name: @an_item_i18n_name.capitalize,
+      default: "#{@an_item_i18n_name.capitalize} must have a title. Please specify one."
+    )
+  %>
 
-  <% category_name = f.input :name %>
   <% editorial = f.cktext_area :editorial, rows: 50, :ckeditor => {language: I18n.locale} %>
-  <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
+  <% submit_button = f.button :submit, t(:save_your_changes, default: 'Save your changes!!!'), class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
 
   <%= render partial: 'shared/categories_portraits/list',
       locals: {
@@ -26,10 +28,4 @@
       }
   %>
 
-  <!--<div class="form-inputs">
-  </div>-->
-
-  <!--<div class="form-actions">
-    <%#= f.button :submit %>
-  </div>-->
 <% end %>

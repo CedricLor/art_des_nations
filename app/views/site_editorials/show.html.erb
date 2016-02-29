@@ -1,7 +1,19 @@
 <%# site_editorials/show.html.erb %>
-
 <% content_for :title, raw(@site_editorial.title) %>
 <% content_for :body_class, "portraits" %>
+
+<% provide :admin_nav_content_type do %>
+  <% "#{@site_editorial.class.name}" %>
+<% end %>
+
+<% provide :admin_nav_content_actions do %>
+  <li><%= link_to t(:admin_nav_delete_content, default: 'Delete'), site_editorial_path, method: :delete, data: { confirm: t(:deletion_confirmation, this_item: @this_item_i18n_name, default: "Are you sure you want to delete #{@this_item_i18n_name}?") } %></li>
+  <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_site_editorial_path %></li>
+  <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), edit_site_editorial_path(@site_editorial) %></li>
+  <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), site_editorials_path %></li>
+<% end %>
+
+<% render 'shared/admin_nav_content' %>
 
 <%= render partial: 'site_editorials/partials/container',
     layout: "shared/article_aktion_static/container_layout",

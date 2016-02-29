@@ -1,10 +1,17 @@
 <% content_for(:title, raw("#{@category.name}")) %>
 <% content_for :body_class, "portraits" %>
 
-<!--
-<%#= link_to 'Edit', edit_category_path(@category) %> |
-<%#= link_to 'Back', categories_path %>
--->
+<% provide :admin_nav_content_type do %>
+  <% "#{@category.class.name}" %>
+<% end %>
+
+<% provide :admin_nav_content_actions do %>
+  <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_category_path %></li>
+  <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), edit_category_path(@category) %></li>
+  <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), categories_path %></li>
+<% end %>
+
+<% render 'shared/admin_nav_content' %>
 
 <%= render partial: 'shared/categories_portraits/list', locals: {
     parameters: {

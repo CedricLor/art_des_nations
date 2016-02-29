@@ -3,6 +3,16 @@
 <% content_for(:title, t(:portraits, default: "Portraits")) %>
 <% content_for :body_class, "portraits" %>
 
+<% provide :admin_nav_content_type do %>
+  <% "#{@portrait_intro.class.name}" %>
+<% end %>
+
+<% provide :admin_nav_content_actions do %>
+  <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), edit_portrait_intro_path(@portrait_intro) %></li>
+<% end %>
+
+<% render 'shared/admin_nav_content' %>
+
 <%= render partial: 'shared/categories_portraits/list', locals: {
     parameters: {
       list_name: t(:portraits, default: "Portraits"),

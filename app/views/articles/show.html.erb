@@ -1,6 +1,5 @@
 <%# view: articles/show.html.erb %>
 <%# rendered in layout/articles.html.erb %>
-<% content_for :title, raw(@article.title) %>
 
 <% provide :admin_nav_content_type do %>
   <% "#{@article.class.name}" %>

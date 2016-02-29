@@ -1,7 +1,5 @@
 <% content_for :title, t(:new_article, default: "New article") %>
 
-<%= render "form" %>
-
 <% provide :admin_nav_content_type do %>
   <% "#{@article.model_name.name}" %>
 <% end %>
@@ -11,3 +9,5 @@
 <% end %>
 
 <% render 'shared/admin_nav_content' %>
+
+<%= render "form" %>

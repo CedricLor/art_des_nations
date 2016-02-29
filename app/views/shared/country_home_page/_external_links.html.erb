@@ -6,18 +6,16 @@
 - countries/edit.html.erb
 %>
 
-<% if external_linkings.present? %>
-  <h2><%= t(:liens, default: "Liens") %></h2>
-  <ul class="<%= class_name_for_ul %>">
-    <% external_linkings.each do |external_linking| %>
-      <%= render partial: "#{sub_partial}",
-          locals: {
-            index: "existing_external_linkings][#{external_linking.id}",
-            name: external_linking.external_link.name,
-            url: external_linking.external_link.url
-          }
-      %>
-    <% end %>
-    <%= yield :additional_external_links %>
-  </ul>
-<% end %>
+<h2><%= t(:liens, default: "Liens") %></h2>
+<ul class="<%= class_name_for_ul %>">
+  <% external_linkings.each do |external_linking| %>
+    <%= render partial: "#{sub_partial}",
+        locals: {
+          index: "existing_external_linkings][#{external_linking.id}",
+          name: external_linking.external_link.name,
+          url: external_linking.external_link.url
+        }
+    %>
+  <% end %>
+  <%= yield :additional_external_links %>
+</ul>

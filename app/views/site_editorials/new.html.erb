@@ -1,5 +1,13 @@
-<h1>New Site Editorial</h1>
+<% content_for :title, t(:new_article, default: "New editorial") %>
+
+<% provide :admin_nav_content_type do %>
+  <% "#{@site_editorial.model_name.name}" %>
+<% end %>
+
+<% provide :admin_nav_content_actions do %>
+  <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), site_editorials_path %></li>
+<% end %>
+
+<% render 'shared/admin_nav_content' %>
 
 <%= render 'form' %>
-
-<%= link_to 'Back', site_editorials_path %>

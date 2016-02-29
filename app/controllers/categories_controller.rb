@@ -1,6 +1,7 @@
 class CategoriesController < ApplicationController
   before_action :set_category_with_aktions_and_articles, only: [:show, :edit, :update]
   before_action :set_category, only: [:destroy]
+  before_action :set_item_i18n_name
   skip_before_action :authenticate_user!, only: :show
 
   # GET /categories
@@ -86,5 +87,11 @@ class CategoriesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def category_params
       params.require(:category).permit(:name, :editorial)
+    end
+
+    def set_item_i18n_name
+      @the_item_i18n_name = t(:the_item_category, default: 'the category')
+      @this_item_i18n_name = t(:this_item_category, default: 'this category')
+      @an_item_i18n_name = t(:an_item_category, default: 'a category')
     end
 end
