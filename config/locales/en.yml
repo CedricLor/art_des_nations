@@ -111,6 +111,8 @@ en:
   main_category: 'main category:'
   missing_categories_error: "You cannot choose the status \"%{published}\" ou \"%{featured}\" without giving at least one category to your %{item_name}."
 
+  missing_body_error: "You cannot choose the status \"%{published}\" or \"%{featured}\" without adding some content to the body of your %{item_name}."
+
   admin_nav_session: "Session"
 
   admin_nav_new_content: 'New'

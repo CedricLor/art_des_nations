@@ -15,7 +15,13 @@
     )
   %>
   <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {language: I18n.locale} %>
-  <% body = f.cktext_area :body, rows: 50, :ckeditor => {language: I18n.locale} %>
+  <% body = render partial: 'shared/aktion_article_portrait_site_edito_static/body_form.html.erb',
+    object: @article,
+    locals: { f: f }
+  %>
+  <%# body = f.cktext_area :body, rows: 50, :ckeditor => {language: I18n.locale} %>
+
+
   <% posted_from_location = f.input :posted_from_location,
     label: false,
     error: t(

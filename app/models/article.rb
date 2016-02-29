@@ -1,12 +1,4 @@
 class Article < ActiveRecord::Base
-  validates :title, presence: true
-  validates :posted_at, presence: true
-  validates :posted_from_location, presence: true
-  validates :status, presence: true
-  validates :status, inclusion: { in: %w(draft published featured archived),
-    message: "%{value} is not a valid status for an article. Choose between draft, published, featured or archived" }
-  validates :author_id, presence: true
-
   default_scope { order(posted_at: :desc) }
 
   belongs_to :author, inverse_of: :articles
@@ -30,19 +22,6 @@ class Article < ActiveRecord::Base
 
   has_many :to_portraits, through: :to_linkings, source: :to_linkable, source_type: "Portrait"
   has_many :from_portraits, through: :from_linkings, source: :from_linkable, source_type: "Portrait"
-
-
-  # has_many :portraitizings, :as => :portraitizable, inverse_of: :article
-  # has_many :portraits, through: :portraitizings
-
-  # has_many :article_linkings, inverse_of: :article
-  # has_many :articles, through: :article_linkings, :source => :article_linkable,
-  #          :source_type => 'Article'
-  # has_many :aktions, through: :article_linkings, :source => :article_linkable,
-  #          :source_type => 'Aktion'
-  # has_many :portaits, through: :article_linkings, :source => :article_linkable,
-  #          :source_type => 'Portrait'
-
 
 
   translates :title, :body, :teaser, :posted_from_location, :status, :fallbacks_for_empty_translations => true

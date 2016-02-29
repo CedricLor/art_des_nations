@@ -14,7 +14,18 @@ class ArticleForm
   validates :status, inclusion: { in: %w(draft published featured archived),
     message: "%{value} is not a valid status for an article. Choose between draft, published, featured or archived" }
   validates :author_name, presence: true
-  validate :has_at_least_one_category_if_featured_or_published
+  with_options if: :is_featured_or_published? do |feat_pub|
+    feat_pub.validates :body, presence: {
+      in: true,
+      message: I18n.t(
+        :missing_body_error,
+        item_name: model_name.name.downcase,
+        published: I18n.t(:published),
+        featured: I18n.t(:featured),
+        default: "You cannot choose the status \"#{I18n.t(:published)}\" or \"#{I18n.t(:featured)}\" without adding some content to the body of your #{model_name.name.downcase}.")
+    }
+    feat_pub.validate :has_at_least_one_category_if_featured_or_published
+  end
 
   def set_attributes(params)
     self.author_name = params[:author_name]
@@ -38,8 +49,12 @@ class ArticleForm
     )
   end
 
+  def is_featured_or_published?
+    ["published", "featured"].include?(status)
+  end
+
   def has_at_least_one_category_if_featured_or_published
-    if applicable_existing_categories_all_false && main_category_id.blank? && new_category_name.blank? && ["published", "featured"].include?(status)
+    if applicable_existing_categories_all_false && main_category_id.blank? && new_category_name.blank?
       errors.add(:categories, I18n.t(
         :missing_categories_error,
         item_name: model_name.name.downcase,

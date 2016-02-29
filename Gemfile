@@ -83,6 +83,3 @@ gem 'active_model_serializers'
 gem 'devise'
 gem 'devise-i18n'
 gem 'devise-i18n-views'
-
-
-gem 'webshims-rails', '~> 1.15', '>= 1.15.10'

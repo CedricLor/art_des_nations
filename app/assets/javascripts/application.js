@@ -14,8 +14,6 @@
 //= require plugins/lastMinute
 //= require jquery_ujs
 
-//= require webshims/polyfiller
-//= require plugins/webshimsInit
 
 // require redux_bundle
 
