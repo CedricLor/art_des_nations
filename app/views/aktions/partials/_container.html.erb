@@ -5,12 +5,12 @@
 - to come: view aktions/new.html.erb
 %>
 
-<%= render partial: 'shared/article_aktion_static/title_teaser', locals: {
-  title: parameters[:title],
-  teaser: parameters[:teaser]
-  # title: item.title,
-  # teaser: item.teaser
-  }
+<%= render partial: 'shared/article_aktion_static/title_teaser',
+    layout: 'shared/article_aktion_static/title_teaser_error_layout',
+    locals: {
+      title: parameters[:title],
+      teaser: parameters[:teaser]
+    }
 %>
 
 <%= yield :pictures %>

@@ -4,10 +4,12 @@
 - static_pages/_form.html.erb
 %>
 
-<%= render partial: 'shared/article_aktion_static/title_teaser', locals: {
-  title: title,
-  teaser: teaser
-  }
+<%= render partial: 'shared/article_aktion_static/title_teaser',
+    layout: 'shared/article_aktion_static/title_teaser_error_layout',
+    locals: {
+      title: title,
+      teaser: teaser
+    }
 %>
 
 <%= render partial: 'shared/aktion_static/body', locals: {

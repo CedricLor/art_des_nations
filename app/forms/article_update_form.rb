@@ -1,13 +1,26 @@
-class ArticleUpdateForm
-  include ActiveModel::Model
-  include AktionArticlePictures
-  include AktionArticlePortraitCategories
+class ArticleUpdateForm < ArticleForm
   include ArticleForms
 
-  attr_accessor :id, :body, :title, :teaser, :posted_from_location, :posted_at, :status, :md_for_destruction, :md_for_carousel, :for_card, :new_md, :md_to_update, :author_id, :create_new_author, :applicable_existing_categories, :main_category_id, :new_category_name
-  attr_reader :article
+  delegate :body, :title, :teaser, :posted_from_location, :posted_at, :status, :author_id, :author, :picturizings, :categorizings, to: :article
+  # delegate :full_name, to: :author
 
-  def update
+  # attr_accessor :title, :teaser, :posted_at, :status, :media_file
+  # attr_reader :article
+  attr_accessor :id, :author_name, :md_for_destruction, :md_for_carousel, :for_card, :new_md, :md_to_update, :applicable_existing_categories, :main_category_id, :new_category_name
+
+  def initialize(attributes={})
+    super
+    article
+  end
+
+  def article
+    @article ||= Article.includes(:media_containers, :author).
+      includes(categorizings: [category: :translations]).
+      find(@id)
+  end
+
+  def update(params)
+    set_attributes(params)
     if valid?
       persist!
       true
@@ -19,19 +32,27 @@ class ArticleUpdateForm
   private
 
   def persist!
-    @article = Article.includes(:media_containers, :author).find(@id)
+    @author = Author.find_or_create_by(full_name: author_name)
 
-    @article.update(
+    @article.update!(
       title: title,
       teaser: teaser,
       body: body,
       posted_from_location: posted_from_location,
       posted_at: posted_at,
-      status: status
+      status: status,
+      author_id: @author.id
     )
 
     persist_ancillary_data
   end # End persist!
+
+  def set_attributes(params)
+    super
+    self.md_for_destruction = params[:md_for_destruction]
+    self.md_to_update = params[:md_to_update]
+    self.md_for_carousel = params[:md_for_carousel]
+  end
 
   def persist_ancillary_data
     persist_picture_changes(
@@ -39,19 +60,11 @@ class ArticleUpdateForm
       "Article",
       md_to_update,
       md_for_carousel,
-      new_md, for_card,
+      new_md,
+      for_card,
       md_for_destruction
     )
-
-    persist_categories(
-      @article,
-      "Article",
-      applicable_existing_categories,
-      main_category_id,
-      new_category_name
-    )
-
-    handle_author_name
+    super
   end
 end # End class
 

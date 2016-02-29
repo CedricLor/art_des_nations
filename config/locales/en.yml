@@ -54,18 +54,44 @@ en:
   home_page_title: "Home"
   published_html: "<p class='meta'>Published on <span class='date-publication'>%{posted_at}</span> in <span class='lieu-publication'>%{posted_from_location}</span></p>"
 
+  save_your_changes: "Save your changes!!!"
+
   mark_for_deletion: "Mark for deletion"
   picture_mark_for_deletion: "Delete this picture"
 
   placeholder_for_new_picture_title: "You may enter a legend for your new picture here"
-  item_article_for_check_box_label: 'this article'
+
   item_action_for_check_box_label: 'this action'
-  item_portrait_for_check_box_label: 'this portrait'
+
   check_box_label_is_picture_for_card: "You want to use this picture as main illustration on the index pages where %{item} is displayed."
   check_box_label_is_picture_for_carousel: "You want this picture to appear in the carousel: "
 
-  article_change_author: "Choose the name of an author for this article:"
-  article_create_new_author: "or enter the name of a new author:"
+  the_item_article: 'the article'
+  this_item_article: 'this article'
+  an_item_article: 'an article'
+
+  the_item_action: "the action"
+  this_item_action: 'this action'
+  an_item_action: 'an action'
+
+  the_item_portrait: 'the portrait'
+  this_item_portrait: 'this portrait'
+  an_item_portrait: 'a portrait'
+
+  missing_title_error: "%{an_item_i18n_name} must have a title. Please specify one."
+  missing_posted_from_location: "You must indicate a publication place for %{this_item_i18n_name}. Please specificy one."
+
+  article_author_selector: "Choose the name of an existing author or enter the name of a new author:"
+  article_author_selector_error: "The author name cannot be blank."
+
+  label_for_status_selector: "Please select a status for %{this_item}."
+  hint_for_status_selector: "If you select %{draft} or %{archived}, %{the_item} will not be published on the website."
+  status_missing_error: "Assigning a status to %{an_item} is mandatory, please specify one."
+
+  draft: "draft"
+  published: "published"
+  featured: "featured"
+  archived: "archived"
 
   portrait_update_file_upload_back_office_legend: "If you want to change your picture, please upload a file here:"
   portrait_create_file_upload_back_office_legend: "Please upload a picture for your portrait here:"
@@ -83,6 +109,7 @@ en:
   item_add_new_category: "Add a new category that will apply to %{this_item} here:"
   make_this_new_category_main_category_for_this_item?: "Do you want to make this new category the main category applicable to %{this_item} ?"
   main_category: 'main category:'
+  missing_categories_error: "You cannot choose the status \"%{status}\" without giving at least one category to your %{item_name}."
 
   admin_nav_session: "Session"
 
@@ -96,6 +123,7 @@ en:
   deletion_confirmation: "Are you sure you want to delete %{this_item}?"
 
   portrait_admin_index_title: "Portraits admin index"
+  article_admin_index_title: "Articles admin index"
 
   media_container_presence_required_validation_message: "You have choosen to publish your portrait. A portrait may not be validly published without a picture."
 

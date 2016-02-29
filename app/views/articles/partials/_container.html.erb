@@ -4,10 +4,16 @@
 - articles/_form.html.erb
 %>
 
-<%= render partial: 'shared/article_aktion_static/title_teaser', locals: {
-  title: parameters[:title],
-  teaser: parameters[:teaser]
-  }
+<%= render partial: 'shared/article_aktion_static/error_notification',
+    layout: 'shared/article_aktion_static/title_teaser_error_layout'
+%>
+
+<%= render partial: 'shared/article_aktion_static/title_teaser',
+    layout: 'shared/article_aktion_static/title_teaser_error_layout',
+    locals: {
+      title: parameters[:title],
+      teaser: parameters[:teaser]
+    }
 %>
 
 <%= yield :pictures %>
@@ -15,25 +21,17 @@
 <%= yield :additional_pictures_form %>
 
 <%= render partial: 'articles/partials/body',
-  object: @article,
-  locals: {
-    body_content: parameters[:body],
-    posted_from_location: parameters[:posted_from_location],
-    posted_at: parameters[:posted_at]
-  },
-  layout: 'shared/article_aktion_static/body_layout'
+    object: @article,
+    locals: {
+      body_content: parameters[:body],
+      posted_from_location: parameters[:posted_from_location],
+      posted_at: parameters[:posted_at]
+    },
+    layout: 'shared/article_aktion_static/body_layout'
 %>
 
 <%= yield :categories_form %>
 
-<%# if parameters > 5, the partial is being called from the edit or the new articles_controller actions %>
-<% if parameters.size > 5 %>
-  <%= render partial: 'shared/article_aktion/additional_form_fields',
-    locals: {
-      remaining_params: parameters.
-        select { |key, value|
-          key === :status || key === :submit_button }.
-        values
-    }
-  %>
-<% end %>
+<%= yield :status_selector %>
+
+<%= yield :submit_button %>

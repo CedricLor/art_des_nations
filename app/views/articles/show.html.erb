@@ -7,7 +7,7 @@
 <% end %>
 
 <% provide :admin_nav_content_actions do %>
-  <li><%= link_to t(:admin_nav_delete_content, default: 'Delete'), article_path, method: :delete, data: { confirm: t(:deletion_confirmation, this_item: @this_item_i18n_name, default:"Are you sure you want to delete this #{@this_item_i18n_name}?") } %></li>
+  <li><%= link_to t(:admin_nav_delete_content, default: 'Delete'), article_path, method: :delete, data: { confirm: t(:deletion_confirmation, this_item: @this_item_i18n_name, default: "Are you sure you want to delete #{@this_item_i18n_name}?") } %></li>
   <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_article_path %></li>
   <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), edit_article_path(@article) %></li>
   <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), articles_path %></li>

@@ -7,16 +7,12 @@
   <% title = f.input :title, label: false %>
   <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {language: I18n.locale} %>
   <% body = f.cktext_area :body, rows: 50, :ckeditor => {language: I18n.locale} %>
-  <% status = f.input :status,
-    collection: %w(draft published featured archived),
-    as: :radio_buttons,
-    prompt: "Please select a status for this portrait",
-    selected: "draft",
-    label: 'Please select a status for this portrait',
-    hint: 'If you select draft or archived, the portrait will not be published on the website',
-    error: 'Assigning a status to a portrait is mandatory, please specify one'
+
+  <% render partial: 'shared/aktion_article_portrait/status_submit_button',
+    locals: {
+      f: f
+    }
   %>
-  <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
 
   <% provide :picture do %>
     <div class="row contenu illustration">
@@ -56,9 +52,7 @@
       parameters: {
         title: title,
         teaser: teaser,
-        body: body,
-        status: status,
-        submit_button: submit_button
+        body: body
       }
     }
   %>

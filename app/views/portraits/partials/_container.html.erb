@@ -25,47 +25,12 @@
       </div>
     </div>
 
-    <%# if the partial is called from the edit (or new) action,
-      its parameters array has more than three items
-    %>
-
     <%= yield :categories_form %>
 
-    <% if parameters.size > 3 %>
+    <%= yield :status_selector %>
 
-    <!-- FIXME - put this into the css -->
-    <style>
-      div.my-inline-status-radios {
-        margin-top: 32px;
-      }
-      div.my-inline-status-radios > div > div > span {
-        display: inline-block;
-        margin-left: 10px;
-        margin-right: 10px;
-      }
-      div.my-inline-status-radios > div > div > label {
-        display: block;
-      }
-      .my-submit-button {
+    <%= yield :submit_button %>
 
-      }
-    </style>
-
-    <%# status selection %>
-    <div class="row my-inline-status-radios">
-      <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-        <%= parameters[:status] %>
-      </div>
-    </div>
-
-    <%# submit button %>
-    <div class="row">
-      <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-        <%= parameters[:submit_button] %>
-      </div>
-    </div>
-
-    <% end %>
   </div>
 </div>
 

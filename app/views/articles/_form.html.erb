@@ -1,25 +1,34 @@
 <%# articles/_form.html.erb %>
 
-<%= simple_form_for @article, html: {multipart: true} do |f| %>
-  <%= f.error_notification %>
+<%= simple_form_for @article, url: @url, html: {method: @method, multipart: true} do |f| %>
+  <% provide :error_notification do %>
+    <%= f.error_notification %>
+  <% end %>
 
   <%# dispatching the form fields in variables to pass them to the partial %>
-  <% title = f.input :title, label: false %>
+  <% title = f.input :title,
+    label: false,
+    error: t(
+      :missing_title_error,
+      an_item_i18n_name: @an_item_i18n_name.capitalize,
+      default: "#{@an_item_i18n_name.capitalize} must have a title. Please specify one."
+    )
+  %>
   <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {language: I18n.locale} %>
   <% body = f.cktext_area :body, rows: 50, :ckeditor => {language: I18n.locale} %>
-  <% posted_from_location = f.input :posted_from_location, label: false %>
-  <% posted_at = f.input :posted_at, as: :date, label: false %>
-  <% status = f.input :status,
-    collection: %w(draft published featured archived),
-    as: :radio_buttons,
-    prompt: "Please select a status for this article",
-    selected: "draft",
-    label: 'Please select a status for this article',
-    hint: 'If you select draft or archived, the article will not be published on the website.',
-    error: 'Assigning a status to an article is mandatory, please specify one.'
+  <% posted_from_location = f.input :posted_from_location,
+    label: false,
+    error: t(
+      :missing_posted_from_location,
+      this_item_i18n_name: @this_item_i18n_name,
+      default: "You must indicate a publication place for #{@this_item_i18n_name}. Please specificy one."
+    )
   %>
-  <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
+  <% posted_at = f.input :posted_at, as: :date, label: false %>
 
+  <% render partial: 'shared/aktion_article_portrait/status_submit_button',
+    locals: { f: f }
+  %>
 
   <%# building a pictures' array for the photo gallery together with media_containers editable fields %>
   <% provide :pictures do %>
@@ -44,12 +53,13 @@
 
   <%# building a form to allow user to change author name or add a new author %>
   <% provide :author_full_name do %>
-    <%= render partial: 'articles/partials/author_form' %>
+    <%= render partial: 'articles/partials/author_form', locals: {f: f} %>
   <% end %>
 
   <%# building a form to allow user to change the categories applying to the articles, select the main category and add new categories %>
   <% provide :categories_form do %>
     <%= render partial: 'shared/aktion_article_portrait/categories_form',
+      object: @article,
       locals: {
         chosen_category_ids: @article.categorizings.map(&:category_id),
         item: 'article'
@@ -67,118 +77,10 @@
           teaser: teaser,
           body: body,
           posted_from_location: posted_from_location,
-          posted_at: posted_at,
-          status: status,
-          submit_button: submit_button
+          posted_at: posted_at
         }
       }
   %>
 
 <% end %>
 
-
-
-
-
-<!--
-<%# if @article.errors.any? %>
-<%# if @article_form.errors.any? %>
-  <ul>
-    <%#= @article.errors.full_messages.each do |message| %>
-    <%#= @article_form.errors.full_messages.each do |message| %>
-        <li><%#= message %></li>
-    <%# end %>
-  </ul>
-<%# end %>
-<%#= form_for(@article, url: articles_path, method: :post, html: { multipart: true }) do |f| %>
-<%#= form_for(@article_form, url: articles_path, method: :post, html: { multipart: true }) do |f| %>
-  <div>
-    <%#= f.label :article_title %>
-  </div>
-  <div>
-    <%#= f.text_field :title %>
-  </div>
-  <div>
-    <%#= f.label :article_teaser %>
-  </div>
-  <div>
-    <%#= f.text_area :teaser, rows: 5 %>
-  </div>
-  -->
-  <!--
-  <div>
-    <%#= f.label :article_body %>
-  </div>
-  -->
-  <!--
-  <div>
-    <%#= f.cktext_area :body, rows: 10, :ckeditor => {language: I18n.locale} %>
-    <%#= f.cktext_area :article_body, rows: 10, :ckeditor => {language: I18n.locale} %>
-  </div>
-  <div>
-    <%#= f.label :article_status %>
-  </div>
-  <div>
-    <%#= f.text_field :status %>
-  </div>
-  <div>
-    <%#= f.label :article_posted_at %>
-  </div>
-  <div>
-    <%#= f.date_field :posted_at %>
-  </div>
-  -->
-  <!--
-  <div>
-    <%#= f.label :media_title %>
-  </div>
-  <div>
-    <%#= f.text_field :media_title %>
-  </div>
-  <div>
-    <%#= f.label :media_author %>
-  </div>
-  <div>
-    <%#= f.text_field :media_author %>
-  </div>
-  <div>
-    <%#= f.label :media_source %>
-  </div>
-  <div>
-    <%#= f.text_field :media_source %>
-  </div>
-  <div>
-    <%#= f.label :media_creation_date %>
-  </div>
-  <div>
-    <%#= f.date_field :media_creation_date %>
-  </div>
-  -->
-  <!--
-  <div>
-    <%#= f.label :media_file %>
-  </div>
-  <div>
-    <%#= f.file_field :media_file %>
-  </div>
-  -->
-  <!--
-  <div>
-    <%#= f.label :picture_for_card %>
-  </div>
-  <div>
-    <%#= select_tag(:picture_for_card, options_for_select([["True", "true"], ["False", "false"]], "false")) %>
-  </div>
-  <div>
-    <%#= f.label :picture_for_carousel %>
-  </div>
-  <div>
-    <%#= select_tag(:picture_for_carousel, options_for_select([["True", "true"], ["False", "false"]], "false")) %>
-  </div>
-  -->
-  <!--
-  <div>
-    <%#= f.submit %>
-  </div>
-<%# end %>
--->

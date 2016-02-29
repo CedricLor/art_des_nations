@@ -1,15 +1,24 @@
-class ArticleCreationForm
-  include ActiveModel::Model
-  include AktionArticlePictures
-  include AktionArticlePortraitCategories
-  include ArticleForms
+class ArticleCreationForm < ArticleForm
+
+
+  delegate :body, :title, :teaser, :posted_from_location, :posted_at, :status, :author_id, :picturizings, :categorizings, to: :article
+  delegate :full_name, to: :author
 
   # attr_accessor :title, :teaser, :posted_at, :status, :media_file
   # attr_reader :article
-  attr_accessor :id, :body, :title, :teaser, :posted_from_location, :posted_at, :status, :for_card, :new_md, :author_id, :create_new_author, :applicable_existing_categories, :main_category_id, :new_category_name
-  attr_reader :article
+  attr_accessor :author_name, :md_for_carousel, :for_card, :new_md,
+    :applicable_existing_categories, :main_category_id, :new_category_name
 
-  def save
+  def article
+    @article ||= Article.new
+  end
+
+  def author
+    @author ||= Author.new
+  end
+
+  def submit(params)
+    set_attributes(params)
     if valid?
       persist!
       true
@@ -21,15 +30,9 @@ class ArticleCreationForm
   private
 
   def persist!
-    @article = Article.create!(
-      title: title,
-      teaser: teaser,
-      body: body,
-      posted_from_location: posted_from_location,
-      posted_at: posted_at,
-      status: status
-      )
-
+    @author = Author.find_or_create_by(full_name: author_name)
+    @article.author_id = @author.id
+    @article.save!
     persist_ancillary_data
   #   return if media_file == 'undefined'
   #   MediaContainerCreationForm.new(
@@ -43,16 +46,7 @@ class ArticleCreationForm
 
   def persist_ancillary_data
     create_pictures(@article.id, "Article", new_md, for_card)
-
-    persist_categories(
-      @article,
-      "Article",
-      applicable_existing_categories,
-      main_category_id,
-      new_category_name
-    )
-
-    handle_author_name
+    super
   end
 end
 

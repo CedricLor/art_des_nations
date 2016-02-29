@@ -1,6 +1,7 @@
 # lib/my_modules/article_forms.rb
 
 module ArticleForms
+
   def handle_author_name
     # 1. if nothing has changed, return true
     return true if @article.author_id.to_s == author_id && (@article.author.full_name == create_new_author || create_new_author.blank?)

@@ -45,7 +45,7 @@ class PortraitsController < ApplicationController
 
     respond_to do |format|
       if @portrait.save
-        format.html { redirect_to @portrait, notice: 'Portrait was successfully created.' }
+        format.html { redirect_to @portrait, notice: 'The portrait was successfully created.' }
         format.json { render json: @portrait, status: :created }
       else
         format.html { render action: 'new' }
@@ -59,7 +59,7 @@ class PortraitsController < ApplicationController
   def update
     respond_to do |format|
       if @portrait.update(portrait_params)
-        format.html { redirect_to @portrait, notice: 'Portrait was successfully updated.' }
+        format.html { redirect_to @portrait, notice: 'The portrait was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -74,7 +74,7 @@ class PortraitsController < ApplicationController
     PortraitDestroy.destroy(params[:id])
     # @portrait.destroy
     respond_to do |format|
-      format.html { redirect_to portraits_url }
+      format.html { redirect_to portraits_url, notice: 'The portrait was successfully deleted.' }
       format.json { head :no_content }
     end
   end
@@ -101,6 +101,8 @@ class PortraitsController < ApplicationController
     end
 
     def set_item_i18n_name
-      @this_item_i18n_name = t(:item_portrait_for_check_box_label, default: 'this portrait')
+      @the_item_i18n_name = t(:the_item_portrait, default: 'the portrait')
+      @this_item_i18n_name = t(:this_item_portrait, default: 'this portrait')
+      @an_item_i18n_name = t(:an_item_portrait, default: 'an article')
     end
 end

@@ -1,8 +1,23 @@
+<% content_for :title, t(:article_admin_index_title, default: "Articles admin index") %>
+
+<% provide :admin_nav_content_type do %>
+  <% "#{@articles.first.class.name.pluralize}" %>
+<% end %>
+
+<% provide :admin_nav_content_actions do %>
+  <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_article_path %></li>
+<% end %>
+
+<% render 'shared/admin_nav_content' %>
+
 
 <%#= react_component('NewsIndexPage', { articles: @articles } ) %>
 <div class="container">
   <h1>Listing articles</h1>
 
+  <%= link_to t('.new_article'), new_article_path %>
+
+  <h3>Ordered by publication status</h3>
   <table class="table table-striped">
     <tr>
       <th>Id</th>
@@ -36,13 +51,14 @@
       <td><%= article.translations.select { |at| at.locale == :'zh-CN' }.size %></td>
       <td><%= link_to 'Show', article %></td>
       <td><%= link_to 'Edit', edit_article_path(article) %></td>
-      <td><%#= link_to 'Destroy', article, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <td><%= link_to 'Destroy', article, method: :delete, data: { confirm: t(:deletion_confirmation, this_item: @this_item_i18n_name, default: "Are you sure you want to delete #{@this_item_i18n_name}?") } %></td>
     </tr>
   <% end %>
   </table>
 
   <br />
 
+  <h3>Ordered by publication date</h3>
   <table class="table table-striped">
     <tr>
       <th>Id</th>
@@ -61,7 +77,8 @@
       <th></th>
     </tr>
 
-  <% @articles.sort{|a,b| a.posted_at <=> b.posted_at}.each do |article| %>
+  <% @articles.sort_by(&:posted_at).reverse.each do |article| %>
+  <%# @articles.sort{|a,b| Date.parse(a.posted_at) <=> Date.parse(b.posted_at)}.each do |article| %>
     <tr>
       <td><%= article.id %></td>
       <td><%= article.title %></td>
@@ -76,27 +93,11 @@
       <td><%= article.translations.select { |at| at.locale == :'zh-CN' }.size %></td>
       <td><%= link_to 'Show', article %></td>
       <td><%= link_to 'Edit', edit_article_path(article) %></td>
-      <td><%#= link_to 'Destroy', article, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <td><%= link_to 'Destroy', article, method: :delete, data: { confirm: t(:deletion_confirmation, this_item: @this_item_i18n_name, default: "Are you sure you want to delete #{@this_item_i18n_name}?") } %></td>
     </tr>
   <% end %>
   </table>
 
   <br />
 
-  <%= link_to t('.new_article'), new_article_path %>
 </div>
-
-<%# @articles.each do |article| %>
-  <h3><%#= article.title.html_safe %></h3>
-  <%# if article.galleries.last %>
-    <%#= image_tag article.galleries.last.media_containers.last.media.url(:medium) %>
-  <%# end %>
-  <%#= image_tag article.picture.url(:medium) %>
-  <p><%#= article.teaser.nil? ? "" : article.teaser.html_safe %></p>
-  <p><%#= article.body.html_safe %></p>
-  <%#= link_to t('.edit_article'), edit_article_path(article) %>
-  <%# if article != @articles.last %>
-    <hr />
-  <%# end %>
-<%# end %>
-

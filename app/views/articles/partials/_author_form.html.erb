@@ -3,11 +3,23 @@
 - articles/_form.html.erb
 %>
 
-<div class="form-group">
-  <%= label_tag("article_change_author", t(:article_change_author, default: "Choose the name of an author:")) %>
-  <%= collection_select(:article, :author_id, Author.all, :id, :full_name, {}, {class: "form-control"}) %>
-</div>
-<div class="form-group">
-  <%= label_tag("article_create_new_author", t(:article_create_new_author, default: "or enter the name of a new author:")) %>
-  <%= text_field_tag("article[create_new_author]", @article.author.full_name, id:"article_create_new_author", class: "form-control") %>
-</div>
+<%= f.input :author_name,
+  input_html: {
+    value: @article.author.full_name,
+    id:"article_author_name_selector",
+    class: "form-control",
+    list: "author_names"
+  },
+  label: t(:article_author_selector, default: "Choose the name of an existing author or enter the name of a new author:"),
+  error: t(:article_author_selector_error, default: "The author name cannot be blank.")
+%>
+
+<!--<div class="form-group">
+  <%#= label_tag("article_author_name_selector", t(:article_author_selector, default: "Choose the name of an existing author or enter the name of a new author:")) %>
+  <%#= f.text_field(:author_name, value: @article.author.full_name, id:"article_author_name_selector", class: "form-control", list: "author_names") %>
+  <%#= text_field_tag("article[author_name]", @article.author.full_name, id:"article_author_name_selector", class: "form-control", list: "author_names") %>
+</div>-->
+
+<datalist id="author_names">
+  <%= options_from_collection_for_select(Author.all, :full_name, :id) %>
+</datalist>

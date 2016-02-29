@@ -97,6 +97,8 @@ class AktionsController < ApplicationController
     end
 
     def set_item_i18n_name
-      @this_item_i18n_name = t(:item_action_for_check_box_label, default: 'this action')
+      @the_item_i18n_name = t(:the_item_action, default: 'the portrait')
+      @this_item_i18n_name = t(:this_item_action, default: 'this portrait')
+      @an_item_i18n_name = t(:an_item_action, default: 'an article')
     end
 end

@@ -1,9 +1,28 @@
+// Fixing the flickering on the call to action
 #derniere-minute-wrapper {
   display: none;
 }
 
+// Menu toggle turned into a span, formatted like a link
 .menu-toggle {
   color: #5368AB;
   text-decoration: none;
   cursor: pointer;
+}
+
+// Format for the articles, aktions, portraits forms
+div.my-inline-status-radios {
+  > div > div {
+    > span {
+      display: inline-block;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+    > label {
+      display: block;
+    }
+  }
+}
+.my-submit-button {
+
 }

@@ -6,53 +6,62 @@
 %>
 
 <div class="row">
-  <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-  <hr>
+  <% error_class = categories_form.errors[:categories].present? ? 'has-error' : '' %>
+  <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2 <%= error_class %>">
+    <hr>
 
 
-  <!-- Checkboxes Categories Chooser -->
-  <div class="form-group">
-    <label><%= t :categories_to_apply_to_this_item, this_item: @this_item_i18n_name, default: "Choose the categories you want to apply to #{@this_item_i18n_name} here:" %></label>
-    <table style="width: 100%;">
-      <% @categories.each do |kateg| %>
-        <tr>
-          <!-- Category chooser -->
-          <td>
-            <label for=<%= "#{item}_category_#{kateg.id}_yes"%> class="radio-inline" ><input class="radio_buttons required"  type="radio" name=<%="#{item}[applicable_existing_categories][#{kateg.id}]"%> id=<%="#{item}_category_#{kateg.id}_yes"%> value='true' <%= "checked" if chosen_category_ids.include?(kateg.id) %> ><%= t :si, default: "Yes" %></label>
-            <label for=<%= "#{item}_category_#{kateg.id}_no"%> class="radio-inline" ><input class="radio_buttons required"  type="radio" name=<%="#{item}[applicable_existing_categories][#{kateg.id}]"%> id=<%="#{item}_category_#{kateg.id}_no"%> value='false' <%= "checked" unless chosen_category_ids.include?(kateg.id) %> ><%= t :non, default: "No" %></label>
-            <p class="radio-inline"><%= kateg.name %></p>
-          </td>
-          <!-- End category chooser -->
-          <!-- Main category chooser -->
-          <td style="text-align: right;">
-            <label style="padding-right: 20px;" for=<%= "#{item}_main_category_#{kateg.id}"%> class="radio-inline" ><%= t :main_category, default: "main category:" %></label><input class="radio_buttons required"  type="radio" name=<%="#{item}[main_category_id]"%> id=<%="#{item}_main_category_#{kateg.id}"%> value=<%="#{kateg.id}" %> <%= "checked" if  kateg.id == chosen_category_ids.first %> >
-          </td>
-          <!-- End main category chooser -->
-        </tr>
-      <% end %>
-    </table>
-  </div>
-  <!-- End Checkboxes Categories Chooser -->
+    <!-- Checkboxes Categories Chooser -->
+    <div class="form-group">
 
-  <!-- New Category Text Input -->
-  <div class="form-group">
-    <%= label_tag("#{item}_add_category", t(:item_add_new_category, this_item: @this_item_i18n_name, default: "Add a new category that will apply to #{@this_item_i18n_name} here:")) %>
-    <%= text_field_tag("#{item}[new_category_name]", '', id:"#{item}_add_category", class: "form-control", placeholder: t(:item_add_new_category, this_item: @this_item_i18n_name, default: "Add a new category that will apply to #{@this_item_i18n_name} here:")) %>
-  </div>
-  <!-- End New Category Text Input -->
+      <label class="required control-label"><abbr title="champ obligatoire">*</abbr> <%= t :categories_to_apply_to_this_item, this_item: @this_item_i18n_name, default: "Choose the categories you want to apply to #{@this_item_i18n_name} here:" %></label>
+      <table style="width: 100%;">
+        <% @categories.each do |kateg| %>
+          <tr>
+            <!-- Category chooser -->
+            <td>
+              <label for=<%= "#{item}_category_#{kateg.id}_yes"%> class="radio-inline required control-label" ><input class="radio_buttons required"  type="radio" name=<%="#{item}[applicable_existing_categories][#{kateg.id}]"%> id=<%="#{item}_category_#{kateg.id}_yes"%> value='true' <%= "checked" if chosen_category_ids.include?(kateg.id) %> ><%= t :si, default: "Yes" %></label>
+              <label for=<%= "#{item}_category_#{kateg.id}_no"%> class="radio-inline required control-label" ><input class="radio_buttons required"  type="radio" name=<%="#{item}[applicable_existing_categories][#{kateg.id}]"%> id=<%="#{item}_category_#{kateg.id}_no"%> value='false' <%= "checked" unless chosen_category_ids.include?(kateg.id) %> ><%= t :non, default: "No" %></label>
+              <p class="radio-inline"><%= kateg.name %></p>
+            </td>
+            <!-- End category chooser -->
+            <!-- Main category chooser -->
+            <td style="text-align: right;">
+              <label style="padding-right: 20px;" for=<%= "#{item}_main_category_#{kateg.id}"%> class="radio-inline" ><%= t :main_category, default: "main category:" %></label><input class="radio_buttons required"  type="radio" name=<%="#{item}[main_category_id]"%> id=<%="#{item}_main_category_#{kateg.id}"%> value=<%="#{kateg.id}" %> <%= "checked" if  kateg.id == chosen_category_ids.first %> >
+            </td>
+            <!-- End main category chooser -->
+          </tr>
+        <% end %>
+      </table>
 
-  <!-- Radio to make new category the main category -->
-  <div class="form-group">
-    <label>
-      <%= t :make_this_new_category_main_category_for_this_item?, this_item: @this_item_i18n_name, default: "Do you want to make this new category the main category applicable to #{@this_item_i18n_name}?" %>
-    </label>
-    <div>
-      <label for=<%= "#{item}_new_category_main_category_yes"%> class="radio-inline" ><input class="radio_buttons required"  type="radio" name=<%="#{item}[main_category_id]"%> id=<%="#{item}_new_category_main_category_yes"%> value='new_category' ><%= t :si, default: "Yes" %></label>
     </div>
-  </div>
-  <!-- End Radio new category -> main category -->
+    <!-- End Checkboxes Categories Chooser -->
 
-  <hr>
+
+    <!-- New Category Text Input -->
+    <div class="form-group">
+      <%= label_tag("#{item}_add_category", t(:item_add_new_category, this_item: @this_item_i18n_name, default: "Add a new category that will apply to #{@this_item_i18n_name} here:"), class: "required control-label") %>
+      <%= text_field_tag("#{item}[new_category_name]", '', id:"#{item}_add_category", class: "form-control", placeholder: t(:item_add_new_category, this_item: @this_item_i18n_name, default: "Add a new category that will apply to #{@this_item_i18n_name} here:")) %>
+    </div>
+    <!-- End New Category Text Input -->
+
+
+    <!-- Radio to make new category the main category -->
+    <div class="form-group">
+      <label class="required control-label">
+        <%= t :make_this_new_category_main_category_for_this_item?, this_item: @this_item_i18n_name, default: "Do you want to make this new category the main category applicable to #{@this_item_i18n_name}?" %>
+      </label>
+      <div>
+        <label for=<%= "#{item}_new_category_main_category_yes"%> class="radio-inline" ><input class="radio_buttons required"  type="radio" name=<%="#{item}[main_category_id]"%> id=<%="#{item}_new_category_main_category_yes"%> value='new_category' ><%= t :si, default: "Yes" %></label>
+      </div>
+    </div>
+    <!-- End Radio new category -> main category -->
+
+    <% if categories_form.errors[:categories].present? %>
+      <p><span class="help-block"><%= categories_form.errors[:categories].last %></span></p>
+    <% end %>
+    <hr>
 
   </div>
 </div>
+

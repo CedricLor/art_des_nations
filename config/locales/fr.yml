@@ -54,18 +54,42 @@ fr:
   home_page_title: "Accueil"
   published_html: "<p class='meta'>Publié le <span class='date-publication'>%{posted_at}</span> à <span class='lieu-publication'>%{posted_from_location}</span></p>"
 
+  save_your_changes: "Sauvegardez vos changements !!!"
+
   mark_for_deletion: "Marquer comme à supprimer"
   picture_mark_for_deletion: "Supprimer cette photo"
 
   placeholder_for_new_picture_title: "Vous pouvez entrer une légende pour votre nouvelle image ici."
-  item_article_for_check_box_label: 'cet article'
-  item_action_for_check_box_label: 'cette action'
-  item_portrait_for_check_box_label: 'ce portrait'
+
   check_box_label_is_picture_for_card: "Vous voulez utiliser cette photo pour les pages d'index où %{item} est affiché(e)."
   check_box_label_is_picture_for_carousel: "Vous souhaitez que cette photo soit utilisée dans le caroussel : "
 
-  article_change_author: "Choisissez le nom d'un auteur pour cet article :"
-  article_create_new_author: "ou entrez le nom d'un nouvel auteur :"
+  the_item_article: "l'article"
+  this_item_article: 'cet article'
+  an_item_article: 'un article'
+
+  the_item_action: "l'action"
+  this_item_action: 'cette action'
+  an_item_action: 'une action'
+
+  the_item_portrait: 'le portrait'
+  this_item_portrait: 'ce portrait'
+  an_item_portrait: 'un portrait'
+
+  missing_title_error: "%{an_item_i18n_name} doit avoir un titre. Merci d'en indiquer un."
+  missing_posted_from_location: "Un lieu de publication doit être indiqué pour %{this_item_i18n_name}. Merci d'en indiquer un."
+
+  article_author_selector: "Choisissez le nom de l'un des auteurs ou entrez le nom d'un nouvel auteur:"
+  article_author_selector_error: "Le nom de l'auteur doit être indiqué."
+
+  label_for_status_selector: "Sélectionnez un status pour %{this_item}."
+  hint_for_status_selector: "Si vous sélectionnez %{draft} ou %{archived}, %{the_item} ne sera pas publié sur le site internet."
+  status_missing_error: "Il est obligatoire d'assigner un statut à %{an_item}. Merci d'en choisir un."
+
+  draft: "brouillon"
+  published: "publié"
+  featured: "à la une"
+  archived: "archivé"
 
   portrait_update_file_upload_back_office_legend: "Si vous souhaitez changer votre photo, téléchargez une image ici :"
   portrait_create_file_upload_back_office_legend: "Veuillez télécharger une photo pour votre portrait ici :"
@@ -81,11 +105,12 @@ fr:
   non: "non"
   not_avalaible_short: "n.a."
 
-  categories_to_apply_to_this_item: "Sélectionner les catégories applicables à %{this_item} ici :"
+  categories_to_apply_to_this_item: "Sélectionnez les catégories applicables à %{this_item} ici :"
   item_change_main_category: "Sélectionnez la catégorie principale applicable à %{this_item} ici :"
   item_add_new_category: "Ajoutez une nouvelle categorie qui s'appliquera à %{this_item} ici :"
   make_this_new_category_main_category_for_this_item?: "Souhaitez-vous faire de cette nouvelle catégorie la catégorie principale applicable à %{this_item} ?"
-  main_category: 'catégorie principale:'
+  main_category: 'catégorie principale :'
+  missing_categories_error: "Vous ne pouvez pas choisir le statut \"%{status}\" sans donner au moins une catégorie à votre %{item_name}."
 
   admin_nav_session: "Session"
 
@@ -99,6 +124,7 @@ fr:
   deletion_confirmation: "Etes-vous certain que vous voulez effacer %{this_item}?"
 
   portrait_admin_index_title: "Index admin des portraits"
+  article_admin_index_title: "Index admin des articles"
 
   media_container_presence_required_validation_message: "Vous avez choisi de publier votre portrait. Un portrait ne peut pas être publié sans une photo pour l'illustrer."
 
