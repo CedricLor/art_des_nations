@@ -43,7 +43,7 @@ class ArticlesController < ApplicationController
   def create
     respond_to do |format|
       if @article.submit(params[:article])
-        format.html { redirect_to @article.article, notice: 'The article was successfully created.' }
+        format.html { redirect_to @article.article, notice: 'The new article was successfully created.' }
         format.json { render json: @article.article, status: :created }
       else
         format.html { render action: 'new' }
@@ -56,7 +56,7 @@ class ArticlesController < ApplicationController
   # PATCH/PUT /articles/1.json
   def update
     respond_to do |format|
-      if @article.update(params[:article])
+      if @article.submit(params[:article])
         format.html { redirect_to @article.article, notice: 'The article was successfully updated.' }
         format.json { head :no_content }
       else

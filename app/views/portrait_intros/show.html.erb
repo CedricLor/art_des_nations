@@ -3,7 +3,7 @@
 <% content_for(:title, t(:portraits, default: "Portraits")) %>
 <% content_for :body_class, "portraits" %>
 
-<%= render partial: 'shared/portraits_categories/list', locals: {
+<%= render partial: 'shared/categories_portraits/list', locals: {
     parameters: {
       list_name: t(:portraits, default: "Portraits"),
       list_editorial: @portrait_intro.intro || '',

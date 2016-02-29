@@ -7,7 +7,7 @@
   <% portrait_intro_content = f.cktext_area :intro, rows: 50, :ckeditor => {language: I18n.locale} %>
   <% submit_button = f.button :submit, 'Save your changes!!!', class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
 
-  <%= render partial: 'shared/portraits_categories/list',
+  <%= render partial: 'shared/categories_portraits/list',
       locals: {
         parameters: {
           list_name: t(:portraits, default: "Portraits"),

@@ -6,7 +6,7 @@
 <%#= link_to 'Back', categories_path %>
 -->
 
-<%= render partial: 'shared/portraits_categories/list', locals: {
+<%= render partial: 'shared/categories_portraits/list', locals: {
     parameters: {
       list_name: @category.name,
       list_editorial: @category.editorial || '',

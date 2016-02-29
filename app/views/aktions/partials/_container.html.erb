@@ -5,6 +5,10 @@
 - to come: view aktions/new.html.erb
 %>
 
+<%= render partial: 'shared/article_aktion_static/error_notification',
+    layout: 'shared/article_aktion_static/title_teaser_error_layout'
+%>
+
 <%= render partial: 'shared/article_aktion_static/title_teaser',
     layout: 'shared/article_aktion_static/title_teaser_error_layout',
     locals: {
@@ -24,10 +28,6 @@
   layout: 'shared/article_aktion_static/body_layout'
 %>
 
-<%= yield :country %>
-
-<%= yield :categories_form %>
-
 <%# if parameters > 3, the partial is being called from the edit or the new aktions_controller actions
 Remaining parameters are
 - status
@@ -39,9 +39,16 @@ Remaining parameters are
 <% if parameters.size > 3 %>
   <%= render partial: 'shared/article_aktion/additional_form_fields',
     locals: {
-      remaining_params: parameters.select { |key, value| key === :status || key === :submit_button || key === :aktion_date || key === :posted_at }.values
+      remaining_params: parameters.select { |key, value| key === :aktion_date || key === :posted_at }.values
       # remaining_params: parameters - parameters[0..3]
     }
   %>
 <% end %>
 
+<%= yield :country %>
+
+<%= yield :categories_form %>
+
+<%= yield :status_selector %>
+
+<%= yield :submit_button %>

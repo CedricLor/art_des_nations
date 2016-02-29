@@ -1,5 +1,5 @@
 class PortraitsController < ApplicationController
-  before_action :set_portrait, only: [:show, :edit, :update]
+  before_action :set_portrait, only: [:show, :edit, :update, :destroy]
   before_action :set_item_i18n_name
   skip_before_action :authenticate_user!, only: [:index, :show]
 
@@ -71,8 +71,7 @@ class PortraitsController < ApplicationController
   # DELETE /portraits/1
   # DELETE /portraits/1.json
   def destroy
-    PortraitDestroy.destroy(params[:id])
-    # @portrait.destroy
+    AktionArticlePortraitDestroy.destroy(@portrait)
     respond_to do |format|
       format.html { redirect_to portraits_url, notice: 'The portrait was successfully deleted.' }
       format.json { head :no_content }

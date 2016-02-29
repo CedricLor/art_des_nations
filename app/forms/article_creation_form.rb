@@ -10,42 +10,17 @@ class ArticleCreationForm < ArticleForm
     :applicable_existing_categories, :main_category_id, :new_category_name
 
   def article
-    @article ||= Article.new
+    @main_model ||= Article.new
   end
 
   def author
     @author ||= Author.new
   end
 
-  def submit(params)
-    set_attributes(params)
-    if valid?
-      persist!
-      true
-    else
-      false
-    end
-  end
-
   private
 
-  def persist!
-    @author = Author.find_or_create_by(full_name: author_name)
-    @article.author_id = @author.id
-    @article.save!
-    persist_ancillary_data
-  #   return if media_file == 'undefined'
-  #   MediaContainerCreationForm.new(
-  #     title: title,
-  #     media_file: media_file,
-  #     article_id: @article.id,
-  #     article_picture_is_for_card: 'true',
-  #     article_picture_is_for_carousel: 'true'
-  #   ).save
-  end
-
   def persist_ancillary_data
-    create_pictures(@article.id, "Article", new_md, for_card)
+    create_pictures(@main_model.id, @main_model.class.name, new_md, for_card)
     super
   end
 end

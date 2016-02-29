@@ -1,54 +1,41 @@
-class AktionUpdateForm
-  include ActiveModel::Model
-  include AktionArticlePictures
-  include AktionArticlePortraitCategories
+class AktionUpdateForm < AktionForm
 
-  attr_accessor :id, :body, :title, :teaser, :posted_at, :aktion_date,:status, :country_id, :md_for_destruction, :md_for_carousel, :for_card, :new_md, :md_to_update, :applicable_existing_categories, :main_category_id, :new_category_name
-  attr_reader :aktion
+  delegate :body, :title, :teaser, :posted_at, :aktion_date, :status, :country_id, :country, :picturizings, :categorizings, to: :aktion
 
-  def update
-    if valid?
-      persist!
-      true
-    else
-      false
-    end
+
+  attr_accessor :id, :md_for_destruction, :md_for_carousel, :for_card, :new_md, :md_to_update,
+    :applicable_existing_categories, :main_category_id, :new_category_name
+
+  def initialize(attributes={})
+    super
+    aktion
+  end
+
+  def aktion
+    @main_model ||= Aktion.includes(:media_containers, :country).
+      includes(categorizings: [category: :translations]).
+      find(@id)
   end
 
   private
 
-  def persist!
-    @aktion = Aktion.includes(:media_containers, :country).find(@id)
-
-    @aktion.update(
-      title: title,
-      teaser: teaser,
-      body: body,
-      posted_at: posted_at,
-      aktion_date: aktion_date,
-      status: status,
-      country_id: country_id
-    )
-
-    persist_ancillary_data
-  end # End persist!
+  def set_attributes(params)
+    super
+    self.md_for_destruction = params[:md_for_destruction]
+    self.md_to_update = params[:md_to_update]
+    self.md_for_carousel = params[:md_for_carousel]
+  end
 
   def persist_ancillary_data
     persist_picture_changes(
-      @aktion,
-      "Aktion",
+      @main_model,
+      @main_model.class.name,
       md_to_update,
       md_for_carousel,
-      new_md, for_card,
+      new_md,
+      for_card,
       md_for_destruction
     )
-
-    persist_categories(
-      @aktion,
-      "Aktion",
-      applicable_existing_categories,
-      main_category_id,
-      new_category_name
-    )
+    super
   end
 end

@@ -1,10 +1,8 @@
-class ArticleDestroy
+class ArticleDestroy < AktionArticlePortraitDestroy
 
   def self.destroy(article)
-    PicturizingsDestroy.destroy_with_content(article.id, "Article")
-    CategorizingsDestroy.destroy_with_content(article.id, "Article")
     AuthorDestroy.destroy_with_article_acmb(article.author_id)
-    Article.destroy(article)
+    super
   end
 end
 

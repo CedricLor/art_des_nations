@@ -23,7 +23,6 @@ class Category < ActiveRecord::Base
         :categories,
         picturizings: [:translations, [media_container: :translations]]
       ]).
-      where(picturizing_translations: {for_card: "true"}).
       where(categories: {id: category_id})
 
     aktions = Aktion.where(status: ["published", "featured"]).
@@ -31,7 +30,6 @@ class Category < ActiveRecord::Base
         :categories,
         picturizings: [:translations, [media_container: :translations]]
       ]).
-      where(picturizing_translations: {for_card: "true"}).
       where(categories: {id: category_id})
 
     portraits = Portrait.where(status: ["published", "featured"]).
@@ -41,8 +39,7 @@ class Category < ActiveRecord::Base
       ]).
       where(categories: {id: category_id})
 
-    articles_aktions = (articles + aktions + portraits).sort { |a, b| b.date_sorting_field <=> a.date_sorting_field }
-
+    (articles + aktions + portraits).sort { |a, b| b.date_sorting_field <=> a.date_sorting_field }
   end
 
 end

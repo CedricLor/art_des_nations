@@ -1,11 +1,8 @@
 class ArticleUpdateForm < ArticleForm
-  include ArticleForms
 
   delegate :body, :title, :teaser, :posted_from_location, :posted_at, :status, :author_id, :author, :picturizings, :categorizings, to: :article
-  # delegate :full_name, to: :author
 
-  # attr_accessor :title, :teaser, :posted_at, :status, :media_file
-  # attr_reader :article
+
   attr_accessor :id, :author_name, :md_for_destruction, :md_for_carousel, :for_card, :new_md, :md_to_update, :applicable_existing_categories, :main_category_id, :new_category_name
 
   def initialize(attributes={})
@@ -14,38 +11,12 @@ class ArticleUpdateForm < ArticleForm
   end
 
   def article
-    @article ||= Article.includes(:media_containers, :author).
+    @main_model ||= Article.includes(:media_containers, :author).
       includes(categorizings: [category: :translations]).
       find(@id)
   end
 
-  def update(params)
-    set_attributes(params)
-    if valid?
-      persist!
-      true
-    else
-      false
-    end
-  end
-
   private
-
-  def persist!
-    @author = Author.find_or_create_by(full_name: author_name)
-
-    @article.update!(
-      title: title,
-      teaser: teaser,
-      body: body,
-      posted_from_location: posted_from_location,
-      posted_at: posted_at,
-      status: status,
-      author_id: @author.id
-    )
-
-    persist_ancillary_data
-  end # End persist!
 
   def set_attributes(params)
     super
@@ -56,8 +27,8 @@ class ArticleUpdateForm < ArticleForm
 
   def persist_ancillary_data
     persist_picture_changes(
-      @article,
-      "Article",
+      @main_model,
+      @main_model.class.name,
       md_to_update,
       md_for_carousel,
       new_md,

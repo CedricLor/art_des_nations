@@ -1,7 +1,11 @@
 class AktionsController < ApplicationController
   before_action :set_aktion, only: [:show, :destroy]
+  before_action :set_aktion_creation_form, only: [:new, :create]
+  before_action :set_aktion_update_form, only: [:edit, :update]
   before_action :set_item_i18n_name
+  before_action :clean_up_date_params, only: [:create, :update]
   skip_before_action :authenticate_user!, only: :show
+
 
   # GET /aktions
   # GET /aktions.json
@@ -32,18 +36,15 @@ class AktionsController < ApplicationController
 
   # GET /aktions/1/edit
   def edit
-    @aktion = Aktion.includes(:media_containers, :country).includes(categorizings: [category: :translations]).find(params[:id])
   end
 
   # POST /aktions
   # POST /aktions.json
   def create
-    @aktion = Aktion.new(aktion_params)
-
     respond_to do |format|
-      if @aktion.save
-        format.html { redirect_to @aktion, notice: 'Aktion was successfully created.' }
-        format.json { render json: @aktion, status: :created }
+      if @aktion.submit(params[:aktion])
+        format.html { redirect_to @aktion.aktion, notice: 'The new action was successfully created.' }
+        format.json { render json: @aktion.aktion, status: :created }
       else
         format.html { render action: 'new' }
         format.json { render json: @aktion.errors, status: :unprocessable_entity }
@@ -54,12 +55,9 @@ class AktionsController < ApplicationController
   # PATCH/PUT /aktions/1
   # PATCH/PUT /aktions/1.json
   def update
-    clean_up_date_params
-    @aktion_update_form = AktionUpdateForm.new({id: params[:id]}.merge(params[:aktion]))
-
     respond_to do |format|
-      if @aktion_update_form.update
-        format.html { redirect_to @aktion_update_form.aktion, notice: 'The action was successfully updated.' }
+      if @aktion.submit(params[:aktion])
+        format.html { redirect_to @aktion.aktion, notice: 'The action was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -71,7 +69,7 @@ class AktionsController < ApplicationController
   # DELETE /aktions/1
   # DELETE /aktions/1.json
   def destroy
-    @aktion.destroy
+    AktionArticlePortraitDestroy.destroy(@aktion)
     respond_to do |format|
       format.html { redirect_to aktions_url }
       format.json { head :no_content }
@@ -82,6 +80,18 @@ class AktionsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_aktion
       @aktion = Aktion.find(params[:id])
+    end
+
+    def set_aktion_creation_form
+      @aktion = AktionCreationForm.new
+      @url = aktions_path
+      @method = "post"
+    end
+
+    def set_aktion_update_form
+      @aktion = AktionUpdateForm.new(id: params[:id])
+      @url = aktion_path(params[:id])
+      @method = "put"
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
@@ -97,8 +107,8 @@ class AktionsController < ApplicationController
     end
 
     def set_item_i18n_name
-      @the_item_i18n_name = t(:the_item_action, default: 'the portrait')
-      @this_item_i18n_name = t(:this_item_action, default: 'this portrait')
-      @an_item_i18n_name = t(:an_item_action, default: 'an article')
+      @the_item_i18n_name = t(:the_item_action, default: 'the action')
+      @this_item_i18n_name = t(:this_item_action, default: 'this action')
+      @an_item_i18n_name = t(:an_item_action, default: 'an action')
     end
 end

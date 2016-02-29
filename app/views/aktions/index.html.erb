@@ -2,6 +2,8 @@
 <div class="container">
   <h1>Listing actions</h1>
 
+  <%= link_to t('New Aktion'), new_aktion_path %>
+
   <table class="table table-striped">
     <tr>
       <th>Id</th>
@@ -23,12 +25,10 @@
       <td><%= aktion.status %></td>
       <td><%= link_to 'Show', aktion %></td>
       <td><%= link_to 'Edit', edit_aktion_path(aktion) %></td>
-      <td><%#= link_to 'Destroy', aktion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <td><%= link_to 'Destroy', aktion, method: :delete, data: { confirm: t(:deletion_confirmation, this_item: @this_item_i18n_name, default: "Are you sure you want to delete #{@this_item_i18n_name}?") } %></td>
     </tr>
   <% end %>
   </table>
 
   <br />
-
-  <%= link_to t('New Aktion'), new_aktion_path %>
 </div>

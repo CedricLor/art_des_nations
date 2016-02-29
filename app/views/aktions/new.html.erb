@@ -1,5 +1,13 @@
-<h1>New Aktion</h1>
+<% content_for :title, t(:new_action, default: "New action") %>
 
 <%= render 'form' %>
 
-<%= link_to 'Back', aktions_path %>
+<% provide :admin_nav_content_type do %>
+  <% "#{@aktion.model_name.name}" %>
+<% end %>
+
+<% provide :admin_nav_content_actions do %>
+  <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), aktions_path %></li>
+<% end %>
+
+<% render 'shared/admin_nav_content' %>
