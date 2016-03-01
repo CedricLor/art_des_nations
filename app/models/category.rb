@@ -3,7 +3,7 @@ class Category < ActiveRecord::Base
 
   validates :name, presence: true
 
-  has_many :categorizings, inverse_of: :category
+  has_many :categorizings, inverse_of: :category, dependent: :destroy
   has_many :articles, through: :categorizings, :source => :categorizable,
            :source_type => 'Article'
   has_many :aktions, through: :categorizings, :source => :categorizable,

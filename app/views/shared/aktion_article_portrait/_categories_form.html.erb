@@ -8,8 +8,8 @@
 <% item = categories_form.model_name.param_key %>
 
 <div class="row">
-  <% error_class = categories_form.errors[:categories].present? ? 'has-error' : '' %>
-  <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2 <%= error_class %>">
+  <% missing_categories_error_class = categories_form.errors[:missing_categories].present? ? 'has-error' : '' %>
+  <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2 <%= missing_categories_error_class %>">
     <hr>
 
 
@@ -45,28 +45,33 @@
     </div>
     <!-- End Checkboxes Categories Chooser -->
 
-
-    <!-- New Category Text Input -->
-    <div class="form-group">
-      <%= label_tag("#{item}_add_category", t(:item_add_new_category, this_item: @this_item_i18n_name, default: "Add a new category that will apply to #{@this_item_i18n_name} here:"), class: "required control-label") %>
-      <%= text_field_tag("#{item}[new_category_name]", categories_form.new_category_name || '', id:"#{item}_add_category", class: "form-control", placeholder: t(:item_add_new_category, this_item: @this_item_i18n_name, default: "Add a new category that will apply to #{@this_item_i18n_name} here:")) %>
-    </div>
-    <!-- End New Category Text Input -->
-
-
-    <!-- Radio to make new category the main category -->
-    <div class="form-group">
-      <label class="required control-label">
-        <%= t :make_this_new_category_main_category_for_this_item?, this_item: @this_item_i18n_name, default: "Do you want to make this new category the main category applicable to #{@this_item_i18n_name}?" %>
-      </label>
-      <div>
-        <label for=<%= "#{item}_new_category_main_category_yes"%> class="radio-inline" ><input class="radio_buttons required"  type="radio" name=<%="#{item}[main_category_id]"%> id=<%="#{item}_new_category_main_category_yes"%> value='new_category' <%= "checked" if categories_form.main_category_id == "new_category" %> ><%= t :si, default: "Yes" %></label>
+    <% missing_main_category_name_error_class = categories_form.errors[:missing_new_category_name].present? ? 'has-error' : '' %>
+    <div class=<%= missing_main_category_name_error_class %> >
+      <!-- New Category Text Input -->
+      <div class="form-group">
+        <%= label_tag("#{item}_add_category", t(:item_add_new_category, this_item: @this_item_i18n_name, default: "Add a new category that will apply to #{@this_item_i18n_name} here:"), class: "required control-label") %>
+        <%= text_field_tag("#{item}[new_category_name]", categories_form.new_category_name || '', id:"#{item}_add_category", class: "form-control", placeholder: t(:item_add_new_category, this_item: @this_item_i18n_name, default: "Add a new category that will apply to #{@this_item_i18n_name} here:")) %>
       </div>
-    </div>
-    <!-- End Radio new category -> main category -->
+      <!-- End New Category Text Input -->
 
-    <% if categories_form.errors[:categories].present? %>
-      <p><span class="help-block"><%= categories_form.errors[:categories].last %></span></p>
+
+      <!-- Radio to make new category the main category -->
+      <div class="form-group">
+        <label class="required control-label">
+          <%= t :make_this_new_category_main_category_for_this_item?, this_item: @this_item_i18n_name, default: "Do you want to make this new category the main category applicable to #{@this_item_i18n_name}?" %>
+        </label>
+        <div>
+          <label for=<%= "#{item}_new_category_main_category_yes"%> class="radio-inline" ><input class="radio_buttons required"  type="radio" name=<%="#{item}[main_category_id]"%> id=<%="#{item}_new_category_main_category_yes"%> value='new_category' <%= "checked" if categories_form.main_category_id == "new_category" %> ><%= t :si, default: "Yes" %></label>
+        </div>
+      </div>
+      <!-- End Radio new category -> main category -->
+      <% if categories_form.errors[:missing_new_category_name].present? %>
+        <p><span class="help-block"><%= categories_form.errors[:missing_new_category_name].last %></span></p>
+      <% end %>
+    </div>
+
+    <% if categories_form.errors[:missing_categories].present? %>
+      <p><span class="help-block"><%= categories_form.errors[:missing_categories].last %></span></p>
     <% end %>
     <hr>
 

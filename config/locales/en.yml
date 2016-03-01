@@ -96,6 +96,8 @@ en:
   hint_for_status_selector: "If you select %{draft} or %{archived}, %{the_item} will not be published on the website."
   status_missing_error: "Assigning a status to %{an_item} is mandatory, please specify one."
 
+  missing_new_category_name_error: "You cannot choose the new category as the main category if you do not give it a name. Please give a name to your new category or choose another category as main category."
+
   draft: "draft"
   published: "published"
   featured: "featured"

@@ -8,6 +8,7 @@ class AktionArticleForm
   validates :status, presence: true
   validates :status, inclusion: { in: %w(draft published featured archived),
     message: "%{value} is not a valid status for an #{model_name.name.downcase}. Choose between draft, published, featured or archived" }
+
   with_options if: :is_featured_or_published? do |feat_pub|
     feat_pub.validates :body, presence: {
       in: true,
@@ -20,6 +21,8 @@ class AktionArticleForm
     }
     feat_pub.validate :has_at_least_one_category_if_featured_or_published
   end
+
+  validate :does_new_category_chosen_as_main_category_have_a_name
 
   def submit
   # def submit(params)
@@ -82,7 +85,7 @@ class AktionArticleForm
 
   def has_at_least_one_category_if_featured_or_published
     if applicable_existing_categories_all_false && main_category_id.blank? && new_category_name.blank?
-      errors.add(:categories, I18n.t(
+      errors.add(:missing_categories, I18n.t(
         :missing_categories_error,
         item_name: model_name.name.downcase,
         published: I18n.t(:published),
@@ -93,5 +96,14 @@ class AktionArticleForm
 
   def applicable_existing_categories_all_false
     applicable_existing_categories.select{|k,v| v == "true"}.length == 0 ? true : false
+  end
+
+  def does_new_category_chosen_as_main_category_have_a_name
+    if main_category_id == "new_category" && new_category_name.blank?
+      errors.add(:missing_new_category_name, I18n.t(
+        :missing_new_category_name_error,
+        default: "You cannot choose the new category as the main category if you do not give it a name. Please give a name to your new category or choose another category as main category."
+      ))
+    end
   end
 end

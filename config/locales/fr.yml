@@ -94,6 +94,8 @@ fr:
   hint_for_status_selector: "Si vous sélectionnez %{draft} ou %{archived}, %{the_item} ne sera pas publié(e) sur le site internet."
   status_missing_error: "Il est obligatoire d'assigner un statut à %{an_item}. Merci d'en choisir un."
 
+  missing_new_category_name_error: "Vous ne pouvez pas choisir la nouvelle catégorie comme catégorie principale si vous ne lui donnez pas un nom. Merci de donner un nom à votre nouvelle catégorie ou de choisir une autre catégorie comme catégorie principale."
+
   draft: "brouillon"
   published: "publié"
   featured: "à la une"
