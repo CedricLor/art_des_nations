@@ -1,9 +1,9 @@
 class AktionsController < ApplicationController
   before_action :set_aktion, only: [:show, :destroy]
+  before_action :clean_up_date_params, only: [:create, :update]
   before_action :set_aktion_creation_form, only: [:new, :create]
   before_action :set_aktion_update_form, only: [:edit, :update]
   before_action :set_item_i18n_name
-  before_action :clean_up_date_params, only: [:create, :update]
   skip_before_action :authenticate_user!, only: :show
 
 
@@ -31,7 +31,6 @@ class AktionsController < ApplicationController
 
   # GET /aktions/new
   def new
-    @aktion = Aktion.new
   end
 
   # GET /aktions/1/edit
@@ -42,7 +41,7 @@ class AktionsController < ApplicationController
   # POST /aktions.json
   def create
     respond_to do |format|
-      if @aktion.submit(params[:aktion])
+      if @aktion.submit
         format.html { redirect_to @aktion.aktion, notice: 'The new action was successfully created.' }
         format.json { render json: @aktion.aktion, status: :created }
       else
@@ -56,7 +55,7 @@ class AktionsController < ApplicationController
   # PATCH/PUT /aktions/1.json
   def update
     respond_to do |format|
-      if @aktion.submit(params[:aktion])
+      if @aktion.submit
         format.html { redirect_to @aktion.aktion, notice: 'The action was successfully updated.' }
         format.json { head :no_content }
       else
@@ -83,20 +82,15 @@ class AktionsController < ApplicationController
     end
 
     def set_aktion_creation_form
-      @aktion = AktionCreationForm.new
+      @aktion = AktionCreationForm.new(params[:aktion])
       @url = aktions_path
       @method = "post"
     end
 
     def set_aktion_update_form
-      @aktion = AktionUpdateForm.new(id: params[:id])
+      @aktion = AktionUpdateForm.new(params[:aktion] ? {id: params[:id]}.merge(params[:aktion]) : {id: params[:id]})
       @url = aktion_path(params[:id])
       @method = "put"
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def aktion_params
-      params.require(:aktion).permit(:title, :body, :teaser, :status, :aktion_date, :posted_at)
     end
 
     def clean_up_date_params

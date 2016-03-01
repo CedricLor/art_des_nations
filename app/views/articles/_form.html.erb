@@ -1,5 +1,6 @@
 <%# articles/_form.html.erb %>
 
+
 <%= simple_form_for @article, url: @url, html: {method: @method, multipart: true} do |f| %>
   <% provide :error_notification do %>
     <%= f.error_notification %>
@@ -40,20 +41,17 @@
   <% provide :pictures do %>
     <%= render partial: 'shared/article_aktion/galerie_photos',
         locals: {
+          parent: @article,
           pictures: @article.picturizings,
           sub_partial: 'shared/article_aktion/slide_wrapper_form',
-          class_name_for_slider: '',
-          item: 'article'
+          class_name_for_slider: ''
         }
     %>
   <% end %>
-
   <%# building a form to allow user to upload additional pictures %>
   <% provide :additional_pictures_form do %>
     <%= render partial: 'shared/article_aktion/additional_pictures_form',
-       locals: {
-        item: 'article'
-       }
+       locals: { parent: @article, item: @article.model_name.param_key }
     %>
   <% end %>
 
@@ -67,8 +65,7 @@
     <%= render partial: 'shared/aktion_article_portrait/categories_form',
       object: @article,
       locals: {
-        chosen_category_ids: @article.categorizings.map(&:category_id),
-        item: 'article'
+        chosen_category_ids: @article.categorizings.map(&:category_id)
       }
     %>
   <% end %>

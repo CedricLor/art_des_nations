@@ -21,8 +21,9 @@ class AktionArticleForm
     feat_pub.validate :has_at_least_one_category_if_featured_or_published
   end
 
-  def submit(params)
-    set_attributes(params)
+  def submit
+  # def submit(params)
+    # set_attributes(params)
     if valid?
       persist!
       true
@@ -31,12 +32,33 @@ class AktionArticleForm
     end
   end
 
+  private
+
   def set_attributes(params)
-    self.for_card = params[:for_card]
-    self.new_md = params[:new_md]
-    self.applicable_existing_categories = params[:applicable_existing_categories]
-    self.main_category_id = params[:main_category_id]
-    self.new_category_name = params[:new_category_name]
+    # self.for_card = params[:for_card]
+    self.new_md ||= populate_new_md
+    self.applicable_existing_categories ||= populate_applicable_categories
+    # self.main_category_id = params[:main_category_id]
+    self.new_category_name ||= ''
+  end
+
+  def populate_new_md
+    new_md_builder = {}
+    3.times do |index|
+      new_md_builder[index.to_s] = { "title" => "", "for_carousel" => "true" }
+    end
+    new_md_builder
+    # {"0"=>{"title"=>"", "for_carousel"=>"true"}, "1"=>{"title"=>"", "for_carousel"=>"true"}, "2"=>{"title"=>"", "for_carousel"=>"true"}}
+  end
+
+  def populate_applicable_categories
+    currently_applicable_categories_ids = @main_model.categorizings.map(&:category_id)
+    applicable_categories_array = Category.all.map do |c|
+      currently_applicable_categories_ids.include?(c.id) ?
+      { c.id.to_s => "true" } :
+      { c.id.to_s => "false" }
+    end
+    applicable_categories_array.reduce Hash.new, :merge
   end
 
   def persist!

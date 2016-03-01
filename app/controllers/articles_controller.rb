@@ -1,9 +1,9 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :destroy]
+  before_action :clean_up_posted_at_params, only: [:create, :update]
   before_action :set_article_creation_form, only: [:new, :create]
   before_action :set_article_update_form, only: [:edit, :update]
   before_action :set_item_i18n_name
-  before_action :clean_up_posted_at_params, only: [:create, :update]
   skip_before_action :authenticate_user!, only: :show
 
 
@@ -42,7 +42,7 @@ class ArticlesController < ApplicationController
   # POST /articles.json
   def create
     respond_to do |format|
-      if @article.submit(params[:article])
+      if @article.submit
         format.html { redirect_to @article.article, notice: 'The new article was successfully created.' }
         format.json { render json: @article.article, status: :created }
       else
@@ -56,7 +56,7 @@ class ArticlesController < ApplicationController
   # PATCH/PUT /articles/1.json
   def update
     respond_to do |format|
-      if @article.submit(params[:article])
+      if @article.submit
         format.html { redirect_to @article.article, notice: 'The article was successfully updated.' }
         format.json { head :no_content }
       else
@@ -83,13 +83,13 @@ class ArticlesController < ApplicationController
     end
 
     def set_article_creation_form
-      @article = ArticleCreationForm.new
+      @article = ArticleCreationForm.new(params[:article])
       @url = articles_path
       @method = "post"
     end
 
     def set_article_update_form
-      @article = ArticleUpdateForm.new(id: params[:id])
+      @article = ArticleUpdateForm.new(params[:article] ? {id: params[:id]}.merge(params[:article]) : {id: params[:id]})
       @url = article_path(params[:id])
       @method = "put"
     end

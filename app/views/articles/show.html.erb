@@ -18,10 +18,10 @@
 <% provide :pictures do %>
   <%= render partial: 'shared/article_aktion/galerie_photos',
       locals: {
+        parent: @article,
         pictures: @media_containers,
         sub_partial: 'shared/article_aktion/slide_wrapper',
-        class_name_for_slider: 'slides',
-        item: ''
+        class_name_for_slider: 'slides'
       }
   %>
 <% end %>

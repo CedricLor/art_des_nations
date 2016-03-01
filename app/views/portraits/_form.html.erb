@@ -25,7 +25,8 @@
               file_field_name: "portrait[new_md][file]",
               file_field_id: "portrait_new_md_file",
               title_field_name: "portrait[new_md][title]",
-              title_field_id: "portrait_new_md_title"
+              title_field_id: "portrait_new_md_title",
+              title_value: @portrait.new_md ? @portrait.new_md["title"] : ''
             }
         %>
 

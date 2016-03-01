@@ -44,7 +44,7 @@ class Portrait < ActiveRecord::Base
 
 
   def to_param
-    "#{id}-#{title.parameterize}"
+    title ? "#{id}-#{title.parameterize}" : id.to_s
   end
 
 

@@ -7,12 +7,17 @@ class ArticleForm < AktionArticleForm
   validates :posted_from_location, presence: true
   validates :author_name, presence: true
 
+  def initialize(attributes={})
+    super
+    article
+    set_attributes(attributes)
+  end
+
   def set_attributes(params)
     super
-    self.author_name = params[:author_name]
     params.slice(:body, :title, :teaser, :posted_from_location, :posted_at, :status).each do |param|
       article.attributes = {param[0] => param[1]}
-    end
+    end if params
   end
 
   def persist!

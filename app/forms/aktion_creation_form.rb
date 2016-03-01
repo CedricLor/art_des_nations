@@ -1,8 +1,17 @@
 class AktionCreationForm < AktionForm
 
 
-  delegate :body, :title, :teaser, :posted_at, :aktion_date, :status, :country_id, :country, :picturizings, :categorizings, to: :aktion
-
+  delegate :body, :body=,
+  :title, :title=,
+  :teaser, :teaser=,
+  :posted_at, :posted_at=,
+  :aktion_date, :aktion_date=,
+  :status, :status=,
+  :country_id, :country_id=,
+  :country,
+  :picturizings,
+  :categorizings,
+  to: :aktion
 
   attr_accessor :md_for_carousel, :for_card, :new_md,
     :applicable_existing_categories, :main_category_id, :new_category_name
@@ -14,7 +23,7 @@ class AktionCreationForm < AktionForm
   private
 
   def persist_ancillary_data
-    create_pictures(@main_model.id, @main_model.class.name, new_md, for_card)
+    create_pictures
     super
   end
 end

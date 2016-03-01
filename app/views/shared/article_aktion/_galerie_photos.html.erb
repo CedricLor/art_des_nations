@@ -17,10 +17,14 @@
       <% pictures.each do |pict| %>
         <li>
           <%= render partial: "#{sub_partial}",
+            # sub_partial may be either (i) shared/article_aktion/slide_wrapper (in show mode)
+            # or (ii) shared/article_aktion/slide_wrapper_form (in edit or new mode)
             layout: 'shared/article_aktion/slide_wrapper_layout',
             locals: {
+              parent: parent,
               pict: pict,
-              item: item
+              marked_for_destruction: marked_for_destruction(parent),
+              item: parent.model_name.param_key
             }
           %>
         </li>

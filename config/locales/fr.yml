@@ -130,6 +130,7 @@ fr:
   admin_nav_delete_content: 'Effacer'
   admin_nav_edit_content: 'Editer'
   admin_nav_admin_index_content: 'Index'
+  admin_nav_show_content: 'Montrer'
 
   admin_nav_show_portrait_intro: "Page d'introduction des portraits"
 

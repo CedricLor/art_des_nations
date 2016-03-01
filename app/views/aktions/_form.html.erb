@@ -20,8 +20,18 @@
     locals: { f: f }
   %>
 
-  <% posted_at = f.input :posted_at, as: :date %>
-  <% aktion_date = f.input :aktion_date, as: :date %>
+  <% provide :aktion_date_fields do %>
+    <% posted_at = f.input :posted_at, as: :date %>
+    <% aktion_date = f.input :aktion_date, as: :date %>
+    <%= render partial: 'shared/article_aktion/additional_form_fields',
+      locals: {
+        remaining_params: [
+          posted_at,
+          aktion_date
+        ]
+      }
+    %>
+  <% end %>
 
   <% render partial: 'shared/aktion_article_portrait/status_submit_button',
     locals: { f: f }
@@ -31,24 +41,24 @@
   <% provide :pictures do %>
     <%= render partial: 'shared/article_aktion/galerie_photos',
         locals: {
+          parent: @aktion,
           pictures: @aktion.picturizings,
           sub_partial: 'shared/article_aktion/slide_wrapper_form',
-          class_name_for_slider: '',
-          item: 'aktion'
+          class_name_for_slider: ''
         }
     %>
   <% end %>
 
   <% provide :additional_pictures_form do %>
     <%= render partial: 'shared/article_aktion/additional_pictures_form',
-       locals: {
-        item: 'aktion'
-       }
+        locals: { parent: @aktion, item: @aktion.model_name.param_key }
     %>
   <% end %>
 
   <% provide :country do %>
-    <%= render partial: 'aktions/partials/country_form' %>
+    <%= render partial: 'aktions/partials/country_form',
+        layout: 'shared/article_aktion_static/content_row_layout'
+    %>
   <% end %>
 
   <%# building a form to allow user to change the categories applying to the aktion, select the main category and add new categories %>
@@ -69,9 +79,7 @@
         parameters: {
           title: title,
           teaser: teaser,
-          body: body,
-          aktion_date: aktion_date,
-          posted_at: posted_at
+          body: body
         }
       }
   %>

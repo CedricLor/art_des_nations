@@ -1,35 +1,35 @@
 # lib/my_modules/aktion_article.rb
 
 module AktionArticlePictures
-  def persist_picture_changes(item, item_type, md_to_update, md_for_carousel, new_md, for_card, md_for_destruction)
+  def persist_picture_changes
     if md_to_update
-      update_pictures(item, md_to_update, md_for_carousel)
+      update_pictures(@main_model, md_to_update, md_for_carousel)
     end
 
     if new_md
-      create_pictures(item.id, item_type, new_md, for_card)
+      create_pictures
     end
 
     if for_card && for_card.match(/existing_md_/)
       pict_id = for_card.sub(/existing_md_/, '')
-      update_pictures_for_card(item, pict_id)
+      update_pictures_for_card(@main_model, pict_id)
     end
 
     if md_for_destruction
-      destroy_pictures(item, md_for_destruction)
+      destroy_pictures(@main_model, md_for_destruction)
     end
   end
 
-  def create_pictures(picturizable_id, picturizable_type, new_mds, for_card)
-    new_mds.each do |key,value|
+  def create_pictures
+    new_md.each do |key,value|
       unless value["file"].nil?
         created_md = MediaContainer.create(
           title: value["title"],
           media: value["file"]
         )
         created_md.picturizings.create(
-          picturizable_id: picturizable_id,
-          picturizable_type: picturizable_type,
+          picturizable_id: @main_model.id,
+          picturizable_type: @main_model.class.name,
           for_carousel: value["for_carousel"],
           for_card: for_card.sub(/new_md_/, '') == key ? "true" : "false"
         )

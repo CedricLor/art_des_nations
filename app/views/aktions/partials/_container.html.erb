@@ -6,11 +6,11 @@
 %>
 
 <%= render partial: 'shared/article_aktion_static/error_notification',
-    layout: 'shared/article_aktion_static/title_teaser_error_layout'
+    layout: 'shared/article_aktion_static/content_row_layout'
 %>
 
 <%= render partial: 'shared/article_aktion_static/title_teaser',
-    layout: 'shared/article_aktion_static/title_teaser_error_layout',
+    layout: 'shared/article_aktion_static/content_row_layout',
     locals: {
       title: parameters[:title],
       teaser: parameters[:teaser]
@@ -28,22 +28,7 @@
   layout: 'shared/article_aktion_static/body_layout'
 %>
 
-<%# if parameters > 3, the partial is being called from the edit or the new aktions_controller actions
-Remaining parameters are
-- status
-- aktion_date
-- posted_at
-- the submit button
-%>
-
-<% if parameters.size > 3 %>
-  <%= render partial: 'shared/article_aktion/additional_form_fields',
-    locals: {
-      remaining_params: parameters.select { |key, value| key === :aktion_date || key === :posted_at }.values
-      # remaining_params: parameters - parameters[0..3]
-    }
-  %>
-<% end %>
+<%= yield :aktion_date_fields %>
 
 <%= yield :country %>
 
