@@ -21,11 +21,11 @@
 
 <%= yield :additional_pictures_form %>
 
-<%= render partial: 'shared/aktion_static/body', locals: {
-  body: parameters[:body]
-  # body: item.body
-  },
-  layout: 'shared/article_aktion_static/body_layout'
+<%= render partial: 'shared/aktion_static/body',
+    layout: 'shared/article_aktion_static/body_layout',
+    locals: {
+      body: parameters[:body]
+    }
 %>
 
 <%= yield :aktion_date_fields %>

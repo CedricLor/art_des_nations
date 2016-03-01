@@ -1,4 +1,6 @@
 class Category < ActiveRecord::Base
+  include MainModelsModifiers
+
   validates :name, presence: true
 
   has_many :categorizings, inverse_of: :category
@@ -10,12 +12,6 @@ class Category < ActiveRecord::Base
            :source_type => 'Portrait'
 
   translates :name, :editorial, :fallbacks_for_empty_translations => true
-
-
-  def to_param
-    "#{id}-#{name.parameterize}"
-  end
-
 
   def self.articles_aktions_and_portraits_for_category(category_id)
     articles = Article.where(status: ["published", "featured"]).
@@ -41,7 +37,6 @@ class Category < ActiveRecord::Base
 
     (articles + aktions + portraits).sort { |a, b| b.date_sorting_field <=> a.date_sorting_field }
   end
-
 end
 
 

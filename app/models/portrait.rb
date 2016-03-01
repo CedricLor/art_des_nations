@@ -1,4 +1,5 @@
 class Portrait < ActiveRecord::Base
+  include MainModelsModifiers
   include AktionArticlePortraitCategories
 
   validates :title, presence: true
@@ -40,14 +41,6 @@ class Portrait < ActiveRecord::Base
 
 
   translates :title, :body, :teaser, :status, :fallbacks_for_empty_translations => true
-
-
-
-  def to_param
-    title ? "#{id}-#{title.parameterize}" : id.to_s
-  end
-
-
 
 
   after_create :add_new_picture_to_portrait, if: "new_md && new_md[:file].present?"

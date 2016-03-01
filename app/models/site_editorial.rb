@@ -1,4 +1,6 @@
 class SiteEditorial < ActiveRecord::Base
+  include MainModelsModifiers
+
   validates :home_page_id, presence: true
   validates :home_page_id, numericality: { equal_to: 1 }
 
@@ -15,10 +17,4 @@ class SiteEditorial < ActiveRecord::Base
   belongs_to :home_page, inverse_of: :site_editorials
 
   translates :title, :body, :status, :fallbacks_for_empty_translations => true
-
-
-  def to_param
-    "#{id}-#{title.parameterize}"
-  end
-
 end

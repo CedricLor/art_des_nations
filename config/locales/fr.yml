@@ -91,7 +91,7 @@ fr:
   article_author_selector_error: "Le nom de l'auteur doit être indiqué."
 
   label_for_status_selector: "Sélectionnez un status pour %{this_item}."
-  hint_for_status_selector: "Si vous sélectionnez %{draft} ou %{archived}, %{the_item} ne sera pas publié sur le site internet."
+  hint_for_status_selector: "Si vous sélectionnez %{draft} ou %{archived}, %{the_item} ne sera pas publié(e) sur le site internet."
   status_missing_error: "Il est obligatoire d'assigner un statut à %{an_item}. Merci d'en choisir un."
 
   draft: "brouillon"

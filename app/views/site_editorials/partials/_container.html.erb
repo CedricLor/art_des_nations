@@ -4,15 +4,17 @@
 - site_editorials/_form.html.erb
 %>
 
-<%= render partial: 'site_editorials/partials/title', locals: {
-  title: parameters[:title]
-  }
+<%= render partial: 'site_editorials/partials/title',
+    locals: {
+      title: parameters[:title]
+    },
+    layout: 'shared/article_aktion_static/body_layout'
 %>
 
 <%= render partial: 'shared/aktion_static/body', locals: {
-  body: parameters[:editorial]
-  },
-  layout: 'shared/article_aktion_static/body_layout'
+      body: parameters[:editorial]
+    },
+    layout: 'shared/article_aktion_static/body_layout'
 %>
 
 <%# if parameters > 2, the partial is being called from the edit or the new site_editorial_controller actions

@@ -1,4 +1,6 @@
 class Article < ActiveRecord::Base
+  include MainModelsModifiers
+
   default_scope { order(posted_at: :desc) }
 
   belongs_to :author, inverse_of: :articles

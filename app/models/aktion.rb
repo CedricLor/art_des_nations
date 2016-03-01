@@ -1,11 +1,5 @@
 class Aktion < ActiveRecord::Base
-  validates :country_id, presence: true
-  validates :title, presence: true
-  validates :posted_at, presence: true
-  validates :aktion_date, presence: true
-  validates :status, presence: true
-  validates :status, inclusion: { in: %w(draft published featured archived),
-    message: "%{value} is not a valid status for an action. Choose between draft, published, featured or archived." }
+  include MainModelsModifiers
 
   default_scope { order(aktion_date: :desc) }
 
@@ -39,13 +33,6 @@ class Aktion < ActiveRecord::Base
 
 
   translates :title, :body, :teaser, :status, :fallbacks_for_empty_translations => true
-
-
-
-  def to_param
-    "#{id}-#{title.parameterize}"
-  end
-
 
 
   def self.for_country(country)

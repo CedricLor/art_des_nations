@@ -21,12 +21,11 @@ Remaining parameters are (in this order -- important!!!):
 - the submit button
 %>
 <% if parameters.size > 2 %>
-  <%= render partial: 'shared/article_aktion/additional_form_fields',
-    locals: {
-      remaining_params: parameters.
-        select { |key, value| key === :submit_button }.
-        values
-    }
+  <%= render partial: 'shared/aktion_static/body',
+      layout: 'shared/article_aktion_static/content_row_layout',
+      locals: {
+        body: parameters[:submit_button]
+      }
   %>
 <% end %>
 
