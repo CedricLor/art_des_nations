@@ -22,7 +22,7 @@
     <tr>
       <th>Id</th>
       <th>Title</th>
-      <th>Created at</th>
+      <th>Posted at</th>
       <th>Updated at</th>
       <th>Status</th>
       <th></th>
@@ -30,12 +30,11 @@
       <th></th>
     </tr>
 
-  <% @site_editorials.sort_by(&:created_at).reverse.each do |site_editorial| %>
+  <% @site_editorials.sort_by(&:posted_at).reverse.each do |site_editorial| %>
     <tr>
       <td><%= site_editorial.id %></td>
       <td><%= site_editorial.title %></td>
-      <td><%= l(site_editorial.created_at, format: :long) %></td>
-      <td><%= l(site_editorial.updated_at, format: :long) %></td>
+      <td><%= l(site_editorial.posted_at, format: :long) %></td>
       <td><%= site_editorial.status %></td>
       <td><%= link_to 'Show', site_editorial %></td>
       <td><%= link_to 'Edit', edit_site_editorial_path(site_editorial) %></td>
