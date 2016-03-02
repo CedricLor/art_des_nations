@@ -8,6 +8,8 @@ class SiteEditorial < ActiveRecord::Base
   validates :title, presence: true
   validates :body, presence: true
 
+  validates :posted_at, presence: true
+
   validates :status, presence: true
   validates :status, inclusion: { in: %w(draft published featured archived),
     message: "%{value} is not a valid status for an editorial. Choose between draft, published, featured or archived." }

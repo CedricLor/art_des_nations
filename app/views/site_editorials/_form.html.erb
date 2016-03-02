@@ -12,6 +12,13 @@
     locals: { f: f }
   %>
 
+  <% provide :posted_at do %>
+    <% posted_at = f.input :posted_at, as: :date %>
+    <%= render partial: 'shared/general_content_row',
+      locals: { content: posted_at }
+    %>
+  <% end %>
+
   <% render partial: 'shared/aktion_article_portrait_site_edito/status_submit_button',
     object: @site_editorial,
     locals: {
