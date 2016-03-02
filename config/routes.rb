@@ -15,12 +15,14 @@ Rails.application.routes.draw do
     resources :aktions
     get 'actions/:id', to: 'aktions#show', as: 'action'
     resources :portraits
+    resources :categories
+
     resources :media_containers, only: [:index]
 
     resources :countries, only: [:show, :edit, :update]
     resources :portrait_intros, only: [:show, :edit, :update]
     get 'protagonistes', to: 'portrait_intros#show', as: 'protagonistes'
-    resources :categories
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -34,9 +36,12 @@ Rails.application.routes.draw do
     # root to: "pages#show"
     resources :static_pages, only: [:show, :edit, :update], path: 'page'
     get 'page/:id', to: 'static_pages#show', as: 'page'
+
     resources :home_pages, only: [:show, :edit, :update]
+
     resources :external_links, only: [:create]
-    resources :site_editorials
+
+    resources :site_editorials, only: [:show, :new, :edit, :update, :create, :index]
     get 'editorial/:id', to: 'site_editorials#show', as: 'editorial'
 
     # get 'home_pages/:id' => 'home_pages#show'
