@@ -21,10 +21,8 @@ Remaining parameters are (in this order -- important!!!):
 - the submit button
 %>
 <% if parameters.size > 2 %>
-  <% submit_button = render partial: 'shared/aktion_static/body',
-      locals: { body: parameters[:submit_button] } %>
   <%= render partial: 'shared/general_content_row',
-      locals: { content: submit_button } %>
+      locals: { content: parameters[:submit_button] } %>
 <% end %>
 
 

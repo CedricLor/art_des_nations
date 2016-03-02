@@ -11,26 +11,37 @@
 <% render 'shared/admin_nav_content' %>
 
 
-<h1>Listing Site Editorials</h1>
 
-<table>
-  <thead>
+<div class="container">
+  <h1>Listing Site Editorials</h1>
+
+  <%= link_to t(:new_editorial, default: 'New editorial'), new_site_editorial_path %>
+
+  <h3>Ordered by publication date</h3>
+  <table class="table table-striped">
     <tr>
-      <th colspan="3"></th>
+      <th>Id</th>
+      <th>Title</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th>Status</th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
-  </thead>
 
-  <tbody>
-    <% @site_editorials.each do |site_editorial| %>
-      <tr>
-        <td><%= link_to 'Show', site_editorial %></td>
-        <td><%= link_to 'Edit', edit_site_editorial_path(site_editorial) %></td>
-        <td><%= link_to 'Destroy', site_editorial, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+  <% @site_editorials.sort_by(&:created_at).reverse.each do |site_editorial| %>
+    <tr>
+      <td><%= site_editorial.id %></td>
+      <td><%= site_editorial.title %></td>
+      <td><%= l(site_editorial.created_at, format: :long) %></td>
+      <td><%= l(site_editorial.updated_at, format: :long) %></td>
+      <td><%= site_editorial.status %></td>
+      <td><%= link_to 'Show', site_editorial %></td>
+      <td><%= link_to 'Edit', edit_site_editorial_path(site_editorial) %></td>
+      <td><%= link_to 'Destroy', site_editorial, method: :delete, data: { confirm: t(:deletion_confirmation, this_item: @this_item_i18n_name, default: "Are you sure you want to delete #{@this_item_i18n_name}?") } %></td>
+    </tr>
+  <% end %>
+  </table>
 
-<br>
-
-<%= link_to 'New Site editorial', new_site_editorial_path %>
+</div>
