@@ -16,6 +16,7 @@
     )
   %>
   <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {language: I18n.locale} %>
+
   <% body = render partial: 'shared/aktion_article_portrait_site_edito_static/body_form.html.erb',
     object: @article,
     locals: { f: f }
@@ -33,7 +34,8 @@
   %>
   <% posted_at = f.input :posted_at, as: :date, label: false %>
 
-  <% render partial: 'shared/aktion_article_portrait/status_submit_button',
+  <% render partial: 'shared/aktion_article_portrait_site_edito/status_submit_button',
+    object: @article,
     locals: { f: f }
   %>
 

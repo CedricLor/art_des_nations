@@ -1,0 +1,14 @@
+<%# shared/aktion_article_portrait/_general_content_row.html.erb %>
+<%# called from:
+- aktions/_form.html.erb
+- aktions/partials/_container.html.erb
+- articles/partials/_container.html.erb
+- countries/partials/_container.html.erb
+- shared/aktion_article_portrait_site_edito/_status_submit_button.html.erb
+%>
+
+<div class= "row <%= (defined? additional_class_name) ? additional_class_name : '' %>" >
+  <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
+    <%= content %>
+  </div>
+</div>

@@ -1,6 +1,5 @@
 <%# shared/aktion_article_portrait_site_edito_static/_body.html.erb %>
 
-
 <% if body_form.errors[:body].present? %>
   <div class="has-error">
     <%= f.cktext_area :body, rows: 50, :ckeditor => {language: I18n.locale} %>

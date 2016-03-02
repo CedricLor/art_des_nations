@@ -144,6 +144,9 @@ en:
 
   media_container_presence_required_validation_message: "You have choosen to publish your portrait. A portrait may not be validly published without a picture."
 
+  site_editorial_status_featured_already_taken_error: ": another site editorial is already featured. Your site may not have more than one feaatured site editorial."
+  featured_cannot_be_turn_off_error_message: "This editorial is currently 'featured'. You cannot turn off the 'featured' status of the currently 'featured' editorial. Instead, turn on the 'featured' status of another editorial (and this one will automatically be turned to 'published')."
+
   activerecord:
     errors:
       messages:

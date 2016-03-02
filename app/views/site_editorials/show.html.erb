@@ -18,9 +18,7 @@
 <%= render partial: 'site_editorials/partials/container',
     layout: "shared/article_aktion_static/container_layout",
     locals: {
-      parameters: {
-        title: @site_editorial.title,
-        editorial: @site_editorial.body || ''
-      }
+      title: @site_editorial.title,
+      editorial: @site_editorial.body || ''
     }
 %>

@@ -4,17 +4,17 @@
 - articles/_form.html.erb
 %>
 
-<%= render partial: 'shared/article_aktion_static/error_notification',
-    layout: 'shared/article_aktion_static/content_row_layout'
-%>
+<% error_notifications = render partial: 'shared/article_aktion_static/error_notification' %>
+<%= render partial: 'shared/general_content_row',
+    locals: { content: error_notifications } %>
 
-<%= render partial: 'shared/article_aktion_static/title_teaser',
-    layout: 'shared/article_aktion_static/content_row_layout',
+<% title_teaser = render partial: 'shared/article_aktion_static/title_teaser',
     locals: {
       title: parameters[:title],
       teaser: parameters[:teaser]
-    }
-%>
+    } %>
+<%= render partial: 'shared/general_content_row',
+    locals: { content: title_teaser } %>
 
 <%= yield :pictures %>
 

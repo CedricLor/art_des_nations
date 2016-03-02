@@ -5,10 +5,10 @@
 %>
 
 <% remaining_params.each do |parameter| %>
-  <%= render partial: 'shared/aktion_static/body',
-      layout: 'shared/article_aktion_static/content_row_layout',
-      locals: {
-        body: parameter
-      }
+  <% html_parameter render partial: 'shared/aktion_static/body',
+      locals: { body: parameter }
+  %>
+  <%= render partial: 'shared/general_content_row',
+    locals: { content: html_parameter }
   %>
 <% end %>

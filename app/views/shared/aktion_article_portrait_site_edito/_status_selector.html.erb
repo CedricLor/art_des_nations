@@ -1,0 +1,38 @@
+<%# shared/aktion_article_portrait_site_edito/_status_selector.html.erb %>
+
+<% provide :status_selector do %>
+
+  <% status_selector_input = f.input :status,
+    disabled: disabled_value,
+    collection: [
+      [t(:draft, default: "draft"), "draft"],
+      [t(:published, default: "published"), "published"],
+      [t(:featured, default: "featured"), "featured"],
+      [t(:archived, default: "archived"), "archived"]
+    ],
+    as: :radio_buttons,
+    selected: "draft",
+    label: disabled_label || t(:label_for_status_selector,
+        this_item: @this_item_i18n_name,
+        default: "Please select a status for #{@this_item_i18n_name}."
+      ),
+    hint: t(:hint_for_status_selector,
+      the_item: @the_item_i18n_name,
+      draft: t(:draft, default: "draft"),
+      archived: t(:archived, default: "archived"),
+      default: "If you select #{t(:draft, default: "draft")} or #{t(:archived, default: "archived")}, #{@the_item_i18n_name} will not be published on the website."
+    ),
+    error: status_selector.errors[:status] || t(:status_missing_error,
+      an_item: @an_item_i18n_name,
+      default: "Assigning a status to #{@an_item_i18n_name} is mandatory, please specify one."
+    )
+  %>
+
+  <%= render partial: 'shared/general_content_row',
+      locals: {
+        additional_class_name: "my-inline-status-radios",
+        content: status_selector_input
+      }
+  %>
+
+<% end %>

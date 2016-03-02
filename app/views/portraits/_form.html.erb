@@ -8,7 +8,8 @@
   <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {language: I18n.locale} %>
   <% body = f.cktext_area :body, rows: 50, :ckeditor => {language: I18n.locale} %>
 
-  <% render partial: 'shared/aktion_article_portrait/status_submit_button',
+  <% render partial: 'shared/aktion_article_portrait_site_edito/status_submit_button',
+    object: @portrait,
     locals: {
       f: f
     }

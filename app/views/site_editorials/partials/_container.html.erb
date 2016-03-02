@@ -5,31 +5,21 @@
 %>
 
 <%= render partial: 'site_editorials/partials/title',
+    layout: 'shared/article_aktion_static/body_layout',
     locals: {
-      title: parameters[:title]
-    },
-    layout: 'shared/article_aktion_static/body_layout'
-%>
-
-<%= render partial: 'shared/aktion_static/body', locals: {
-      body: parameters[:editorial]
-    },
-    layout: 'shared/article_aktion_static/body_layout'
-%>
-
-<%# if parameters > 2, the partial is being called from the edit or the new site_editorial_controller actions
-Remaining parameters are (in this order -- important!!!):
-- status
-- the submit button
-%>
-<% if parameters.size > 2 %>
-  <%= render partial: 'shared/article_aktion/additional_form_fields',
-    locals: {
-      remaining_params: parameters.
-        select { |key, value| key === :submit_button || key == :status }.
-        values
+      title: title
     }
-  %>
-<% end %>
+%>
+
+<%= render partial: 'shared/aktion_static/body',
+    layout: 'shared/article_aktion_static/body_layout',
+    locals: {
+      body: editorial
+    }
+%>
 
 
+
+<%= yield :status_selector %>
+
+<%= yield :submit_button %>

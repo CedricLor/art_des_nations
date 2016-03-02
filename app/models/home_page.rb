@@ -6,11 +6,8 @@ class HomePage < ActiveRecord::Base
   translates :call_to_action, :fallbacks_for_empty_translations => true
 
   def site_editorial
-    # FIXME -- need to add a published_at column to the database and sort by published_at
     site_editorials.
-      includes(:translations).
-      where(status: 'published').
-      order(:updated_at).
+      where(status: 'featured').
       last
   end
 
@@ -24,8 +21,7 @@ class HomePage < ActiveRecord::Base
 
   def editorial=(value)
     site_editorials.
-      includes(:translations).
-      where(status: "published").
+      where(status: 'featured').
       last.
       update!(
       body: value
@@ -33,25 +29,8 @@ class HomePage < ActiveRecord::Base
   end
 
   def short_editorial
-    end_of_short_edito = editorial.index('</p>', 350) + 4
+    end_of_short_edito = editorial.length > 350 ? (editorial.index('</p>', 350) + 4) : editorial.length
     editorial.slice(0, end_of_short_edito)
   end
 end
 
-# class CreateHomePages < ActiveRecord::Migration
-#   def up
-#     create_table :home_pages do |t|
-#       t.string :call_to_action
-#       t.string :call_to_action_url
-#       t.integer :article_id, :null => false
-
-#       t.timestamps null: false
-#     end
-#     HomePage.create_translation_table! :call_to_action => :string
-#   end
-
-#   def down
-#     drop_table :home_pages
-#     HomePage.drop_translation_table!
-#   end
-# end

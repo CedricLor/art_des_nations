@@ -1,0 +1,29 @@
+<%# shared/aktion_article_portrait_site_edito/_status_submit_button.html.erb %>
+<%# called from:
+- articles/_form.html.erb
+- aktions/_form.html.erb
+- portraits/_form.html.erb
+- site_editorials/_form.html.erb
+%>
+
+<% render partial: 'shared/aktion_article_portrait_site_edito/status_selector',
+    object: status_submit_button,
+    locals: {
+      f: f,
+      disabled_value: (defined? status_selector_disabled_value) ? status_selector_disabled_value : false,
+      disabled_label: (defined? status_selector_disabled_label) ? status_selector_disabled_label : nil
+    }
+%>
+
+
+<% provide :submit_button do %>
+
+  <% submit_button = f.button :submit, t(:save_your_changes, default: 'Save your changes!!!'), class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
+
+  <%= render partial: 'shared/general_content_row',
+      locals: {
+        content: submit_button
+      }
+  %>
+
+<% end %>

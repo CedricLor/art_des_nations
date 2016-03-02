@@ -5,29 +5,27 @@
 
 <%= simple_form_for(@site_editorial) do |f| %>
   <%= f.error_notification %>
-
   <% title = f.input :title %>
-  <% body = f.cktext_area :body, rows: 50, :ckeditor => {language: I18n.locale} %>
-  <% status = f.input :status,
-    collection: %w(draft published archived),
-    as: :radio_buttons,
-    prompt: "Please select a status for this editorial",
-    selected: "draft",
-    label: 'Please select a status for this editorial',
-    hint: 'If you select draft or archived, the editorial will not be published on the website.',
-    error: 'Assigning a status to an editorial is mandatory, please specify one.'
+
+  <% body = render partial: 'shared/aktion_article_portrait_site_edito_static/body_form.html.erb',
+    object: @site_editorial,
+    locals: { f: f }
   %>
-  <% submit_button = f.button :submit, t(:save_your_changes, default: 'Save your changes!!!'), class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
+
+  <% render partial: 'shared/aktion_article_portrait_site_edito/status_submit_button',
+    object: @site_editorial,
+    locals: {
+      f: f,
+      status_selector_disabled_value: (@site_editorial.status == "featured") ? true : false,
+      status_selector_disabled_label: (@site_editorial.status == "featured") ? t(:featured_cannot_be_turn_off_error_message) : nil
+    }
+  %>
 
   <%= render partial: 'site_editorials/partials/container',
       layout: "shared/article_aktion_static/container_layout",
       locals: {
-        parameters: {
-          title: title,
-          editorial: body,
-          status: status,
-          submit_button: submit_button
-        }
+        title: title,
+        editorial: body
       }
   %>
 
