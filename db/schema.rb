@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160224173140) do
+ActiveRecord::Schema.define(version: 20160302181003) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -280,6 +280,7 @@ ActiveRecord::Schema.define(version: 20160224173140) do
     t.integer  "home_page_id", default: 1, null: false
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+    t.datetime "posted_at",                null: false
   end
 
   create_table "static_page_translations", force: :cascade do |t|
