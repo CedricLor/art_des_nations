@@ -49,7 +49,8 @@ fr:
   further_reading: "Aller plus loin"
   credit: "Crédits"
   legal: "Mentions légales"
-  related: "En liens"
+  related: "En lien"
+  create_links: "Créez des liens !!!"
 
   home_page_title: "Accueil"
   published_html: "<p class='meta'>Publié le <span class='date-publication'>%{posted_at}</span> à <span class='lieu-publication'>%{posted_from_location}</span></p>"

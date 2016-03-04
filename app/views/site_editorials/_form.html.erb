@@ -1,7 +1,5 @@
 <%# site_editorials/_form.html.erb %>
 
-<% content_for :title, raw(@site_editorial.title) %>
-<% content_for :body_class, "portraits" %>
 
 <%= simple_form_for(@site_editorial) do |f| %>
   <%= f.error_notification %>

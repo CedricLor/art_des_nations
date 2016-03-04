@@ -31,10 +31,12 @@
 
 
         <!-- Articles -->
-        <%= render partial: 'home_pages/partials/show/article_recommandations',
-            locals: {
-              items: articles
-            }
+        <%= render partial: 'shared/recommandations_iterator',
+          locals: {
+            collection: articles,
+            additional_class_names: '',
+            sub_partial: 'home_pages/partials/show/article_recommandation'
+          }
         %>
 
       </div><!-- fin des articles -->

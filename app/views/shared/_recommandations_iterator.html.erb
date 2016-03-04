@@ -1,0 +1,22 @@
+<%# shared/_recommandations_iterator.html.erb %>
+<%# called from:
+- shared/article_aktion/_recommandations.html.erb
+%>
+
+<% i = 1 %>
+<% collection.each do | element | %>
+
+  <%= render partial: sub_partial,
+    locals: {
+      element: element,
+      additional_class_names: additional_class_names
+    }
+  %>
+
+  <% if i == 3 %>
+    <% i = 0 %>
+    <div class="clearfix hidden-xs"></div>
+  <% end %>
+  <% i = i + 1 %>
+
+<% end %>

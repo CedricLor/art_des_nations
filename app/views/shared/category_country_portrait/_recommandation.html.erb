@@ -1,0 +1,15 @@
+<%# shared/_recommandation.html.erb %>
+<%# called by:
+- shared/_recommandations.html.erb
+%>
+
+<div class="<%=additional_class_names%> recommandation " >
+
+  <%= render partial: 'shared/recommandation_inner',
+      locals: {
+        element: element,
+        subpartial: 'shared/html_safe'
+      }
+  %>
+
+</div>

@@ -32,9 +32,11 @@
     <!-- List -->
     <div class="row">
 
-      <%= render partial: 'shared/category_country_portrait/recommandations', locals: {
-        list: parameters[:list_items],
-        additional_class_names: "col-xs-12 col-sm-4 "
+      <%= render partial: 'shared/recommandations_iterator',
+        locals: {
+          collection: parameters[:list_items],
+          additional_class_names: 'col-xs-12 col-sm-4 ',
+          sub_partial: 'shared/category_country_portrait/recommandation'
         }
       %>
 

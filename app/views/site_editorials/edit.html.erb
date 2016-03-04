@@ -1,4 +1,5 @@
 <% content_for :title, raw(@site_editorial.title) %>
+<% content_for :body_class, "portraits" %>
 
 <% provide :admin_nav_content_type do %>
   <% "#{@site_editorial.model_name.name}" %>

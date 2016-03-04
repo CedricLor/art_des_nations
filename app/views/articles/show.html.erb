@@ -30,6 +30,13 @@
   <%= @article.author.full_name %>
 <% end %>
 
+<% render partial: 'shared/aktion_article_portrait/recommandations',
+    locals: {
+      collection: @article.existing_links,
+      yieldable_name: "existing_external_linkings",
+      linkings_heading: t(:further_reading, default: "Aller plus loin")
+    }
+%>
 
 <%= render partial: 'articles/partials/container',
     layout: "shared/article_aktion_static/container_layout",
@@ -37,9 +44,10 @@
       parameters: {
         title: @article.title,
         teaser: @article.teaser  || '',
-        body: @article.body,
+        body: @article.body || '',
         posted_from_location: @article.posted_from_location,
         posted_at: @article.posted_at
       }
     }
 %>
+

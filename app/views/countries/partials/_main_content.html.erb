@@ -13,10 +13,11 @@
     <!-- aktion list -->
     <div id="recommandations">
 
-      <%= render partial: 'shared/category_country_portrait/recommandations',
+      <%= render partial: 'shared/recommandations_iterator',
         locals: {
-          list: @aktions,
-          additional_class_names: ""
+          collection: @aktions,
+          additional_class_names: '',
+          sub_partial: 'shared/category_country_portrait/recommandation'
         }
       %>
 

@@ -1,0 +1,21 @@
+<%# shared/article_aktion/_recommandation.html.erb %>
+<%# called from:
+- shared/_recommandations_iterator.html.erb
+%>
+
+<div class="col-xs-12 col-sm-4 recommandation">
+
+  <!-- top link displayed above the item -->
+  <p class="categorie">
+    <% name, path = name_and_path_for_link_super_title(element) %>
+    <%= link_to name.html_safe, path %>
+  </p>
+  <!-- main link -->
+  <%= render partial: 'shared/recommandation_inner',
+      locals: {
+        element: element,
+        subpartial: 'shared/html_safe'
+      }
+  %>
+
+</div>

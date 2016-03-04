@@ -5,9 +5,11 @@ home_pages/partials/shared/_main_content.html.erb
 
 <div class="col-xs-12 recommandation">
   <!-- wrapper link -->
-  <%= render partial: 'home_pages/partials/show/card_link_wrapper_partial', locals: {
-      item: portrait
-    }
+  <%= render partial: 'shared/recommandation_inner',
+      locals: {
+        element: portrait,
+        subpartial: 'home_pages/partials/show/img_safe_for_card_layout'
+      }
   %>
 
 </div>

@@ -6,13 +6,15 @@
 <div class="col-xs-12 col-sm-6 col-md-4 recommandation">
   <!-- categorie link -->
   <p class="categorie">
-    <%= link_to article.categorizings[0].category.name, category_path(article.categorizings[0].category) %>
+    <%= link_to element.categorizings[0].category.name, category_path(element.categorizings[0].category) %>
   </p>
 
   <!-- wrapper link -->
-  <%= render partial: 'home_pages/partials/show/card_link_wrapper_partial', locals: {
-      item: article
-    }
+  <%= render partial: 'shared/recommandation_inner',
+      locals: {
+        element: element,
+        subpartial: 'home_pages/partials/show/img_safe_for_card_layout'
+      }
   %>
 
 </div>

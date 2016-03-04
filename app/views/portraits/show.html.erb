@@ -27,6 +27,14 @@
   <% end %>
 <% end %>
 
+<% render partial: 'shared/aktion_article_portrait/recommandations',
+    locals: {
+      collection: @portrait,
+      yieldable_name: "existing_external_linkings",
+      linkings_heading: t(:further_reading, default: "Aller plus loin")
+    }
+%>
+
 <%# render the partial with the variables passed in an object %>
 <%= render partial: 'portraits/partials/container',
   object: @portrait, locals: {
@@ -37,5 +45,3 @@
     }
   }
 %>
-
-<%#= link_to 'Edit', edit_portrait_path(@portrait) %>

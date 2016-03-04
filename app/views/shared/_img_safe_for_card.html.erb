@@ -1,0 +1,9 @@
+<%# shared/_img_safe_for_card.html.erb %>
+<%# called from:
+- shared/_recommandation_inner.html.erb
+%>
+
+<% if (picturizing = element.picturizings.size > 0 && element.picturizings.select { |p| p.for_card == "true" }) && picturizing.size > 0 %>
+  <% img_safe_for_card_inner = render partial: 'shared/img_safe_for_card_inner', locals: {picturizing: picturizing} %>
+  <%= render partial: subpartial, locals: {content: img_safe_for_card_inner} %>
+<% end %>

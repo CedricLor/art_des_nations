@@ -1,5 +1,6 @@
 class Portrait < ActiveRecord::Base
   include MainModelsModifiers
+  include Linkings
   include AktionArticlePortraitCategories
 
   validates :title, presence: true
@@ -67,13 +68,12 @@ class Portrait < ActiveRecord::Base
   end
 
   def picturizings
-    [picturizing]
+    picturizing.present? ? [picturizing] : []
   end
 
   def date_sorting_field
     updated_at
   end
-
 
 
   private

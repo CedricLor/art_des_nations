@@ -11,11 +11,9 @@
     }
 %>
 
-<%= render partial: 'shared/aktion_static/body',
+<%= render partial: 'shared/html_safe',
     layout: 'shared/article_aktion_static/body_layout',
-    locals: {
-      body: editorial
-    }
+    locals: { content: editorial }
 %>
 
 <%= yield :posted_at %>

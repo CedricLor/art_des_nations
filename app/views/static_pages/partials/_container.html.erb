@@ -14,9 +14,7 @@
   locals: { content: title_teaser }
 %>
 
-<%= render partial: 'shared/aktion_static/body',
+<%= render partial: 'shared/hmtl_safe',
     layout: 'shared/article_aktion_static/body_layout',
-    locals: {
-      body: body
-    }
+    locals: { content: body }
 %>

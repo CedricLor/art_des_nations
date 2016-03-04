@@ -22,11 +22,9 @@
 
 <%= yield :additional_pictures_form %>
 
-<%= render partial: 'shared/aktion_static/body',
+<%= render partial: 'shared/html_safe',
     layout: 'shared/article_aktion_static/body_layout',
-    locals: {
-      body: parameters[:body]
-    }
+    locals: { content: parameters[:body] }
 %>
 
 <%= yield :aktion_date_fields %>
@@ -38,3 +36,5 @@
 <%= yield :status_selector %>
 
 <%= yield :submit_button %>
+
+<%= yield :existing_external_linkings %>

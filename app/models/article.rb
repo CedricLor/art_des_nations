@@ -1,5 +1,6 @@
 class Article < ActiveRecord::Base
   include MainModelsModifiers
+  include Linkings
 
   default_scope { order(posted_at: :desc) }
 
@@ -10,7 +11,6 @@ class Article < ActiveRecord::Base
 
   has_many :categorizings, :as => :categorizable, inverse_of: :article, dependent: :destroy
   has_many :categories, through: :categorizings
-
 
 
   has_many :to_linkings, :as => :from_linkable, class_name: "Linking"
@@ -42,24 +42,5 @@ class Article < ActiveRecord::Base
   def date_sorting_field
     posted_at
   end
+
 end
-
-
-# <div class="col-xs-12 col-sm-6 col-md-4 recommandation">
-#   <p class="categorie">
-#     <!-- FIXME - article.categories.first -->
-#     <!-- article.categories.first.name, article.categories.first -->
-#     <%= link_to article[:category].name, category_path(article[:category]) %>
-#   </p>
-
-#   <%= link_to article_path(article[:id]) do %>
-
-#     <div class="img-wrapper">
-#       <!-- FIXME - article.media_containers.where(for_card: true).first -->
-#       <%= image_tag(article[:media], alt: "") %>
-#       <div class="layer"></div>
-#     </div>
-#     <h3><%= article[:title] %></h3>
-
-#   <% end %>
-# </div>

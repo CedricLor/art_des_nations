@@ -1,0 +1,29 @@
+<%# shared/article_aktion/_recommandations.html.erb %>
+<%# called from:
+- aktions/show.html.erb
+- articles/show.html.erb
+- portraits/show.html.erb
+%>
+<% if collection.present? %>
+  <% provide "#{yieldable_name}".to_sym do %>
+
+    <hr>
+    <div class="container-fluid recommandations">
+      <div class="container">
+        <h2><%= linkings_heading %></h2>
+        <div class="row">
+
+          <%= render partial: 'shared/recommandations_iterator',
+            locals: {
+              collection: collection,
+              additional_class_names: '',
+              sub_partial: 'shared/aktion_article_portrait/recommandation'
+            }
+          %>
+
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+<% end %>

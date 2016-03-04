@@ -13,9 +13,11 @@
           <%= link_to aktion.categorizings[0].category.name, category_path(aktion.categorizings[0].category) %>
         </p>
 
-        <%= render partial: 'home_pages/partials/show/card_link_wrapper_partial', locals: {
-            item: aktion
-          }
+        <%= render partial: 'shared/recommandation_inner',
+            locals: {
+              element: aktion,
+              subpartial: 'home_pages/partials/show/img_safe_for_card_layout'
+            }
         %>
 
       </li>

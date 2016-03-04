@@ -1,5 +1,6 @@
 class Aktion < ActiveRecord::Base
   include MainModelsModifiers
+  include Linkings
 
   default_scope { order(aktion_date: :desc) }
 

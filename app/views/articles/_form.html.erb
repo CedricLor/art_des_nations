@@ -72,6 +72,22 @@
     %>
   <% end %>
 
+  <% render partial: 'shared/aktion_article_portrait/recommandations',
+      locals: {
+        collection: @article.article.existing_links,
+        yieldable_name: "existing_external_linkings",
+        linkings_heading: t(:further_reading, default: "Aller plus loin")
+      }
+  %>
+
+  <% render partial: 'shared/aktion_article_portrait/recommandations',
+      locals: {
+        collection: @article.article.linkables,
+        yieldable_name: "linkables",
+        linkings_heading: t(:create_links, default: "Créez des liens !!!")
+      }
+  %>
+
   <%# render the partial with the variables passed in an array %>
   <%= render partial: 'articles/partials/container',
       layout: "shared/article_aktion_static/container_layout",

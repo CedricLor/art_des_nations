@@ -26,13 +26,21 @@
   %>
 <% end %>
 
+<% render partial: 'shared/aktion_article_portrait/recommandations',
+    locals: {
+      collection: @aktion,
+      yieldable_name: "existing_external_linkings",
+      linkings_heading: t(:further_reading, default: "Aller plus loin")
+    }
+%>
+
 <%= render partial: 'aktions/partials/container',
     layout: "shared/article_aktion_static/container_layout",
     locals: {
       parameters: {
         title: @aktion.title,
         teaser: @aktion.teaser || '',
-        body: @aktion.body
+        body: @aktion.body || ''
       }
     }
 %>

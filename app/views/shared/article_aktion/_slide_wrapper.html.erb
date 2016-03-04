@@ -3,5 +3,5 @@
 - shared/article_aktion/_galerie_photos.html.erb
 %>
 
-<%= image_tag(pict.media(:for_slider), alt: "") %>
+<%= image_tag(pict.media(:for_slider), alt: pict.title) %>
 <p class="legende"><%= pict.title %></p>
