@@ -3,10 +3,11 @@
 - articles/_form.html.erb
 %>
 
+<% byebug %>
 <%= f.input :author_name,
   input_html: {
     value: @article.author.full_name,
-    id:"article_author_name_selector",
+    id: "article_author_name_selector",
     class: "form-control",
     list: "author_names"
   },

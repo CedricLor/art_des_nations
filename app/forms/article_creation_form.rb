@@ -22,7 +22,7 @@ class ArticleCreationForm < ArticleForm
   end
 
   def author
-    @author ||= Author.new
+    @author ||= @main_model.build_author(full_name: author_name)
   end
 
   private

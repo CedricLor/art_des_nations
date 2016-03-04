@@ -30,7 +30,6 @@ class ArticleUpdateForm < ArticleForm
     super
     set_common_update_attributes
     self.author_name ||= @main_model.author.full_name
-
   end
 
   def persist_ancillary_data
