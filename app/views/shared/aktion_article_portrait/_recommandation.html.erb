@@ -18,4 +18,12 @@
       }
   %>
 
+  <% if params[:action] == "edit" %>
+    <% if additional_class_names == 'existing_external_linkings' %>
+      <p><%= link_to 'Destroy the link', article_linking_path(@article.id, element.get_linking_id), method: :delete %></p>
+    <% elsif additional_class_names == 'linkables' %>
+      <p><%= link_to 'Create a link', article_linkings_path(article_id: @article.id, to_linkable_id: element.id, to_linkable_type: element.class.name), method: :post %></p>
+    <% end %>
+  <% end %>
+
 </div>
