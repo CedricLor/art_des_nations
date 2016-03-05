@@ -132,6 +132,7 @@ en:
   admin_nav_delete_content: 'Delete'
   admin_nav_edit_content: 'Edit'
   admin_nav_admin_index_content: 'Index'
+  admin_nav_manage_links: 'Manage links'
 
   admin_nav_show_portrait_intro: 'Portrait intro page'
 
@@ -147,6 +148,9 @@ en:
 
   site_editorial_status_featured_already_taken_error: ": another site editorial is already featured. Your site may not have more than one feaatured site editorial."
   featured_cannot_be_turn_off_error_message: "This editorial is currently 'featured'. You cannot turn off the 'featured' status of the currently 'featured' editorial. Instead, turn on the 'featured' status of another editorial (and this one will automatically be turned to 'published')."
+
+  create_a_link: "Create a link!!!"
+  destroy_a_link: "Destroy this link!!!"
 
   activerecord:
     errors:

@@ -1,24 +1,23 @@
 class LinkingsController < ApplicationController
-  before_action { |controller| @redirect_url = set_redirect_url }
-  before_action :set_from_linkable, only: [:create]
+
+  def index
+    # @parent_item can be of type Article, Aktion or Portrait
+    @parent_item = permitted_linkable_type.constantize.find(params[:linkable_id])
+    # @media_containers = @parent_item.media_containers_for_carousel
+  end
 
   # POST /articles
   # POST /articles.json
   def create
-    @linking = Linking.new(
-      from_linkable_type: @from_linkable_type,
-      from_linkable_id: @from_linkable_id,
-      to_linkable_type: params[:to_linkable_type],
-      to_linkable_id: params[:to_linkable_id]
-    )
+    @linking = Linking.new(linking_params)
 
     respond_to do |format|
       if @linking.save
-        format.html { redirect_to @redirect_url, notice: 'The new link was successfully created.' }
-        # format.json { render json: @article.article, status: :created }
+        format.html { redirect_to :back, notice: 'The new link was successfully created.' }
+        format.json { render json: @linking, status: :created }
       else
-        # format.html { render action: 'new' }
-        # format.json { render json: @article.errors, status: :unprocessable_entity }
+        format.html { redirect_to :back, alert: 'The new link could not be created. Sorry!!!' }
+        format.json { render json: @linking.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -28,27 +27,26 @@ class LinkingsController < ApplicationController
   def destroy
     Linking.destroy(params[:id])
     respond_to do |format|
-      # format.html { redirect_to articles_url, notice: 'The article was successfully deleted.' }
-      format.html { redirect_to @redirect_url, notice: 'The link was successfully deleted.' }
+      format.html { redirect_to :back, notice: 'The link was successfully deleted.' }
       format.json { head :no_content }
     end
   end
 
   private
 
-  def set_redirect_url
-    return edit_article_url(params[:article_id]) if params[:article_id]
-    return edit_aktion_url(params[:aktion_id]) if params[:aktion_id]
-    return edit_portrait_url(params[:portrait_id]) if params[:portrait_id]
+  def linking_params
+    params[:linking][:from_linkable_id] = params[:linking][:from_linkable_id].to_i
+    params.require(:linking).permit(:from_linkable_type, :from_linkable_id, :to_linkable_type, :to_linkable_id)
   end
 
-  def set_from_linkable
-    if @from_linkable_id = params[:article_id]
-      @from_linkable_type = 'Article'
-    elsif @from_linkable_id = params[:aktion_id]
-      @from_linkable_type = 'Aktion'
-    elsif @from_linkable_id = params[:portrait_id]
-      @from_linkable_type = 'Portrait'
+  def permitted_linkable_type
+    if %(Aktion Article Portrait).include?(params[:linkable_type])
+      return params[:linkable_type]
+    else
+      respond_to do |format|
+        format.html { redirect_to :back, alert: "You cannot manage links for the #{params[:linkable_type].pluralize}." }
+        format.json { head :no_content }
+      end
     end
   end
 end

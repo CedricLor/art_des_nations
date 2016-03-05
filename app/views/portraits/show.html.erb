@@ -11,6 +11,7 @@
   <li><%= link_to t(:admin_nav_delete_content, default: 'Delete'), portrait_path, method: :delete, data: { confirm: t(:deletion_confirmation, this_item: @this_item_i18n_name, default:"Are you sure you want to delete #{@this_item_i18n_name}?") } %></li>
   <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_portrait_path %></li>
   <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), edit_portrait_path(@portrait) %></li>
+  <li><%= link_to t(:admin_nav_manage_links, default: 'Manage links'), linkings_for_path(@portrait.class.name, @portrait.id) %></li>
   <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), portraits_path %></li>
   <li><%= link_to t(:admin_nav_show_portrait_intro, default: 'Portrait intro page'), portrait_intro_path(1) %></li>
 <% end %>
@@ -31,11 +32,12 @@
     locals: {
       collection: @portrait,
       yieldable_name: "existing_external_linkings",
-      linkings_heading: t(:further_reading, default: "Aller plus loin")
+      linkings_heading: t(:related, default: "En lien"),
+      sub_sub_partial: 'shared/aktion_article_portrait/recommandation_picture_title'
     }
 %>
 
-<%# render the partial with the variables passed in an object %>
+<%# render the partial with the variables passed in a hash %>
 <%= render partial: 'portraits/partials/container',
   object: @portrait, locals: {
     parameters: {

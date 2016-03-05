@@ -88,7 +88,7 @@ class AktionsController < ApplicationController
     end
 
     def set_aktion_update_form
-      @aktion = AktionUpdateForm.new(params[:aktion] ? {id: params[:id]}.merge(params[:aktion]) : {id: params[:id]})
+      @item = @aktion = AktionUpdateForm.new(params[:aktion] ? {id: params[:id]}.merge(params[:aktion]) : {id: params[:id]})
       @url = aktion_path(params[:id])
       @method = "put"
     end

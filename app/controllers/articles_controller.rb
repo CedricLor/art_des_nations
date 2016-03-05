@@ -89,7 +89,7 @@ class ArticlesController < ApplicationController
     end
 
     def set_article_update_form
-      @article = ArticleUpdateForm.new(params[:article] ? {id: params[:id]}.merge(params[:article]) : {id: params[:id]})
+      @item = @article = ArticleUpdateForm.new(params[:article] ? {id: params[:id]}.merge(params[:article]) : {id: params[:id]})
       @url = article_path(params[:id])
       @method = "put"
     end

@@ -1,0 +1,14 @@
+<%# shared/aktion_article_portrait/_recommandation_picture_title_form.html.erb %>
+
+<!-- main link -->
+<%= render partial: 'shared/recommandation_inner',
+    locals: {
+      element: element,
+      subpartial: 'shared/html_safe'
+    }
+%>
+
+<p class="create-link">
+  <%= link_to t(:create_a_link, default: 'Create a link'), linkings_path(linking: {from_linkable_id: @parent_item.id, from_linkable_type: @parent_item.model_name.name, to_linkable_id: element.id, to_linkable_type: element.class.name}), method: :post %>
+</p>
+

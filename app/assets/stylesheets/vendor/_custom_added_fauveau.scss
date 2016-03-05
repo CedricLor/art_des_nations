@@ -26,3 +26,29 @@ div.my-inline-status-radios {
 .my-submit-button {
 
 }
+
+
+// Format the recommandations / internal linkings
+div.recommandations {
+  div.existing_external_linkings, div.linkables {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    div.recommandation {
+      margin-bottom: 2em;
+      flex-grow: 1;
+      flex-shrink: 1;
+      flex-basis: 100%;
+      @media (min-width: $my-screen-sm-min) {
+        flex-basis: 33%;
+      }
+      position: relative;
+      padding-bottom: 40px;
+      p.create-link {
+        position: absolute;
+        bottom: 0px;
+      }
+    }
+  }
+}

@@ -134,6 +134,7 @@ fr:
   admin_nav_edit_content: 'Editer'
   admin_nav_admin_index_content: 'Index'
   admin_nav_show_content: 'Montrer'
+  admin_nav_manage_links: 'Gérer les liens'
 
   admin_nav_show_portrait_intro: "Page d'introduction des portraits"
 
@@ -149,6 +150,9 @@ fr:
 
   site_editorial_status_featured_already_taken_error: ": un autre éditorial du site est déjà à la une. Votre site ne peut pas avoir plus d'un éditorial à la une."
   featured_cannot_be_turn_off_error_message: "Cet éditorial est actuellement 'à la une'. Vous ne pouvez pas changer le statut 'à la une' de l'éditorial actuellement 'à la une'. En revanche, vous pouvez marquer un autre éditorial 'à la une' (et celui-ci sera automatiquement classé comme 'publié')."
+
+  create_a_link: "Créez un lien !!!"
+  destroy_a_link: "Détruisez ce lien !!!"
 
   activerecord:
     errors:

@@ -1,0 +1,24 @@
+<%# shared/aktion_article_portrait/_recommandations_forms_wrapper %>
+<%# called from:
+- aktions/edit.html.erb
+- articles/edit.html.erb
+- portraits/edit.html.erb
+%>
+
+<% render partial: 'shared/aktion_article_portrait/recommandations',
+    locals: {
+      collection: collections[:existing_links],
+      yieldable_name: "existing_external_linkings",
+      linkings_heading: t(:further_reading, default: "Aller plus loin"),
+      sub_sub_partial: 'shared/aktion_article_portrait/recommandation_picture_title'
+    }
+%>
+
+<% render partial: 'shared/aktion_article_portrait/recommandations',
+    locals: {
+      collection: collections[:linkables],
+      yieldable_name: "linkables",
+      linkings_heading: t(:create_links, default: "Créez des liens !!!"),
+      sub_sub_partial: 'shared/aktion_article_portrait/recommandation_picture_title_form'
+    }
+%>

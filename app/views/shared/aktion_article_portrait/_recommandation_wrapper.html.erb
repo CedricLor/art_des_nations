@@ -1,0 +1,17 @@
+<%# shared/aktion_article_portrait/_recommandation_wrapper.html.erb %>
+
+<div class="col-xs-12 col-sm-4 recommandation">
+  <!-- top link displayed above the item -->
+  <p class="categorie">
+    <% name, path = name_and_path_for_link_super_title(element) %>
+    <%= link_to name.html_safe, path %>
+  </p>
+
+  <%= render partial: sub_sub_partial,
+    locals: {
+      element: element,
+      additional_class_names: additional_class_names
+    }
+  %>
+
+</div>

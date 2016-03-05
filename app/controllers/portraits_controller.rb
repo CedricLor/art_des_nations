@@ -1,6 +1,7 @@
 class PortraitsController < ApplicationController
   before_action :set_portrait, only: [:show, :edit, :update, :destroy]
   before_action :set_item_i18n_name
+  before_action :set_item
   skip_before_action :authenticate_user!, only: [:index, :show]
 
   # GET /portraits
@@ -103,5 +104,9 @@ class PortraitsController < ApplicationController
       @the_item_i18n_name = t(:the_item_portrait, default: 'the portrait')
       @this_item_i18n_name = t(:this_item_portrait, default: 'this portrait')
       @an_item_i18n_name = t(:an_item_portrait, default: 'an article')
+    end
+
+    def set_item
+      @item = @portrait
     end
 end

@@ -9,7 +9,8 @@
   <%= render partial: sub_partial,
     locals: {
       element: element,
-      additional_class_names: additional_class_names
+      additional_class_names: additional_class_names,
+      sub_sub_partial: sub_sub_partial
     }
   %>
 
@@ -20,3 +21,21 @@
   <% i = i + 1 %>
 
 <% end %>
+
+<%# ###########
+Usage of this iterator
+COUNTRIES : countries/partials/_main_content.html.erb -> shared/category_country_portrait/recommandation : displaying aktions in the countries pages
+comment: this is a very specific view; aktions are displayed in column on the right
+
+PORTRAITS INTRO and CATEGORIES : shared/categories_portraits/_list.html.erb -> shared/category_country_portrait/recommandation : (i) displaying the aktions, articles and portraits in the categories pages and (ii) the portraits in the portrait intro page
+comment: this is a line view, speading on several lines
+comment: the items are displayed without any references to anything
+
+HOME PAGE : home_pages/partials/shared/_main_content.html.erb -> home_pages/partials/show/article_recommandation : displaying the articles in the home page
+comment: this is a line view, speading on several lines
+comment: the items are displayed with references to their categories only (not to their type)
+
+ARTICLES, AKTIONS and PORTRAITS : shared/aktion_article_portrait/_recommandations.html.erb -> shared/aktion_article_portrait/recommandation : displaying aktions, articles and portraits in the articles, aktions and portraits pages
+comment: this is a line view, speading on several lines
+comment: the items are displayed with references to their categories, failing which to their type if they are portrait or to their country if they are aktions
+%>

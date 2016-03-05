@@ -11,9 +11,9 @@ Rails.application.routes.draw do
     # FIXME -- This was for React
     # get 'article/:id' => "pages#show"
 
-    resources :articles do
-      resources :linkings, only: [:destroy, :create]
-    end
+    get 'linkings/for/:linkable_type/:linkable_id', to: 'linkings#index', as: 'linkings_for'
+    resources :linkings, only: [:destroy, :create]
+    resources :articles
     resources :aktions
     get 'actions/:id', to: 'aktions#show', as: 'action'
     resources :portraits

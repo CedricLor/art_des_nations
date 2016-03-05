@@ -1,0 +1,19 @@
+<%# shared/aktion_article_portrait/_recommandation_picture_title.html.erb %>
+<%# called from:
+- shared/aktion_article_portrait/_recommandation_wrapper.html.erb as sub_sub_partial (or sub_sub_partial), defined in:
+- articles/show.html.erb
+- aktions/show.html.erb
+- portraits/show.html.erb
+%>
+
+<!-- main link -->
+<%= render partial: 'shared/recommandation_inner',
+    locals: {
+      element: element.target_element,
+      subpartial: 'shared/html_safe'
+    }
+%>
+
+<% if additional_class_names == 'existing_external_linkings' %>
+  <p class="create-link"><%= link_to t(:destroy_this_link, default: 'Destroy the link'), linking_path(element.id), method: :delete %></p>
+<% end %>
