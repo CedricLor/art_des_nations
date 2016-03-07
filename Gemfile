@@ -75,7 +75,7 @@ gem 'figaro'
 # Adding support for paperclip
 gem 'aws-sdk', '< 2.0'
 gem 'paperclip'
-gem 'papercrop'
+gem 'jcrop-rails-v2'
 
 # Adding active model serializer to render nice json
 gem 'active_model_serializers'

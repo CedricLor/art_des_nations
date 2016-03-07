@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     resources :portraits
     resources :categories
 
-    resources :media_containers, only: [:index]
+    resources :media_containers, only: [:new, :create, :update, :show, :index]
 
     resources :countries, only: [:show, :edit, :update]
     resources :portrait_intros, only: [:show, :edit, :update]

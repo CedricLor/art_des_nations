@@ -1,0 +1,28 @@
+<%# shared/article_aktion/additional_picture_form_management_fields %>
+
+
+<!-- Check box picture is for_card -->
+<span class="radio">
+  <label for=<%= "#{item}_new_md_#{i}_for_card"%> >
+    <input class="radio_buttons required"  type="radio" name=<%="#{item}[for_card]"%> id=<%="#{item}_new_md_#{i}_for_card"%> value=<%= "new_md_#{i}"%> <%= mark_as_checked_if_pict_is_for_card(parent, Struct.new("Pict", :id).new(i)) %> >
+    <%= t :check_box_label_is_picture_for_card, item: @this_item_i18n_name, default: "You want to use this picture as main illustration on the index pages where this #{@this_item_i18n_name} is displayed." %>
+  </label>
+</span>
+<!-- end check box picture is for_card -->
+
+<!-- Check box picture is for_carousel -->
+<%
+  checked_yes = ''
+  checked_no = ''
+  value["for_carousel"] == "true" ? checked_yes = "checked" : checked_no = "checked"
+%>
+<div>
+  <%= t :check_box_label_is_picture_for_carousel, default: "You want this picture to appear in the carousel: " %>
+  <label for=<%= "#{item}_new_md_#{i}_for_carousel_yes"%> class="radio-inline" >
+    <input class="radio_buttons required"  type="radio" name=<%="#{item}[new_md][#{i}][for_carousel]"%> id=<%="#{item}_new_md_#{i}_for_carousel_yes"%> value='true' <%= checked_yes %> ><%= t :si, default: "Yes" %>
+  </label>
+  <label for=<%= "#{item}_new_md_#{i}_for_carousel_no"%> class="radio-inline" >
+    <input class="radio_buttons required"  type="radio" name=<%="#{item}[new_md][#{i}][for_carousel]"%> id=<%="#{item}_new_md_#{i}_for_carousel_no"%> value='false' <%= checked_no %> ><%= t :non, default: "No" %>
+  </label>
+</div>
+<!-- end check box picture is for_carousel -->

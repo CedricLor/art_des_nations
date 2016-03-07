@@ -51,6 +51,7 @@ en:
   legal: "Legal mentions"
   related: "Related"
   create_links: "Create some links!!!"
+  picture: 'Picture'
 
   home_page_title: "Home"
   published_html: "<p class='meta'>Published on <span class='date-publication'>%{posted_at}</span> in <span class='lieu-publication'>%{posted_from_location}</span></p>"
@@ -112,6 +113,7 @@ en:
   new_aktion: "New action"
   new_category: "New category"
   new_editorial: "New editorial"
+  new_picture: "New picture"
 
   si: "yes"
   non: "no"

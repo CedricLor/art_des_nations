@@ -51,6 +51,7 @@ fr:
   legal: "Mentions légales"
   related: "En lien"
   create_links: "Créez des liens !!!"
+  picture: 'Image'
 
   home_page_title: "Accueil"
   published_html: "<p class='meta'>Publié le <span class='date-publication'>%{posted_at}</span> à <span class='lieu-publication'>%{posted_from_location}</span></p>"
@@ -113,6 +114,7 @@ fr:
   new_action: "Nouvelle action"
   new_category: "Nouvelle catégorie"
   new_editorial: "Nouvel éditorial"
+  new_picture: "Nouvelle image"
 
   si: "oui"
   non: "non"
