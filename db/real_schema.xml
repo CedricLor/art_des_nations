@@ -37,7 +37,7 @@
     <type label="SET" length="1" sql="SET" quote=""/>
     <type label="Bit" length="0" sql="bit" quote=""/>
   </group>
-</datatypes><table x="1622" y="604" name="ARTICLES">
+</datatypes><table x="1496" y="621" name="ARTICLES">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -52,7 +52,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1479" y="808" name="authors">
+<table x="1353" y="825" name="authors">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -63,7 +63,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="521" y="510" name="AKTIONS">
+<table x="395" y="527" name="AKTIONS">
 <row name="id_countries" null="1" autoincrement="0">
 <datatype>TINYINT</datatype>
 <default>NULL</default><relation table="COUNTRIES" row="id" />
@@ -81,7 +81,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="711" y="982" name="CATEGORIES">
+<table x="585" y="999" name="CATEGORIES">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -89,7 +89,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1286" y="39" name="HOME_PAGE">
+<table x="1160" y="56" name="HOME_PAGE">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -97,7 +97,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="551" y="31" name="external_links">
+<table x="425" y="48" name="external_links">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -108,7 +108,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1491" y="919" name="users">
+<table x="1365" y="936" name="users">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -128,7 +128,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="555" y="123" name="COUNTRIES">
+<table x="429" y="140" name="COUNTRIES">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -136,7 +136,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1099" y="153" name="media_containers">
+<table x="973" y="170" name="media_containers">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -156,7 +156,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1090" y="406" name="PORTRAITS">
+<table x="964" y="423" name="PORTRAITS">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -164,7 +164,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="938" y="813" name="categorizings">
+<table x="812" y="830" name="categorizings">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -185,7 +185,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="925" y="217" name="picturizings">
+<table x="759" y="227" name="picturizings">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -202,11 +202,14 @@
 <relation table="ARTICLES" row="id" />
 <relation table="PORTRAITS" row="id" />
 </row>
+<row name="order_idx" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="885" y="616" name="linkings">
+<table x="759" y="633" name="linkings">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -228,11 +231,14 @@
 <row name="to_linkable_type" null="1" autoincrement="0">
 <datatype>VARCHAR</datatype>
 <default>NULL</default></row>
+<row name="order_idx" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="947" y="15" name="external_linkings">
+<table x="765" y="22" name="external_linkings">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -248,11 +254,14 @@
 <row name="external_linkable_type" null="1" autoincrement="0">
 <datatype>VARCHAR</datatype>
 <default>NULL</default></row>
+<row name="order_idx" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="413" y="793" name="STATIC_PAGES">
+<table x="287" y="810" name="STATIC_PAGES">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -260,7 +269,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1131" y="466" name="portrait_intro">
+<table x="1005" y="483" name="portrait_intro">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -268,7 +277,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1788" y="609" name="article_translations">
+<table x="1663" y="557" name="article_translations">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -298,7 +307,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1536" y="10" name="home_page_translations">
+<table x="1410" y="27" name="home_page_translations">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -312,14 +321,11 @@
 <row name="call_to_action" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
-<row name="editorial" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="282" y="18" name="external_link_translations">
+<table x="156" y="35" name="external_link_translations">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -337,7 +343,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="276" y="171" name="country_translations">
+<table x="150" y="188" name="country_translations">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -361,7 +367,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="282" y="484" name="aktion_translations">
+<table x="156" y="501" name="aktion_translations">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -388,7 +394,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="401" y="867" name="static_page_translations">
+<table x="275" y="884" name="static_page_translations">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -412,7 +418,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1028" y="945" name="category_translations">
+<table x="902" y="962" name="category_translations">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -433,7 +439,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1296" y="211" name="media_container_translations">
+<table x="1180" y="268" name="media_container_translations">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -451,7 +457,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="584" y="198" name="picturizing_translations">
+<table x="458" y="215" name="picturizing_translations">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -472,7 +478,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="851" y="360" name="portrait_translations">
+<table x="715" y="409" name="portrait_translations">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -499,7 +505,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1124" y="521" name="portrait_intro_translations">
+<table x="998" y="538" name="portrait_intro_translations">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
@@ -517,7 +523,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1585" y="168" name="editorial">
+<table x="1479" y="198" name="editorial">
 <row name="id_HOME_PAGE" null="1" autoincrement="0">
 <datatype>TINYINT</datatype>
 <default>NULL</default><relation table="HOME_PAGE" row="id" />
@@ -529,7 +535,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1593" y="258" name="site_editorial_translations">
+<table x="1517" y="290" name="site_editorial_translations">
 <row name="id" null="1" autoincrement="1">
 <datatype>TINYINT</datatype>
 <default>NULL</default></row>
