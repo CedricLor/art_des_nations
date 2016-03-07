@@ -30,7 +30,7 @@
 
 <% render partial: 'shared/aktion_article_portrait/recommandations',
     locals: {
-      collection: @portrait,
+      collection: @portrait.existing_links,
       yieldable_name: "existing_external_linkings",
       linkings_heading: t(:related, default: "En lien"),
       sub_sub_partial: 'shared/aktion_article_portrait/recommandation_picture_title'
