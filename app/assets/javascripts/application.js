@@ -14,6 +14,8 @@
 //= require plugins/lastMinute
 //= require jquery_ujs
 
+//= require jquery.jcrop
+//= require papercrop
 
 // require redux_bundle
 

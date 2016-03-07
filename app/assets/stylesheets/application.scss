@@ -7,6 +7,8 @@
 @import "bootstrap";
 @import "font-awesome-sprockets";
 @import "font-awesome";
+@import 'jquery.jcrop';
+// *= require jquery.jcrop
 
 // Site wide settings (other than variables and mixins)
 @import "config/additional_variables";
