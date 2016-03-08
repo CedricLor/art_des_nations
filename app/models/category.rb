@@ -31,7 +31,7 @@ class Category < ActiveRecord::Base
     portraits = Portrait.where(status: ["published", "featured"]).
       includes([
         :categories,
-        picturizing: [media_container: :translations]
+        picturizings: [media_container: :translations]
       ]).
       where(categories: {id: category_id})
 

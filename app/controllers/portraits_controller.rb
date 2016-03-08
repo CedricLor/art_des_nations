@@ -8,8 +8,8 @@ class PortraitsController < ApplicationController
   # GET /portraits.json
   def index
     @portraits = Portrait.
-      includes(picturizing: [:media_container]).
-      includes(categorizings: [:category])
+      includes(picturizings: [:translations, media_container: :translations]).
+      includes(categorizings: [category: :translations])
     @picturizings = Picturizing.unscoped.
       where(picturizable_type: "Portrait").
       group(:picturizable_id).
@@ -82,7 +82,7 @@ class PortraitsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_portrait
-      @portrait = Portrait.includes(media_container: :translations).find(params[:id])
+      @portrait = Portrait.includes(media_containers: :translations).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -17,10 +17,11 @@ class Portrait < ActiveRecord::Base
   end
 
 
+  has_many :picturizings, as: :picturizable, inverse_of: :portrait
+  has_many :media_containers, through: :picturizings
 
-
-  has_one :picturizing, :as => :picturizable, inverse_of: :portrait
-  has_one :media_container, through: :picturizing
+  # has_one :picturizing, :as => :picturizable, inverse_of: :portrait
+  # has_one :media_container, through: :picturizing
 
   has_many :categorizings, :as => :categorizable, inverse_of: :portrait, dependent: :destroy
   has_many :categories, through: :categorizings
@@ -64,12 +65,20 @@ class Portrait < ActiveRecord::Base
   end
 
   def self.with_media_containers_for_card
-    includes(picturizing: [:translations, media_container: :translations])
+    includes(picturizings: [:translations, media_container: :translations])
   end
 
-  def picturizings
-    picturizing.present? ? [picturizing] : []
+  def picturizing
+    picturizings.last
   end
+
+  def media_container
+    media_containers.last
+  end
+
+  # def picturizings
+  #   picturizing.present? ? [picturizing] : []
+  # end
 
   def date_sorting_field
     updated_at
