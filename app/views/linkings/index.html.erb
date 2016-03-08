@@ -20,7 +20,18 @@
 <% render 'shared/admin_nav_content' %>
 
 <%# ############################### %>
-<%# Sliders or picture for portrait %>
+<%# Recommandations -- Common to all types %>
+<% render partial: 'shared/aktion_article_portrait/recommandations_forms_wrapper',
+  locals: {
+    collections: {
+      existing_links: @parent_item.existing_links,
+      linkables: @parent_item.linkables
+    }
+  }
+%>
+
+<%# ############################### %>
+<%# sliders for Aktion or Article or picture for Portrait %>
 <% if %(Aktion Article).include?(@parent_item.model_name.name) %>
 
   <% provide :pictures do %>
@@ -35,55 +46,7 @@
     %>
   <% end %>
 
-<% end %>
-
-<%# ############################### %>
-<%# Recommandations -- Common to all types %>
-<% render partial: 'shared/aktion_article_portrait/recommandations_forms_wrapper',
-  locals: {
-    collections: {
-      existing_links: @parent_item.existing_links,
-      linkables: @parent_item.linkables
-    }
-  }
-%>
-
-<%# ############################### %>
-<%# if it is an article, render article's container (with author name, posted at and posted from stuffs) %>
-<% if @parent_item.model_name.name == "Article" %>
-  <% provide :author_full_name do %>
-    <%= @parent_item.author.full_name %>
-  <% end %>
-
-  <%= render partial: 'articles/partials/container',
-      layout: "shared/article_aktion_static/container_layout",
-      locals: {
-        parameters: {
-          title: @parent_item.title,
-          teaser: @parent_item.teaser  || '',
-          body: @parent_item.body || '',
-          posted_from_location: @parent_item.posted_from_location,
-          posted_at: @parent_item.posted_at
-        }
-      }
-  %>
-<%# if it is an aktion, render aktion's container %>
-<% elsif @parent_item.model_name.name == "Aktion" %>
-
-  <%= render partial: 'aktions/partials/container',
-      layout: "shared/article_aktion_static/container_layout",
-      locals: {
-        parameters: {
-          title: @parent_item.title,
-          teaser: @parent_item.teaser || '',
-          body: @parent_item.body || ''
-        }
-      }
-  %>
-
-<%# if it is a portrait, render portrait's container (with its own picture logic) %>
-<%# FIXME -- Modify the portrait model so that it can hit the picturizings table with a has_many %>
-<% elsif @parent_item.model_name.name == "Portrait" %>
+<% else %>
 
   <% if @parent_item.media_container.present? %>
     <% provide :picture do %>
@@ -95,14 +58,11 @@
     <% end %>
   <% end %>
 
-  <%= render partial: 'portraits/partials/container',
-    object: @parent_item, locals: {
-      parameters: {
-        title: @parent_item.title,
-        teaser: @parent_item.teaser || '',
-        body: @parent_item.body || ''
-      }
-    }
-  %>
-
 <% end %>
+
+
+<%= render partial: 'shared/linkings_media_containers/common_index_page_builder',
+    locals: {
+      parent_item: @parent_item
+    }
+%>

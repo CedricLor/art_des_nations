@@ -13,12 +13,14 @@ Rails.application.routes.draw do
 
     get 'linkings/for/:linkable_type/:linkable_id', to: 'linkings#index', as: 'linkings_for'
     resources :linkings, only: [:destroy, :create]
+
     resources :articles
     resources :aktions
     get 'actions/:id', to: 'aktions#show', as: 'action'
     resources :portraits
     resources :categories
 
+    get 'illustrations/for/:picturizable_type/:picturizable_id', to: 'media_containers#index', as: 'picturizings_for'
     resources :media_containers, only: [:new, :create, :update, :show, :index]
 
     resources :countries, only: [:show, :edit, :update]

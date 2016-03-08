@@ -12,3 +12,18 @@
 <% end %>
 
 <% render 'shared/admin_nav_content' %>
+
+<% render partial: 'shared/aktion_article_portrait/recommandations',
+    locals: {
+      collection: @parent_item.existing_links,
+      yieldable_name: "existing_external_linkings",
+      linkings_heading: @parent_item.model_name.name == "Portrait" ? t(:related, default: "En lien") : t(:further_reading, default: "Aller plus loin"),
+      sub_sub_partial: 'shared/aktion_article_portrait/recommandation_picture_title'
+    }
+%>
+
+<%= render partial: 'shared/linkings_media_containers/common_index_page_builder',
+    locals: {
+      parent_item: @parent_item
+    }
+%>

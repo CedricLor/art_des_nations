@@ -44,7 +44,6 @@ class Portrait < ActiveRecord::Base
 
   translates :title, :body, :teaser, :status, :fallbacks_for_empty_translations => true
 
-
   after_create :add_new_picture_to_portrait, if: "new_md && new_md[:file].present?"
   after_update :update_associated_picture_acmb
   after_update :update_categories
