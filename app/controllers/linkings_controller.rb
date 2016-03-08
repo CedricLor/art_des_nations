@@ -3,7 +3,6 @@ class LinkingsController < ApplicationController
   def index
     # @parent_item can be of type Article, Aktion or Portrait
     @parent_item = permitted_linkable_type.constantize.find(params[:linkable_id])
-    # @media_containers = @parent_item.media_containers_for_carousel
   end
 
   # POST /articles

@@ -5,9 +5,18 @@ class MediaContainersController < ApplicationController
   end
 
   def index
-    @media_containers = MediaContainer.all
-    # render json: @media_containers, root: false
+    # @parent_item can be of type Article, Aktion or Portrait
+    @parent_item = permitted_picturizable_type.
+      constantize.
+      includes(picturizings: [:translations, media_container: :translations]).
+      find(params[:picturizable_id])
+    @media_containers = @parent_item.media_containers
   end
+
+  # def index
+  #   @media_containers = MediaContainer.all
+  #   # render json: @media_containers, root: false
+  # end
 
   def new
     @media_container = MediaContainer.new
@@ -57,5 +66,16 @@ class MediaContainersController < ApplicationController
       :crop_h,
       :crop_w
     )
+  end
+
+  def permitted_picturizable_type
+    if %(Aktion Article Portrait).include?(params[:picturizable_type])
+      return params[:picturizable_type]
+    else
+      respond_to do |format|
+        format.html { redirect_to :back, alert: "You cannot manage pictures for the #{params[:picturizable_type].pluralize}." }
+        format.json { head :no_content }
+      end
+    end
   end
 end

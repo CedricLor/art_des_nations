@@ -13,10 +13,12 @@ class MediaContainer < ActiveRecord::Base
   translates :title
 
   has_attached_file :media,
-    styles: { for_slider: "1200x500#", for_card: "300x125#", large: "2000x1000>" }, processors: [:cropper]
+    styles: { for_slider: "1200x500#", for_card: "300x125#" }, processors: [:cropper]
 
   validates_attachment_content_type :media,
     content_type: /\Aimage\/.*\z/
+
+
 
   attr_accessor :crop_x, :crop_y, :crop_h, :crop_w
 
@@ -35,6 +37,8 @@ class MediaContainer < ActiveRecord::Base
     @geometry ||= {}
     @geometry[style] ||= Paperclip::Geometry.from_file(media.path(style))
   end
+
+
 
   def self.for_carousel_for(picturizable_type, picturizable_id)
     MediaContainer.with_translations(I18n.locale).

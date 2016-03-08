@@ -11,15 +11,15 @@
       });
     };
 
-    var ratio = <%= @media_container.media_geometry(:original).width %> / <%= @media_container.media_geometry(:large).width %>;
+    var ratio = <%= @media_container.media_geometry(:original).width %> / <%= @media_container.media_geometry(:for_slider).width %>;
 
     function update_crop(coords){
 
       var rx = 1200/coords.w;
       var ry = 500/coords.h;
       $('#preview').css({
-        width: Math.round(rx * <%= @media_container.media_geometry(:large).width %>) + 'px',
-        height: Math.round(ry * <%= @media_container.media_geometry(:large).height %>) + 'px',
+        width: Math.round(rx * <%= @media_container.media_geometry(:for_slider).width %>) + 'px',
+        height: Math.round(ry * <%= @media_container.media_geometry(:for_slider).height %>) + 'px',
         marginLeft: '-' + Math.round(rx * coords.x) + 'px',
         marginTop: '-' + Math.round(ry * coords.y) + 'px'
       });
@@ -34,17 +34,11 @@
   <% end -%>
 <% end %>
 
-<style>
-  img.my-img-preview {
-    max-width: none;
-  }
-</style>
-
-<%= image_tag @media_container.media.url(:large), id: "cropbox" %>
+<%= image_tag @media_container.media.url(:for_slider), id: "cropbox" %>
 
 <h4>Preview:</h4>
 <div style="width:1200px; height:500px; overflow:hidden">
-  <%= image_tag @media_container.media.url(:large), :id => "preview", class: "my-img-preview" %>
+  <%= image_tag @media_container.media.url(:for_slider), :id => "preview", class: "my-img-preview" %>
 </div>
 
 <%= simple_form_for @media_container do |f| %>
