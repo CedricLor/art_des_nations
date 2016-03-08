@@ -62,6 +62,9 @@ fr:
   picture_mark_for_deletion: "Supprimer cette photo"
 
   placeholder_for_new_picture_title: "Vous pouvez entrer une légende pour votre nouvelle image ici."
+  placeholder_for_picture_source_url: "Vous pouvez entrer l'url du site d'où vient l'image ici."
+  placeholder_for_picture_creation_date: "Vous pouvez entrer la date de la photo ou du tableau ici."
+  placeholder_for_picture_author_name: "Vous pouvez entrer le nom du photographe ou du peintre ici."
 
   check_box_label_is_picture_for_card: "Vous voulez utiliser cette photo pour les pages d'index où %{item} est affiché(e)."
   check_box_label_is_picture_for_carousel: "Vous souhaitez que cette photo soit utilisée dans le caroussel : "

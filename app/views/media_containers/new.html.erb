@@ -13,7 +13,8 @@
 
 <% render 'shared/admin_nav_content' %>
 
-<%= render "form",
+<%= render "media_containers/form",
+    media_container: @media_container,
     title_value: '',
     source_url_field_name: 'media_container[source_url]',
     source_url_value: '',

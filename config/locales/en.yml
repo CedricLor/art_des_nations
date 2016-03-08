@@ -62,6 +62,9 @@ en:
   picture_mark_for_deletion: "Delete this picture"
 
   placeholder_for_new_picture_title: "You may enter a legend for your new picture here"
+  placeholder_for_picture_source_url: "You may enter the source url of your new picture here."
+  placeholder_for_picture_creation_date: "You may enter the date of your new foto or painting here."
+  placeholder_for_picture_author_name: "You may enter the name of the photograph or painter here."
 
   item_action_for_check_box_label: 'this action'
 

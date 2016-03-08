@@ -1,7 +1,11 @@
 <%# media_containers/_form.html.erb %>
+<%# called from:
+- media_containers/index.html.erb
+- media_containers/new.html.erb
+%>
 
 
-<%= simple_form_for @media_container, html: {multipart: true} do |f| %>
+<%= simple_form_for media_container, html: {multipart: true} do |f| %>
 
   <%= render partial: 'shared/aktion_article_portrait/additional_picture_form.html.erb',
       locals: {
@@ -15,15 +19,15 @@
 
   <%= render partial: 'media_containers/partials/additional_media_container_fields',
       locals: {
-        source_url_field_name: 'media_container[source_url]',
+        source_url_field_name: source_url_field_name,
         source_url_value: source_url_value,
-        placeholder_for_picture_source_url: t(:placeholder_for_picture_source_url, default: "You may enter the source url of your new picture here"),
-        creation_date_field_name: 'media_container[creation_date]',
+        placeholder_for_picture_source_url: t(:placeholder_for_picture_source_url, default: "You may enter the source url of your new picture here."),
+        creation_date_field_name: creation_date_field_name,
         creation_date_value: creation_date_field_value,
-        placeholder_for_picture_creation_date: t(:placeholder_for_picture_creation_date, default: "You may enter the date of your new photograp or painting here"),
-        author_field_name: 'media_container[author]',
+        placeholder_for_picture_creation_date: t(:placeholder_for_picture_creation_date, default: "You may enter the date of your new foto or painting here."),
+        author_field_name: author_field_name,
         author_field_name_value: author_field_name_value,
-        placeholder_for_picture_author_name: t(:placeholder_for_picture_author_name, default: "You may enter the name of the photograph or painter here")
+        placeholder_for_picture_author_name: t(:placeholder_for_picture_author_name, default: "You may enter the name of the photograph or painter here.")
       }
   %>
 

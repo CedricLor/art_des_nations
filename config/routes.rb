@@ -21,7 +21,7 @@ Rails.application.routes.draw do
     resources :categories
 
     get 'illustrations/for/:picturizable_type/:picturizable_id', to: 'media_containers#index', as: 'picturizings_for'
-    resources :media_containers, only: [:new, :create, :update, :show, :index]
+    resources :media_containers, only: [:new, :create, :update, :show]
 
     resources :countries, only: [:show, :edit, :update]
     resources :portrait_intros, only: [:show, :edit, :update]

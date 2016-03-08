@@ -10,7 +10,6 @@ class MediaContainersController < ApplicationController
       constantize.
       includes(picturizings: [:translations, media_container: :translations]).
       find(params[:picturizable_id])
-    @media_containers = @parent_item.media_containers
   end
 
   # def index
