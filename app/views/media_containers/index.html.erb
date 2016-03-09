@@ -38,19 +38,19 @@
         <% if @parent_item.media_container.present? %>
           <%# from portrait#update %>
           <% provide :picture_form_intro do %>
-            <%= image_tag(@parent_item.media_container.media(:for_slider), alt: @parent_item.media_container.title) %>
+            <%= render 'media_containers/crop_fields_for', media_container: @parent_item.media_container, width: 1200, height: 500, index: 1 %>
             <div class="form-group">
               <%= text_field_tag("portrait[picture_title]", @parent_item.media_container.title, id:"portrait_picture_title", class: "form-control") %>
             </div>
             <p>
-              <%= t :portrait_update_file_upload_back_office_legend, default: "If you want to change your picture, please upload a file here:" %>
+              <%= t :portrait_update_file_upload_back_office_legend, default: "If you want to change your picture, please upload a file here." %>
             </p>
           <% end %>
-        <% else %><%# else of: if @parent_item.media_container.present? %>
+        <% else %><%# else of: if @parent_item.media_container.present? i.e. if there are currently no media_containers %>
           <%# from portrait#new %>
           <% provide :picture_form_intro do %>
             <p>
-              <%= t :portrait_create_file_upload_back_office_legend, default: "Please upload a picture for your portrait here::" %>
+              <%= t :portrait_create_file_upload_back_office_legend, default: "Please upload a picture for your portrait here." %>
             </p>
           <% end %>
         <% end %><%# end of: if @parent_item.media_container.present? %>

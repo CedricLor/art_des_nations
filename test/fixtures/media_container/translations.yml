@@ -1,0 +1,12 @@
+
+my_first_media_container_translation:
+  id: 1
+  locale: fr
+  title: MyString
+  globalized_model: first_media_container
+
+my_second_media_container__translation:
+  id: 2
+  locale: fr
+  title: MyString
+  globalized_model: second_media_container

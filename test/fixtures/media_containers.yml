@@ -1,13 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  title: MyString
+first_media_container:
   author: MyString
-  source: MyString
+  source_url: http://www.toto.fr
   creation_date: 2015-12-15
 
-two:
-  title: MyString
+second_media_container:
   author: MyString
-  source: MyString
+  source_url: http://www.toto.fr
   creation_date: 2015-12-15

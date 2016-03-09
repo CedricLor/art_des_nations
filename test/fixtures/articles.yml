@@ -1,9 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  title: MyString
-  body: MyText
+my_first_article:
+  id: 1
+  author_id: 1
+  posted_at: "2016-03-08 23:52:32"
 
-two:
-  title: MyString
-  body: MyText
+my_second_article:
+  id: 2
+  author_id: 1
+  posted_at: "2016-03-08 23:52:32"

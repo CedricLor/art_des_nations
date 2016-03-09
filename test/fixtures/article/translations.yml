@@ -1,0 +1,7 @@
+
+my_first_article_translation:
+  id: 1
+  locale: fr
+  title: My first article
+  body: What a time to be alive!
+  globalized_model: my_first_article
