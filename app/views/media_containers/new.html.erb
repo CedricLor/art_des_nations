@@ -2,18 +2,18 @@
 
 <% content_for :title, t(:new_picture, default: "Adding pictures") %>
 
-<%# provide :admin_nav_content_type do %>
-  <%# t(:picture, default: "Picture") %>
-<%# end %>
+<% provide :admin_nav_content_type do %>
+  <% t(:picture, default: "Picture") %>
+<% end %>
 
-<%# provide :admin_nav_content_actions do %>
-  <!--<li><%#= link_to t(:admin_nav_admin_index_content, default: 'Index'), media_containers_path %></li>
-  <li><%#= link_to 'Back', url_for(:back) %></li>-->
-<%# end %>
+<% provide :admin_nav_content_actions do %>
+  <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), media_containers_path %></li>
+  <li><%= link_to 'Back', url_for(:back) %></li>
+<% end %>
 
-<%# render 'shared/admin_nav_content' %>
+<% render 'shared/admin_nav_content' %>
 
-<%#= render "media_containers/form",
+<%= render "media_containers/form",
     media_container: @media_container,
     title_value: '',
     source_url_field_name: 'media_container[source_url]',
@@ -24,70 +24,4 @@
     author_field_name_value: ''
 %>
 
-<% provide :admin_nav_content_type do %>
-  <% "#{@parent_item.class.name}" %>
-<% end %>
 
-<% provide :admin_nav_content_actions do %>
-  <li><%= link_to t(:admin_nav_delete_content, default: 'Delete'), polymorphic_path(@parent_item, method: :delete, data: { confirm: t(:deletion_confirmation, this_item: @this_item_i18n_name, default: "Are you sure you want to delete #{@this_item_i18n_name}?") }) %></li>
-  <li><%= link_to t(:admin_nav_new_content, default: 'New'), polymorphic_url(@parent_item.class.new, action: :new, routing_type: :path) %></li>
-  <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), polymorphic_url(@parent_item, action: :edit, routing_type: :path) %></li>
-  <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), polymorphic_path(@parent_item.class.new) %></li>
-<% end %>
-
-<% render 'shared/admin_nav_content' %>
-
-<% provide :picture do %>
-  <div class="row contenu illustration">
-    <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
-
-      <% if @parent_item.media_container.present? && @parent_item.media_container.id != nil %>
-        <%# from portrait#update %>
-        <% provide :picture_form_intro do %>
-          <%= image_tag media_container.media.url(:for_slider), alt: media_container.title %>
-          <p>
-            <%= t :portrait_update_file_upload_back_office_legend, default: "If you want to change your picture, please upload a file here." %>
-          </p>
-        <% end %>
-      <% else %><%# else of: if @parent_item.media_container.present? i.e. if there are currently no media_containers %>
-        <%# from portrait#new %>
-        <% provide :picture_form_intro do %>
-          <p>
-            <%= t :portrait_create_file_upload_back_office_legend, default: "Please upload a picture for your portrait here." %>
-          </p>
-        <% end %>
-      <% end %><%# end of: if @parent_item.media_container.present? %>
-
-      <%= yield :picture_form_intro %>
-
-      <%= render "media_containers/form",
-          media_container: @parent_item.media_container,
-          title_value: '',
-          source_url_field_name: 'media_container[source_url]',
-          source_url_value: '',
-          creation_date_field_name: 'media_container[creation_date]',
-          creation_date_field_value: '',
-          author_field_name: 'media_container[author]',
-          author_field_name_value: ''
-      %>
-
-      <hr>
-    </div>
-  </div>
-<% end %>
-
-
-<% render partial: 'shared/aktion_article_portrait/recommandations',
-    locals: {
-      collection: @parent_item.existing_links,
-      yieldable_name: "existing_external_linkings",
-      linkings_heading: @parent_item.model_name.name == "Portrait" ? t(:related, default: "En lien") : t(:further_reading, default: "Aller plus loin"),
-      sub_sub_partial: 'shared/aktion_article_portrait/recommandation_picture_title'
-    }
-%>
-
-<%= render partial: 'shared/linkings_media_containers/common_index_page_builder',
-    locals: {
-      parent_item: @parent_item
-    }
-%>

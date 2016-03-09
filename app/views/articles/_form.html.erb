@@ -6,6 +6,9 @@
     <%= f.error_notification %>
   <% end %>
 
+
+
+
   <%# dispatching the form fields in variables to pass them to the partial %>
   <% title = f.input :title,
     label: false,
@@ -21,23 +24,11 @@
     object: @article,
     locals: { f: f }
   %>
-  <%# body = f.cktext_area :body, rows: 50, :ckeditor => {language: I18n.locale} %>
 
 
-  <% posted_from_location = f.input :posted_from_location,
-    label: false,
-    error: t(
-      :missing_posted_from_location,
-      this_item_i18n_name: @this_item_i18n_name,
-      default: "You must indicate a publication place for #{@this_item_i18n_name}. Please specificy one."
-    )
-  %>
-  <% posted_at = f.input :posted_at, as: :date, label: false %>
 
-  <% render partial: 'shared/aktion_article_portrait_site_edito/status_submit_button',
-    object: @article,
-    locals: { f: f }
-  %>
+
+
 
   <%# building a pictures' array for the photo gallery together with media_containers editable fields %>
   <% provide :pictures do %>
@@ -57,10 +48,33 @@
     %>
   <% end %>
 
+
+
+
+
+  <% posted_from_location = f.input :posted_from_location,
+    label: false,
+    error: t(
+      :missing_posted_from_location,
+      this_item_i18n_name: @this_item_i18n_name,
+      default: "You must indicate a publication place for #{@this_item_i18n_name}. Please specificy one."
+    )
+  %>
+  <% posted_at = f.input :posted_at, as: :date, label: false %>
+  <% render partial: 'shared/aktion_article_portrait_site_edito/status_submit_button',
+    object: @article,
+    locals: { f: f }
+  %>
   <%# building a form to allow user to change author name or add a new author %>
   <% provide :author_full_name do %>
     <%= render partial: 'articles/partials/author_form', locals: {f: f} %>
   <% end %>
+
+
+
+
+
+
 
   <%# building a form to allow user to change the categories applying to the articles, select the main category and add new categories %>
   <% provide :categories_form do %>
@@ -71,6 +85,10 @@
       }
     %>
   <% end %>
+
+
+
+
 
   <%# render the partial with the variables passed in an array %>
   <%= render partial: 'articles/partials/container',

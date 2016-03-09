@@ -44,8 +44,13 @@ module AktionArticlePictures
       pict.update(
         for_carousel: md_for_carousel["#{pict.id}"]
       )
-      pict.media_container.update(
-        title: md_to_update["#{pict.id}"]
+      byebug
+      pict.media_container.update_attributes(
+        title: md_to_update["#{pict.id}"]["title"],
+        crop_x: md_to_update["#{pict.id}"]["crop_x"],
+        crop_y: md_to_update["#{pict.id}"]["crop_y"],
+        crop_w: md_to_update["#{pict.id}"]["crop_w"],
+        crop_h: md_to_update["#{pict.id}"]["crop_h"]
       )
     end
   end

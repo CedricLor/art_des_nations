@@ -5,14 +5,35 @@
 
 <% title = title_for_existing_md(parent, pict) %>
 
-<%= image_tag(pict.media_container.media(:for_slider), alt: "#{title}") %>
+
+
+<%# FIXME:
+1. change all the references to pict.id to pict.media_container.id
+2. change the module to handle directly the media_container.id instead of passing through the picturizing.id
+%>
+
+<%# RENDER THE EXISTING PICTURE %>
+<%= render 'shared/aktion_article_portrait/crop_fields_for',
+    media_container: pict.media_container,
+    name_builder: "#{item}[md_to_update][#{pict.id}]",
+    id_builder: "#{item}_media_container_md_to_update_#{pict.id}",
+    index: pict.id,
+    width: 1200,
+    height: 500
+%>
+
+
+
 <!-- FORM FIELD FOR THE PICTURE (MEDIA_CONTAINER) TITLE-->
 <div class="form-group">
-  <%= text_field_tag("#{item}[md_to_update][#{pict.id}]", title, id:"#{item}_media_container_md_to_update_#{pict.id}", class: "form-control") %>
+  <%= text_field_tag("#{item}[md_to_update][#{pict.id}][title]", title, id:"#{item}_media_container_md_to_update_#{pict.id}", class: "form-control") %>
 </div>
 <!-- END FORM FIELD FOR THE PICTURE TITLE-->
 
-<!-- ADDITIONAL ITEMS: -->
+
+
+
+<!-- ADDITIONAL ACTIONS ON THE PICTURE: -->
   <!-- DESTROY CHECKBOX -->
   <span class="checkbox">
     <label for=<%= "#{item}_media_container_md_for_destruction_#{pict.id}"%> >
