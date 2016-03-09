@@ -96,6 +96,7 @@ class PortraitsController < ApplicationController
         :main_category_id,
         :new_category_name,
         new_md: [:file, :title],
+        picture_update: params[:portrait][:picture_update].try(:keys),
         applicable_existing_categories: params[:portrait][:applicable_existing_categories].try(:keys)
       )
     end

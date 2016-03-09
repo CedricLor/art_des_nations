@@ -12,7 +12,7 @@
 2. change the module to handle directly the media_container.id instead of passing through the picturizing.id
 %>
 
-<%# RENDER THE EXISTING PICTURE %>
+<%# RENDER THE EXISTING PICTURE WITH THE CROPPING FIELDS %>
 <%= render 'shared/aktion_article_portrait/crop_fields_for',
     media_container: pict.media_container,
     name_builder: "#{item}[md_to_update][#{pict.id}]",

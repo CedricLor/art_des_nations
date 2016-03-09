@@ -16,8 +16,19 @@
 
 <% render 'shared/admin_nav_content' %>
 
+
+
 <% provide :picture_form_intro do %>
-  <%= image_tag(@portrait.media_container.media(:for_slider), alt: @portrait.media_container.title) %>
+  <%# RENDER THE EXISTING PICTURE WITH THE CROPPING FIELDS %>
+  <%= render 'shared/aktion_article_portrait/crop_fields_for',
+      media_container: @portrait.media_container,
+      name_builder: "portrait[picture_update]",
+      id_builder: "portrait_picture_update",
+      index: 0,
+      width: 1200,
+      height: 500
+  %>
+  <%#= image_tag(@portrait.media_container.media(:for_slider), alt: @portrait.media_container.title) %>
   <div class="form-group">
     <%= text_field_tag("portrait[picture_title]", @portrait.media_container.title, id:"portrait_picture_title", class: "form-control") %>
   </div>
@@ -25,5 +36,6 @@
     <%= t :portrait_update_file_upload_back_office_legend, default: "If you want to change your picture, please upload a file here:" %>
   </p>
 <% end %>
+
 
 <%= render 'form' %>

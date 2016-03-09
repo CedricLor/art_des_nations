@@ -51,7 +51,7 @@ class Portrait < ActiveRecord::Base
 
 
 
-  attr_accessor :picture_title, :new_md, :applicable_existing_categories, :main_category_id, :new_category_name
+  attr_accessor :picture_title, :picture_update, :new_md, :applicable_existing_categories, :main_category_id, :new_category_name
 
 
 
@@ -94,9 +94,15 @@ class Portrait < ActiveRecord::Base
   end
 
   def update_associated_picture_acmb
+    media_container.update_attributes(
+      crop_x: picture_update["crop_x"],
+      crop_y: picture_update["crop_y"],
+      crop_w: picture_update["crop_w"],
+      crop_h: picture_update["crop_h"]
+    )
     if picture_title
       media_container.update(
-        title: picture_title,
+        title: picture_title
       )
     end
     if new_md && new_md[:file].present?
