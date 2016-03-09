@@ -61,8 +61,53 @@
 <% end %>
 
 
-<%= render partial: 'shared/linkings_media_containers/common_index_page_builder',
-    locals: {
-      parent_item: @parent_item
+
+
+<%# ############################### %>
+<%# if it is an article, render article's container (with author name, posted at and posted from stuffs) %>
+<% if @parent_item.model_name.name == "Article" %>
+  <% provide :author_full_name do %>
+    <%= @parent_item.author.full_name %>
+  <% end %>
+
+  <%= render partial: 'articles/partials/container',
+      layout: "shared/article_aktion_static/container_layout",
+      locals: {
+        parameters: {
+          title: @parent_item.title,
+          teaser: @parent_item.teaser  || '',
+          body: @parent_item.body || '',
+          posted_from_location: @parent_item.posted_from_location,
+          posted_at: @parent_item.posted_at
+        }
+      }
+  %>
+<%# if it is an aktion, render aktion's container %>
+<% elsif @parent_item.model_name.name == "Aktion" %>
+
+  <%= render partial: 'aktions/partials/container',
+      layout: "shared/article_aktion_static/container_layout",
+      locals: {
+        parameters: {
+          title: @parent_item.title,
+          teaser: @parent_item.teaser || '',
+          body: @parent_item.body || ''
+        }
+      }
+  %>
+
+<%# if it is a portrait, render portrait's container (with its own picture logic) %>
+<% elsif @parent_item.model_name.name == "Portrait" %>
+
+  <%= render partial: 'portraits/partials/container',
+    object: @parent_item, locals: {
+      parameters: {
+        title: @parent_item.title,
+        teaser: @parent_item.teaser || '',
+        body: @parent_item.body || ''
+      }
     }
-%>
+  %>
+
+<% end %>
+

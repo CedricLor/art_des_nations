@@ -5,6 +5,7 @@
 - portraits/_form.html.erb
 %>
 
+
 <% item = categories_form.model_name.param_key %>
 
 <div class="row">
@@ -17,30 +18,32 @@
     <div class="form-group">
 
       <label class="required control-label"><abbr title="champ obligatoire">*</abbr> <%= t :categories_to_apply_to_this_item, this_item: @this_item_i18n_name, default: "Choose the categories you want to apply to #{@this_item_i18n_name} here:" %></label>
-      <table style="width: 100%;">
+
+
+
+
 
 
         <% @categories.each do |kateg| %>
-          <tr>
-            <!-- Category chooser -->
-            <td>
+
+          <div class="row flex-row">
+            <div class="col-xs-6 flex-col-6">
               <% checked_yes, checked_no = marked_as_chosen_category(categories_form, chosen_category_ids, kateg) %>
               <label for=<%= "#{item}_category_#{kateg.id}_yes"%> class="radio-inline required control-label" ><input class="radio_buttons required"  type="radio" name=<%="#{item}[applicable_existing_categories][#{kateg.id}]"%> id=<%="#{item}_category_#{kateg.id}_yes"%> value='true' <%= checked_yes %> ><%= t :si, default: "Yes" %></label>
               <label for=<%= "#{item}_category_#{kateg.id}_no"%> class="radio-inline required control-label" ><input class="radio_buttons required"  type="radio" name=<%="#{item}[applicable_existing_categories][#{kateg.id}]"%> id=<%="#{item}_category_#{kateg.id}_no"%> value='false' <%= checked_no %> ><%= t :non, default: "No" %></label>
               <p class="radio-inline"><%= kateg.name %></p>
-            </td>
-            <!-- End category chooser -->
-            <!-- Main category chooser -->
-            <% checked_if_main_category = is_main_category?(categories_form, chosen_category_ids, kateg) %>
-            <td style="text-align: right;">
-              <label style="padding-right: 20px;" for=<%= "#{item}_main_category_#{kateg.id}"%> class="radio-inline" ><%= t :main_category, default: "main category:" %></label><input class="radio_buttons required"  type="radio" name=<%="#{item}[main_category_id]"%> id=<%="#{item}_main_category_#{kateg.id}"%> value=<%="#{kateg.id}" %> <%= checked_if_main_category %> >
-            </td>
-            <!-- End main category chooser -->
-          </tr>
+            </div>
+
+
+            <div class="col-xs-6 text-right flex-col-6 flex-bottom-aligned-content">
+              <% checked_if_main_category = is_main_category?(categories_form, chosen_category_ids, kateg) %>
+              <label for=<%= "#{item}_main_category_#{kateg.id}"%> class="radio-inline padding-right-20 " ><%= t :main_category, default: "main category:" %></label><input class="radio_buttons required"  type="radio" name=<%="#{item}[main_category_id]"%> id=<%="#{item}_main_category_#{kateg.id}"%> value=<%="#{kateg.id}" %> <%= checked_if_main_category %> >
+            </div>
+          </div>
+
+
         <% end %>
 
-
-      </table>
 
     </div>
     <!-- End Checkboxes Categories Chooser -->

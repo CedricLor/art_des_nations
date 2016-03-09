@@ -8,7 +8,6 @@
 @import "font-awesome-sprockets";
 @import "font-awesome";
 @import 'jquery.Jcrop';
-// *= require jquery.jcrop
 
 // Site wide settings (other than variables and mixins)
 @import "config/additional_variables";
@@ -17,5 +16,4 @@
 // Your CSS
 @import "layout/index";
 @import "components/index";
-@import "pages/index";
 @import "vendor/index";

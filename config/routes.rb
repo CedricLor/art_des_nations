@@ -8,9 +8,6 @@ Rails.application.routes.draw do
   end
 
   scope '(:locale)', locale: /fr|en|ru|zh-CN/ do
-    # FIXME -- This was for React
-    # get 'article/:id' => "pages#show"
-
     get 'linkings/for/:linkable_type/:linkable_id', to: 'linkings#index', as: 'linkings_for'
     resources :linkings, only: [:destroy, :create]
 
@@ -20,9 +17,6 @@ Rails.application.routes.draw do
     resources :portraits
     resources :categories
 
-    get 'illustrations/for/:picturizable_type/:picturizable_id', to: 'media_containers#index', as: 'picturizings_for'
-    resources :media_containers, only: [:new, :create, :update, :show]
-
     resources :countries, only: [:show, :edit, :update]
     resources :portrait_intros, only: [:show, :edit, :update]
     get 'protagonistes', to: 'portrait_intros#show', as: 'protagonistes'
@@ -30,14 +24,10 @@ Rails.application.routes.draw do
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
-    # FIXME -- This was for React
-    # get 'pages/show'
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
 
-    # FIXME -- This was the React default route
-    # root to: "pages#show"
     resources :static_pages, only: [:show, :edit, :update], path: 'page'
     get 'page/:id', to: 'static_pages#show', as: 'page'
 
@@ -48,7 +38,6 @@ Rails.application.routes.draw do
     resources :site_editorials, only: [:show, :new, :edit, :update, :create, :index]
     get 'editorial/:id', to: 'site_editorials#show', as: 'editorial'
 
-    # get 'home_pages/:id' => 'home_pages#show'
     root to: "home_pages#show"
 
   # Example of regular route:

@@ -57,3 +57,25 @@ div.recommandations {
 img.my-img-preview {
   max-width: none;
 }
+
+
+// Format the categories selector
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.flex-col-11 {
+  flex-grow: 11;
+}
+.flex-col-1 {
+  flex-grow: 1;
+}
+.flex-col-6 {
+  flex-grow: 6;
+}
+.flex-bottom-aligned-content {
+  align-self: flex-end;
+}
+.padding-right-20 {
+  padding-right: 20px;
+}

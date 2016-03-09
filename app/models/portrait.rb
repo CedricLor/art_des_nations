@@ -20,9 +20,6 @@ class Portrait < ActiveRecord::Base
   has_many :picturizings, as: :picturizable, inverse_of: :portrait
   has_many :media_containers, through: :picturizings
 
-  # has_one :picturizing, :as => :picturizable, inverse_of: :portrait
-  # has_one :media_container, through: :picturizing
-
   has_many :categorizings, :as => :categorizable, inverse_of: :portrait, dependent: :destroy
   has_many :categories, through: :categorizings
 
@@ -74,10 +71,6 @@ class Portrait < ActiveRecord::Base
   def media_container
     media_containers.last
   end
-
-  # def picturizings
-  #   picturizing.present? ? [picturizing] : []
-  # end
 
   def date_sorting_field
     updated_at
