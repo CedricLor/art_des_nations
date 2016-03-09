@@ -28,28 +28,8 @@ Please feel free to use a different markup language if you do not plan to run
 <tt>rake doc:app</tt>.
 
 TODOS:
-- Remove devise-i18n-views and import devise fr yaml files
-- Figure out how to split the require in application.js to generate js per files
-- active-admin.js.coffee is loaded in every pages of the site -> performance hit
-
-- todo:
-  - heavy refactoring needed for the query methods in :
-    - portraits -> portrait model
-    - categories -> category model
-    - actions -> action model
 
 - pagination on list left aside for the moment: need to ask Seb after how many items do we need to paginate
-
-- Refactoring need: the external links partial might be eager-loading...
-- Refactoring need: the categories links in the side-nav are eager-loading...
-- Refactoring need: the categories loading on the home page (see the article model)
-
-- Feed in the alts in the recommandation partial
-- Feed in the alts in the article_recommandation partial on the home_page
-- Feed in the alts in the diaporama actions partial
-- Refacto the diaporama actions partial to make it fit with the other partials
-
-- Refacto article_recommandations and article_recommandation partials. There is a way to match the recommandation partial.
 
 - Refacto home_page controller slice method on Portrait.with_media_containers_for_card(locale) => should not be necessary to slice, should not get more than three portraits
 - Refacto / feature: the user should be able to choose the portraits that are displayed on the home page: to be discussed with Seb
