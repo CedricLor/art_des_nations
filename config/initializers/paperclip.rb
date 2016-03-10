@@ -1,4 +1,4 @@
-if Rails.env == 'production'
+# if Rails.env == 'production'
   Paperclip::Attachment.default_options[:storage] = :s3
   Paperclip::Attachment.default_options[:url] = ':s3_domain_url'
   Paperclip::Attachment.default_options[:path] = '/:rails_env/:class/:attachment/:id_partition/:style/:filename'
@@ -7,4 +7,4 @@ if Rails.env == 'production'
     access_key_id:      ENV['AWS_ACCESS_KEY_ID'],     #  |- DO NOT replace this
     secret_access_key:  ENV['AWS_SECRET_ACCESS_KEY']  # /
   }
-end
+# end

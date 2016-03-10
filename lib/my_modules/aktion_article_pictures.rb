@@ -31,7 +31,7 @@ module AktionArticlePictures
           picturizable_id: @main_model.id,
           picturizable_type: @main_model.class.name,
           for_carousel: value["for_carousel"],
-          for_card: for_card.sub(/new_md_/, '') == key ? "true" : "false"
+          for_card: (for_card && for_card.sub(/new_md_/, '') == key) ? "true" : "false"
         )
       end
     end

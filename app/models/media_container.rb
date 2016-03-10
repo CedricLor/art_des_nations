@@ -36,7 +36,7 @@ class MediaContainer < ActiveRecord::Base
   def media_geometry(style = :original)
     @geometry ||= {}
     media_path = (media.options[:storage] == :s3) ? media.url(style) : media.path(style)
-    @geometry[style] ||= Paperclip::Geometry.from_file(media.path)
+    @geometry[style] ||= Paperclip::Geometry.from_file(media_path)
   end
 
 
