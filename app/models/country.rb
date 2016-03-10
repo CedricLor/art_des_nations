@@ -15,4 +15,8 @@ class Country < ActiveRecord::Base
   def teaser
     self.editorial
   end
+
+  def picturizings
+    nil
+  end
 end
