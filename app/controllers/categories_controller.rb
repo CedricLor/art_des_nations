@@ -1,4 +1,5 @@
 class CategoriesController < ApplicationController
+  include OgMetaTagsSetter
   before_action :set_category_with_aktions_and_articles, only: [:show, :edit, :update]
   before_action :set_category, only: [:destroy]
   before_action :set_item_i18n_name
@@ -19,6 +20,8 @@ class CategoriesController < ApplicationController
   # GET /categories/1
   # GET /categories/1.json
   def show
+    set_og_meta_tags(@category)
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @category }

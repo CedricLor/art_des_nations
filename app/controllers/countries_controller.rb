@@ -1,4 +1,5 @@
 class CountriesController < ApplicationController
+  include OgMetaTagsSetter
   before_action :set_country, only: [:show, :edit]
   before_action :set_ancillary_collections, only: [:show, :edit]
   before_action :set_item_i18n_name
@@ -9,6 +10,8 @@ class CountriesController < ApplicationController
   # GET /countries/1
   # GET /countries/1.json
   def show
+    set_og_meta_tags(@country)
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @country }

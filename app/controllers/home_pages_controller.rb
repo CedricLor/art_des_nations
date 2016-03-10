@@ -1,4 +1,5 @@
 class HomePagesController < ApplicationController
+  include OgMetaTagsSetter
   before_action :set_home_page, only: [:show, :edit, :update]
   before_action :set_ancillary_collections, only: [:show, :edit, :update]
   before_action :set_item_i18n_name
@@ -7,6 +8,8 @@ class HomePagesController < ApplicationController
   # GET /home_pages/1
   # GET /home_pages/1.json
   def show
+    # set_og_meta_tags(@home_page)
+
     respond_to do |format|
       format.html { render } # show.html.erb
       format.json { render json: @home_page }

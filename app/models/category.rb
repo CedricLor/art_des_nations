@@ -37,6 +37,14 @@ class Category < ActiveRecord::Base
 
     (articles + aktions + portraits).sort { |a, b| b.date_sorting_field <=> a.date_sorting_field }
   end
+
+  def title
+    self.name
+  end
+
+  def teaser
+    self.editorial
+  end
 end
 
 

@@ -53,6 +53,7 @@ fr:
   create_links: "Créez des liens !!!"
   picture: 'Image'
   truncating_omission: '... (lire la suite)'
+  home_page_title: "Page d'accueil de l'Art des Nations"
 
   home_page_title: "Accueil"
   published_html: "<p class='meta'>Publié le <span class='date-publication'>%{posted_at}</span> à <span class='lieu-publication'>%{posted_from_location}</span></p>"

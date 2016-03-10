@@ -32,5 +32,13 @@ class HomePage < ActiveRecord::Base
     end_of_short_edito = editorial.length > 350 ? (editorial.index('</p>', 350) + 4) : editorial.length
     editorial.slice(0, end_of_short_edito)
   end
+
+  def teaser
+    short_editorial
+  end
+
+  def title
+    I18n.t(:home_page_title, default: "Page d'accueil de l'Art des Nations")
+  end
 end
 

@@ -1,4 +1,5 @@
 class ArticlesController < ApplicationController
+  include OgMetaTagsSetter
   before_action :set_article, only: [:show, :destroy]
   before_action :clean_up_posted_at_params, only: [:create, :update]
   before_action :set_article_creation_form, only: [:new, :create]
@@ -24,6 +25,7 @@ class ArticlesController < ApplicationController
   # GET /articles/1.json
   def show
     @media_containers = @article.media_containers_for_carousel
+    set_og_meta_tags(@article)
 
     respond_to do |format|
       format.html # show.html.erb
