@@ -1,9 +1,5 @@
 <% content_for :title, t(:new_action, default: "New action") %>
 
-<% provide :admin_nav_content_type do %>
-  <% "#{@aktion.model_name.name}" %>
-<% end %>
-
 <% provide :admin_nav_content_actions do %>
   <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), aktions_path %></li>
 <% end %>

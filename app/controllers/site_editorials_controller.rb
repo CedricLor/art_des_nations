@@ -1,6 +1,7 @@
 class SiteEditorialsController < ApplicationController
   before_action :set_site_editorial, only: [:show, :edit, :update, :destroy]
   before_action :set_item_i18n_name
+  before_action :set_items_i18n_name, only: [:index]
   skip_before_action :authenticate_user!, only: [:show]
 
   # GET /site_editorials
@@ -87,5 +88,10 @@ class SiteEditorialsController < ApplicationController
       @the_item_i18n_name = t(:the_item_site_editorial, default: 'the editorial')
       @this_item_i18n_name = t(:this_item_site_editorial, default: 'this editorial')
       @an_item_i18n_name = t(:an_item_site_editorial, default: 'an editorial')
+      @item_i18n_name = t(:item_editorial, default: 'Editorial')
+    end
+
+    def set_items_i18n_name
+      @item_i18n_name = @item_i18n_name.pluralize
     end
 end

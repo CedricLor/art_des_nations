@@ -5,11 +5,11 @@
 - to come: view aktions/new.html.erb
 %>
 
-<% error_notifications = render partial: 'shared/article_aktion_static/error_notification' %>
+<% error_notifications = render partial: 'shared/aktion_article_static/error_notification' %>
 <%= render partial: 'shared/general_content_row',
     locals: { content: error_notifications } %>
 
-<% title_teaser = render partial: 'shared/article_aktion_static/title_teaser',
+<% title_teaser = render partial: 'shared/aktion_article_static/title_teaser',
     locals: {
       title: parameters[:title],
       teaser: parameters[:teaser]
@@ -23,7 +23,7 @@
 <%= yield :additional_pictures_form %>
 
 <%= render partial: 'shared/html_safe',
-    layout: 'shared/article_aktion_static/body_layout',
+    layout: 'shared/aktion_article_static/body_layout',
     locals: { content: parameters[:body] }
 %>
 

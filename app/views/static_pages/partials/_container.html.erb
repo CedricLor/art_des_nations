@@ -4,7 +4,7 @@
 - static_pages/_form.html.erb
 %>
 
-<% title_teaser = render partial: 'shared/article_aktion_static/title_teaser',
+<% title_teaser = render partial: 'shared/aktion_article_static/title_teaser',
     locals: {
       title: title,
       teaser: teaser
@@ -15,6 +15,6 @@
 %>
 
 <%= render partial: 'shared/html_safe',
-    layout: 'shared/article_aktion_static/body_layout',
+    layout: 'shared/aktion_article_static/body_layout',
     locals: { content: body }
 %>

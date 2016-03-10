@@ -9,7 +9,7 @@ at the bottom of the aktions, the articles or the portraits
 %>
 
 
-<% if collection.present? %>
+<% if linkings_collection.present? %>
   <% provide "#{yieldable_name}".to_sym do %>
 
     <hr>
@@ -20,7 +20,7 @@ at the bottom of the aktions, the articles or the portraits
 
           <%= render partial: 'shared/recommandations_iterator',
             locals: {
-              collection: collection,
+              collection: linkings_collection,
               additional_class_names: yieldable_name,
               sub_partial: 'shared/aktion_article_portrait/recommandation_wrapper',
               sub_sub_partial: sub_sub_partial

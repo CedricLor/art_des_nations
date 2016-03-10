@@ -1,9 +1,5 @@
 <% content_for :title, t(:article_admin_index_title, default: "Articles admin index") %>
 
-<% provide :admin_nav_content_type do %>
-  <% "#{@articles.first.class.name.pluralize}" %>
-<% end %>
-
 <% provide :admin_nav_content_actions do %>
   <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_article_path %></li>
 <% end %>

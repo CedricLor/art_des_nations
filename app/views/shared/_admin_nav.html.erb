@@ -1,22 +1,14 @@
 <%# shared/_admin_nav.html.erb %>
 <% if user_signed_in? %>
 
-  <style>
-    .admin-nav-wrapper {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-    }
-  </style>
-
   <div class="admin-nav-wrapper">
     <div class="btn-group" role="group" aria-label="Administrative navigation bar">
       <div class="btn-group dropup" role="group" aria-label="Session actions (see profile and log out)">
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <%= t(:admin_nav_session, default: "Session") %>
           <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
           <li><%= link_to 'Profile', edit_user_registration_path %></li>
           <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
           <li role="separator" class="divider"></li>

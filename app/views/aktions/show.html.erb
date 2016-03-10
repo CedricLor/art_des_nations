@@ -1,42 +1,28 @@
 <%# aktions/show.html.erb %>
 <%# rendered in layout/aktions.html.erb %>
 
-<% provide :admin_nav_content_type do %>
-  <% "#{@aktion.class.name}" %>
-<% end %>
-
-<% provide :admin_nav_content_actions do %>
-  <li><%= link_to t(:admin_nav_delete_content, default: 'Delete'), aktion_path, method: :delete, data: { confirm: t(:deletion_confirmation, this_item: @this_item_i18n_name, default: "Are you sure you want to delete #{@this_item_i18n_name}?") } %></li>
-  <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_aktion_path %></li>
-  <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), edit_aktion_path(@aktion) %></li>
-  <li><%= link_to t(:admin_nav_manage_links, default: 'Manage links'), linkings_for_path(@aktion.class.name, @aktion.id) %></li>
-  <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), aktions_path %></li>
-<% end %>
-
-<% render 'shared/admin_nav_content' %>
+<% render 'shared/aktion_article_portrait/admin_nav_content_actions_for_show_view' %>
 
 <% provide :pictures do %>
-  <%= render partial: 'shared/article_aktion/galerie_photos',
-      locals: {
-        parent: @aktion,
-        pictures: @media_containers,
-        sub_partial: 'shared/article_aktion/slide_wrapper',
-        class_name_for_slider: 'slides'
-      }
+  <%= render 'shared/aktion_article/galerie_photos',
+      parent: @aktion,
+      pictures: @media_containers,
+      sub_partial: 'shared/aktion_article/slide_wrapper',
+      class_name_for_slider: 'slides'
   %>
 <% end %>
 
 <% render partial: 'shared/aktion_article_portrait/recommandations',
-    locals: {
-      collection: @aktion.existing_links,
-      yieldable_name: "existing_external_linkings",
-      linkings_heading: t(:further_reading, default: "Aller plus loin"),
-      sub_sub_partial: 'shared/aktion_article_portrait/recommandation_picture_title'
-    }
+  locals: {
+    linkings_collection: @aktion.existing_links,
+    yieldable_name: "existing_external_linkings",
+    linkings_heading: t(:further_reading, default: "Aller plus loin"),
+    sub_sub_partial: 'shared/aktion_article_portrait/recommandation_picture_title'
+  }
 %>
 
 <%= render partial: 'aktions/partials/container',
-    layout: "shared/article_aktion_static/container_layout",
+    layout: "shared/aktion_article_static/container_layout",
     locals: {
       parameters: {
         title: @aktion.title,

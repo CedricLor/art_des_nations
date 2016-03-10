@@ -23,7 +23,7 @@
   <% provide :aktion_date_fields do %>
     <% posted_at = f.input :posted_at, as: :date %>
     <% aktion_date = f.input :aktion_date, as: :date %>
-    <%= render partial: 'shared/article_aktion/additional_form_fields',
+    <%= render partial: 'shared/aktion_article/additional_form_fields',
       locals: {
         remaining_params: [
           posted_at,
@@ -40,18 +40,18 @@
 
   <%# building a pictures' array for the photo gallery together with media_containers editable fields %>
   <% provide :pictures do %>
-    <%= render partial: 'shared/article_aktion/galerie_photos',
+    <%= render partial: 'shared/aktion_article/galerie_photos',
         locals: {
           parent: @aktion,
           pictures: @aktion.picturizings,
-          sub_partial: 'shared/article_aktion/slide_wrapper_form',
+          sub_partial: 'shared/aktion_article/slide_wrapper_form',
           class_name_for_slider: ''
         }
     %>
   <% end %>
 
   <% provide :additional_pictures_form do %>
-    <%= render partial: 'shared/article_aktion/additional_pictures_form',
+    <%= render partial: 'shared/aktion_article/additional_pictures_form',
         locals: { parent: @aktion, item: @aktion.model_name.param_key }
     %>
   <% end %>
@@ -76,7 +76,7 @@
 
   <%# render the partial with the variables passed in an array %>
   <%= render partial: 'aktions/partials/container',
-      layout: "shared/article_aktion_static/container_layout",
+      layout: "shared/aktion_article_static/container_layout",
       locals: {
         parameters: {
           title: title,

@@ -4,6 +4,7 @@ class ArticlesController < ApplicationController
   before_action :set_article_creation_form, only: [:new, :create]
   before_action :set_article_update_form, only: [:edit, :update]
   before_action :set_item_i18n_name
+  before_action :set_items_i18n_name, only: [:index]
   skip_before_action :authenticate_user!, only: :show
 
 
@@ -79,7 +80,7 @@ class ArticlesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_article
-      @article = Article.find(params[:id])
+      @item = @article = Article.includes(:author).find(params[:id])
     end
 
     def set_article_creation_form
@@ -104,5 +105,10 @@ class ArticlesController < ApplicationController
       @the_item_i18n_name = t(:the_item_article, default: 'the article')
       @this_item_i18n_name = t(:this_item_article, default: 'this article')
       @an_item_i18n_name = t(:an_item_article, default: 'an article')
+      @item_i18n_name = t(:item_article, default: 'Article')
+    end
+
+    def set_items_i18n_name
+      @item_i18n_name = @item_i18n_name.pluralize
     end
 end

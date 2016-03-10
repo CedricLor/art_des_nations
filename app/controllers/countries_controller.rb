@@ -1,6 +1,8 @@
 class CountriesController < ApplicationController
   before_action :set_country, only: [:show, :edit]
   before_action :set_ancillary_collections, only: [:show, :edit]
+  before_action :set_item_i18n_name
+  before_action :set_items_i18n_name, only: [:index]
 
   skip_before_action :authenticate_user!, only: :show
 
@@ -56,5 +58,13 @@ class CountriesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def country_params
       params.require(:country).permit(:name, :title, :editorial)
+    end
+
+    def set_item_i18n_name
+      @item_i18n_name = t(:item_country, default: 'Country')
+    end
+
+    def set_items_i18n_name
+      @item_i18n_name = @item_i18n_name.pluralize
     end
 end

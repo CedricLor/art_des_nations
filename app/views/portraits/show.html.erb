@@ -3,20 +3,7 @@
 <% content_for :title, raw(@portrait.title) %>
 <% content_for :body_class, "portraits" %>
 
-<% provide :admin_nav_content_type do %>
-  <% "#{@portrait.class.name}" %>
-<% end %>
-
-<% provide :admin_nav_content_actions do %>
-  <li><%= link_to t(:admin_nav_delete_content, default: 'Delete'), portrait_path, method: :delete, data: { confirm: t(:deletion_confirmation, this_item: @this_item_i18n_name, default:"Are you sure you want to delete #{@this_item_i18n_name}?") } %></li>
-  <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_portrait_path %></li>
-  <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), edit_portrait_path(@portrait) %></li>
-  <li><%= link_to t(:admin_nav_manage_links, default: 'Manage links'), linkings_for_path(@portrait.class.name, @portrait.id) %></li>
-  <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), portraits_path %></li>
-  <li><%= link_to t(:admin_nav_show_portrait_intro, default: 'Portrait intro page'), portrait_intro_path(1) %></li>
-<% end %>
-
-<% render 'shared/admin_nav_content' %>
+<% render 'shared/aktion_article_portrait/admin_nav_content_actions_for_show_view' %>
 
 <% if @portrait.media_container.present? %>
   <% provide :picture do %>
@@ -28,9 +15,9 @@
   <% end %>
 <% end %>
 
-<% render partial: 'shared/aktion_article_portrait/recommandations',
+<% render 'shared/aktion_article_portrait/recommandations',
     locals: {
-      collection: @portrait.existing_links,
+      linkings_collection: @portrait.existing_links,
       yieldable_name: "existing_external_linkings",
       linkings_heading: t(:related, default: "En lien"),
       sub_sub_partial: 'shared/aktion_article_portrait/recommandation_picture_title'

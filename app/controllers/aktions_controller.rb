@@ -1,9 +1,11 @@
 class AktionsController < ApplicationController
+  include OgMetaTagsSetter
   before_action :set_aktion, only: [:show, :destroy]
   before_action :clean_up_date_params, only: [:create, :update]
   before_action :set_aktion_creation_form, only: [:new, :create]
   before_action :set_aktion_update_form, only: [:edit, :update]
   before_action :set_item_i18n_name
+  before_action :set_items_i18n_name, only: [:index]
   skip_before_action :authenticate_user!, only: :show
 
 
@@ -22,6 +24,7 @@ class AktionsController < ApplicationController
   # GET /aktions/1.json
   def show
     @media_containers = @aktion.media_containers_for_carousel
+    set_og_meta_tags(@aktion)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -78,7 +81,7 @@ class AktionsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_aktion
-      @aktion = Aktion.find(params[:id])
+      @item = @aktion = Aktion.find(params[:id])
     end
 
     def set_aktion_creation_form
@@ -104,5 +107,10 @@ class AktionsController < ApplicationController
       @the_item_i18n_name = t(:the_item_action, default: 'the action')
       @this_item_i18n_name = t(:this_item_action, default: 'this action')
       @an_item_i18n_name = t(:an_item_action, default: 'an action')
+      @item_i18n_name = t(:item_action, default: 'Action')
+    end
+
+    def set_items_i18n_name
+      @item_i18n_name = @item_i18n_name.pluralize
     end
 end

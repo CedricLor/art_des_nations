@@ -1,10 +1,6 @@
 <%# view: countries/show.html.erb %>
 <% content_for :title, raw(@country.title) %>
 
-<% provide :admin_nav_content_type do %>
-  <% "#{@country.class.name}" %>
-<% end %>
-
 <% provide :admin_nav_content_actions do %>
   <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), edit_country_path(@country) %></li>
 <% end %>

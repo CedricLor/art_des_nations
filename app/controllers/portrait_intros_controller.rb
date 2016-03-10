@@ -1,6 +1,7 @@
 class PortraitIntrosController < ApplicationController
   before_action :set_portrait_intro_and_portraits, only: [:show, :edit, :update]
   skip_before_action :authenticate_user!, only: :show
+  before_action :set_item_i18n_name
 
   # GET /portrait_intros/1
   # GET /portrait_intros/1.json
@@ -41,5 +42,9 @@ class PortraitIntrosController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def portrait_intro_params
       params.require(:portrait_intro).permit(:intro)
+    end
+
+    def set_item_i18n_name
+      @item_i18n_name = t(:item_portrait_intro, default: "Profiles' page")
     end
 end

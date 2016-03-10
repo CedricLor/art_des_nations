@@ -3,8 +3,7 @@
 <% provide :admin_nav_content do %>
   <div class="btn-group dropup" role="group" aria-label="Content actions (edit, new, duplicate, see index and destroy)">
     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <%= content_for?(:admin_nav_content_type) ? yield(:admin_nav_content_type) : "Content" %>
-      <%#= yield :admin_nav_content_type %>
+      <%= @item_i18n_name %>
       <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">

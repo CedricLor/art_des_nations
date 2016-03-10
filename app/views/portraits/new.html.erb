@@ -1,10 +1,6 @@
 <% content_for :title, t(:new_portrait, default: "New portrait") %>
 <% content_for :body_class, "portraits" %>
 
-<% provide :admin_nav_content_type do %>
-  <% "#{@portrait.class.name}" %>
-<% end %>
-
 <% provide :admin_nav_content_actions do %>
   <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), portraits_path %></li>
   <li><%= link_to t(:admin_nav_show_portrait_intro, default: 'Portrait intro page'), portrait_intro_path(1) %></li>

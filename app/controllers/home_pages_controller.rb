@@ -1,6 +1,7 @@
 class HomePagesController < ApplicationController
   before_action :set_home_page, only: [:show, :edit, :update]
   before_action :set_ancillary_collections, only: [:show, :edit, :update]
+  before_action :set_item_i18n_name
   skip_before_action :authenticate_user!, only: :show
 
   # GET /home_pages/1
@@ -48,5 +49,9 @@ class HomePagesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def home_page_params
       params.require(:home_page).permit(:editorial, :call_to_action)
+    end
+
+    def set_item_i18n_name
+      @item_i18n_name = t(:item_home_page, default: 'Home page')
     end
 end

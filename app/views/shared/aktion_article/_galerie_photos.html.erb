@@ -1,4 +1,4 @@
-<%# shared/article_aktion/_galerie_photos.html.erb %>
+<%# shared/aktion_article/_galerie_photos.html.erb %>
 <%# called from:
 - aktions/_form.html.erb
 - aktions/show.html.erb
@@ -17,9 +17,9 @@
       <% pictures.each do |pict| %>
         <li>
           <%= render partial: "#{sub_partial}",
-            # sub_partial may be either (i) shared/article_aktion/slide_wrapper (in show mode)
-            # or (ii) shared/article_aktion/slide_wrapper_form (in edit or new mode)
-            layout: 'shared/article_aktion/slide_wrapper_layout',
+            # sub_partial may be either (i) shared/aktion_article/slide_wrapper (in show mode)
+            # or (ii) shared/aktion_article/slide_wrapper_form (in edit or new mode)
+            layout: 'shared/aktion_article/slide_wrapper_layout',
             locals: {
               parent: parent,
               pict: pict,

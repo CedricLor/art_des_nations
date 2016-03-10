@@ -5,9 +5,15 @@
 # below each fixture, per the syntax in the comments below
 #
 one:
+  id: 1
   email: toto@toto.org
+  # password: 1234567890
+  # password_confirmation: 1234567890
 # column: value
 #
 two:
+  id: 2
   email: tata@tata.org
+  # password: 1234567890
+  # password_confirmation: 1234567890
 #  column: value

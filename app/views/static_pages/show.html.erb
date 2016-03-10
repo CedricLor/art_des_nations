@@ -3,10 +3,6 @@
 <% content_for(:title, raw("#{@static_page.title}")) %>
 <% content_for :body_class, "page-article" %>
 
-<% provide :admin_nav_content_type do %>
-  <% "#{@static_page.class.name}" %>
-<% end %>
-
 <% provide :admin_nav_content_actions do %>
   <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), edit_static_page_path(@static_page) %></li>
 <% end %>
@@ -14,7 +10,7 @@
 <% render 'shared/admin_nav_content' %>
 
 <%= render partial: 'static_pages/partials/container',
-    layout: "shared/article_aktion_static/container_layout",
+    layout: "shared/aktion_article_static/container_layout",
     locals: {
       title: @static_page.title,
       teaser: @static_page.teaser  || '',

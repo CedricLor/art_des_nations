@@ -1,7 +1,7 @@
 class PortraitsController < ApplicationController
   before_action :set_portrait, only: [:show, :edit, :update, :destroy]
   before_action :set_item_i18n_name
-  before_action :set_item
+  before_action :set_items_i18n_name, only: [:index]
   skip_before_action :authenticate_user!, only: [:index, :show]
 
   # GET /portraits
@@ -16,7 +16,7 @@ class PortraitsController < ApplicationController
       count
 
     respond_to do |format|
-      format.html {render :layout => 'application'} # index.html.erb
+      format.html { render :layout => 'application' } # index.html.erb
       format.json { render json: @portraits }
     end
   end
@@ -32,7 +32,7 @@ class PortraitsController < ApplicationController
 
   # GET /portraits/new
   def new
-    @portrait = Portrait.new
+    @item = @portrait = Portrait.new
   end
 
   # GET /portraits/1/edit
@@ -82,7 +82,7 @@ class PortraitsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_portrait
-      @portrait = Portrait.includes(media_containers: :translations).find(params[:id])
+      @item = @portrait = Portrait.includes(media_containers: :translations).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
@@ -105,9 +105,10 @@ class PortraitsController < ApplicationController
       @the_item_i18n_name = t(:the_item_portrait, default: 'the portrait')
       @this_item_i18n_name = t(:this_item_portrait, default: 'this portrait')
       @an_item_i18n_name = t(:an_item_portrait, default: 'an article')
+      @item_i18n_name = t(:item_portrait, default: 'Portrait')
     end
 
-    def set_item
-      @item = @portrait
+    def set_items_i18n_name
+      @item_i18n_name = @item_i18n_name.pluralize
     end
 end

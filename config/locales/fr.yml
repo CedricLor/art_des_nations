@@ -52,6 +52,7 @@ fr:
   related: "En lien"
   create_links: "Créez des liens !!!"
   picture: 'Image'
+  truncating_omission: '... (lire la suite)'
 
   home_page_title: "Accueil"
   published_html: "<p class='meta'>Publié le <span class='date-publication'>%{posted_at}</span> à <span class='lieu-publication'>%{posted_from_location}</span></p>"
@@ -92,7 +93,17 @@ fr:
   missing_title_error: "%{an_item_i18n_name} doit avoir un titre. Merci d'en indiquer un."
   missing_posted_from_location: "Un lieu de publication doit être indiqué pour %{this_item_i18n_name}. Merci d'en indiquer un."
 
-  article_author_selector: "Choisissez le nom de l'un des auteurs ou entrez le nom d'un nouvel auteur:"
+  item_action: 'Action'
+  item_article: 'Article'
+  item_category: 'Categorie'
+  item_country: 'Pays'
+  item_home_page: "Page d'accueil"
+  item_portrait_intro: "Page d'accueil des portraits"
+  item_portrait: 'Portrait'
+  item_editorial: 'Editorial'
+  item_static_page: 'Page statique'
+
+  article_author_selector: "Choisissez le nom de l'un des auteurs ou entrez le nom d'un nouvel auteur :"
   article_author_selector_error: "Le nom de l'auteur doit être indiqué."
 
   label_for_status_selector: "Sélectionnez un status pour %{this_item}."

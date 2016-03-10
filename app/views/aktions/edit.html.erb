@@ -1,15 +1,6 @@
-<% provide :admin_nav_content_type do %>
-  <% "#{@aktion.model_name.name}" %>
-<% end %>
 
-<% provide :admin_nav_content_actions do %>
-  <li><%= link_to t(:admin_nav_delete_content, default: 'Delete'), aktion_path, method: :delete, data: { confirm: t(:deletion_confirmation, this_item: @this_item_i18n_name, default: "Are you sure you want to delete #{@this_item_i18n_name}?") } %></li>
-  <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_aktion_path %></li>
-  <li><%= link_to t(:admin_nav_show_content, default: 'Show'), aktion_path %></li>
-  <li><%= link_to t(:admin_nav_manage_links, default: 'Manage links'), linkings_for_path(@aktion.class.name, @aktion.id) %></li>
-  <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), aktions_path %></li>
-<% end %>
-
-<% render 'shared/admin_nav_content' %>
+<%= render 'shared/aktion_article/admin_nav_content_actions_for_edit_view',
+    item: @aktion.aktion
+%>
 
 <%= render 'form' %>

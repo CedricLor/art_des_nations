@@ -1,10 +1,6 @@
 <% content_for :title, t(:home_page_title, default: "Accueil") %>
 <% content_for :body_class, "page-accueil" %>
 
-<% provide :admin_nav_content_type do %>
-  <% "#{@home_page.model_name.name}" %>
-<% end %>
-
 <% provide :admin_nav_content_actions do %>
   <li><%= link_to t(:admin_nav_show_content, default: 'Show'), @home_page %></li>
 <% end %>

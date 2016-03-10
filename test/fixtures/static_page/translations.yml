@@ -1,0 +1,36 @@
+
+my_first_static_page_translation:
+  id: 1
+  locale: fr
+  title: MyString
+  body: "my body"
+  globalized_model: my_first_static_page
+
+my_second_static_page_translation:
+  id: 2
+  locale: fr
+  title: MyString
+  body: "my body"
+  globalized_model: my_second_static_page
+
+my_third_static_page_translation:
+  id: 3
+  locale: fr
+  title: MyString
+  body: "my body"
+  globalized_model: my_third_static_page
+
+my_fourth_static_page_translation:
+  id: 4
+  locale: fr
+  title: MyString
+  body: "my body"
+  globalized_model: my_fourth_static_page
+
+my_fifth_static_page_translation:
+  id: 5
+  locale: fr
+  title: MyString
+  body: "my body"
+  globalized_model: my_fifth_static_page
+

@@ -52,6 +52,7 @@ en:
   related: "Related"
   create_links: "Create some links!!!"
   picture: 'Picture'
+  truncating_omission: '... (continued)'
 
   home_page_title: "Home"
   published_html: "<p class='meta'>Published on <span class='date-publication'>%{posted_at}</span> in <span class='lieu-publication'>%{posted_from_location}</span></p>"
@@ -93,6 +94,16 @@ en:
 
   missing_title_error: "%{an_item_i18n_name} must have a title. Please specify one."
   missing_posted_from_location: "You must indicate a publication place for %{this_item_i18n_name}. Please specificy one."
+
+  item_action: 'Action'
+  item_article: 'Article'
+  item_category: 'Category'
+  item_country: 'Country'
+  item_home_page: 'Home page'
+  item_portrait_intro: "Profiles' page"
+  item_portrait: 'Portrait'
+  item_editorial: 'Editorial'
+  item_static_page: 'Static Page'
 
   article_author_selector: "Choose the name of an existing author or enter the name of a new author:"
   article_author_selector_error: "The author name cannot be blank."

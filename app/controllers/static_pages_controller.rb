@@ -1,6 +1,8 @@
 class StaticPagesController < ApplicationController
   before_action :set_static_page, only: [:show, :edit, :update, :destroy]
   skip_before_action :authenticate_user!, only: [:show]
+  before_action :set_item_i18n_name
+  before_action :set_items_i18n_name, only: [:index]
 
   # GET /static_pages
   # GET /static_pages.json
@@ -80,5 +82,13 @@ class StaticPagesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def static_page_params
       params.require(:static_page).permit(:title, :body, :teaser)
+    end
+
+    def set_item_i18n_name
+      @item_i18n_name = t(:item_static_page, default: 'Static Page')
+    end
+
+    def set_items_i18n_name
+      @item_i18n_name = @item_i18n_name.pluralize
     end
 end

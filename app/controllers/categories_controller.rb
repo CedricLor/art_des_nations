@@ -2,6 +2,7 @@ class CategoriesController < ApplicationController
   before_action :set_category_with_aktions_and_articles, only: [:show, :edit, :update]
   before_action :set_category, only: [:destroy]
   before_action :set_item_i18n_name
+  before_action :set_items_i18n_name, only: [:index]
   skip_before_action :authenticate_user!, only: :show
 
   # GET /categories
@@ -93,5 +94,10 @@ class CategoriesController < ApplicationController
       @the_item_i18n_name = t(:the_item_category, default: 'the category')
       @this_item_i18n_name = t(:this_item_category, default: 'this category')
       @an_item_i18n_name = t(:an_item_category, default: 'a category')
+      @item_i18n_name = t(:item_category, default: 'Category')
+    end
+
+    def set_items_i18n_name
+      @item_i18n_name = @item_i18n_name.pluralize
     end
 end
