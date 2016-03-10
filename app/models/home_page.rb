@@ -40,5 +40,9 @@ class HomePage < ActiveRecord::Base
   def title
     I18n.t(:home_page_title, default: "Page d'accueil de l'Art des Nations")
   end
+
+  def picturizings
+    nil
+  end
 end
 

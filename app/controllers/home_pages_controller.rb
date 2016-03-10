@@ -8,7 +8,7 @@ class HomePagesController < ApplicationController
   # GET /home_pages/1
   # GET /home_pages/1.json
   def show
-    # set_og_meta_tags(@home_page)
+    set_og_meta_tags(@home_page)
 
     respond_to do |format|
       format.html { render } # show.html.erb
