@@ -25,8 +25,6 @@ class AktionArticleForm
   validate :does_new_category_chosen_as_main_category_have_a_name
 
   def submit
-  # def submit(params)
-    # set_attributes(params)
     if valid?
       persist!
       true
@@ -38,10 +36,8 @@ class AktionArticleForm
   private
 
   def set_attributes(params)
-    # self.for_card = params[:for_card]
     self.new_md ||= populate_new_md
     self.applicable_existing_categories ||= populate_applicable_categories
-    # self.main_category_id = params[:main_category_id]
     self.new_category_name ||= ''
   end
 

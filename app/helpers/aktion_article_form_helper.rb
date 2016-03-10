@@ -3,8 +3,8 @@ module AktionArticleFormHelper
   def mark_as_checked_if_pict_is_for_card(parent, pict)
     checked = ''
     if parent.for_card
-      parent.for_card.match(/existing_md_|new_md_(\d+)/) do |match|
-        checked = 'checked' if match[1] == pict.id.to_s
+      parent.for_card.match(/(existing_md_|new_md_)(\d+)/) do |match|
+        checked = 'checked' if match[2] == pict.id.to_s
       end
     else
       checked = 'checked' if pict.respond_to?(:for_card) && pict.for_card == "true"
