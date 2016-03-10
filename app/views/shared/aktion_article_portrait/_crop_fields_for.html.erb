@@ -11,7 +11,7 @@
       });
     };
 
-    var ratio = <%#= media_container.media_geometry(:original).width %>1 / 2<%#= media_container.media_geometry(:for_slider).width %>;
+    var ratio = <%= media_container.media_geometry(:original).width %> / 2 <%#= media_container.media_geometry(:for_slider).width %>;
 
     function update_crop(coords){
 
