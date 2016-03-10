@@ -1,4 +1,6 @@
 class StaticPagesController < ApplicationController
+  include OgMetaTagsSetter
+
   before_action :set_static_page, only: [:show, :edit, :update, :destroy]
   skip_before_action :authenticate_user!, only: [:show]
   before_action :set_item_i18n_name
@@ -18,6 +20,8 @@ class StaticPagesController < ApplicationController
   # GET /static_pages/1
   # GET /static_pages/1.json
   def show
+    set_og_meta_tags(@static_page)
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @static_page }

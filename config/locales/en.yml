@@ -54,6 +54,7 @@ en:
   picture: 'Picture'
   truncating_omission: '... (continued)'
   home_page_title: "Home page of Art des Nations"
+  portrait_intro_title: "Home page of the profiles of the artistes of Art des Nations"
 
   home_page_title: "Home"
   published_html: "<p class='meta'>Published on <span class='date-publication'>%{posted_at}</span> in <span class='lieu-publication'>%{posted_from_location}</span></p>"

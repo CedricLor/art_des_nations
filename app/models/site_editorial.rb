@@ -25,6 +25,14 @@ class SiteEditorial < ActiveRecord::Base
   belongs_to :home_page, inverse_of: :site_editorials
   translates :title, :body, :status, :fallbacks_for_empty_translations => true
 
+  def teaser
+    self.body
+  end
+
+  def picturizings
+    nil
+  end
+
   protected
 
   def remove_other_featured

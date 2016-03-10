@@ -1,4 +1,6 @@
 class PortraitsController < ApplicationController
+  include OgMetaTagsSetter
+
   before_action :set_portrait, only: [:show, :edit, :update, :destroy]
   before_action :set_item_i18n_name
   before_action :set_items_i18n_name, only: [:index]
@@ -24,6 +26,8 @@ class PortraitsController < ApplicationController
   # GET /portraits/1
   # GET /portraits/1.json
   def show
+    set_og_meta_tags(@portrait)
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @portrait }

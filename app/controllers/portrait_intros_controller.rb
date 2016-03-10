@@ -1,4 +1,5 @@
 class PortraitIntrosController < ApplicationController
+  include OgMetaTagsSetter
   before_action :set_portrait_intro_and_portraits, only: [:show, :edit, :update]
   skip_before_action :authenticate_user!, only: :show
   before_action :set_item_i18n_name
@@ -6,7 +7,7 @@ class PortraitIntrosController < ApplicationController
   # GET /portrait_intros/1
   # GET /portrait_intros/1.json
   def show
-    # @portrait_feed = PortraitFeed.new(portraits: Portrait.all)
+    set_og_meta_tags(@portrait_intro)
 
     respond_to do |format|
       format.html # show.html.erb

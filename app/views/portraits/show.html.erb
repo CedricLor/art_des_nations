@@ -15,7 +15,7 @@
   <% end %>
 <% end %>
 
-<% render 'shared/aktion_article_portrait/recommandations',
+<% render partial: 'shared/aktion_article_portrait/recommandations',
     locals: {
       linkings_collection: @portrait.existing_links,
       yieldable_name: "existing_external_linkings",

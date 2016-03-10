@@ -1,4 +1,5 @@
 class SiteEditorialsController < ApplicationController
+  include OgMetaTagsSetter
   before_action :set_site_editorial, only: [:show, :edit, :update, :destroy]
   before_action :set_item_i18n_name
   before_action :set_items_i18n_name, only: [:index]
@@ -18,6 +19,8 @@ class SiteEditorialsController < ApplicationController
   # GET /site_editorials/1
   # GET /site_editorials/1.json
   def show
+    set_og_meta_tags(@site_editorial)
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @site_editorial }

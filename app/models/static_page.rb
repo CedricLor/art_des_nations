@@ -6,6 +6,9 @@ class StaticPage < ActiveRecord::Base
 
   translates :title, :body, :teaser, :fallbacks_for_empty_translations => true
 
+  def picturizings
+    nil
+  end
 end
 
 

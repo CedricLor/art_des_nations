@@ -1,24 +1,38 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= I18n.locale %>">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content='<%= @og_description.blank? ? "#{t(:default_description, default: "L'Art des Nations (ADN), association fondée par Patrick Sommier en février 2015, a pour objectif d’aller plus loin dans les « échanges » des arts vivants entre la France, la Chine et la Russie. L'Art des Nations organise des tournées d'artistes (musiciens, comédiens, metteurs en scènes) entre ces trois pays.")}" : truncate(@og_description, length: 155) %>' >
+    <meta name="author" content="<%= @article_author || 'Patrick Sommier' %>">
 
     <title>
       <%= yield_with_default(:title, "") %>
       <%= " | Art des Nations" %>
     </title>
 
+    <meta name="twitter:card" content="">
+    <meta name="twitter:site" content="@psommier">
+    <meta name="twitter:title" content="<%= @og_title || 'Art des Nations' %>">
+    <meta name="twitter:description" content='<%= @og_description.blank? ? "#{t(:default_description, default: "L'Art des Nations (ADN), association fondée par Patrick Sommier en février 2015, a pour objectif d’aller plus loin dans les « échanges » des arts vivants entre la France, la Chine et la Russie. L'Art des Nations organise des tournées d'artistes (musiciens, comédiens, metteurs en scènes) entre ces trois pays.")}" : truncate(@og_description, length: 200) %>'>
+    <meta name="twitter:creator" content="@psommier">
+    <meta name="twitter:image" content="<%= @og_image_url %>">
+
     <meta property="og:url"                content=<%= request.original_url %> />
     <meta property="og:type"               content="article" />
     <meta property="og:title"              content="<%= @og_title || 'Art des Nations' %>" />
     <meta property="og:description"        content='<%= @og_description.blank? ? "#{t(:default_description, default: "L'Art des Nations (ADN), association fondée par Patrick Sommier en février 2015, a pour objectif d’aller plus loin dans les « échanges » des arts vivants entre la France, la Chine et la Russie. L'Art des Nations organise des tournées d'artistes (musiciens, comédiens, metteurs en scènes) entre ces trois pays.")}" : @og_description %>' />
     <meta property="og:image"              content="<%= @og_image_url %>" />
-
+    <meta property="og:site_name"          content="Art des Nations" />
+    <meta property="article:section"       content="<%= @og_article_section %>" />
+    <meta property="og:locale"             content="<%= I18n.locale %>" />
+    <meta property="fb:app_id"             content="" />
+    <%# facebook id or url of the author %>
+    <meta property="article:author"        content="" />
+    <%# facebook id or url of the publishing page %>
+    <meta property="article:publisher"     content="" />
 
     <%= stylesheet_link_tag    'application', media: 'all'%>
     <!-- BEWARE - REACT SLICK CAROUSEL CSS ADDED FROM CDN -->
