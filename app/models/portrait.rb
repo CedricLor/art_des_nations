@@ -57,11 +57,11 @@ class Portrait < ActiveRecord::Base
   end
 
   def self.for_portrait_list
-    with_media_containers_for_card.where(status: ["published", "featured"])
+    with_media_containers_for_card.where(status: ["published", "featured"]).order(:status, :title)
   end
 
   def self.with_media_containers_for_card
-    includes(picturizings: [:translations, media_container: :translations])
+    includes(:translations).includes(picturizings: [:translations, media_container: :translations]).distinct
   end
 
   def picturizing
