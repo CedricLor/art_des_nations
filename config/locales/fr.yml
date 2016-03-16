@@ -59,6 +59,11 @@ fr:
   update: "Mettre à jour"
   edit: "Editer"
   user: "l'utilisateur"
+  profile: 'Editer le profil'
+  log_out: 'Fermer la session'
+  devise_leave_pwd_blank: "laissez-le en blanc si vous ne souhaitez pas le changer"
+  devise_we_need_your_current_pwd: "nous avons besoin de votre mot de passe pour confirmer les changements"
+  login: "Ouvrir une session"
 
   home_page_title: "Accueil"
   published_html: "<p class='meta'>Publié le <span class='date-publication'>%{posted_at}</span> à <span class='lieu-publication'>%{posted_from_location}</span></p>"
@@ -175,9 +180,6 @@ fr:
 
   create_a_link: "Créez un lien !!!"
   destroy_a_link: "Détruisez ce lien !!!"
-
-  devise_leave_pwd_blank: "laissez-le en blanc si vous ne souhaitez pas le changer"
-  devise_we_need_your_current_pwd: "nous avons besoin de votre mot de passe pour confirmer les changements"
 
   activerecord:
     errors:

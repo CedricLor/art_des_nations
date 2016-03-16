@@ -56,6 +56,15 @@ en:
   home_page_title: "Home page of Art des Nations"
   portrait_intro_title: "Home page of the profiles of the artistes of Art des Nations"
 
+  update: "Update"
+  edit: "Edit"
+  user: "user"
+  profile: 'Profile'
+  log_out: 'Log out'
+  devise_leave_pwd_blank: "leave it blank if you don't want to change it"
+  devise_we_need_your_current_pwd: "we need your current password to confirm your changes"
+  login: "Log in"
+
   home_page_title: "Home"
   published_html: "<p class='meta'>Published on <span class='date-publication'>%{posted_at}</span> in <span class='lieu-publication'>%{posted_from_location}</span></p>"
 

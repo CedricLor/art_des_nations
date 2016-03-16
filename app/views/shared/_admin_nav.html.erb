@@ -9,8 +9,8 @@
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-          <li><%= link_to 'Profile', edit_user_registration_path %></li>
-          <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
+          <li><%= link_to t(:profile, default: 'Profile'), edit_user_registration_path %></li>
+          <li><%= link_to t(:log_out, default: 'Log out'), destroy_user_session_path, method: :delete %></li>
         </ul>
       </div>
       <%= yield :admin_nav_content %>
