@@ -2,13 +2,20 @@
 
 <% provide :status_selector do %>
 
+  <%
+    draft = t(:draft, default: "draft", count: 1)
+    published = t(:published, default: "published", count: 1)
+    featured = t(:featured, default: "featured", count: 1)
+    archived = t(:archived, default: "archived", count: 1)
+  %>
+
   <% status_selector_input = f.input :status,
     disabled: disabled_value,
     collection: [
-      [t(:draft, default: "draft"), "draft"],
-      [t(:published, default: "published"), "published"],
-      [t(:featured, default: "featured"), "featured"],
-      [t(:archived, default: "archived"), "archived"]
+      [draft, "draft"],
+      [published, "published"],
+      [featured, "featured"],
+      [archived, "archived"]
     ],
     as: :radio_buttons,
     selected: "draft",
@@ -17,9 +24,9 @@
       ),
     hint: t(:hint_for_status_selector,
       the_item: @the_item_i18n_name,
-      draft: t(:draft, default: "draft"),
-      archived: t(:archived, default: "archived"),
-      default: "If you select #{t(:draft, default: "draft")} or #{t(:archived, default: "archived")}, #{@the_item_i18n_name} will not be published on the website."
+      draft: draft,
+      archived: archived,
+      default: "If you select #{draft} or #{archived}, #{@the_item_i18n_name} will not be published on the website."
     ),
     error: status_selector.errors[:status] || t(:status_missing_error,
       an_item: @an_item_i18n_name,

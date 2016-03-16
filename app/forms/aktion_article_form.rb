@@ -14,10 +14,9 @@ class AktionArticleForm
       in: true,
       message: I18n.t(
         :missing_body_error,
-        item_name: model_name.name.downcase,
-        published: I18n.t(:published),
-        featured: I18n.t(:featured),
-        default: "You cannot choose the status \"#{I18n.t(:published)}\" or \"#{I18n.t(:featured)}\" without adding some content to the body of your #{model_name.name.downcase}.")
+        published: I18n.t(:published, count: 1),
+        featured: I18n.t(:featured, count: 1),
+        default: "You cannot choose the status \"#{I18n.t(:published, count: 1)}\" or \"#{I18n.t(:featured, count: 1)}\" without adding some content to the body of your publication.")
     }
     feat_pub.validate :has_at_least_one_category_if_featured_or_published
   end
@@ -84,9 +83,9 @@ class AktionArticleForm
       errors.add(:missing_categories, I18n.t(
         :missing_categories_error,
         item_name: model_name.name.downcase,
-        published: I18n.t(:published),
-        featured: I18n.t(:featured),
-        default: "You cannot choose the status \"#{I18n.t(:published)}\" or \"#{I18n.t(:featured)}\" without giving at least one category to your #{model_name.name.downcase}."))
+        published: I18n.t(:published, count: 1),
+        featured: I18n.t(:featured, count: 1),
+        default: "You cannot choose the status \"#{I18n.t(:published, count: 1)}\" or \"#{I18n.t(:featured, count: 1)}\" without giving at least one category to your #{model_name.name.downcase}."))
     end
   end
 
