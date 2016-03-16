@@ -88,3 +88,13 @@ img.my-img-preview {
   left: 0;
 }
 
+// Format the language switcher
+.language-block {
+  line-height: 20px;
+  &.active-language {
+    background-color: #00A190;
+    a {
+      color: white;
+    }
+  }
+}

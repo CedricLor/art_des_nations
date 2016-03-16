@@ -2,23 +2,25 @@
 <div class="container-fluid">
   <div class="container">
     <div class="row" id="top-nav">
+
       <div class="col-xs-12 col-sm-4" id="conteneur-logo">
         <%= link_to "ADN Art des Nations", root_path, id: "logo" %>
       </div>
+
       <div class="col-xs-7 col-sm-4 col-lg-6">
         <ul class="list-inline">
-
           <% @languages_array.each do | locale | %>
-            <li>
+            <li class="language-block <%= locale.keys[0] == I18n.locale ? 'active-language' : ''%>" >
               <%= link_to locale.values[0], params.merge({:locale => locale.keys[0]}) %>
             </li>
           <% end %>
-
         </ul>
       </div>
+
       <div class="col-xs-5 col-sm-4 col-lg-2 text-right">
         <a class="menu-toggle"><i class="fa fa-reorder"></i><%= t(:menu, default: " Menu")%></a>
       </div>
+
     </div>
   </div>
 </div>
