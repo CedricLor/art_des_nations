@@ -11,8 +11,6 @@
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
           <li><%= link_to 'Profile', edit_user_registration_path %></li>
           <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
-          <li role="separator" class="divider"></li>
-          <li><a href="#">Separated link</a></li>
         </ul>
       </div>
       <%= yield :admin_nav_content %>

@@ -56,6 +56,10 @@ fr:
   home_page_title: "Page d'accueil de l'Art des Nations"
   portrait_intro_title: "Page d'accueil des profils des artistes d'Art des Nations"
 
+  update: "Mettre à jour"
+  edit: "Editer"
+  user: "l'utilisateur"
+
   home_page_title: "Accueil"
   published_html: "<p class='meta'>Publié le <span class='date-publication'>%{posted_at}</span> à <span class='lieu-publication'>%{posted_from_location}</span></p>"
 
@@ -171,6 +175,9 @@ fr:
 
   create_a_link: "Créez un lien !!!"
   destroy_a_link: "Détruisez ce lien !!!"
+
+  devise_leave_pwd_blank: "laissez-le en blanc si vous ne souhaitez pas le changer"
+  devise_we_need_your_current_pwd: "nous avons besoin de votre mot de passe pour confirmer les changements"
 
   activerecord:
     errors:
