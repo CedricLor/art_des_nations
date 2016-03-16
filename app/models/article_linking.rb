@@ -13,8 +13,8 @@ class ArticleLinking < ActiveRecord::Base
 
   default_scope { order(id: :asc) }
 
-  belongs_to :article, inverse_of: :article_linkings
   belongs_to :article_linkable, :polymorphic => true
+  belongs_to :article, inverse_of: :article_linkings
   belongs_to :portrait, inverse_of: :article_linkings
   belongs_to :aktion, inverse_of: :article_linkings
 end
