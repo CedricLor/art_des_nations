@@ -1,13 +1,12 @@
 <% content_for(:title, raw("#{@category.name}")) %>
-<% content_for :body_class, "portraits" %>
+
+<% render partial: 'shared/admin_nav_translation_menu_wrapper' %>
 
 <% provide :admin_nav_content_actions do %>
   <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_category_path %></li>
   <li><%= link_to t(:admin_nav_show_content, default: 'Show'), @category %></li>
   <li><%= link_to t(:admin_nav_admin_index_content, default: 'Index'), categories_path %></li>
 <% end %>
-
-<% render 'shared/admin_nav_content' %>
 
 
 <%= render 'form' %>

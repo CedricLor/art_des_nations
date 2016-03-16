@@ -5,6 +5,8 @@
 
 <% render 'shared/aktion_article_portrait/admin_nav_content_actions_for_show_view' %>
 
+<% render partial: 'shared/admin_nav_translation_menu_wrapper' %>
+
 <% if @portrait.media_container.present? %>
   <% provide :picture do %>
     <div class="row contenu illustration">

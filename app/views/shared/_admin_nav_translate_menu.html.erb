@@ -1,0 +1,8 @@
+<%# shared/_admin_nav_translate_menu.html.erb %>
+
+
+<% @languages_array.each do | locale | %>
+  <li class="language-block <%= locale.keys[0] == I18n.locale ? 'hidden' : ''%>" >
+    <%= link_to t("in_#{locale.values[0]}", default: "en #{locale.values[0]}"), params.merge({:locale => locale.keys[0], :action => "edit"}) %>
+  </li>
+<% end %>

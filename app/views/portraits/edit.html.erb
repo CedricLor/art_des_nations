@@ -10,9 +10,7 @@
   <li><%= link_to t(:admin_nav_show_portrait_intro, default: 'Portrait intro page'), portrait_intro_path(1) %></li>
 <% end %>
 
-<% render 'shared/admin_nav_content' %>
-
-
+<% render partial: 'shared/admin_nav_translation_menu_wrapper' %>
 
 <% provide :picture_form_intro do %>
   <%# RENDER THE EXISTING PICTURE WITH THE CROPPING FIELDS %>

@@ -1,0 +1,16 @@
+<%# shared/_admin_nav_menu.html.erb %>
+<%# called from
+- shared/_admin_nav.html.erb
+%>
+
+<div class="btn-group dropup" role="group" aria-label="<%= aria_label %>">
+  <button class="btn btn-default dropdown-toggle" type="button" id="<%= main_button_id %>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <%= main_button_content %>
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="<%= main_button_id %>">
+    <%= menu_content %>
+  </ul>
+</div>
+
+

@@ -5,7 +5,7 @@
   <li><%= link_to t(:admin_nav_show_content, default: 'Show'), @country %></li>
 <% end %>
 
-<% render 'shared/admin_nav_content' %>
+<% render partial: 'shared/admin_nav_translation_menu_wrapper' %>
 
 <% provide :external_links do %>
   <%= render partial: 'shared/country_home_page/external_links_fields',

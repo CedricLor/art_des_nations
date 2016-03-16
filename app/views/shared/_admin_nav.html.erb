@@ -3,17 +3,24 @@
 
   <div class="admin-nav-wrapper">
     <div class="btn-group" role="group" aria-label="Administrative navigation bar">
-      <div class="btn-group dropup" role="group" aria-label="Session actions (see profile and log out)">
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <%= t(:admin_nav_session, default: "Session") %>
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-          <li><%= link_to t(:profile, default: 'Profile'), edit_user_registration_path %></li>
-          <li><%= link_to t(:log_out, default: 'Log out'), destroy_user_session_path, method: :delete %></li>
-        </ul>
-      </div>
-      <%= yield :admin_nav_content %>
+      <%= render partial: 'shared/admin_nav_btn_menu_container',
+          locals: {
+            aria_label: "Session actions (see profile and log out)",
+            main_button_id: "dropdownMenu1",
+            main_button_content: t(:admin_nav_session, default: "Session"),
+            menu_content: render(partial: 'shared/admin_nav_session_menu')
+          }
+      %>
+      <%= render partial: 'shared/admin_nav_btn_menu_container',
+          locals: {
+            aria_label: "Actions on the displayed contents (edit, new, duplicate, see index and destroy)",
+            main_button_id: "dropdownMenu2",
+            main_button_content: @item_i18n_name,
+            menu_content: yield(:admin_nav_content_actions)
+          }
+      %>
+      <%#= render "shared/admin_nav_translation_menu_wrapper" %>
+      <%= yield :translation_menu %>
     </div>
   </div>
 

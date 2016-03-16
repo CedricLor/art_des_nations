@@ -5,7 +5,7 @@
   <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), edit_country_path(@country) %></li>
 <% end %>
 
-<% render 'shared/admin_nav_content' %>
+<% render partial: 'shared/admin_nav_translation_menu_wrapper' %>
 
 <% if @country.external_linkings.present? %>
   <% provide :external_links do %>

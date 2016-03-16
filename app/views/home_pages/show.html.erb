@@ -5,8 +5,7 @@
   <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), edit_home_page_path(@home_page) %></li>
 <% end %>
 
-<% render 'shared/admin_nav_content' %>
-
+<% render partial: 'shared/admin_nav_translation_menu_wrapper' %>
 
 <!-- Edito -->
 <%= render partial: 'home_pages/partials/shared/editorial_wrapper',

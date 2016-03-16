@@ -18,6 +18,8 @@ Rails.application.routes.draw do
     resources :categories
 
     resources :countries, only: [:show, :edit, :update]
+
+    get 'portrait_intros/edit', to: 'portrait_intros#edit#1'
     resources :portrait_intros, only: [:show, :edit, :update]
     get 'protagonistes', to: 'portrait_intros#show', as: 'protagonistes'
 
@@ -31,6 +33,7 @@ Rails.application.routes.draw do
     resources :static_pages, only: [:show, :edit, :update], path: 'page'
     get 'page/:id', to: 'static_pages#show', as: 'page'
 
+    get 'home_pages/edit', to: 'home_pages#edit#1'
     resources :home_pages, only: [:show, :edit, :update]
 
     resources :external_links, only: [:create]

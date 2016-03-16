@@ -1,0 +1,12 @@
+<%# shared/_admin_nav_translation_menu_wrapper.html.erb %>
+
+<% provide :translation_menu do %>
+  <%= render partial: 'shared/admin_nav_btn_menu_container',
+      locals: {
+        aria_label: "Translate actions",
+        main_button_id: "dropdownMenu3",
+        main_button_content: t(:translate, default: "Traduire"),
+        menu_content: render(partial: 'shared/admin_nav_translate_menu')
+      }
+  %>
+<% end %>

@@ -65,6 +65,12 @@ en:
   devise_we_need_your_current_pwd: "we need your current password to confirm your changes"
   login: "Log in"
 
+  translate: "Translate"
+  in_EN: "in English"
+  in_FR: "in French"
+  in_PY: "in Russian"
+  in_中文: "in Chinese"
+
   home_page_title: "Home"
   published_html: "<p class='meta'>Published on <span class='date-publication'>%{posted_at}</span> in <span class='lieu-publication'>%{posted_from_location}</span></p>"
 

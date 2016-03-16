@@ -7,7 +7,7 @@
   <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), edit_static_page_path(@static_page) %></li>
 <% end %>
 
-<% render 'shared/admin_nav_content' %>
+<% render partial: 'shared/admin_nav_translation_menu_wrapper' %>
 
 <%= render partial: 'static_pages/partials/container',
     layout: "shared/aktion_article_static/container_layout",

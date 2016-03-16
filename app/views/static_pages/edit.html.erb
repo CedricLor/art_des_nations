@@ -5,6 +5,6 @@
   <li><%= link_to t(:admin_nav_show_content, default: 'Show'), @static_page %></li>
 <% end %>
 
-<% render 'shared/admin_nav_content' %>
+<% render partial: 'shared/admin_nav_translation_menu_wrapper' %>
 
 <%= render 'form' %>

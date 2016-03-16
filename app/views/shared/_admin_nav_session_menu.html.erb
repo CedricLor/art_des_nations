@@ -1,0 +1,7 @@
+<%# shared/_admin_nav_session_menu.html.erb %>
+<%# called from
+- shared/_admin_nav.html.erb
+%>
+
+<li><%= link_to t(:profile, default: 'Profile'), edit_user_registration_path %></li>
+<li><%= link_to t(:log_out, default: 'Log out'), destroy_user_session_path, method: :delete %></li>

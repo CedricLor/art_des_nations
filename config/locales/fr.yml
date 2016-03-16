@@ -65,6 +65,12 @@ fr:
   devise_we_need_your_current_pwd: "nous avons besoin de votre mot de passe pour confirmer les changements"
   login: "Ouvrir une session"
 
+  translate: "Traduire"
+  in_EN: "en anglais"
+  in_FR: "en français"
+  in_PY: "en russe"
+  in_中文: "en chinois"
+
   home_page_title: "Accueil"
   published_html: "<p class='meta'>Publié le <span class='date-publication'>%{posted_at}</span> à <span class='lieu-publication'>%{posted_from_location}</span></p>"
 
