@@ -8,6 +8,7 @@
   <%# dispatching the form fields in variables to pass them to the partial %>
   <% title = f.input :title,
     label: false,
+    placeholder: t(:placeholder_enter_title_here, this_item: @this_item_i18n_name, default: "Entrez le titre de #{@this_item_i18n_name} ici"),
     error: t(
       :missing_title_error,
       an_item_i18n_name: @an_item_i18n_name.capitalize,
@@ -21,8 +22,19 @@
   %>
 
   <% provide :aktion_date_fields do %>
-    <% posted_at = f.input :posted_at, as: :date %>
-    <% aktion_date = f.input :aktion_date, as: :date %>
+    <% posted_at = f.input :posted_at,
+      as: :date,
+      label: t(:posted_at, default: "Date de publication")
+    %>
+    <% aktion_date = f.input :aktion_date,
+      as: :date,
+      label: t(:aktion_date, default: "Date de l'action")
+    %>
+    <div class="row">
+      <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
+        <hr>
+      </div>
+    </div>
     <%= render partial: 'shared/aktion_article/additional_form_fields',
       locals: {
         remaining_params: [

@@ -5,7 +5,7 @@
   <%= f.error_notification %>
 
   <!-- Fields assignment to variables -->
-  <% title = f.input :title %>
+  <% title = f.input :title, label: false, placeholder: t(:placeholder_enter_title_here, this_item: @this_item_i18n_name, default: "Entrez le titre de #{@this_item_i18n_name} ici") %>
   <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {language: I18n.locale} %>
   <% body = f.cktext_area :body, rows: 10, :ckeditor => {language: I18n.locale} %>
 
@@ -18,9 +18,15 @@
       }
   %>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
+  <div class="container">
+    <br>
+    <%= render partial: 'shared/general_content_row',
+        locals: {
+          content: render('shared/aktion_article_portrait_site_edito_static/submit_button', f: f)
+        }
+    %>
   </div>
+
 <% end %>
 
 

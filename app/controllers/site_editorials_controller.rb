@@ -1,6 +1,7 @@
 class SiteEditorialsController < ApplicationController
   include OgMetaTagsSetter
   before_action :set_site_editorial, only: [:show, :edit, :update, :destroy]
+  before_action :clean_up_posted_at_params, only: [:create, :update]
   before_action :set_item_i18n_name
   before_action :set_items_i18n_name, only: [:index]
   skip_before_action :authenticate_user!, only: [:show]
@@ -84,7 +85,13 @@ class SiteEditorialsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def site_editorial_params
-      params.require(:site_editorial).permit(:title, :body, :status)
+      params.require(:site_editorial).permit(:title, :body, :status, :posted_at)
+    end
+
+    def clean_up_posted_at_params
+      se = params[:site_editorial]
+      se[:posted_at] = Date.new se["posted_at(1i)"].to_i, se["posted_at(2i)"].to_i, se["posted_at(3i)"].to_i
+      params[:site_editorial] = se.except('posted_at(1i)', 'posted_at(2i)', 'posted_at(3i)')
     end
 
     def set_item_i18n_name

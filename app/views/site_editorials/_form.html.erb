@@ -3,7 +3,15 @@
 
 <%= simple_form_for(@site_editorial) do |f| %>
   <%= f.error_notification %>
-  <% title = f.input :title %>
+  <% title = f.input :title,
+    label: false,
+    placeholder: t(:placeholder_enter_title_here, this_item: @this_item_i18n_name, default: "Entrez le titre de #{@this_item_i18n_name} ici"),
+    error: t(
+      :missing_title_error,
+      an_item_i18n_name: @an_item_i18n_name.capitalize,
+      default: "#{@an_item_i18n_name.capitalize} must have a title. Please specify one."
+    )
+  %>
 
   <% body = render partial: 'shared/aktion_article_portrait_site_edito_static/body_form.html.erb',
     object: @site_editorial,
@@ -11,7 +19,10 @@
   %>
 
   <% provide :posted_at do %>
-    <% posted_at = f.input :posted_at, as: :date %>
+    <% posted_at = f.input :posted_at,
+      as: :date,
+      label: t(:posted_at, default: "Date de publication")
+    %>
     <%= render partial: 'shared/general_content_row',
       locals: { content: posted_at }
     %>

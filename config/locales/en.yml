@@ -73,8 +73,11 @@ en:
 
   home_page_title: "Home"
   published_html: "<p class='meta'>Published on <span class='date-publication'>%{posted_at}</span> in <span class='lieu-publication'>%{posted_from_location}</span></p>"
+  posted_at: "Publication date"
+  aktion_date: "Action date"
+  aktion_change_country: "Country to which this action relates:"
 
-  save_your_changes: "Save your changes!!!"
+  save_your_changes: "Save your changes"
 
   mark_for_deletion: "Mark for deletion"
   picture_mark_for_deletion: "Delete this picture"
@@ -83,6 +86,8 @@ en:
   placeholder_for_picture_source_url: "You may enter the source url of your new picture here."
   placeholder_for_picture_creation_date: "You may enter the date of your new foto or painting here."
   placeholder_for_picture_author_name: "You may enter the name of the photograph or painter here."
+
+  placeholder_enter_title_here: "Enter the title of %{this_item} here."
 
   item_action_for_check_box_label: 'this action'
 
@@ -125,7 +130,7 @@ en:
   article_author_selector: "Choose the name of an existing author or enter the name of a new author:"
   article_author_selector_error: "The author name cannot be blank."
 
-  label_for_status_selector: "Please select a status for %{this_item}."
+  label_for_status_selector: "Status"
   hint_for_status_selector: "If you select %{draft} or %{archived}, %{the_item} will not be published on the website."
   status_missing_error: "Assigning a status to %{an_item} is mandatory, please specify one."
 

@@ -5,12 +5,10 @@
     <%= f.error_notification %>
   <% end %>
 
-
-
-
   <%# dispatching the form fields in variables to pass them to the partial %>
   <% title = f.input :title,
     label: false,
+    placeholder: t(:placeholder_enter_title_here, this_item: @this_item_i18n_name, default: "Entrez le titre de #{@this_item_i18n_name} ici"),
     error: t(
       :missing_title_error,
       an_item_i18n_name: @an_item_i18n_name.capitalize,

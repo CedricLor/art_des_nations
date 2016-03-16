@@ -73,8 +73,11 @@ fr:
 
   home_page_title: "Accueil"
   published_html: "<p class='meta'>Publié le <span class='date-publication'>%{posted_at}</span> à <span class='lieu-publication'>%{posted_from_location}</span></p>"
+  posted_at: "Date de publication"
+  aktion_date: "Date de l'action"
+  aktion_change_country: "Pays auquel se rattache cette action :"
 
-  save_your_changes: "Sauvegardez vos changements !!!"
+  save_your_changes: "Sauvegardez vos changements"
 
   mark_for_deletion: "Marquer comme à supprimer"
   picture_mark_for_deletion: "Supprimer cette photo"
@@ -83,6 +86,8 @@ fr:
   placeholder_for_picture_source_url: "Vous pouvez entrer l'url du site d'où vient l'image ici."
   placeholder_for_picture_creation_date: "Vous pouvez entrer la date de la photo ou du tableau ici."
   placeholder_for_picture_author_name: "Vous pouvez entrer le nom du photographe ou du peintre ici."
+
+  placeholder_enter_title_here: "Entrez le titre de %{this_item} ici."
 
   check_box_label_is_picture_for_card: "Vous voulez utiliser cette photo pour les pages d'index où %{item} est affiché(e)."
   check_box_label_is_picture_for_carousel: "Vous souhaitez que cette photo soit utilisée dans le caroussel : "
@@ -123,7 +128,7 @@ fr:
   article_author_selector: "Choisissez le nom de l'un des auteurs ou entrez le nom d'un nouvel auteur :"
   article_author_selector_error: "Le nom de l'auteur doit être indiqué."
 
-  label_for_status_selector: "Sélectionnez un status pour %{this_item}."
+  label_for_status_selector: "Status"
   hint_for_status_selector: "Si vous sélectionnez %{draft} ou %{archived}, %{the_item} ne sera pas publié(e) sur le site internet."
   status_missing_error: "Il est obligatoire d'assigner un statut à %{an_item}. Merci d'en choisir un."
 

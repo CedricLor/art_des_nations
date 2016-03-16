@@ -1,15 +1,10 @@
 <%= simple_form_for(@country) do |f| %>
   <%= f.error_notification %>
 
-  <!-- div class="form-inputs"-->
-    <% title = f.input :title %>
-    <% editorial = f.cktext_area :editorial, rows: 50, :ckeditor => {language: I18n.locale} %>
-  <!-- /div-->
+  <% title = f.input :title, label: false %>
+  <% editorial = f.cktext_area :editorial, rows: 50, :ckeditor => {language: I18n.locale} %>
 
-  <!--div class="form-actions" -->
-    <% submit_button = f.button :submit, t(:save_your_changes, default: 'Save your changes!!!'), class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
-  <!-- /div -->
-
+  <% submit_button = render('shared/aktion_article_portrait_site_edito_static/submit_button', f: f) %>
 
   <%# render the partial with the variables passed in an array %>
   <%= render partial: 'countries/partials/container',
@@ -22,6 +17,5 @@
         }
       }
   %>
-
 
 <% end %>

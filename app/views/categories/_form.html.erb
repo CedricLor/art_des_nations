@@ -14,7 +14,7 @@
 
   <% editorial = f.cktext_area :editorial, rows: 50, :ckeditor => {language: I18n.locale} %>
 
-  <% submit_button = f.button :submit, t(:save_your_changes, default: 'Save your changes!!!'), class: 'my-submit-button btn btn-primary btn-lg btn-block' %>
+  <% submit_button = render('shared/aktion_article_portrait_site_edito_static/submit_button', f: f) %>
 
   <%= render partial: 'shared/categories_portraits/list',
       locals: {

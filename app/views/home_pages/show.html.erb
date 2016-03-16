@@ -2,6 +2,11 @@
 <% content_for :body_class, "page-accueil" %>
 
 <% provide :admin_nav_content_actions do %>
+  <li><%= link_to t(:new_article, default: "Nouvel article"), new_article_path %></li>
+  <li><%= link_to t(:new_action, default: "Nouvelle action"), new_aktion_path %></li>
+  <li><%= link_to t(:new_portrait, default: "Nouvel article"), new_portrait_path %></li>
+  <li><%= link_to t(:new_editorial, default: "Nouvel édito"), new_site_editorial_path %></li>
+  <li role="separator" class="divider"></li>
   <li><%= link_to t(:admin_nav_edit_content, default: 'Edit'), edit_home_page_path(@home_page) %></li>
 <% end %>
 
