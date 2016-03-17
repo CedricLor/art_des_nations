@@ -1,6 +1,5 @@
 <%# _index_table_middle_cols.html.erb %>
 
 <td>
-  <%= link_to status_update_name.capitalize, polymorphic_path(item, item.class.name.underscore.to_sym => {id: item.id, status: status_update_type}), method: :patch
-%>
+  <%= link_to status_update_name.capitalize, polymorphic_path(item, item.class.name.underscore.to_sym => {id: item.id, status: status_update_type}), method: :patch %>
 </td>

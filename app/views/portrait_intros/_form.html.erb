@@ -4,7 +4,7 @@
 <%= simple_form_for(@portrait_intro) do |f| %>
   <%= f.error_notification %>
 
-  <% portrait_intro_content = f.cktext_area :intro, rows: 50, :ckeditor => {language: I18n.locale} %>
+  <% portrait_intro_content = f.cktext_area :intro, rows: 50  %>
   <% submit_button = render('shared/aktion_article_portrait_site_edito_static/submit_button', f: f) %>
 
   <%= render partial: 'shared/categories_portraits/list',

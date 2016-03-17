@@ -6,8 +6,8 @@
 
   <!-- Fields assignment to variables -->
   <% title = f.input :title, label: false, placeholder: t(:placeholder_enter_title_here, this_item: @this_item_i18n_name, default: "Entrez le titre de #{@this_item_i18n_name} ici") %>
-  <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {language: I18n.locale} %>
-  <% body = f.cktext_area :body, rows: 10, :ckeditor => {language: I18n.locale} %>
+  <% teaser = f.cktext_area :teaser, rows: 10  %>
+  <% body = f.cktext_area :body, rows: 10  %>
 
   <%= render partial: 'static_pages/partials/container',
       layout: "shared/aktion_article_static/container_layout",

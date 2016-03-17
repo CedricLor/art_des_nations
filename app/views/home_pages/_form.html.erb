@@ -5,7 +5,7 @@
   <%= f.error_notification %>
 
   <!-- Edito -->
-  <% editorial = f.cktext_area :editorial, rows: 10, :ckeditor => {language: I18n.locale} %>
+  <% editorial = f.cktext_area :editorial, rows: 10  %>
   <%= render partial: 'home_pages/partials/shared/editorial_wrapper',
     locals: {
       editorial: editorial,
@@ -14,7 +14,7 @@
   %>
 
   <!-- Call to action -->
-  <% call_to_action = f.cktext_area :call_to_action, rows: 2, :ckeditor => {language: I18n.locale} %>
+  <% call_to_action = f.cktext_area :call_to_action, rows: 2  %>
   <%= render partial: 'home_pages/partials/shared/call_to_action_wrapper',
     locals: {
       call_to_action: call_to_action

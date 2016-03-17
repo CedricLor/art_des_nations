@@ -2,7 +2,7 @@
   <%= f.error_notification %>
 
   <% title = f.input :title, label: false %>
-  <% editorial = f.cktext_area :editorial, rows: 50, :ckeditor => {language: I18n.locale} %>
+  <% editorial = f.cktext_area :editorial, rows: 50  %>
 
   <% submit_button = render('shared/aktion_article_portrait_site_edito_static/submit_button', f: f) %>
 

@@ -39,14 +39,14 @@ class Aktion < ActiveRecord::Base
   def self.for_country(country)
     Aktion.includes(picturizings: [:translations, media_container: :translations]).
       where(status: ["published", "featured"]).
-      where(country_id: country.id)
+      where(country_id: country.id).uniq
   end
 
   def self.for_home_page
     Aktion.includes(country: :translations).
       includes(categorizings: [category: :translations]).
       includes(picturizings: [:translations, media_container: :translations]).
-      where(status: ["featured"])
+      where(status: ["featured"]).uniq
   end
 
   def media_containers_for_carousel

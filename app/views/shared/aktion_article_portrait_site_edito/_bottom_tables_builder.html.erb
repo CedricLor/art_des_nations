@@ -4,26 +4,23 @@
 <%= render 'shared/aktion_article_portrait_site_edito/featured_published_table_builder',
     selected_items: items.select{|a| a.status == "featured" },
     table_name: "feature",
-    update_1_name: 'publish',
-    update_1_type: 'published',
-    update_2_name: 'archive',
-    update_2_type: 'archived',
+    update_aktions: [
+      {status_update_name: t(:publish), status_update_type: "published"},
+      {status_update_name: t(:archive), status_update_type: "archived"}
+    ],
     sub_partial: sub_partial
 %>
-
-
 
 <%# PUBLISHED %>
 <%= render 'shared/aktion_article_portrait_site_edito/featured_published_table_builder',
     selected_items: items.select{|a| a.status == "published" },
     table_name: "published",
-    update_1_name: 'feature',
-    update_1_type: 'featured',
-    update_2_name: 'archive',
-    update_2_type: 'archived',
+    update_aktions: [
+      {status_update_name: t(:feature), status_update_type: "featured"},
+      {status_update_name: t(:archive), status_update_type: "archived"}
+    ],
     sub_partial: sub_partial
 %>
-
 
 
 <%# ARCHIVED %>

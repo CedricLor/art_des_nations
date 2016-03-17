@@ -6,4 +6,4 @@ fr:
     new:
       new_article: "Nouvel article"
     edit:
-      editing_article: "En train d'éditer l'article %{article_title}"
+      editing_article: "En train de modifier l'article %{article_title}"

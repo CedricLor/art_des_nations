@@ -7,7 +7,7 @@
           locals: {
             aria_label: "Session actions (see profile and log out)",
             main_button_id: "dropdownMenu1",
-            main_button_content: content_tag(:i, "", class: "fa fa-user-plus fa-2x"),
+            main_button_content: content_tag(:i, "", class: "fa fa-user-plus"),
             menu_content: render(partial: 'shared/admin_nav_session_menu')
           }
       %>
@@ -15,7 +15,7 @@
           locals: {
             aria_label: "Actions on the displayed contents (edit, new, duplicate, see index and destroy)",
             main_button_id: "dropdownMenu2",
-            main_button_content: content_tag(:i, "", class: "fa fa-cog fa-spin fa-2x"),
+            main_button_content: content_tag(:i, "", class: "fa fa-cog"),
             menu_content: yield(:admin_nav_content_actions)
           }
       %>

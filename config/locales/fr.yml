@@ -57,9 +57,9 @@ fr:
   portrait_intro_title: "Page d'accueil des profils des artistes d'Art des Nations"
 
   update: "Mettre à jour"
-  edit: "Editer"
+  edit: "Modifier"
   user: "l'utilisateur"
-  profile: 'Editer le profil'
+  profile: 'Modifier le profil'
   log_out: 'Fermer la session'
   devise_leave_pwd_blank: "laissez-le en blanc si vous ne souhaitez pas le changer"
   devise_we_need_your_current_pwd: "nous avons besoin de votre mot de passe pour confirmer les changements"
@@ -192,7 +192,7 @@ fr:
 
   admin_nav_new_content: 'Nouveau'
   admin_nav_delete_content: 'Effacer'
-  admin_nav_edit_content: 'Editer'
+  admin_nav_edit_content: 'Modifier'
   admin_nav_admin_index_content: 'Index'
   admin_nav_show_content: 'Voir'
   admin_nav_manage_links: 'Gérer les liens'

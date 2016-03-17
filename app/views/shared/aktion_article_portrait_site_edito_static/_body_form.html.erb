@@ -2,11 +2,11 @@
 
 <% if body_form.errors[:body].present? %>
   <div class="has-error">
-    <%= f.cktext_area :body, rows: 50, :ckeditor => {language: I18n.locale} %>
+    <%= f.cktext_area :body, rows: 50  %>
     <p><span class="help-block"><%= body_form.errors[:body].last %></span></p>
   </div>
 <% else %>
-  <%= f.cktext_area :body, rows: 50, :ckeditor => {language: I18n.locale} %>
+  <%= f.cktext_area :body, rows: 50  %>
 <% end %>
 
 

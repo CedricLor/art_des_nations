@@ -15,7 +15,7 @@
       default: "#{@an_item_i18n_name.capitalize} must have a title. Please specify one."
     )
   %>
-  <% teaser = f.cktext_area :teaser, rows: 10, :ckeditor => {language: I18n.locale} %>
+  <% teaser = f.cktext_area :teaser, rows: 10 %>
   <% body = render partial: 'shared/aktion_article_portrait_site_edito_static/body_form.html.erb',
     object: @aktion,
     locals: { f: f }
