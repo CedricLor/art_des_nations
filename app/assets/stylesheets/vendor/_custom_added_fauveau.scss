@@ -93,6 +93,9 @@ img.my-img-preview {
 .language-block {
   line-height: 20px;
   &.active-language {
-    font-weight: bold;
+    background-color: #00A190;
+    a {
+      color: white;
+    }
   }
 }
