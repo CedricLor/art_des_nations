@@ -14,7 +14,7 @@ module AktionArticleFormSetters
 
     self.md_for_destruction ||= nil
 
-    self.main_category_id ||= @main_model.categorizings.first.category_id.to_s
+    self.main_category_id ||= @main_model.categorizings.first ? @main_model.categorizings.first.category_id.to_s : nil
   end
 
   private
