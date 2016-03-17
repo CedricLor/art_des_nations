@@ -27,8 +27,8 @@ class ExternalLinksUpdateForm
   private
 
   def persist!
-    persist_existing_external_links
-    persist_new_external_links
+    persist_existing_external_links if existing_external_linkings.present?
+    persist_new_external_links if new_external_links.present?
     persist_deletions if marked_for_deletion.present?
   end # End persist!
 
