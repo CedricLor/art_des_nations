@@ -4,13 +4,13 @@
     <div class="row" id="top-nav">
 
       <div class="col-xs-12 col-sm-4" id="conteneur-logo">
-        <%= link_to "ADN Art des Nations", root_path, id: "logo" %>
+        <%= link_to "ADN Art des Nations", root_path, id: "logo", 'aria-label' => "Back to Home Page" %>
       </div>
 
       <div class="col-xs-7 col-sm-4 col-lg-6">
-        <ul class="list-inline">
+        <ul class="list-inline" aria-label="Language switcher">
           <% @languages_array.each do | locale | %>
-            <li class="language-block <%= locale.keys[0] == I18n.locale ? 'active-language' : ''%>" >
+            <li class="language-block <%= locale.keys[0] == I18n.locale ? 'active-language' : ''%>" aria-label="<%= locale.keys[0] == I18n.locale ? "Currently active language" : "Other available language"%>" >
               <%= link_to locale.values[0], params.merge({:locale => locale.keys[0]}) %>
             </li>
           <% end %>
@@ -18,7 +18,7 @@
       </div>
 
       <div class="col-xs-5 col-sm-4 col-lg-2 text-right">
-        <a class="menu-toggle"><i class="fa fa-reorder"></i><%= t(:menu, default: " Menu")%></a>
+        <a class="menu-toggle" aria-label="Main menu handle (Works only with javascript enabled. Sorry.)"><i class="fa fa-reorder"></i><%= t(:menu, default: " Menu")%></a>
       </div>
 
     </div>
