@@ -10,6 +10,7 @@
 
   <%= link_to 'New Category', new_category_path %>
 
+  <h3>Etat des publications par catégories</h3>
   <table class="table table-striped">
     <tr>
       <th>Id</th>
@@ -38,6 +39,14 @@
 
   <hr>
 
+  <%# TRANSLATION STATUS %>
+  <%= render 'shared/aktion_article_portrait_site_edito/translation_table_builder',
+      items: @categories
+  %>
+
+  <hr>
+
+  <h3>Accéder aux publications par catégories</h3>
   <table class="table table-striped">
     <tr>
       <th>Id</th>
