@@ -70,6 +70,7 @@ fr:
   in_FR: "en français"
   in_PY: "en russe"
   in_中文: "en chinois"
+  existing_translations: "Traductions existantes"
 
   home_page_title: "Accueil"
   published_html: "<p class='meta'>Publié le <span class='date-publication'>%{posted_at}</span> à <span class='lieu-publication'>%{posted_from_location}</span></p>"
@@ -91,6 +92,10 @@ fr:
 
   check_box_label_is_picture_for_card: "Vous voulez utiliser cette photo pour les pages d'index où %{item} est affiché(e)."
   check_box_label_is_picture_for_carousel: "Vous souhaitez que cette photo soit utilisée dans le caroussel : "
+
+  new:
+    action: "Nouvelle action"
+    other: "Nouveau %{other}"
 
   the_item_article: "l'article"
   this_item_article: 'cet article'
@@ -136,6 +141,10 @@ fr:
 
   title: "Titre"
   author: "Auteur"
+  name: "Nom"
+  editorials:
+    one: "édito"
+    other: "éditos"
 
   draft:
     one: "brouillon"
@@ -147,9 +156,11 @@ fr:
   featured: "à la une"
   feature: "A la une"
   archived:
-    one: "archivé"
-    other: "archivés"
+    one: "archivé(e)"
+    other: "archivé(e)s"
   archive: "Archiver"
+
+  listing_items: "Liste des %{items}"
 
   portrait_update_file_upload_back_office_legend: "Si vous souhaitez changer votre photo, téléchargez une image ici :"
   portrait_create_file_upload_back_office_legend: "Veuillez télécharger une photo pour votre portrait ici :"

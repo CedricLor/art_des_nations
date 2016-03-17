@@ -70,6 +70,7 @@ en:
   in_FR: "in French"
   in_PY: "in Russian"
   in_中文: "in Chinese"
+  existing_translations: "Existing translations"
 
   home_page_title: "Home"
   published_html: "<p class='meta'>Published on <span class='date-publication'>%{posted_at}</span> in <span class='lieu-publication'>%{posted_from_location}</span></p>"
@@ -138,6 +139,10 @@ en:
 
   title: "Title"
   author: "Author"
+  name: "Name"
+  editorials:
+    one: "editorial"
+    other: "editorials"
 
   draft:
     one: "draft"
@@ -152,6 +157,8 @@ en:
     one: "archived"
     other: "archived"
   archive: "Archive"
+
+  listing_items: "Listing %{items}"
 
   portrait_update_file_upload_back_office_legend: "If you want to change your picture, please upload a file here:"
   portrait_create_file_upload_back_office_legend: "Please upload a picture for your portrait here:"

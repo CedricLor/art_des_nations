@@ -1,0 +1,12 @@
+<%# shared/aktion_article_portrait_site_edito/_index_table_first_cols.html.erb %>
+
+<td><%= item.id %></td>
+<td><%= item.title %></td>
+
+<%= render "#{sub_partial}", item: item %>
+<%# sub_partial may be:
+- articles/partials/_index_table_article_specific_cols
+%>
+
+<td><%= link_to t(:admin_nav_show_content, default: 'Voir'), item %></td>
+

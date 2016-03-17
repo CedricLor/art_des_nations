@@ -97,10 +97,12 @@ class AktionsController < ApplicationController
     end
 
     def clean_up_date_params
-      aktion = params[:aktion]
-      params[:aktion][:aktion_date] = Date.new aktion["aktion_date(1i)"].to_i, aktion["aktion_date(2i)"].to_i, aktion["aktion_date(3i)"].to_i
-      params[:aktion][:posted_at] = Date.new aktion["posted_at(1i)"].to_i, aktion["posted_at(2i)"].to_i, aktion["posted_at(3i)"].to_i
-      params[:aktion] = aktion.except('aktion_date(1i)', 'aktion_date(2i)', 'aktion_date(3i)', 'posted_at(1i)', 'posted_at(2i)', 'posted_at(3i)')
+      if params[:aktion]["posted_at(1i)"].present?
+        aktion = params[:aktion]
+        params[:aktion][:aktion_date] = Date.new aktion["aktion_date(1i)"].to_i, aktion["aktion_date(2i)"].to_i, aktion["aktion_date(3i)"].to_i
+        params[:aktion][:posted_at] = Date.new aktion["posted_at(1i)"].to_i, aktion["posted_at(2i)"].to_i, aktion["posted_at(3i)"].to_i
+        params[:aktion] = aktion.except('aktion_date(1i)', 'aktion_date(2i)', 'aktion_date(3i)', 'posted_at(1i)', 'posted_at(2i)', 'posted_at(3i)')
+      end
     end
 
     def set_item_i18n_name

@@ -1,0 +1,13 @@
+<%# shared/aktion_article_portrait_site_edito/_index.html.erb %>
+
+<% provide :admin_nav_content_actions do %>
+  <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_item_path %></li>
+<% end %>
+
+
+<% provide :index_top do %>
+  <h1>
+    <%= t(:listing_items, items: items_name, default:"Listing #{items_name}") %>
+  </h1>
+  <%= link_to new_item, new_item_path %>
+<% end %>

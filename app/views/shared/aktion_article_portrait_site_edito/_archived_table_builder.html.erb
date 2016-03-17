@@ -1,0 +1,18 @@
+<%# shared/aktion_article_portrait_site_edito/_featured_published_table_builder.html.erb %>
+
+
+<h3><%= t(:archived, default: "Archivé(e)s", count: archived_items.count).capitalize %></h3>
+<table class="table table-striped">
+  <tr>
+    <%= yield :first_header_rows %>
+  </tr>
+
+<% archived_items.each do |item| %>
+  <tr>
+    <%= render 'shared/aktion_article_portrait_site_edito/index_table_first_cols', item: item, sub_partial: sub_partial %>
+    <%= render 'shared/aktion_article_portrait_site_edito/index_table_last_cols', item: item %>
+  </tr>
+<% end %>
+</table>
+
+<br />

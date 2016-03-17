@@ -89,9 +89,11 @@ class SiteEditorialsController < ApplicationController
     end
 
     def clean_up_posted_at_params
-      se = params[:site_editorial]
-      se[:posted_at] = Date.new se["posted_at(1i)"].to_i, se["posted_at(2i)"].to_i, se["posted_at(3i)"].to_i
-      params[:site_editorial] = se.except('posted_at(1i)', 'posted_at(2i)', 'posted_at(3i)')
+      if params[:site_editorial]["posted_at(1i)"]
+        se = params[:site_editorial]
+        se[:posted_at] = Date.new se["posted_at(1i)"].to_i, se["posted_at(2i)"].to_i, se["posted_at(3i)"].to_i
+        params[:site_editorial] = se.except('posted_at(1i)', 'posted_at(2i)', 'posted_at(3i)')
+      end
     end
 
     def set_item_i18n_name

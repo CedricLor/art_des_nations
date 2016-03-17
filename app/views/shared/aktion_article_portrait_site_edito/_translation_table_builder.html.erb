@@ -1,0 +1,27 @@
+<%# shared/aktion_article_portrait_site_edit/_translation_table_builder.html.erb %>
+
+<h3><%= t(:translation_status, default: "Etat des traductions").capitalize %></h3>
+<table class="table table-striped">
+  <tr>
+    <th>Id</th>
+    <th><%= t(:titre, default: "Titre") %></th>
+    <th class="text-center"><%= t(:existing_translations, default: "Traductions existantes") %></th>
+    <th colspan="4" class="text-center"><%= t(:translate, default: "Traduire") %></th>
+  </tr>
+
+<% items.each do |item| %>
+  <% languages = item.translations.map { |t| t.locale.to_s } %>
+  <tr>
+    <td><%= item.id %></td>
+    <td><%= item.title %></td>
+    <td class="text-center">
+      <%= languages.join(" ") %>
+    </td>
+    <% @languages_array.each do | locale | %>
+      <td>
+        <%= link_to t("in_#{locale.values[0]}", default: "en #{locale.values[0]}"), params.merge({:locale => locale.keys[0], :action => languages.include?(locale.keys[0].to_s) ? "show" : "edit", :id => item.id}) %>
+      </td>
+    <% end %>
+  </tr>
+<% end %>
+</table>

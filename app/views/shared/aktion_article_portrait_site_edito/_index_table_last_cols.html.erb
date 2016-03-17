@@ -1,0 +1,4 @@
+<%# shared/aktion_article_portrait_site_edito/_index_table_last_cols.html.erb %>
+
+<td><%= link_to t(:admin_nav_edit_content, default: 'Editer'), controller: item.class.to_s.tableize, action: "edit", id: item.id %></td>
+<td><%= link_to t(:admin_nav_delete_content, default: 'Effacer'), item, method: :delete, data: { confirm: t(:deletion_confirmation, this_item: @this_item_i18n_name, default: "Are you sure you want to delete #{@this_item_i18n_name}?") } %></td>

@@ -87,12 +87,14 @@ class Portrait < ActiveRecord::Base
   end
 
   def update_associated_picture_acmb
-    media_container.update_attributes(
-      crop_x: picture_update["crop_x"],
-      crop_y: picture_update["crop_y"],
-      crop_w: picture_update["crop_w"],
-      crop_h: picture_update["crop_h"]
-    )
+    if picture_update
+      media_container.update_attributes(
+        crop_x: picture_update["crop_x"],
+        crop_y: picture_update["crop_y"],
+        crop_w: picture_update["crop_w"],
+        crop_h: picture_update["crop_h"]
+      )
+    end
     if picture_title
       media_container.update(
         title: picture_title

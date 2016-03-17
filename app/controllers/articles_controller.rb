@@ -97,27 +97,6 @@ class ArticlesController < ApplicationController
       @method = "put"
     end
 
-# {"utf8"=>"✓", "_method"=>"put", "authenticity_token"=>"5K637mJtuxX8LF/fWerfIZbkj9DEB0TW33Yai5+kCM9PuSCATQPTlCX6hNNq/9OSY3kMSX+EN43Wvvjuyvd7zA==",
-#   "article"=>{
-#     "title"=>"Test look for bug",
-#     "teaser"=>"",
-#     "new_md"=>{
-#       "0"=>{"title"=>"", "for_carousel"=>"true"},
-#       "1"=>{"title"=>"", "for_carousel"=>"true"},
-#       "2"=>{"title"=>"", "for_carousel"=>"true"}},
-#     "body"=>"",
-#     "author_name"=>"Guillaume Mattéo",
-#     "posted_at(3i)"=>"4",
-#     "posted_at(2i)"=>"3",
-#     "posted_at(1i)"=>"2016",
-#     "posted_from_location"=>"Paris",
-#     "applicable_existing_categories"=>{"2"=>"false", "4"=>"true", "5"=>"false", "6"=>"false", "7"=>"false", "1"=>"false", "8"=>"false", "3"=>"false", "9"=>"false"},
-#     "main_category_id"=>"4",
-#     "new_category_name"=>"",
-#     "status"=>"draft"},
-#   "commit"=>"Sauvegardez vos changements", "controller"=>"articles", "action"=>"update", "id"=>"28-test-look-for-bug"}
-
-# {"_method"=>"patch", "authenticity_token"=>"y1Q5kxysg15pSwuwFawITHEb6qfzF9FIxdoo6Q7QexxgQ679M8Lr37Cd0LwmuQT/hIZpPkiUohPMEsqMW4MIHw==", "article"=>{"status"=>"published"}, "controller"=>"articles", "action"=>"update", "id"=>"28"}
     def clean_up_posted_at_params
       if params[:article]["posted_at(1i)"].present?
         article = params[:article]

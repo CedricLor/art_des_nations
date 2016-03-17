@@ -1,0 +1,40 @@
+<%# shared/aktion_article_portrait_site_edito/_bottom_tables_builder.html.erb %>
+
+<%# FEATURED %>
+<%= render 'shared/aktion_article_portrait_site_edito/featured_published_table_builder',
+    selected_items: items.select{|a| a.status == "featured" },
+    table_name: "feature",
+    update_1_name: 'publish',
+    update_1_type: 'published',
+    update_2_name: 'archive',
+    update_2_type: 'archived',
+    sub_partial: sub_partial
+%>
+
+
+
+<%# PUBLISHED %>
+<%= render 'shared/aktion_article_portrait_site_edito/featured_published_table_builder',
+    selected_items: items.select{|a| a.status == "published" },
+    table_name: "published",
+    update_1_name: 'feature',
+    update_1_type: 'featured',
+    update_2_name: 'archive',
+    update_2_type: 'archived',
+    sub_partial: sub_partial
+%>
+
+
+
+<%# ARCHIVED %>
+<%= render 'shared/aktion_article_portrait_site_edito/archived_table_builder',
+    archived_items: items.select{|a| a.status == "archived" },
+    sub_partial: sub_partial
+%>
+
+
+
+<%# TRANSLATION STATUS %>
+<%= render 'shared/aktion_article_portrait_site_edito/translation_table_builder',
+    items: items
+%>

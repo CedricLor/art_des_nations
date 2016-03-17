@@ -4,37 +4,73 @@
   <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_site_editorial_path %></li>
 <% end %>
 
-
+<%= render partial: 'shared/aktion_article_portrait_site_edito/index_top',
+    locals: {
+      items_name: t(:editorials, count: @site_editorials.count),
+      collec: @site_editorials,
+      new_item: t(:new_editorial),
+      new_item_path: new_site_editorial_path
+    }
+%>
 
 <div class="container">
-  <h1>Listing Site Editorials</h1>
+  <%= yield :index_top %>
 
-  <%= link_to t(:new_editorial, default: 'New editorial'), new_site_editorial_path %>
+  <% provide :first_header_rows do %>
+    <th>Id</th>
+    <th><%= t(:name, default: "Nom") %></th>
+    <th><%= t(:posted_at, default: "Date de publication") %></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  <% end %>
 
-  <h3>Ordered by publication date</h3>
+  <% provide :additional_header_rows do %>
+    <th></th>
+    <th></th>
+  <% end %>
+
+  <% provide :big_table_top do %>
+      <tr>
+        <%= yield :first_header_rows %>
+        <%= yield :additional_header_rows %>
+      </tr>
+  <% end %>
+
+  <% sub_partial = "site_editorials/partials/index_table_site_editorial_specific_cols" %>
+
+  <%# DRAFTS %>
+  <% draft_site_editorials = @site_editorials.select{|a| a.status == "draft" } %>
+  <h3><%= t(:draft, default: "Brouillons", count: draft_site_editorials.count).capitalize %></h3>
   <table class="table table-striped">
-    <tr>
-      <th>Id</th>
-      <th>Title</th>
-      <th>Posted at</th>
-      <th>Updated at</th>
-      <th>Status</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
+    <%= yield :big_table_top %>
 
-  <% @site_editorials.sort_by(&:posted_at).reverse.each do |site_editorial| %>
+  <% draft_site_editorials.each do |site_editorial| %>
     <tr>
-      <td><%= site_editorial.id %></td>
-      <td><%= site_editorial.title %></td>
-      <td><%= l(site_editorial.posted_at, format: :long) %></td>
-      <td><%= site_editorial.status %></td>
-      <td><%= link_to 'Show', site_editorial %></td>
-      <td><%= link_to 'Edit', edit_site_editorial_path(site_editorial) %></td>
-      <td><%= link_to 'Destroy', site_editorial, method: :delete, data: { confirm: t(:deletion_confirmation, this_item: @this_item_i18n_name, default: "Are you sure you want to delete #{@this_item_i18n_name}?") } %></td>
+      <%= render 'shared/aktion_article_portrait_site_edito/index_table_first_cols', item: site_editorial, sub_partial: sub_partial %>
+        <% site_editorial.status = "published" %>
+
+        <% if site_editorial.valid? %>
+          <%= render 'shared/aktion_article_portrait_site_edito/index_table_update_col', item: site_editorial, status_update_name: t(:publish, default: 'Publier'), status_update_type: "published" %>
+        <% end %>
+
+        <% site_editorial.status = "featured" %>
+        <% if site_editorial.valid? %>
+          <%= render 'shared/aktion_article_portrait_site_edito/index_table_update_col', item: site_editorial, status_update_name: t(:feature, default: 'A la une'), status_update_type: "featured" %>
+        <% end %>
+
+      <%= render 'shared/aktion_article_portrait_site_edito/index_table_last_cols', item: site_editorial %>
     </tr>
   <% end %>
   </table>
+
+  <br />
+
+
+  <%= render 'shared/aktion_article_portrait_site_edito/bottom_tables_builder',
+      items: @site_editorials,
+      sub_partial: sub_partial
+  %>
+
 
 </div>

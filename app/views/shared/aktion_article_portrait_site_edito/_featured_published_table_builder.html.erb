@@ -1,0 +1,22 @@
+<%# shared/aktion_article_portrait_site_edito/_featured_published_table_builder.html.erb %>
+
+<h3><%= t("#{table_name}", count: selected_items.count).capitalize %></h3>
+<table class="table table-striped">
+  <%= yield :big_table_top %>
+
+<% selected_items.each do |item| %>
+  <tr>
+    <%= render 'shared/aktion_article_portrait_site_edito/index_table_first_cols', item: item, sub_partial: sub_partial %>
+
+    <% [{status_update_name: t("#{update_1_name}"), status_update_type: "#{update_1_type}"},
+        {status_update_name: t(:archive), status_update_type: "archived"} ].each do | update_aktion| %>
+      <%= render 'shared/aktion_article_portrait_site_edito/index_table_update_col', item: item, status_update_name: update_aktion[:status_update_name], status_update_type: update_aktion[:status_update_type] %>
+    <% end %>
+
+    <%= render 'shared/aktion_article_portrait_site_edito/index_table_last_cols', item: item %>
+  </tr>
+<% end %>
+</table>
+
+<br />
+

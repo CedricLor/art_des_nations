@@ -3,68 +3,77 @@
 
 
 <% provide :admin_nav_content_actions do %>
-  <li><%= link_to t(:admin_nav_new_content, default: 'New'), new_portrait_path %></li>
   <li><%= link_to t(:admin_nav_show_portrait_intro, default: 'Portrait intro page'), portrait_intro_path(1) %></li>
 <% end %>
 
+<%= render partial: 'shared/aktion_article_portrait_site_edito/index_top',
+    locals: {
+      items_name: @portraits.first.class.name.underscore.pluralize,
+      collec: @portraits,
+      new_item: t(:new_portrait),
+      new_item_path: new_portrait_path
+    }
+%>
 
 <div class="container">
-  <h1>Listing portraits</h1>
+  <%= yield :index_top %>
 
-  <%= link_to t('New Portrait'), new_portrait_path %>
+  <% provide :first_header_rows do %>
+    <th>Id</th>
+    <th><%= t(:name, default: "Nom") %></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  <% end %>
 
-  <h3>Regular listing</h3>
+  <% provide :additional_header_rows do %>
+    <th></th>
+    <th></th>
+  <% end %>
+
+  <% provide :big_table_top do %>
+      <tr>
+        <%= yield :first_header_rows %>
+        <%= yield :additional_header_rows %>
+      </tr>
+  <% end %>
+
+
+  <% sub_partial = "portraits/partials/index_table_empty" %>
+
+
+  <%# DRAFTS %>
+  <% draft_portraits = @portraits.select{|a| a.status == "draft" } %>
+  <h3><%= t(:draft, default: "Brouillons", count: draft_portraits.count).capitalize %></h3>
   <table class="table table-striped">
-    <tr>
-      <th>Id</th>
-      <th>Name</th>
-      <th>Status</th>
-      <th>Picturizing Id</th>
-      <th>Picture Id</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
+    <%= yield :big_table_top %>
 
-  <% @portraits.each do |portrait| %>
+  <% draft_portraits.each do |portrait| %>
     <tr>
-      <td><%= portrait.id %></td>
-      <td><%= portrait.title %></td>
-      <td><%= portrait.status %></td>
-      <% if portrait.picturizing.present? %>
-        <td><%= portrait.picturizing.id %></td>
-        <td><%= portrait.media_container.id %></td>
-      <% else %>
-        <td><%= t(:not_avalaible_short, default: "n.a.") %></td>
-        <td><%= t(:not_avalaible_short, default: "n.a.") %></td>
-      <% end %>
-      <td><%= link_to 'Show', portrait %></td>
-      <td><%= link_to 'Edit', edit_portrait_path(portrait) %></td>
-      <td><%= link_to 'Destroy', portrait, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <%= render 'shared/aktion_article_portrait_site_edito/index_table_first_cols', item: portrait, sub_partial: sub_partial %>
+        <% portrait.status = "published" %>
+
+        <% if portrait.valid? %>
+          <%= render 'shared/aktion_article_portrait_site_edito/index_table_update_col', item: portrait, status_update_name: t(:publish, default: 'Publier'), status_update_type: "published" %>
+        <% end %>
+
+        <% portrait.status = "featured" %>
+        <% if portrait.valid? %>
+          <%= render 'shared/aktion_article_portrait_site_edito/index_table_update_col', item: portrait, status_update_name: t(:feature, default: 'A la une'), status_update_type: "featured" %>
+        <% end %>
+
+      <%= render 'shared/aktion_article_portrait_site_edito/index_table_last_cols', item: portrait %>
     </tr>
   <% end %>
   </table>
 
   <br />
 
-  <h3>Listing for potential picture issues</h3>
-  <p>Portrait shall not have more than one picture attached to it</p>
-  <table class="table table-striped">
-    <tr>
-      <th>Id</th>
-      <th>Name</th>
-      <th>How many picturizings?</th>
-      <th></th>
-    </tr>
 
-  <% @portraits.each do |portrait| %>
-    <tr>
-      <td><%= portrait.id %></td>
-      <td><%= portrait.title %></td>
-      <td><%= @picturizings.fetch(portrait.id){0} %></td>
-      <td><%= link_to 'Destroy', portrait, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-    </tr>
-  <% end %>
-  </table>
+  <%= render 'shared/aktion_article_portrait_site_edito/bottom_tables_builder',
+      items: @portraits,
+      sub_partial: sub_partial
+  %>
+
 
 </div>
