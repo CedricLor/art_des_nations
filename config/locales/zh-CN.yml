@@ -1,12 +1,12 @@
 ---
 zh-CN:
 
-  portraits: 生平简介
-  protagonists: 生平简介
-  last_articles: 最新消息
-  read_more: 详细内容
-  truncating_omission: ...(详细内容)
-  contact_us: 联系我们
+  portraits: '生平'简介
+  protagonists: '生平简介'
+  last_articles: '最新消息'
+  read_more: '详细内容'
+  truncating_omission: '...(详细内容)'
+  contact_us: '联系我们'
 
 
   activerecord:

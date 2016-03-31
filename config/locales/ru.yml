@@ -1,13 +1,13 @@
 ru:
 
-portraits: Портреты
-protagonists: Портреты
-last_articles: Новые статьи
+portraits: Порт'реты'
+protagonists: 'Портреты'
+last_articles: 'Новые статьи'
 read_more: Читать дальше
-truncating_omission: ...(Читать дальше)
-what_is_adn: Что такое ADN?
-contact_us: Контакты
-adn_actions: Разделы
+truncating_omission: '...(Читать дальше)'
+what_is_adn: 'Что такое ADN?'
+contact_us: 'Контакты'
+adn_actions: 'Разделы'
 
 
   activerecord:
