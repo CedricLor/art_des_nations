@@ -1,6 +1,14 @@
 ru:
 
-  portraits: Порт'реты'
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Возникли ошибки: %{errors}'
+        restrict_dependent_destroy:
+          has_one: 'Невозможно удалить запись, так как существует зависимость: %{record}'
+          has_many: 'Невозможно удалить запись, так как существуют зависимости: %{record}'
+
+  portraits: 'Портреты'
   protagonists: 'Портреты'
   last_articles: 'Новые статьи'
   read_more: Читать дальше
@@ -9,14 +17,6 @@ ru:
   contact_us: 'Контакты'
   adn_actions: 'Разделы'
 
-
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Возникли ошибки: %{errors}'
-        restrict_dependent_destroy:
-          has_one: 'Невозможно удалить запись, так как существует зависимость: %{record}'
-          has_many: 'Невозможно удалить запись, так как существуют зависимости: %{record}'
   date:
     abbr_day_names:
     - Вс
