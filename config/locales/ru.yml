@@ -16,6 +16,10 @@ ru:
   what_is_adn: 'Что такое ADN?'
   contact_us: 'Контакты'
   adn_actions: 'Разделы'
+  the_adn_project: "проект ADN"
+  categories: "Разделы"
+  credits: "Авторские права"
+  legal: "Информация о сайте"
 
   date:
     abbr_day_names:

@@ -3,11 +3,19 @@ zh-CN:
 
   portraits: '生平简介'
   protagonists: '生平简介'
+  tous_les_portraits: "所有人物生平简介"
   last_articles: '最新消息'
   read_more: '详细内容'
   truncating_omission: '...(详细内容)'
   contact_us: '联系我们'
-
+  adn_actions: "活动"
+  what_is_adn: "万国演艺项目是什么？"
+  liens: "链接"
+  categories: "目录"
+  legal: "法律的提及（法律方面"
+  credits: "版权"
+  menu: " 菜单"
+  the_adn_project: "万国演艺项目"
 
   activerecord:
     errors:
