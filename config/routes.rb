@@ -33,7 +33,7 @@ Rails.application.routes.draw do
     resources :static_pages, only: [:show, :edit, :update], path: 'page'
     get 'page/:id', to: 'static_pages#show', as: 'page'
 
-    get 'home_pages/edit', to: 'home_pages#edit#1'
+    get 'home_pages/edit', to: 'home_pages#edit#id:1'
     resources :home_pages, only: [:show, :edit, :update]
 
     resources :external_links, only: [:create]

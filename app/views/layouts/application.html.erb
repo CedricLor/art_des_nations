@@ -69,6 +69,11 @@
     <%= render 'shared/admin_nav' %>
 
     <%= javascript_include_tag 'application' %>
+    <%# javascript that controls the opening and closing of the side nav
+        #wrapper is the site wrapper (except the side bar)
+        this javascript applies a toogled class to the wrapper; When the toogled class is applied,
+        it give a -320px right margin to the site, pulling it right.
+    %>
     <%= javascript_tag do -%>
       $(".menu-toggle").click(function(e) {
           e.preventDefault();

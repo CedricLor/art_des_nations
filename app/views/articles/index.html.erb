@@ -12,8 +12,10 @@
 <%#= react_component('NewsIndexPage', { articles: @articles } ) %>
 <div class="container">
 
+  <%# :index_top comes from shared/aktion_article_portrait_site_edito/_index.html.erb %>
   <%= yield :index_top %>
 
+  <%# rendered below %>
   <% provide :first_header_rows do %>
     <th>Id</th>
     <th><%= t(:titre, default: "Titre") %></th>
@@ -24,11 +26,13 @@
     <th></th>
   <% end %>
 
+  <%# rendered below %>
   <% provide :additional_header_rows do %>
     <th></th>
     <th></th>
   <% end %>
 
+  <%# rendered below %>
   <% provide :big_table_top do %>
       <tr>
         <%= yield :first_header_rows %>
