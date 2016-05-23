@@ -78,7 +78,7 @@ gem 'paperclip'
 gem 'jcrop-rails-v2'
 
 # Adding active model serializer to render nice json
-gem 'active_model_serializers'
+# gem 'active_model_serializers'
 
 # Authentication with Devise
 gem 'devise'
