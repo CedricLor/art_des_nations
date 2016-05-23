@@ -5,7 +5,7 @@
     <div class="row">
 
 
-      <div class="col-xs-12 col-sm-12 col-md-4 toto">
+      <div class="col-xs-12 col-sm-6 col-md-4">
         <ul class="list-inline">
           <!-- FIXME -->
           <li><%= link_to t(:contact_us, default: "Nous contacter"), page_path(@static_pages[4]) %></li>
@@ -16,12 +16,19 @@
         </ul>
       </div>
 
-      <div class="col-xs-12 col-sm-12 col-md-4 text-center">
+      <div class="col-xs-12 col-sm-3 col-md-2">
 
-          <a href="http://www.jeune-theatre-national.com/" target="_blank"><img src="http://adn.beatles.artiscode.org/img/jtn.jpg" alt="Jeune Théâtre National"></a>
-      </div>
+          <a href="http://www.jeune-theatre-national.com/" target="_blank"><%= image_tag "jtn-h90.jpg", width:"162", height:"90", alt: "Jeune Théâtre National" %></a>
 
-      <div class="col-xs-12 col-sm-12 col-md-4 text-right">
+      </div>   
+
+      <div class="col-xs-12 col-sm-3 col-md-2">
+
+          <a href="http://www.sacem.com/" target="_blank"><%= image_tag "sacem.jpg", width:"183", height:"90", alt: "SACEM" %></a>
+
+      </div>      
+
+      <div class="col-xs-12 col-sm-12 col-md-3 text-right">
 
         <ul class="list-inline">
           <li>&copy 2016 ADN - Art des nations</li>
