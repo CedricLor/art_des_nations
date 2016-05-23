@@ -84,3 +84,5 @@ gem 'active_model_serializers'
 gem 'devise'
 gem 'devise-i18n'
 gem 'devise-i18n-views'
+
+gem 'heroku-deflater', :group => :production
