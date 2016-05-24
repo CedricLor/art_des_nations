@@ -11,30 +11,20 @@
       });
     };
 
-    var ratio = <%= media_container.media_geometry(:original).width %> / <%= media_container.media_geometry(:for_slider).width %>;
-
     function update_crop(coords){
-
-      $("<%= "##{id_builder}_crop_x" %>").val(Math.round(coords.x * ratio));
-      $("<%= "##{id_builder}_crop_y" %>").val(Math.round(coords.y * ratio));
-      $("<%= "##{id_builder}_crop_w" %>").val(Math.round(coords.w * ratio));
-      $("<%= "##{id_builder}_crop_h" %>").val(Math.round(coords.h * ratio));
-/*
-      $("#crop_x").val(Math.round(coords.x * ratio));
-      $("#crop_y").val(Math.round(coords.y * ratio));
-      $("#crop_w").val(Math.round(coords.w * ratio));
-      $("#crop_h").val(Math.round(coords.h * ratio));
-*/
+      $("<%= "##{id_builder}_crop_x" %>").val(Math.round(coords.x));
+      $("<%= "##{id_builder}_crop_y" %>").val(Math.round(coords.y));
+      $("<%= "##{id_builder}_crop_w" %>").val(Math.round(coords.w));
+      $("<%= "##{id_builder}_crop_h" %>").val(Math.round(coords.h));
     };
 
     cropBox();
   <% end -%>
 <% end %>
-
-<%= image_tag media_container.media.url(:for_slider), alt: media_container.title, id: "cropbox_#{index}" %>
+<%= image_tag media_container.media.url(:original), alt: media_container.title, id: "cropbox_#{index}" %>
 
 <%= fields_for media_container do |f| %>
   <% [:crop_x, :crop_y, :crop_h, :crop_w].each do |attribute| %>
-    <%= f.hidden_field attribute, id: "#{id_builder}_#{attribute}", name: "#{name_builder}[#{attribute.to_s}]" %>
+    <%= f.text_field attribute, id: "#{id_builder}_#{attribute}", name: "#{name_builder}[#{attribute.to_s}]" %>
   <% end %>
 <% end %>
