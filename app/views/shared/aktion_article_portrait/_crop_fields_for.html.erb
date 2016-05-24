@@ -25,6 +25,6 @@
 
 <%= fields_for media_container do |f| %>
   <% [:crop_x, :crop_y, :crop_h, :crop_w].each do |attribute| %>
-    <%= f.text_field attribute, id: "#{id_builder}_#{attribute}", name: "#{name_builder}[#{attribute.to_s}]" %>
+    <%= f.hidden_field attribute, id: "#{id_builder}_#{attribute}", name: "#{name_builder}[#{attribute.to_s}]" %>
   <% end %>
 <% end %>
