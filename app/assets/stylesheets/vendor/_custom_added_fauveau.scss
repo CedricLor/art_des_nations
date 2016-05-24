@@ -103,3 +103,18 @@ img.my-img-preview {
 .form-teaser {
   width: 100%; font-size: 14px;
 }
+
+.videodetector {
+  position      : relative;
+  width         : 100%;
+  height        : 0;
+  padding-bottom: 60%;
+}
+
+.videodetector iframe {
+  position: absolute;
+  top     : 0;
+  left    : 0;
+  width   : 100%;
+  height  : 100%;
+}
