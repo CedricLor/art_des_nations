@@ -89,6 +89,7 @@ en:
   placeholder_for_picture_author_name: "You may enter the name of the photograph or painter here."
 
   placeholder_enter_title_here: "Enter the title of %{this_item} here."
+  placeholder_enter_summ: "Enter the summary (optional) of %{this_item} here."
 
   item_action_for_check_box_label: 'this action'
 

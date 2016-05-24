@@ -89,6 +89,7 @@ fr:
   placeholder_for_picture_author_name: "Vous pouvez entrer le nom du photographe ou du peintre ici."
 
   placeholder_enter_title_here: "Entrez le titre de %{this_item} ici."
+  placeholder_enter_summ: "Entrez le résumé (facultatif) de %{this_item} ici."
 
   check_box_label_is_picture_for_card: "Vous voulez utiliser cette photo pour les pages d'index où %{item} est affiché(e)."
   check_box_label_is_picture_for_carousel: "Vous souhaitez que cette photo soit utilisée dans le caroussel : "
