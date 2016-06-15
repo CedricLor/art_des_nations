@@ -14,6 +14,6 @@
     }
 %>
 
-<% if additional_class_names == 'existing_external_linkings' %>
+<% if user_signed_in? && additional_class_names == 'existing_external_linkings' %>
   <p class="create-link"><%= link_to t(:destroy_this_link, default: 'Destroy the link'), linking_path(element.id), method: :delete %></p>
 <% end %>
