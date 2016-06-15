@@ -1,3 +1,4 @@
+# This is the internal linking class
 class Linking < ActiveRecord::Base
 
   validates :from_linkable_id, presence: true
