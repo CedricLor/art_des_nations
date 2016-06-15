@@ -2,7 +2,7 @@
 <%# called from:
 - countries/partials/_main_content.html.erb
 - home_pages/partials/shared/_main_content.html.erb
-- shared/aktion_article_portrait/_recommandations.html.erb
+- shared/aktion_article_portrait/_recommandations.html.erb -> sub_partial is equal to shared/aktion_article_portrait/recommandation_wrapper and sub_sub_partial is 'shared/aktion_article_portrait/recommandation_picture_title'
 - shared/categories_portraits/_list.html.erb
 %>
 
@@ -32,7 +32,7 @@ comment: this is a very specific view; aktions are displayed in column on the ri
 
 PORTRAITS INTRO and CATEGORIES : shared/categories_portraits/_list.html.erb -> shared/category_country_portrait/recommandation : (i) displaying the aktions, articles and portraits in the categories pages and (ii) the portraits in the portrait intro page
 comment: this is a line view, speading on several lines
-comment: the items are displayed without any references to anything
+comment: the items are displayed without any references to any category (theatre, dance, etc), nor any type (article, aktion, portrait or country)
 
 HOME PAGE : home_pages/partials/shared/_main_content.html.erb -> home_pages/partials/show/article_recommandation : displaying the articles in the home page
 comment: this is a line view, speading on several lines

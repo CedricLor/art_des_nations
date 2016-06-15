@@ -1,7 +1,7 @@
 <%# shared/_recommandation_inner.html.erb %>
 <%# called from:
 - shared/categories_country_portrait/_recommandation.html.erb
-- shared/aktion_article/_recommandations.html.erb
+- shared/aktion_article_portrait/_recommandations.html.erb
 %>
 
 <%= link_to element.class.name != "Aktion" ? polymorphic_path(element) : action_path(element) do %>

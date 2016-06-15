@@ -29,6 +29,8 @@ class Linking < ActiveRecord::Base
 
   delegate :picturizings, :categorizings, to: :target_element
 
+  attr_accessor :caller_side
+
   def self.from(type, id)
     includes(to_linkable: [:translations, {categorizings: [category: :translations]}]).
     where(from_linkable_id: id, from_linkable_type: type)
@@ -40,13 +42,14 @@ class Linking < ActiveRecord::Base
   end
 
   def self.for(type, id)
-    from_linkings = from(type, id).each { |linking| linking.set_caller_side = "from" }
-    to_linkings = to(type, id).each { |linking| linking.set_caller_side = "to" }
+    # this method is called from lib/my_modules/linkings.rb
+    from_linkings = from(type, id).each { |linking| linking.caller_side = "from" }
+    to_linkings = to(type, id).each { |linking| linking.caller_side = "to" }
     from_linkings + to_linkings
   end
 
   def target_element
-    if @caller_side == "from"
+    if @caller_side == "to"
       from_linkable
     else
       to_linkable
@@ -67,13 +70,5 @@ class Linking < ActiveRecord::Base
     else
       to_linkable_type
     end
-  end
-
-  def set_caller_side=(val)
-    @caller_side
-  end
-
-  def get_caller_side
-    @caller_side
   end
 end

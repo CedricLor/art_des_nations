@@ -1,15 +1,15 @@
 <%# shared/aktion_article_portrait/_recommandation_picture_title.html.erb %>
 <%# called from:
 - shared/aktion_article_portrait/_recommandation_wrapper.html.erb as sub_sub_partial (or sub_sub_partial), defined in:
-- articles/show.html.erb
-- aktions/show.html.erb
-- portraits/show.html.erb
+  - articles/show.html.erb
+  - aktions/show.html.erb
+  - portraits/show.html.erb
 %>
 
 <!-- main link -->
 <%= render partial: 'shared/recommandation_inner',
     locals: {
-      element: element.target_element,
+      element: element.target_element, # element is of the class Linking. the method target_element is defined in the model Linking
       subpartial: 'shared/html_safe'
     }
 %>
