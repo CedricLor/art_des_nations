@@ -36,17 +36,6 @@
     </div>
   <% end %>
 
-  <%# building a form to allow user to change the categories applying to the portrait, select the main category and add new categories %>
-  <% provide :categories_form do %>
-    <%= render partial: 'shared/aktion_article_portrait/categories_form',
-      object: @portrait,
-      locals: {
-        chosen_category_ids: @portrait.categorizings.map(&:category_id),
-        item: 'portrait'
-      }
-    %>
-  <% end %>
-
   <%# render the partial with the variables passed in an object %>
   <%= render partial: 'portraits/partials/container',
     object: @portrait, locals: {

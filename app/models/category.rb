@@ -8,8 +8,8 @@ class Category < ActiveRecord::Base
            :source_type => 'Article'
   has_many :aktions, through: :categorizings, :source => :categorizable,
            :source_type => 'Aktion'
-  has_many :portraits, through: :categorizings, :source => :categorizable,
-           :source_type => 'Portrait'
+  # has_many :portraits, through: :categorizings, :source => :categorizable,
+  #          :source_type => 'Portrait'
 
   translates :name, :editorial, :fallbacks_for_empty_translations => true
 
@@ -28,14 +28,14 @@ class Category < ActiveRecord::Base
       ]).
       where(categories: {id: category_id})
 
-    portraits = Portrait.where(status: ["published", "featured"]).
-      includes([
-        :categories,
-        picturizings: [media_container: :translations]
-      ]).
-      where(categories: {id: category_id})
+    # portraits = Portrait.where(status: ["published", "featured"]).
+    #   includes([
+    #     :categories,
+    #     picturizings: [media_container: :translations]
+    #   ]).
+    #   where(categories: {id: category_id})
 
-    (articles + aktions + portraits).sort { |a, b| b.date_sorting_field <=> a.date_sorting_field }
+    (articles + aktions).sort { |a, b| b.date_sorting_field <=> a.date_sorting_field }
   end
 
   def title

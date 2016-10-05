@@ -10,8 +10,8 @@ class PortraitsController < ApplicationController
   # GET /portraits.json
   def index
     @portraits = Portrait.
-      includes(picturizings: [:translations, media_container: :translations]).
-      includes(categorizings: [category: :translations])
+      includes(picturizings: [:translations, media_container: :translations])
+      #includes(categorizings: [category: :translations])
     @picturizings = Picturizing.unscoped.
       where(picturizable_type: "Portrait").
       group(:picturizable_id).
@@ -97,11 +97,11 @@ class PortraitsController < ApplicationController
         :teaser,
         :status,
         :picture_title,
-        :main_category_id,
-        :new_category_name,
+        #:main_category_id,
+        #:new_category_name,
         new_md: [:file, :title],
-        picture_update: params[:portrait][:picture_update].try(:keys),
-        applicable_existing_categories: params[:portrait][:applicable_existing_categories].try(:keys)
+        picture_update: params[:portrait][:picture_update].try(:keys)
+        #applicable_existing_categories: params[:portrait][:applicable_existing_categories].try(:keys)
       )
     end
 

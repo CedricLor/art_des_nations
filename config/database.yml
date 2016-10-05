@@ -1,6 +1,6 @@
 default: &default
   adapter: postgresql
-  username: gmtoto
+  username: hou
   host: localhost
   encoding: unicode
 

@@ -21,7 +21,7 @@ module Linkings
       includes(picturizings: [:translations, :media_container]).
       includes(categorizings: [category: :translations]) +
     Portrait.includes(:translations).
-      includes(picturizings: [:translations, :media_container]).
-      includes(categorizings: [category: :translations])
+      includes(picturizings: [:translations, :media_container])
+      #includes(categorizings: [category: :translations])
   end
 end

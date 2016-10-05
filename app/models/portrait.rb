@@ -20,9 +20,8 @@ class Portrait < ActiveRecord::Base
   has_many :picturizings, as: :picturizable, inverse_of: :portrait
   has_many :media_containers, through: :picturizings
 
-  has_many :categorizings, :as => :categorizable, inverse_of: :portrait, dependent: :destroy
-  has_many :categories, through: :categorizings
-
+  # has_many :categorizings, :as => :categorizable, inverse_of: :portrait, dependent: :destroy
+  # has_many :categories, through: :categorizings
 
   has_many :to_linkings, :as => :from_linkable, class_name: "Linking"
   has_many :from_linkings, :as => :to_linkable, class_name: "Linking"
@@ -43,7 +42,7 @@ class Portrait < ActiveRecord::Base
 
   after_create :add_new_picture_to_portrait, if: "new_md && new_md[:file].present?"
   after_update :update_associated_picture_acmb
-  after_update :update_categories
+  # after_update :update_categories
 
 
 
@@ -119,17 +118,17 @@ class Portrait < ActiveRecord::Base
     )
   end
 
-  def update_categories
-    if applicable_existing_categories || main_category_id || new_category_name
-      persist_categories(
-        self,
-        "Portrait",
-        applicable_existing_categories,
-        main_category_id,
-        new_category_name
-      )
-    end
-  end
+  # def update_categories
+  #   if applicable_existing_categories || main_category_id || new_category_name
+  #     persist_categories(
+  #       self,
+  #       "Portrait",
+  #       applicable_existing_categories,
+  #       main_category_id,
+  #       new_category_name
+  #     )
+  #   end
+  # end
 end
 
 # class CreatePortraits < ActiveRecord::Migration
