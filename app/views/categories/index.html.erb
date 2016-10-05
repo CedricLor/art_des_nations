@@ -76,13 +76,6 @@
           </div>
         <% end %>
       </td>
-      <td>
-        <% category.portraits.each do |portrait| %>
-          <div>
-            <%= link_to portrait.title, edit_portrait_path(portrait) %>
-          </div>
-        <% end %>
-      </td>
     </tr>
   <% end %>
   </table>

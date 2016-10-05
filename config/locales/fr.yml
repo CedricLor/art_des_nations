@@ -134,7 +134,7 @@ fr:
   article_author_selector: "Choisissez le nom de l'un des auteurs ou entrez le nom d'un nouvel auteur :"
   article_author_selector_error: "Le nom de l'auteur doit être indiqué."
 
-  label_for_status_selector: "Status"
+  label_for_status_selector: "Statut"
   hint_for_status_selector: "Si vous sélectionnez %{draft} ou %{archived}, %{the_item} ne sera pas publié(e) sur le site internet."
   status_missing_error: "Il est obligatoire d'assigner un statut à %{an_item}. Merci d'en choisir un."
 
